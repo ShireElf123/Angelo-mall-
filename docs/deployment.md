@@ -23,11 +23,34 @@ Known-good Preview history (all READY, retained as rollback points):
 | `dpl_5MscSd3qE3bExrtg9VMqvr4YGWAY` | `30cb6c0` | Phase 2 expandable chat + wordmarks |
 | `dpl_Fw2bur9shv6j2TvSfEPAfGhgMfqS` | `56db4a7` | Phase 1 final |
 
-## Enabling push-to-Preview (owner action, dashboard)
+## Push-to-Preview automation (GitHub Actions)
 
-These steps cannot be completed from the API in this environment (the Vercel project was
-created without a Git link, and the earlier attempt to create it linked failed on GitHub
-write permissions). Do them in the dashboard:
+A repository workflow now exists at `.github/workflows/vercel-preview.yml`. It runs only
+when `arena/aeeb5cff-angelo-mall` is pushed (or manually started), runs `npm ci`, tests,
+and `npm run build`, then uses the Vercel CLI to create a Preview deployment. It does not
+use `--prod`, does not promote Production, and does not require connecting Vercel's native
+Git integration. The workflow is committed, but it will not deploy until the repository
+secret `VERCEL_TOKEN` is configured by the owner.
+
+To finish setup:
+
+1. In Vercel, create a token with access to team *mercel's projects* and project
+   `angelo-mall-go`; keep it private and do not paste it into chat or commit it to the repo.
+2. In GitHub, open `ShireElf123/Angelo-mall-` → Settings → Secrets and variables → Actions
+   → New repository secret. Name it exactly `VERCEL_TOKEN` and paste the token value.
+3. Open the repository Actions tab, select **Vercel Preview (feature branch)**, and run it
+   with **Run workflow** on `arena/aeeb5cff-angelo-mall`, or push the next code commit to
+   that branch. The workflow will test/build first, then publish a Preview only.
+4. Verify the run is green and the resulting Vercel deployment references the pushed SHA.
+   If it fails, inspect the failing step; do not switch to Production or disable SSO.
+
+The Vercel project IDs are stored as non-secret workflow environment variables. The native
+Vercel Git integration remains disconnected/disabled; this workflow is a separate route.
+
+## Optional: native Vercel Git integration
+
+If you later prefer Vercel's built-in deployment integration instead, these are the
+owner-controlled dashboard steps. They are not required for the GitHub Actions workflow:
 
 1. **GitHub** → Settings → Applications → *Vercel* → Configure → Repository access →
    grant access to `ShireElf123/Angelo-mall-`.
