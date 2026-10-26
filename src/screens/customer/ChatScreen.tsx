@@ -18,6 +18,13 @@ import { EmptyState, ShopAvatar, TradingPill } from '../../components/ui';
 /** Class set on <html>/<body> while the mobile full-screen chat is open. */
 const SCROLL_LOCK_CLASS = 'chat-expanded';
 
+/**
+ * Page chrome that sits outside the chat panel. While the full-screen overlay is
+ * open it is marked inert + aria-hidden so screen readers and pointer users
+ * cannot reach the page hidden behind it (Tab alone is handled by the trap).
+ */
+const BACKGROUND_SELECTORS = '.shell-chrome, .app-footer, .bottom-nav';
+
 /** Clearly-labelled simulated staff replies (no real employee is connected). */
 function simulatedReply(customerText: string): string {
   const text = customerText.toLowerCase();
@@ -80,6 +87,49 @@ export function ChatScreen({
     const roots = [document.documentElement, document.body];
     roots.forEach((node) => node?.classList.add(SCROLL_LOCK_CLASS));
     return () => roots.forEach((node) => node?.classList.remove(SCROLL_LOCK_CLASS));
+  }, [expanded]);
+
+  // Hide the page behind the overlay from assistive tech for as long as it is
+  // open; restore the exact previous state on close or unmount.
+  useEffect(() => {
+    if (!expanded) return;
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(BACKGROUND_SELECTORS));
+    const previous = nodes.map((node) => ({
+      node,
+      inert: node.hasAttribute('inert'),
+      ariaHidden: node.getAttribute('aria-hidden'),
+    }));
+    nodes.forEach((node) => {
+      node.setAttribute('inert', '');
+      node.setAttribute('aria-hidden', 'true');
+    });
+    return () =>
+      previous.forEach(({ node, inert, ariaHidden }) => {
+        if (!inert) node.removeAttribute('inert');
+        if (ariaHidden === null) node.removeAttribute('aria-hidden');
+        else node.setAttribute('aria-hidden', ariaHidden);
+      });
+  }, [expanded]);
+
+  // On-screen keyboards: iOS Safari does not shrink 100dvh when the keyboard
+  // opens, which used to leave the composer behind the keyboard. Follow the
+  // visual viewport where the browser exposes it and fall back to 100dvh.
+  useEffect(() => {
+    if (!expanded) return;
+    const frame = frameRef.current;
+    const viewport = window.visualViewport;
+    if (!frame || !viewport) return;
+    const apply = () => {
+      frame.style.setProperty('--chat-overlay-height', `${Math.round(viewport.height)}px`);
+    };
+    apply();
+    viewport.addEventListener('resize', apply);
+    viewport.addEventListener('scroll', apply);
+    return () => {
+      viewport.removeEventListener('resize', apply);
+      viewport.removeEventListener('scroll', apply);
+      frame.style.removeProperty('--chat-overlay-height');
+    };
   }, [expanded]);
 
   // Escape closes the overlay; Tab stays inside it while open so keyboard and

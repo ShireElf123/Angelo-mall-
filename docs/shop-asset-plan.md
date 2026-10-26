@@ -72,5 +72,7 @@ Shared assets:
 2. Wide/short crop variants for very wide desktop cards, if the design later
    widens beyond 3 columns.
 3. Verified official logos + written tenant permission — only possible once a
-   real tenant opts in; until then the wordmark stays.
+   real tenant opts in; until then the wordmark stays. Record each tenant in
+   [`tenant-onboarding-template.md`](tenant-onboarding-template.md); approved
+   logos go in `public/images/logos/<shop-slug>.<svg|png>`.
 4. Optional AVIF/WebP derivatives with `<picture>` for smaller payloads.

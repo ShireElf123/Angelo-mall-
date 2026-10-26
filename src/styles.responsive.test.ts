@@ -16,7 +16,8 @@ describe('expandable chat stylesheet contract', () => {
     const block = css.match(/\.page--chat--expanded \.chat-frame\s*\{[^}]*\}/s)?.[0] ?? '';
     expect(block).toContain('position: fixed');
     expect(block).toContain('inset: 0');
-    expect(block).toContain('height: 100dvh');
+    // Height follows the on-screen keyboard via visualViewport, with dvh as fallback.
+    expect(block).toContain('height: var(--chat-overlay-height, 100dvh)');
   });
 
   it('reserves safe-area spacing for the status bar and home indicator', () => {

@@ -1521,9 +1521,11 @@ body.chat-expanded {
   z-index: 120;
   width: 100%;
   max-width: none;
-  height: 100dvh;
-  min-height: 100dvh;
-  max-height: 100dvh;
+  /* --chat-overlay-height is set from window.visualViewport so the composer
+     stays above the on-screen keyboard; 100dvh is the fallback. */
+  height: var(--chat-overlay-height, 100dvh);
+  min-height: var(--chat-overlay-height, 100dvh);
+  max-height: var(--chat-overlay-height, 100dvh);
   border: none;
   border-radius: 0;
   box-shadow: none;

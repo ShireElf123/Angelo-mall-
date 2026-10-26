@@ -73,6 +73,7 @@ No environment variables, API keys or accounts are needed — demo state is seed
 - Delivery-job oversight and simple activity reports (orders by status, GMV by shop, promotion funnel).
 
 ### Cross-cutting
+- Onboarding a **real** tenant is a documented data task, not a redesign: see [`docs/tenant-onboarding-template.md`](docs/tenant-onboarding-template.md) for the editable per-shop record (approved logo file, image permission, confirmation status) and the minimum information required from the mall. Until a row reaches *verified*, the shop stays labelled as a fictional demo tenant.
 - Shop identity is a **generated text wordmark** (monogram tile + shop name), not an imitation of any real retailer logo — see [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) for the full asset inventory, fallback behaviour and remaining asset work.
 - Installable **PWA shell** (manifest, icons, app-shell service worker for fast repeat loads). No offline ordering, push or background sync is claimed.
 - Loading (skeleton), empty, error and offline states; accessible focus, labels, contrast and reduced-motion support; responsive from small Android phones to desktop.
@@ -108,7 +109,7 @@ src/
 - **Money is explicit.** Totals are computed cent-safely; the delivery fee is snapshotted at confirmation; customers cannot edit shop-confirmed prices (only request changes).
 - **Honesty is a feature.** Simulated replies, demo tenants, sample prices, sponsored placements and illustrative metrics are all labelled in the UI.
 
-## Tests (66, all passing)
+## Tests (76, all passing)
 
 - `orderWorkflow.test.ts` — ZAR totals (delivery vs collection), formatting, item validation, transition guards, fulfilment-specific timelines.
 - `reducer.test.ts` — the full acceptance journey on shared state (chat → draft → change request → confirm → prepare → driver → delivered), failed-delivery re-publish, demo reset.
@@ -120,6 +121,8 @@ src/
 - `styles.responsive.test.ts` — the stylesheet contract for the expanded overlay (fixed 100dvh, safe-area padding, scroll lock, desktop centred panel) and the shared shop-card image ratio.
 - `ShopCard.test.tsx` — wordmark, cover image, monogram fallback on image error, both open actions.
 - `seedAssets.test.ts` — every shop/promo/hero asset referenced by demo data exists in `public/` and no two shops share an image.
+- `ChatUxFixes.test.tsx` — Phase 3 regressions: hidden attachment input is not a tab stop, the page behind the expanded overlay is marked `inert`/`aria-hidden` and restored, the overlay follows `visualViewport` when the keyboard opens (with a dvh fallback), and messages survive leaving a chat and returning.
+- `tenantTemplate.test.ts` — the onboarding doc keeps one row per demo shop and keeps every row marked fictional/wordmark-only.
 - `App.smoke.test.tsx` — all 22 demo routes (customer, shop staff, delivery partner, mall admin) mount after the Phase 2 changes.
 
 Verified: `tsc --noEmit` clean, production build clean, dev preview served and smoke-checked (home, manifest, service worker, images).

@@ -273,7 +273,17 @@ export function ChatThread({
           >
             <ImagePlus size={22} aria-hidden />
           </button>
-          <input ref={fileRef} type="file" accept="image/*" className="visually-hidden" onChange={onPickImage} />
+          {/* Opened by the labelled button above; kept out of the tab order so
+              keyboard users never land on an invisible control. */}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="visually-hidden"
+            tabIndex={-1}
+            aria-hidden
+            onChange={onPickImage}
+          />
           <label className="visually-hidden" htmlFor="chat-composer-input">
             Type a message
           </label>
