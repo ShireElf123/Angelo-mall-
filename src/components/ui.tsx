@@ -98,6 +98,23 @@ export function Modal({
 
 /* ---------------- Small building blocks ---------------- */
 
+/**
+ * Directory-level honesty: makes it unmistakable that the businesses are real
+ * tenants of the mall while the Mall Go experience around them is a concept.
+ */
+export function ListingDisclosure() {
+  return (
+    <div className="listing-disclosure" role="note">
+      <Info size={17} aria-hidden />
+      <div>
+        <strong>Real shops, concept app.</strong> Every business listed is a tenant of Angelo Mall, transcribed from the
+        mall&rsquo;s own store directory. None of them is a Mall Go partner: nothing you send here reaches a shop, and no
+        order, price, payment or delivery is real.
+      </div>
+    </div>
+  );
+}
+
 export function DemoTag({ children = 'Demo data' }: { children?: ReactNode }) {
   return <span className="demo-tag">{children}</span>;
 }
@@ -124,14 +141,24 @@ export function TradingPill({ tradingNow }: { tradingNow: boolean }) {
 }
 
 const PARTICIPATION_LABELS: Record<ParticipationStatus, string> = {
-  'demo-partner': 'Demo tenant · worked example',
-  'directory-example': 'Directory example · not a confirmed partner',
-  paused: 'Paused in demo',
+  'demo-scenario': 'Sample walkthrough · simulated',
+  'real-listing': 'Listed from mall directory · no ordering',
+  paused: 'Hidden in this demo',
 };
 
 export function ParticipationPill({ status }: { status: ParticipationStatus }) {
-  return <span className={`pill pill--participation pill--${status}`}>{PARTICIPATION_LABELS[status]}</span>;
+  return (
+    <span className={`pill pill--participation pill--${status}`} title={PARTICIPATION_TITLES[status]}>
+      {PARTICIPATION_LABELS[status]}
+    </span>
+  );
 }
+
+const PARTICIPATION_TITLES: Record<ParticipationStatus, string> = {
+  'demo-scenario': 'This shop is a real tenant, but the chat and orders here are a scripted, simulated sample.',
+  'real-listing': 'Real tenant transcribed from the mall store directory. Mall Go has no ordering, chat or payment link to it.',
+  paused: 'Hidden from the demo directory by the admin demo.',
+};
 
 export function StatusPill({ status }: { status: OrderStatus }) {
   const tone =

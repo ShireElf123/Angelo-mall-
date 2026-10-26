@@ -3,12 +3,13 @@ import type { Shop } from '../types';
 /**
  * Shop identity lock-up used across the demo directory.
  *
- * Branding honesty: every tenant in this demo is invented, so no shop has a
- * real retailer logo. Instead of imitating a real brand mark we render a
- * generated text wordmark — a monogram tile in the shop's own demo colour plus
- * the shop name set in the app type. If an official, verified logo is supplied
- * later it can replace the monogram without changing any consumers, and the
- * `initials` + `colour` fallback keeps working if the image is unavailable.
+ * Branding honesty: the tenants are now real Angelo Mall businesses, but we do
+ * not bundle or imitate any retailer logo. Every shop renders a generated text
+ * wordmark — a monogram tile in an app-chosen colour plus the business name set
+ * in the app type. These are labels, not official brand marks. If a tenant
+ * supplies an official logo file with permission it can replace the monogram
+ * without changing any consumers, and the `initials` + `colour` fallback keeps
+ * working if an image is unavailable.
  */
 export function ShopLogo({
   shop,

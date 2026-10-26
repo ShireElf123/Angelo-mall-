@@ -3,8 +3,9 @@ import template from '../../docs/tenant-onboarding-template.md?raw';
 import { createSeedState } from './seed';
 
 /**
- * Keeps the onboarding record in sync with the demo data: every shop must have
- * an editable row, and the doc must keep stating that all shops are fictional.
+ * Keeps the onboarding record in sync with the tenant data: every shop must have
+ * an editable row, each row must record its provenance, and the doc must keep
+ * stating that a listing is not a partnership.
  */
 describe('tenant onboarding template', () => {
   const state = createSeedState();
@@ -20,19 +21,33 @@ describe('tenant onboarding template', () => {
     expect(rowCount).toBe(state.shops.length);
   });
 
-  it('still marks every row as fictional and logo-free', () => {
+  it('marks every row logo-free and provenance-tagged', () => {
     const rows = template.split('\n').filter((line) => line.startsWith('| `shop-'));
     for (const row of rows) {
       expect(row).toContain('wordmark-only');
-      expect(row).toContain('fictional');
+      expect(row).toMatch(/cross-verified|directory-only/);
     }
-    expect(template).toMatch(/fictional demo tenant/i);
+    // The doc must never present a listing as a partnership.
+    expect(template).toMatch(/not a partner/i);
+    expect(template).not.toMatch(/\*\*fictional demo tenant\*\*/i);
   });
 
   it('documents the minimum information needed from the mall', () => {
     expect(template).toMatch(/Minimum information required from the mall/);
-    for (const required of ['Trading name', 'Category', 'Written permission', 'Approved logo file', 'Image permission']) {
+    for (const required of [
+      'Trading name',
+      'Category',
+      'Written permission',
+      'Approved logo file',
+      'Image permission',
+      'Confirmed shop number',
+    ]) {
       expect(template).toContain(required);
     }
+  });
+
+  it('points at the directory record that explains provenance', () => {
+    expect(template).toMatch(/angelomall\.co\.za/);
+    expect(template).toMatch(/2026-10-26/);
   });
 });

@@ -47,18 +47,33 @@ export function ShopCard({
         </div>
         <p className="shop-card__tagline">{shop.tagline}</p>
         <div className="shop-card__meta">
-          <span>
-            <Clock size={14} aria-hidden /> {shop.prepTimeLabel}
-          </span>
-          {shop.fulfilment.includes('delivery') && (
-            <span>
-              <Bike size={14} aria-hidden /> Delivery {formatZAR(shop.deliveryFee)} (demo)
-            </span>
-          )}
-          {shop.fulfilment.includes('collection') && (
-            <span>
-              <ShoppingBag size={14} aria-hidden /> Collection
-            </span>
+          {shop.participation === 'demo-scenario' ? (
+            <>
+              <span>
+                <Clock size={14} aria-hidden /> {shop.prepTimeLabel}
+              </span>
+              {shop.fulfilment.includes('delivery') && (
+                <span>
+                  <Bike size={14} aria-hidden /> Sample delivery fee {formatZAR(shop.deliveryFee)}
+                </span>
+              )}
+              {shop.fulfilment.includes('collection') && (
+                <span>
+                  <ShoppingBag size={14} aria-hidden /> Collection (simulated)
+                </span>
+              )}
+            </>
+          ) : (
+            <>
+              {shop.shopNumber && (
+                <span>
+                  <ShoppingBag size={14} aria-hidden /> Shop {shop.shopNumber}
+                </span>
+              )}
+              <span>
+                <Clock size={14} aria-hidden /> {shop.hoursLabel}
+              </span>
+            </>
           )}
         </div>
         <ParticipationPill status={shop.participation} />

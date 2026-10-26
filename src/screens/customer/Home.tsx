@@ -33,6 +33,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   homeware: '/images/shop-homeware.jpg',
   beauty: '/images/shop-beauty.jpg',
   services: '/images/shop-services.jpg',
+  finance: '/images/shop-finance.jpg',
 };
 
 export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
@@ -73,8 +74,9 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </span>
           <h1>Chat to mall shops. Order without the catalogue hunt.</h1>
           <p>
-            Message a participating shop, ask about sizes, stock and prices, and confirm a priced summary — for local
-            delivery or collection.
+            This concept shows how a shopper could message a mall shop, ask about sizes, stock and prices, and confirm a
+            priced summary for local delivery or collection. Every shop here is a real Angelo Mall tenant; every reply,
+            price and delivery step is simulated.
           </p>
           <form className="hero__search" onSubmit={submitSearch} role="search">
             <Search size={20} aria-hidden />
@@ -95,7 +97,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           {query.trim() && (
             <div className="hero__results" aria-live="polite">
               {searchResults.length === 0 ? (
-                <p>No demo shops match “{query}”. Try a category below, or browse all shops — in chat you can ask for almost anything.</p>
+                <p>No listed shops match “{query}”. Try a category below, or browse the full mall directory.</p>
               ) : (
                 <ul>
                   {searchResults.map((shop) => (
@@ -164,7 +166,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
       <section aria-label="Shop by category">
         <SectionHeader
           title="What do you need today?"
-          subtitle="Demo categories — listings are examples until real tenants opt in."
+          subtitle="Real Angelo Mall tenants, grouped the way the mall directory lists them. None is a Mall Go partner; ordering is simulated."
         />
         <div className="category-grid">
           {CATEGORIES.map((category) => {
@@ -180,7 +182,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
                 <span>
                   <strong>{category.label}</strong>
                   <small>
-                    {category.tagline} · {count} demo listing{count === 1 ? '' : 's'}
+                    {category.tagline} · {count} listed shop{count === 1 ? '' : 's'}
                   </small>
                 </span>
               </button>
@@ -208,7 +210,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
       <section aria-label="Featured shops">
         <SectionHeader
           title="Featured shops"
-          subtitle="Worked demo tenants with full chat-to-order journeys."
+          subtitle="Real tenants, chosen because the mall directory and the business’s own listings agree. Their chats here are scripted samples."
           action={
             <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'shops' })}>
               All shops <ArrowRight size={15} aria-hidden />
@@ -268,26 +270,26 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               <MessagesSquare size={22} aria-hidden />
             </span>
             <h3>1. Chat to the shop</h3>
-            <p>Ask about availability, sizes, prices or substitutions — send a list or even a photo of what you need.</p>
+            <p>In a live version you would ask about availability, sizes and prices. Here the replies are scripted samples, clearly labelled.</p>
           </li>
           <li>
             <span className="steps__icon">
               <ClipboardList size={22} aria-hidden />
             </span>
             <h3>2. Review the summary</h3>
-            <p>Staff build a priced order summary in the chat. Check items, quantities and the delivery fee before you confirm anything.</p>
+            <p>The shop would build a priced summary in the chat. In this demo the summary is sample data with demo prices.</p>
           </li>
           <li>
             <span className="steps__icon">
               <Bike size={22} aria-hidden />
             </span>
             <h3>3. Delivery or collection</h3>
-            <p>Follow each step — accepted, prepared, out for delivery — and jump back into the same chat if you have a question.</p>
+            <p>Follow each step — accepted, prepared, out for delivery — in a simulated timeline. No real courier is involved.</p>
           </li>
         </ol>
         <p className="how-it-works__note">
-          <ShoppingBag size={16} aria-hidden /> Try it now: open <strong>Mzansi Fresh Grocers</strong> — a basket is
-          already waiting in the chat. <DemoTag>Demo prices</DemoTag>
+          <ShoppingBag size={16} aria-hidden /> Try the walkthrough: open <strong>The Angelo SUPERSPAR</strong> — a
+          sample basket is already waiting in the chat. <DemoTag>Simulated · demo prices</DemoTag>
         </p>
       </section>
     </div>

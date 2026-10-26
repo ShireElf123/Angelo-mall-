@@ -17,12 +17,26 @@ export type CategoryId =
   | 'pharmacy'
   | 'homeware'
   | 'beauty'
-  | 'services';
+  | 'services'
+  | 'finance';
 
 export type FulfilmentMethod = 'delivery' | 'collection';
 
-/** Demo honesty: a listing is either a worked demo tenant or a directory example. */
-export type ParticipationStatus = 'demo-partner' | 'directory-example' | 'paused';
+/**
+ * Listing honesty. Every business in the directory is a real Angelo Mall tenant
+ * per the mall's own store directory, but NONE of them has a commercial
+ * relationship with Mall Go: no chat, ordering, payment or delivery integration
+ * exists. `demo-scenario` marks the few listings that carry the scripted sample
+ * conversation/order walkthrough in this concept demo.
+ */
+export type ParticipationStatus = 'real-listing' | 'demo-scenario' | 'paused';
+
+/** How well a tenant entry is supported by sources. */
+export type ListingConfidence =
+  /** Mall store directory plus at least one independent source. */
+  | 'cross-verified'
+  /** Official mall store directory only — cannot be independently confirmed. */
+  | 'directory-only';
 
 export interface Shop {
   id: string;
@@ -33,6 +47,20 @@ export interface Shop {
   coverImage: string;
   initials: string;
   colour: string;
+  /** Shop number exactly as printed in the mall directory, when it gives one. */
+  shopNumber?: string;
+  /** Public switchboard number(s) printed in the mall directory. Not a Mall Go line. */
+  phones?: string[];
+  /** Business's own website, where the mall directory or the business lists one. */
+  website?: string;
+  /** Confidence in the listing (see ListingConfidence). */
+  listingConfidence?: ListingConfidence;
+  /** Where the listing came from — always the mall's own store directory. */
+  listingSource?: string;
+  /** ISO date the listing was checked against the source. */
+  listingCheckedOn?: string;
+  /** Caveat shown with the listing (conflicts, spelling, unconfirmed status). */
+  listingNote?: string;
   /** Sample trading state — demo data, not live trading hours. */
   tradingNow: boolean;
   hoursLabel: string;

@@ -24,9 +24,18 @@ describe('demo shop asset plan', () => {
     }
   });
 
-  it('does not repeat a shop image when a distinct category image exists', () => {
-    const covers = state.shops.map((shop) => shop.coverImage);
-    expect(new Set(covers).size).toBe(covers.length);
+  it('uses one shared, logo-free category image per category', () => {
+    // Phase 4: shops are real tenants and we deliberately ship NO shop
+    // photographs or brand logos, so covers are shared category scenes. Guard
+    // that a category never mixes images, and that every category has one.
+    for (const category of CATEGORIES) {
+      const covers = new Set(
+        state.shops.filter((shop) => shop.category === category.id).map((shop) => shop.coverImage),
+      );
+      expect(covers.size, `${category.id} uses more than one cover`).toBeLessThanOrEqual(1);
+    }
+    const covers = new Set(state.shops.map((shop) => shop.coverImage));
+    expect(covers.size).toBeGreaterThanOrEqual(8);
   });
 
   it('has at least one demo shop per category', () => {

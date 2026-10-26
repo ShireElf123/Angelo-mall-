@@ -5,7 +5,7 @@ import { DemoStoreProvider } from '../../store/DemoStore';
 import { ToastProvider } from '../../components/ui';
 import { ChatScreen } from './ChatScreen';
 
-const CONVERSATION_ID = 'conv-mzansi-thandi';
+const CONVERSATION_ID = 'conv-superspar-thandi';
 
 function renderChat() {
   const navigate = vi.fn();
@@ -36,13 +36,13 @@ describe('ChatScreen expand / collapse', () => {
     const minimise = screen.getByRole('button', { name: 'Minimise chat' });
     expect(minimise.getAttribute('aria-expanded')).toBe('true');
     expect(document.querySelector('.page--chat--expanded')).toBeTruthy();
-    const panel = screen.getByRole('dialog', { name: /Chat with Mzansi Fresh Grocers/ });
+    const panel = screen.getByRole('dialog', { name: /Chat with The Angelo SUPERSPAR/ });
     expect(panel.getAttribute('aria-modal')).toBe('true');
 
     fireEvent.click(minimise);
 
     expect(screen.getByRole('button', { name: 'Expand chat' })).toBeTruthy();
-    const compactPanel = screen.getByRole('region', { name: /Chat with Mzansi Fresh Grocers/ });
+    const compactPanel = screen.getByRole('region', { name: /Chat with The Angelo SUPERSPAR/ });
     expect(compactPanel.getAttribute('aria-modal')).toBeNull();
     expect(document.querySelector('.page--chat--expanded')).toBeNull();
   });

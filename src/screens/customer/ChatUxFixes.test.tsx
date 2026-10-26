@@ -7,7 +7,7 @@ import { DemoStoreProvider } from '../../store/DemoStore';
 import { ToastProvider } from '../../components/ui';
 import { ChatScreen } from './ChatScreen';
 
-const CHAT_HASH = '#/chat/conv-mzansi-thandi';
+const CHAT_HASH = '#/chat/conv-superspar-thandi';
 
 function renderAppAtChat() {
   window.location.hash = CHAT_HASH;
@@ -18,7 +18,7 @@ function renderChat() {
   return render(
     <DemoStoreProvider>
       <ToastProvider>
-        <ChatScreen conversationId="conv-mzansi-thandi" navigate={vi.fn()} />
+        <ChatScreen conversationId="conv-superspar-thandi" navigate={vi.fn()} />
       </ToastProvider>
     </DemoStoreProvider>,
   );
@@ -156,13 +156,13 @@ describe('switching shops and returning to a chat', () => {
     expect(screen.getByText('Do you have brown bread today?')).toBeTruthy();
 
     // Leave the chat for the shop page, then switch to a different shop's chat.
-    window.location.hash = '#/shop/shop-flame-co';
+    window.location.hash = '#/shop/shop-kfc';
     fireEvent(window, new HashChangeEvent('hashchange'));
-    expect(await screen.findByRole('heading', { level: 1, name: /Flame & Co\. Grill/ })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1, name: /KFC/ })).toBeTruthy();
 
-    window.location.hash = '#/chat/conv-flame-thandi';
+    window.location.hash = '#/chat/conv-kfc-thandi';
     fireEvent(window, new HashChangeEvent('hashchange'));
-    expect(await screen.findByPlaceholderText('Message Flame & Co. Grill…')).toBeTruthy();
+    expect(await screen.findByPlaceholderText('Message KFC…')).toBeTruthy();
 
     // Return to the first conversation: the sent message is still there and the
     // composer is empty (drafts are per-mount, messages are per-store).

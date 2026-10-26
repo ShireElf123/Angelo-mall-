@@ -1,4 +1,4 @@
-import { ArrowLeft, Bike, Clock, MapPin, MessageCircle, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Bike, Clock, Globe, MapPin, MessageCircle, Phone, ShoppingBag } from 'lucide-react';
 import { categoryLabel } from '../../data/seed';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
@@ -9,7 +9,14 @@ import {
 } from '../../store/selectors';
 import { formatZAR, formatRelative } from '../../utils/format';
 import { PromotionBanner } from '../../components/PromotionBanner';
-import { DemoTag, EmptyState, ParticipationPill, StatusPill, TradingPill, useToast } from '../../components/ui';
+import {
+  DemoTag,
+  EmptyState,
+  ParticipationPill,
+  StatusPill,
+  TradingPill,
+  useToast,
+} from '../../components/ui';
 import { ShopLogo } from '../../components/ShopLogo';
 
 const SUGGESTED_ASKS: Record<string, string[]> = {
@@ -101,10 +108,38 @@ export function ShopPageScreen({
             </div>
             <div>
               <dt>
-                <MapPin size={15} aria-hidden /> Find them
+                <MapPin size={15} aria-hidden /> Shop number
               </dt>
               <dd>{shop.unitLabel}</dd>
             </div>
+            {shop.phones && shop.phones.length > 0 && (
+              <div>
+                <dt>
+                  <Phone size={15} aria-hidden /> Shop telephone
+                </dt>
+                <dd>
+                  {shop.phones.map((phone) => (
+                    <a key={phone} href={`tel:${phone.replace(/\s+/g, '')}`}>
+                      {phone}
+                    </a>
+                  ))}
+                  <small className="shop-facts__note">As listed by the mall directory — call the shop directly.</small>
+                </dd>
+              </div>
+            )}
+            {shop.website && (
+              <div>
+                <dt>
+                  <Globe size={15} aria-hidden /> Website
+                </dt>
+                <dd>
+                  <a href={shop.website} target="_blank" rel="noopener noreferrer nofollow">
+                    {shop.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  </a>
+                  <small className="shop-facts__note">Published by the mall directory or the business itself.</small>
+                </dd>
+              </div>
+            )}
             <div>
               <dt>
                 <Bike size={15} aria-hidden /> Delivery
@@ -125,12 +160,32 @@ export function ShopPageScreen({
 
           <button type="button" className="btn btn--primary btn--lg btn--block" onClick={() => void startChat()}>
             <MessageCircle size={20} aria-hidden />
-            {conversation ? 'Continue chatting' : 'Start chatting'}
+            {conversation ? 'Continue the sample chat' : 'Try the sample chat'}
           </button>
           <p className="shop-hero__hint">
-            No catalogue to scroll — ask for what you need and staff confirm availability and prices in the chat.{' '}
-            <DemoTag>Demo chat</DemoTag>
+            Sample chat only — nothing is sent to {shop.name}. Replies, prices and collection steps are simulated in this
+            browser. <DemoTag>Simulated</DemoTag>
           </p>
+
+          <div className="shop-source" aria-label="Listing source">
+            <p>
+              <strong>Listing source:</strong> The Angelo Mall store directory
+              {shop.listingCheckedOn ? ` · checked ${shop.listingCheckedOn}` : ''} ·{' '}
+              {shop.listingConfidence === 'cross-verified'
+                ? 'cross-checked against the business’s own listing'
+                : 'directory entry only — not independently confirmed as current'}
+            </p>
+            {shop.listingNote && (
+              <p>
+                <strong>Note:</strong> {shop.listingNote}
+              </p>
+            )}
+            <p>
+              The name, shop number, hours and contact details are the mall’s. The category and one-line description are
+              our own summary of the business type, not wording supplied by the shop. No logo, photograph or product
+              image from any business is used.
+            </p>
+          </div>
         </div>
       </article>
 

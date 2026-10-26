@@ -22,34 +22,34 @@ function run(state: DemoState, action: DemoAction): DemoState {
 }
 
 describe('seed scenario', () => {
-  it('starts with the scripted Mzansi Fresh conversation and a reviewable basket', () => {
+  it('starts with the scripted SUPERSPAR conversation and a reviewable basket', () => {
     const state = createSeedState(1_700_000_000_000);
-    const messages = messagesForConversation(state, 'conv-mzansi-thandi');
+    const messages = messagesForConversation(state, 'conv-superspar-thandi');
     expect(messages.some((m) => m.text === 'Hi, I need bread, milk, eggs and mince.')).toBe(true);
     expect(messages.some((m) => m.kind === 'order-card')).toBe(true);
-    const basket = openBasketForConversation(state, 'conv-mzansi-thandi');
+    const basket = openBasketForConversation(state, 'conv-superspar-thandi');
     expect(basket?.status).toBe('awaiting-customer');
     expect(basket?.items).toHaveLength(4);
   });
 
   it('customer and shop both append to the same conversation state', () => {
     let state = createSeedState(now());
-    const before = messagesForConversation(state, 'conv-mzansi-thandi').length;
+    const before = messagesForConversation(state, 'conv-superspar-thandi').length;
     state = run(state, {
       type: 'SEND_MESSAGE',
-      conversationId: 'conv-mzansi-thandi',
+      conversationId: 'conv-superspar-thandi',
       sender: 'customer',
       text: 'Please add butter if you have it.',
       now: now(),
     });
     state = run(state, {
       type: 'SEND_MESSAGE',
-      conversationId: 'conv-mzansi-thandi',
+      conversationId: 'conv-superspar-thandi',
       sender: 'shop',
       text: 'Added — see your updated basket.',
       now: now(),
     });
-    const after = messagesForConversation(state, 'conv-mzansi-thandi');
+    const after = messagesForConversation(state, 'conv-superspar-thandi');
     expect(after).toHaveLength(before + 2);
     expect(after[after.length - 2].sender).toBe('customer');
     expect(after[after.length - 1].sender).toBe('shop');
@@ -61,8 +61,8 @@ describe('full chat → order → delivery journey', () => {
     let state = createSeedState(now());
 
     // Shop staff starts a fresh summary for Sipho (unread braai-pack chat).
-    state = run(state, { type: 'CREATE_ORDER_DRAFT', conversationId: 'conv-mzansi-Sipho', now: now() });
-    const draft = openBasketForConversation(state, 'conv-mzansi-Sipho');
+    state = run(state, { type: 'CREATE_ORDER_DRAFT', conversationId: 'conv-superspar-Sipho', now: now() });
+    const draft = openBasketForConversation(state, 'conv-superspar-Sipho');
     expect(draft?.status).toBe('draft');
 
     state = run(state, {
@@ -133,7 +133,7 @@ describe('full chat → order → delivery journey', () => {
     expect(orderById(state, draft!.id)?.status).toBe('delivered');
 
     // The customer conversation narrates the whole journey via system messages.
-    const systemNotes = messagesForConversation(state, 'conv-mzansi-Sipho').filter((m) => m.kind === 'system');
+    const systemNotes = messagesForConversation(state, 'conv-superspar-Sipho').filter((m) => m.kind === 'system');
     expect(systemNotes.some((m) => m.text.includes('confirmed'))).toBe(true);
     expect(systemNotes.some((m) => m.text.includes('Delivered'))).toBe(true);
   });
@@ -156,14 +156,14 @@ describe('demo reset', () => {
     state = run(state, { type: 'SET_ROLE', role: 'delivery' });
     state = run(state, {
       type: 'SEND_MESSAGE',
-      conversationId: 'conv-mzansi-thandi',
+      conversationId: 'conv-superspar-thandi',
       sender: 'customer',
       text: 'Extra message that reset should remove',
       now: now(),
     });
     state = run(state, { type: 'RESET_DEMO', now: now() });
     expect(state.role).toBe('delivery');
-    const texts = messagesForConversation(state, 'conv-mzansi-thandi').map((m) => m.text);
+    const texts = messagesForConversation(state, 'conv-superspar-thandi').map((m) => m.text);
     expect(texts).not.toContain('Extra message that reset should remove');
     expect(orderById(state, 'ord-demo-1001')?.status).toBe('awaiting-customer');
   });

@@ -252,10 +252,19 @@ export function ChatScreen({
             on the shop page).
           </div>
         )}
+        {shop.participation === 'demo-scenario' && (
+          <div className="chat-notice chat-notice--info" role="note">
+            <TriangleAlert size={16} aria-hidden />
+            <span>
+              Simulated chat: {shop.name} is a real tenant at Angelo Mall but has no Mall Go account. Nobody at the store
+              receives these messages, and the replies, prices and delivery steps are scripted for this demo.
+            </span>
+          </div>
+        )}
         {shop.participation === 'paused' && (
           <div className="chat-notice" role="note">
             <TriangleAlert size={16} aria-hidden />
-            This listing is paused in the demo directory — chat remains open so you can see how the state is handled.
+            This listing is hidden in the demo directory — chat remains open so you can see how the state is handled.
           </div>
         )}
 

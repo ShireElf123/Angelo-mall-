@@ -38,7 +38,7 @@ function useMarketplaceMetrics(commissionRate: number) {
     const commission = roundMoney(gmv * commissionRate);
     const deliveryMargin = roundMoney(deliveryFees - driverPayouts);
     return {
-      participating: state.shops.filter((s) => s.participation === 'demo-partner').length,
+      participating: state.shops.filter((s) => s.participation === 'demo-scenario').length,
       listings: state.shops.length,
       conversations: state.conversations.length,
       confirmedOrders: confirmed.length,
@@ -61,9 +61,9 @@ function Overview() {
     <div>
       <div className="stat-grid">
         <div className="stat-card">
-          <span>Participating shops (demo)</span>
+          <span>Sample-walkthrough shops</span>
           <strong>{metrics.participating}</strong>
-          <small>of {metrics.listings} directory listings</small>
+          <small>of {metrics.listings} real directory listings (none is a partner)</small>
         </div>
         <div className="stat-card">
           <span>Conversations</span>
@@ -104,7 +104,7 @@ function Overview() {
           <div>
             <dt>
               Driver payouts (completed)
-              <small>What demo partners earned — a cost against delivery fees</small>
+              <small>What the simulated drivers earned — a cost against delivery fees</small>
             </dt>
             <dd>− {formatZAR(metrics.driverPayouts)}</dd>
           </div>
@@ -150,9 +150,9 @@ function ShopsAdmin() {
   return (
     <div>
       <InfoBanner>
-        Tenant participation is a management decision. Changing a status here updates the customer directory
-        immediately — e.g. switch a “directory example” to “demo partner” to present an onboarding conversation.
-        Nothing here enrols a real tenant.
+        Listing status is a management decision. Changing a status here updates the customer directory immediately —
+        e.g. move a listing into the “sample walkthrough” group to present an onboarding conversation. Nothing here
+        enrols a real tenant: every business in this directory is listed from public mall information only.
       </InfoBanner>
       <ul className="admin-shop-list">
         {state.shops.map((shop) => (
@@ -177,9 +177,9 @@ function ShopsAdmin() {
                   notify(`${shop.name} participation updated (demo).`);
                 }}
               >
-                <option value="demo-partner">Demo partner</option>
-                <option value="directory-example">Directory example</option>
-                <option value="paused">Paused</option>
+                <option value="demo-scenario">Sample walkthrough (simulated)</option>
+                <option value="real-listing">Directory listing only</option>
+                <option value="paused">Hidden in demo</option>
               </select>
             </label>
             <label className="switch">
@@ -474,7 +474,7 @@ function Reports() {
               <span className="report-shop-list__name">
                 <strong>{shop.name}</strong>
                 <small>
-                  {orders} confirmed order(s) · {shop.participation === 'demo-partner' ? 'demo partner' : shop.participation}
+                  {orders} confirmed order(s) · {shop.participation === 'demo-scenario' ? 'sample walkthrough' : 'directory listing only'}
                 </small>
               </span>
               <strong>{formatZAR(gmv)}</strong>

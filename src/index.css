@@ -234,6 +234,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .pill--closed { background: #ece7db; color: var(--muted); }
 .pill--participation { background: var(--gold-100); color: #6d5410; align-self: flex-start; }
 .pill--paused { background: var(--danger-bg); color: var(--danger); }
+.pill--demo-scenario { background: #e7f0ff; color: #1d4ed8; }
+.pill--real-listing { background: #eef2f0; color: #3f4f48; }
 .pill--status { text-transform: none; }
 .pill--success { background: var(--success-bg); color: var(--success); }
 .pill--warning { background: var(--warning-bg); color: var(--warning); }
@@ -868,6 +870,37 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   flex: none;
 }
 .chat-notice svg { flex: none; margin-top: 1px; }
+.chat-notice--info { background: #eaf2fb; color: #1e3a5f; }
+
+/* Phase 4: real-tenant disclosure blocks */
+.listing-disclosure {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #f1f5f3;
+  border: 1px solid rgba(12, 59, 46, 0.14);
+  border-radius: var(--radius-md, 12px);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-soft, #3f4f48);
+}
+.listing-disclosure svg { flex: none; margin-top: 2px; color: var(--green-700, #0c3b2e); }
+.shop-facts dd a { color: var(--green-700, #0c3b2e); font-weight: 600; }
+.shop-facts__note { display: block; font-size: 0.76rem; color: var(--ink-soft, #5f6f68); margin-top: 2px; }
+.shop-source {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 12px);
+  background: #f7f9f8;
+  border: 1px dashed rgba(12, 59, 46, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-soft, #3f4f48);
+}
+.shop-source p + p { margin-top: 6px; }
+.shop-source strong { color: var(--ink, #16281f); }
 
 .chat-thread { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 

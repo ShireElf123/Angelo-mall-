@@ -1,10 +1,10 @@
-# Angelo Mall Go — Phase 1 Frontend Prototype
+# Angelo Mall Go — Phase 4 Frontend Prototype (real tenant directory)
 
 **Your mall. Your shops. One easy way to shop.**
 
 A mobile-first, chat-oriented, multi-vendor shopping and local-delivery **PWA concept** for Angelo Mall, Nigel, Gauteng — built as a production-quality, interactive frontend with a backend-ready architecture.
 
-> ⚠️ **Demonstration only.** Every tenant, price, trading hour, distance and metric in this app is sample data. No shop has confirmed participation, no endorsement by Angelo Mall is implied, and no real orders, payments or deliveries take place. There are no user accounts: a clearly labelled **Demo Mode** switcher changes between the four workspaces.
+> ⚠️ **Demonstration only.** The shops are **real Angelo Mall tenants**, transcribed from the mall's own store directory (shop numbers, telephone numbers and trading hours as listed). **No shop is a Mall Go partner**: no business has agreed to take part, has been contacted on this project's behalf, or receives messages, orders, payments or delivery requests from this app. All chat replies, prices, stock levels, order acceptance, collection and delivery are simulated in the browser, and no official logo or shop photograph is used. No endorsement by Angelo Mall or any tenant is implied. There are no user accounts: a clearly labelled **Demo Mode** switcher changes between the four workspaces.
 
 This app lives in its own folder (`angelo-mall-go/`) inside the Student Portal repository and is completely independent of that product — its own `package.json`, build, tests and PWA manifest.
 
@@ -34,10 +34,10 @@ No environment variables, API keys or accounts are needed — demo state is seed
 
 ## The 3-minute guided demo
 
-1. **Customer:** open the **Mzansi Fresh Grocers** chat — a basket (`AMG-1001`, bread/milk/eggs/mince) is already waiting. Send a message and you'll get a clearly labelled *simulated* reply.
+1. **Customer:** open the **The Angelo SUPERSPAR** sample chat — a basket (`AMG-1001`, bread/milk/eggs/mince) is already waiting. Send a message and you'll get a clearly labelled *simulated* reply; the real store receives nothing.
 2. Review the basket and **confirm the demo order** (choose delivery).
 3. Switch **Demo Mode → Shop staff**: open Thandi's conversation, reply as the shop, then **Accept → Start preparing → Ready — request delivery partner**.
-4. Switch to **Delivery partner**: accept the Mzansi Fresh job, then **Confirm collection → Start delivery → Confirm delivered**.
+4. Switch to **Delivery partner**: accept the SUPERSPAR job, then **Confirm collection → Start delivery → Confirm delivered**.
 5. Back to **Customer → Orders**: `AMG-1001` shows **Delivered** with a complete timeline.
 6. Bonus: in Shop staff, open Sipho's unread chat and build an order from scratch — no catalogue, just agreed items. Then visit **Mall admin** to see the numbers move.
 
@@ -47,8 +47,8 @@ No environment variables, API keys or accounts are needed — demo state is seed
 
 ### Customer experience
 - Home with shop search, categories, featured shops, promotions, recent chats and active-order strip.
-- Searchable/filterable shop directory (category, delivery/collection, open-now demo state) with honest participation labels ("Demo tenant" vs "Directory example — not a confirmed partner").
-- Shop pages with sample hours, fulfilment options, "popular things to ask" shortcuts and a prominent **Start chatting** action. **No product-catalogue grid.**
+- Searchable/filterable shop directory of 29 real Angelo Mall tenants across nine categories, with a permanent disclosure block ("Real shops, concept app"), per-shop provenance (directory source, check date, cross-verified vs directory-only) and honest labels ("Sample walkthrough · simulated" vs "Listed from mall directory · no ordering").
+- Shop pages with the directory's shop number, telephone and website (only where the source lists one), sample hours, a listing-confidence note, "popular things to ask" shortcuts and a **sample chat** action. **No product-catalogue grid.**
 - WhatsApp-style conversation (original UI, no WhatsApp branding): text + photo attach (downscaled in-browser, stored on-device only, labelled as demo), day separators, timestamps, typing indicator, and **structured order cards** embedded in the thread.
 - **Expandable chat:** an Expand / Minimise control in the chat header opens the same conversation as a full-screen panel on phones (safe-area padding for the status bar and home indicator, background scroll locked, Esc to close, focus kept inside the panel) or as a large centred overlay on desktop. Compact mode is unchanged, and the conversation, draft, attachment preview, basket and order state carry across because the panel is never unmounted.
 - Basket with shop-confirmed prices (locked), quantity/removal **change requests** that the shop must approve, transparent totals incl. delivery fee, delivery-vs-collection choice, and explicit confirmation. A chat message is never silently a purchase.
@@ -73,8 +73,9 @@ No environment variables, API keys or accounts are needed — demo state is seed
 - Delivery-job oversight and simple activity reports (orders by status, GMV by shop, promotion funnel).
 
 ### Cross-cutting
-- Onboarding a **real** tenant is a documented data task, not a redesign: see [`docs/tenant-onboarding-template.md`](docs/tenant-onboarding-template.md) for the editable per-shop record (approved logo file, image permission, confirmation status) and the minimum information required from the mall. Until a row reaches *verified*, the shop stays labelled as a fictional demo tenant.
-- Shop identity is a **generated text wordmark** (monogram tile + shop name), not an imitation of any real retailer logo — see [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) for the full asset inventory, fallback behaviour and remaining asset work.
+- Tenant data has a single source of truth: [`src/data/tenants.ts`](src/data/tenants.ts) (with source URL, check date and confidence per listing), projected into `Shop` records by `src/data/seed.ts`. Provenance, conflicts and exclusions are written up in [`docs/tenant-directory.md`](docs/tenant-directory.md).
+- Turning a **listing** into a **consenting partner** is a documented data task, not a redesign: see [`docs/tenant-onboarding-template.md`](docs/tenant-onboarding-template.md) for the per-shop record (approved logo file, image permission, confirmation status) and the minimum information required from the mall.
+- Shop identity is a **generated text wordmark** (monogram tile + shop name), not an imitation of any real retailer logo; covers are shared, logo-free category illustrations. See [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) for the inventory, fallback behaviour and remaining asset work.
 - Installable **PWA shell** (manifest, icons, app-shell service worker for fast repeat loads). No offline ordering, push or background sync is claimed.
 - Loading (skeleton), empty, error and offline states; accessible focus, labels, contrast and reduced-motion support; responsive from small Android phones to desktop.
 
@@ -140,13 +141,16 @@ GitHub, so pushes do not deploy. See [`docs/deployment.md`](docs/deployment.md) 
 verified project configuration, the known-good Preview/rollback deployments, and the exact
 dashboard steps to enable push-to-Preview. Preview only: nothing is promoted to Production.
 
-## Known limitations (by design, Phase 1)
+## Known limitations (by design)
 
 - Mock data persists only in the browser (`localStorage`); photo attachments are downscaled data URLs kept on-device and may stop persisting if storage fills — the demo keeps running in memory.
 - Simulated shop replies are canned and keyword-based, and always labelled simulated.
 - Distances, payouts and the commission model are supplied demo values — no routing engine, no pricing engine.
 - The PWA service worker caches the app shell only; there is no offline ordering, background sync or push notifications.
 - Demo Mode role switching is a presentation tool, **not** authentication.
+- Tenant listings are transcribed from the mall's store directory, which publishes no "last updated" date: 23 of 29 entries are `directory-only` and marked on their shop page as not independently confirmed as current. Nothing here proves a shop is still trading today.
+- No tenant has given permission for anything: names and shop numbers are used because the mall publishes them, and every chat/order/delivery is simulated. Real onboarding is a separate, consent-based step (see the onboarding template).
+- Shop covers are shared category illustrations, not photographs of the named businesses.
 
 ## Recommended Phase 2 (backend)
 

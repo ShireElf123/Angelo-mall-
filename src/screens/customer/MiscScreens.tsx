@@ -62,7 +62,7 @@ export function PromotionDetailScreen({
       <article className="promo-detail">
         <img src={promotion.image} alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
         <div className="promo-detail__body">
-          {promotion.sponsored ? <SponsoredTag /> : <DemoTag>Demo tenant promotion · unpaid sample content</DemoTag>}
+          {promotion.sponsored ? <SponsoredTag /> : <DemoTag>Concept placeholder · not a tenant offer</DemoTag>}
           <h1>{promotion.title}</h1>
           <p>{promotion.description}</p>
           <p className="promo-detail__dates">
@@ -84,7 +84,7 @@ export function PromotionDetailScreen({
             {shop ? (
               <>
                 <button type="button" className="btn btn--primary btn--lg btn--block" onClick={() => void startChatFromPromo()}>
-                  <MessageCircle size={19} aria-hidden /> Chat to {shop.name}
+                  <MessageCircle size={19} aria-hidden /> Open a sample chat for {shop.name}
                 </button>
                 <button type="button" className="btn btn--ghost btn--block" onClick={() => navigate({ name: 'shop', shopId: shop.id })}>
                   View shop page
@@ -92,7 +92,7 @@ export function PromotionDetailScreen({
               </>
             ) : (
               <button type="button" className="btn btn--primary btn--block" onClick={() => navigate({ name: 'shops' })}>
-                Browse participating demo shops
+                Browse the mall directory
               </button>
             )}
           </div>
@@ -119,10 +119,10 @@ export function PromotionDetailScreen({
 }
 
 const DEMO_WALKTHROUGH: string[] = [
-  'Customer: open Mzansi Fresh Grocers and review the basket already waiting in the chat (AMG-1001).',
+  'Customer: open The Angelo SUPERSPAR and review the basket already waiting in the chat (AMG-1001).',
   'Confirm the demo order — choose delivery to see the full journey.',
   'Switch Demo Mode to Shop staff: open Thandi’s conversation, reply, then accept → preparing → ready for driver.',
-  'Switch to Delivery partner: accept the Mzansi Fresh job, mark collected → out for delivery → delivered.',
+  'Switch to Delivery partner: accept the SUPERSPAR job, mark collected → out for delivery → delivered.',
   'Return to Customer: open Orders — AMG-1001 now shows Delivered with a complete timeline.',
   'Bonus: in the Shop staff inbox, open Sipho’s unread chat and build him an order from scratch.',
 ];
@@ -136,8 +136,24 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
     <div className="page page--narrow">
       <SectionHeader
         title="Help & about this demo"
-        subtitle="Angelo Mall Go is a Phase 1 interactive prototype: real front-end behaviour, sample data, no live services."
+        subtitle="Angelo Mall Go is a front-end prototype: real interface behaviour, sample data from the mall’s own store directory, no live services."
       />
+
+      <section className="panel" aria-label="About the shop listings">
+        <h2>About the shop listings</h2>
+        <p>
+          Every shop in the directory is a real business at Angelo Mall, transcribed from the mall’s published store
+          directory (<a href="https://www.angelomall.co.za/" target="_blank" rel="noopener noreferrer nofollow">angelomall.co.za</a>),
+          including shop numbers, telephone numbers and trading hours. The directory has no “last updated” date, so
+          those details are shown as listed rather than as confirmed today.
+        </p>
+        <p>
+          <strong>No shop is a Mall Go partner.</strong> None has agreed to take part, none receives messages or orders
+          from this app, and no logo or shop photograph is used. Replies, prices, stock, collection and delivery in the
+          four sample chats are simulated in your browser. Before any real launch, each business needs to be contacted
+          and must give written permission.
+        </p>
+      </section>
 
       <section className="panel" aria-label="How ordering works">
         <h2>
@@ -174,8 +190,8 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
             <li key={step}>{step}</li>
           ))}
         </ol>
-        <button type="button" className="btn btn--primary" onClick={() => navigate({ name: 'chat', conversationId: 'conv-mzansi-thandi' })}>
-          Start at the Mzansi Fresh chat
+        <button type="button" className="btn btn--primary" onClick={() => navigate({ name: 'chat', conversationId: 'conv-superspar-thandi' })}>
+          Start at the SUPERSPAR chat
         </button>
       </section>
 

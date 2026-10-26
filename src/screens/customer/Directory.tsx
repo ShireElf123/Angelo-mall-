@@ -7,7 +7,7 @@ import { activePromotions } from '../../store/selectors';
 import type { CategoryId, FulfilmentMethod } from '../../types';
 import { PromotionBanner } from '../../components/PromotionBanner';
 import { ShopCard } from '../../components/ShopCard';
-import { EmptyState, InfoBanner, SectionHeader, SkeletonList } from '../../components/ui';
+import { EmptyState, InfoBanner, ListingDisclosure, SectionHeader, SkeletonList } from '../../components/ui';
 
 type FulfilmentFilter = 'all' | FulfilmentMethod;
 
@@ -73,8 +73,10 @@ export function DirectoryScreen({
     <div className="page">
       <SectionHeader
         title="Shop directory"
-        subtitle="Demo tenant directory for Angelo Mall. “Demo tenant” listings have full worked journeys; “directory examples” show how future tenants would appear — none are confirmed Mall Go partners yet."
+        subtitle="Angelo Mall’s shops, transcribed from the mall’s own store directory. Every listing is a real tenant; none of them is a Mall Go partner and no ordering, payment or delivery is connected."
       />
+
+      <ListingDisclosure />
 
       <div className="directory-controls">
         <div className="search-field">

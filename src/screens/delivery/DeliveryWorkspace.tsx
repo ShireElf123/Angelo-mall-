@@ -147,7 +147,7 @@ function JobCard({ job, mode }: { job: DeliveryJob; mode: 'available' | 'mine' |
       {failOpen && (
         <Modal title="Can’t complete this delivery?" onClose={() => setFailOpen(false)}>
           <p>
-            The job will be re-published for another demo partner and the customer’s order returns to “Awaiting driver
+            The job will be re-published for another simulated driver and the customer’s order returns to “Awaiting driver
             assignment”. In a live system you’d pick a reason (vehicle trouble, customer unreachable…) and support
             would be notified.
           </p>
@@ -198,7 +198,7 @@ export function DeliveryWorkspace({
         <div>
           <span className="workspace-kicker">Delivery partner workspace · demo</span>
           <h1>Local deliveries around Nigel</h1>
-          <p>Independent demo job board for approved local partners — serving any participating mall shop. Not connected to any courier company.</p>
+          <p>Independent demo job board: a simulated courier view of the sample orders. No courier company, driver or shop is connected to it.</p>
         </div>
       </div>
 

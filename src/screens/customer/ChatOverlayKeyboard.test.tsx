@@ -9,7 +9,7 @@ function renderChat() {
   return render(
     <DemoStoreProvider>
       <ToastProvider>
-        <ChatScreen conversationId="conv-mzansi-thandi" navigate={vi.fn()} />
+        <ChatScreen conversationId="conv-superspar-thandi" navigate={vi.fn()} />
       </ToastProvider>
     </DemoStoreProvider>,
   );

@@ -22,7 +22,7 @@ afterEach(() => {
 
 describe('chat state while toggling compact / expanded', () => {
   it('keeps the basket bar and review action available in both modes', () => {
-    renderChat('conv-mzansi-thandi');
+    renderChat('conv-superspar-thandi');
     const basketLabel = /Basket AMG-1001 ready/;
 
     expect(screen.getByText(basketLabel)).toBeTruthy();
@@ -36,7 +36,7 @@ describe('chat state while toggling compact / expanded', () => {
   });
 
   it('keeps messages that were sent before expanding and survives a message sent while expanded', () => {
-    renderChat('conv-mzansi-thandi');
+    renderChat('conv-superspar-thandi');
     fireEvent.click(screen.getByRole('button', { name: 'Expand chat' }));
     const input = screen.getByLabelText('Type a message');
     fireEvent.change(input, { target: { value: 'Please add a loaf of brown bread.' } });
@@ -50,20 +50,20 @@ describe('chat state while toggling compact / expanded', () => {
   });
 
   it('renders the correct shop identity when switching between shops', () => {
-    const first = renderChat('conv-mzansi-thandi');
-    expect(screen.getByRole('region', { name: /Chat with Mzansi Fresh Grocers/ })).toBeTruthy();
-    expect(screen.getByPlaceholderText('Message Mzansi Fresh Grocers…')).toBeTruthy();
+    const first = renderChat('conv-superspar-thandi');
+    expect(screen.getByRole('region', { name: /Chat with The Angelo SUPERSPAR/ })).toBeTruthy();
+    expect(screen.getByPlaceholderText('Message The Angelo SUPERSPAR…')).toBeTruthy();
     first.unmount();
 
-    renderChat('conv-flame-thandi');
-    expect(screen.getByRole('region', { name: /Chat with Flame & Co\. Grill/ })).toBeTruthy();
-    expect(screen.getByPlaceholderText('Message Flame & Co. Grill…')).toBeTruthy();
-    expect(screen.queryByPlaceholderText('Message Mzansi Fresh Grocers…')).toBeNull();
+    renderChat('conv-kfc-thandi');
+    expect(screen.getByRole('region', { name: /Chat with KFC/ })).toBeTruthy();
+    expect(screen.getByPlaceholderText('Message KFC…')).toBeTruthy();
+    expect(screen.queryByPlaceholderText('Message The Angelo SUPERSPAR…')).toBeNull();
   });
 
   it('shows the simulated-reply label after the automated demo response', async () => {
     vi.useFakeTimers();
-    renderChat('conv-flame-thandi');
+    renderChat('conv-kfc-thandi');
     fireEvent.change(screen.getByLabelText('Type a message'), { target: { value: 'What are today’s specials?' } });
     fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
     expect(screen.getByText(/is typing…/)).toBeTruthy();

@@ -1,25 +1,34 @@
 /**
  * Centralised demo seed data.
  *
- * HONESTY RULES (Phase 1):
- * - Every tenant below is an invented demonstration tenant. Nothing here is a
- *   confirmed Angelo Mall tenant or Mall Go partner, and the UI says so.
- * - Prices, hours, distances and metrics are sample values for the demo.
- * - Phase 2 replaces this module's consumers with API responses; the shapes
- *   in ../types stay the same.
+ * PHASE 4 — REAL TENANT DIRECTORY
+ * - Shop listings now come from the mall's own store directory, transcribed in
+ *   `./tenants.ts` (with source, check date and confidence per listing). The
+ *   names, shop numbers, telephone numbers, hours and websites are the mall's,
+ *   not invented.
+ * - NO tenant is a Mall Go partner. Every conversation, price, basket, order,
+ *   collection and delivery below is simulated in the browser: no real shop
+ *   staff, stock system, payment or courier is connected. The UI says so on the
+ *   directory, shop pages and inside every demo chat.
+ * - Four well-corroborated tenants (SUPERSPAR, KFC, Clicks, MTN) carry the
+ *   scripted sample walkthrough. The rest are listings for information only.
+ * - Phase 2 replaces this module's consumers with API responses; the shapes in
+ *   ../types stay the same.
  */
-import type { CategoryId, DemoState } from '../types';
+import type { CategoryId, DemoState, FulfilmentMethod, Shop } from '../types';
 import { DEMO_CUSTOMER } from '../types';
+import { TENANTS, TENANT_SOURCE, type TenantRecord } from './tenants';
 
 export const CATEGORIES: { id: CategoryId; label: string; tagline: string }[] = [
-  { id: 'groceries', label: 'Groceries', tagline: 'Food & household basics' },
-  { id: 'food', label: 'Restaurants & takeaway', tagline: 'Meals, coffee & treats' },
-  { id: 'fashion', label: 'Clothing & fashion', tagline: 'Clothes, shoes & accessories' },
-  { id: 'electronics', label: 'Electronics', tagline: 'Phones, audio & gadgets' },
-  { id: 'pharmacy', label: 'Pharmacy & health', tagline: 'Health & wellness essentials' },
-  { id: 'homeware', label: 'Homeware', tagline: 'Kitchen, bedding & décor' },
-  { id: 'beauty', label: 'Personal care', tagline: 'Beauty & grooming' },
-  { id: 'services', label: 'Services', tagline: 'Repairs, printing & more' },
+  { id: 'groceries', label: 'Groceries', tagline: 'Supermarkets, liquor & convenience' },
+  { id: 'food', label: 'Restaurants & takeaway', tagline: 'Sit-down, fast food & biltong' },
+  { id: 'fashion', label: 'Clothing & fashion', tagline: 'Clothing, jewellery & boutiques' },
+  { id: 'electronics', label: 'Electronics & mobile', tagline: 'Phones, networks & appliances' },
+  { id: 'pharmacy', label: 'Pharmacy & health', tagline: 'Pharmacy, optometry & wellness' },
+  { id: 'homeware', label: 'Home & hardware', tagline: 'Hardware, plastics & variety goods' },
+  { id: 'beauty', label: 'Hair & beauty', tagline: 'Hair and beauty supplies' },
+  { id: 'services', label: 'Services & professional', tagline: 'Courier, print, property & more' },
+  { id: 'finance', label: 'Banking & finance', tagline: 'Bank branches with tellers' },
 ];
 
 export function categoryLabel(id: CategoryId): string {
@@ -29,6 +38,114 @@ export function categoryLabel(id: CategoryId): string {
 const MIN = 60_000;
 const HOUR = 60 * MIN;
 
+/** Per-shop demo behaviour. Nothing here is real trading information. */
+interface DemoOps {
+  tradingNow: boolean;
+  fulfilment: FulfilmentMethod[];
+  deliveryFee: number;
+  prepTimeLabel: string;
+  description: string;
+}
+
+const LISTING_ONLY_OPS: Omit<DemoOps, 'description'> = {
+  tradingNow: true,
+  // Listing-only shops advertise no fulfilment method: offering "collection"
+  // would imply the real business accepts an order from this app.
+  fulfilment: [],
+  deliveryFee: 0,
+  prepTimeLabel: 'Listing only — ordering is not connected in this demo',
+};
+
+/** Shops that carry the scripted sample conversation / basket walkthrough. */
+const DEMO_OPS: Record<string, DemoOps> = {
+  'shop-superspar': {
+    tradingNow: true,
+    fulfilment: ['delivery', 'collection'],
+    deliveryFee: 35,
+    prepTimeLabel: 'Sample collection time ±45 min (simulated)',
+    description:
+      'Real tenant at Angelo Mall (Shop 13, supermarket with butchery and bakery). This is the worked example: a sample grocery chat, order summary and delivery are simulated in your browser — the real store receives nothing, and no price or stock level shown here is theirs.',
+  },
+  'shop-kfc': {
+    tradingNow: true,
+    fulfilment: ['delivery', 'collection'],
+    deliveryFee: 25,
+    prepTimeLabel: 'Sample collection time ±25 min (simulated)',
+    description:
+      'Real tenant at Angelo Mall (Shop 1, quick-service chicken restaurant). The scripted takeaway chat in this demo is fictional; KFC has no connection to Mall Go and no real order, price or delivery is shown.',
+  },
+  'shop-clicks': {
+    tradingNow: true,
+    fulfilment: ['delivery', 'collection'],
+    deliveryFee: 30,
+    prepTimeLabel: 'Sample collection time ±20 min (simulated)',
+    description:
+      'Real tenant at Angelo Mall (Shop 9A, Clicks store with an in-store pharmacy). The sample health-and-beauty chat is fictional and medicine is never sold or advised in this demo — Clicks receives nothing from the app.',
+  },
+  'shop-mtn': {
+    tradingNow: true,
+    fulfilment: ['delivery', 'collection'],
+    deliveryFee: 60,
+    prepTimeLabel: 'Sample collection time ±30 min (simulated)',
+    description:
+      'Real tenant at Angelo Mall (Shop 18A, MTN-branded mobile store). The sample airtime-and-accessory chat is fictional; no MTN systems, stock or contracts are connected to this demo.',
+  },
+};
+
+/** Shops shown as "closed" so the directory keeps a realistic mix. */
+const CLOSED_SHOP_IDS = new Set(['shop-aviya', 'shop-just-u-2']);
+
+const DEMO_SCENARIO_PREFIX = 'Sample walkthrough · simulated';
+
+function descriptionFor(tenant: TenantRecord, location: string): string {
+  if (DEMO_OPS[tenant.id]) return DEMO_OPS[tenant.id].description;
+  const parts = [
+    `${tenant.summary} Listed from The Angelo Mall store directory at ${location}.`,
+    'Mall Go is a concept demo: no chat, ordering, payment or delivery is connected to this business, and nothing on this page is an offer from it.',
+  ];
+  if (tenant.confidence === 'directory-only') {
+    parts.push('Listing is from the mall directory only and could not be independently confirmed as current.');
+  }
+  return parts.join(' ');
+}
+
+function buildShop(tenant: TenantRecord): Shop {
+  const ops = DEMO_OPS[tenant.id] ?? LISTING_ONLY_OPS;
+  const location = tenant.shopNumber ? `Shop ${tenant.shopNumber}` : 'the mall property';
+  const scenario = Boolean(DEMO_OPS[tenant.id]);
+  return {
+    id: tenant.id,
+    name: tenant.name,
+    category: tenant.category,
+    tagline: tenant.tagline,
+    description: descriptionFor(tenant, location),
+    coverImage: tenant.coverImage,
+    initials: tenant.initials,
+    colour: tenant.colour,
+    shopNumber: tenant.shopNumber,
+    phones: tenant.phones,
+    website: tenant.website,
+    listingConfidence: tenant.confidence,
+    listingSource: `${TENANT_SOURCE.title} — ${TENANT_SOURCE.url}`,
+    listingCheckedOn: TENANT_SOURCE.checkedOn,
+    listingNote: tenant.listingNote,
+    tradingNow: CLOSED_SHOP_IDS.has(tenant.id) ? false : ops.tradingNow,
+    hoursLabel: tenant.hoursLabel,
+    fulfilment: ops.fulfilment,
+    deliveryFee: ops.deliveryFee,
+    participation: scenario ? 'demo-scenario' : 'real-listing',
+    featured: Boolean(tenant.featured),
+    prepTimeLabel: scenario ? ops.prepTimeLabel : LISTING_ONLY_OPS.prepTimeLabel,
+    unitLabel: tenant.shopNumber
+      ? `Shop ${tenant.shopNumber}, Angelo Mall (per mall directory)`
+      : 'Angelo Mall, Heidelberg Rd & Station Rd, Nigel (no shop number listed)',
+  };
+}
+
+export const SHOPS: Shop[] = TENANTS.map(buildShop);
+
+export const DEMO_SCENARIO_LABEL = DEMO_SCENARIO_PREFIX;
+
 /** Deterministic-shape seed; timestamps are relative to first load. */
 export function createSeedState(now: number = Date.now()): DemoState {
   const t = (minutesAgo: number) => now - minutesAgo * MIN;
@@ -36,166 +153,13 @@ export function createSeedState(now: number = Date.now()): DemoState {
   return {
     version: 1,
     role: 'customer',
-    activeShopId: 'shop-mzansi-fresh',
+    activeShopId: 'shop-superspar',
     seq: 1042,
-    shops: [
-      {
-        id: 'shop-mzansi-fresh',
-        name: 'Mzansi Fresh Grocers',
-        category: 'groceries',
-        tagline: 'Everyday groceries, gathered for you while you chat.',
-        description:
-          'Demo grocery tenant. Send your list in the chat — bread, milk, fresh produce, butchery basics — and staff confirm what is available, suggest substitutions and prepare a priced summary before you pay a cent.',
-        coverImage: '/images/shop-grocery.jpg',
-        initials: 'MF',
-        colour: '#14532d',
-        tradingNow: true,
-        hoursLabel: 'Mon–Sat 08:00–19:00 · Sun 09:00–15:00 (sample hours)',
-        fulfilment: ['delivery', 'collection'],
-        deliveryFee: 35,
-        participation: 'demo-partner',
-        featured: true,
-        prepTimeLabel: 'Usually ready in ±45 min (demo)',
-        unitLabel: 'Shop 12, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-flame-co',
-        name: 'Flame & Co. Grill',
-        category: 'food',
-        tagline: 'Grills, burgers and family meals — order by chat.',
-        description:
-          'Demo takeaway tenant. Ask about today’s specials, portion sizes or spice levels in the chat. Staff build your meal order with you and confirm the total before anything is cooked.',
-        coverImage: '/images/shop-food.jpg',
-        initials: 'FC',
-        colour: '#9a3412',
-        tradingNow: true,
-        hoursLabel: 'Daily 10:00–21:00 (sample hours)',
-        fulfilment: ['delivery', 'collection'],
-        deliveryFee: 25,
-        participation: 'demo-partner',
-        featured: true,
-        prepTimeLabel: 'Usually ready in ±25 min (demo)',
-        unitLabel: 'Food Court F3, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-style-studio',
-        name: 'Nigel Style Studio',
-        category: 'fashion',
-        tagline: 'Chat about sizes, colours and what just arrived.',
-        description:
-          'Directory-example clothing tenant. Send a photo of the style you are looking for and staff check sizes and colours on the rail — no scrolling through thousands of catalogue items.',
-        coverImage: '/images/shop-fashion.jpg',
-        initials: 'NS',
-        colour: '#7c2d12',
-        tradingNow: true,
-        hoursLabel: 'Mon–Sat 09:00–18:00 (sample hours)',
-        fulfilment: ['delivery', 'collection'],
-        deliveryFee: 45,
-        participation: 'directory-example',
-        featured: false,
-        prepTimeLabel: 'Same-day collection (demo)',
-        unitLabel: 'Shop 27, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-techpoint',
-        name: 'TechPoint Electronics',
-        category: 'electronics',
-        tagline: 'Phones, airtime, accessories and honest advice.',
-        description:
-          'Demo electronics tenant. Ask about stock, compare two models, or send a photo of a cable you need to replace. Staff confirm the exact item and price in the chat first.',
-        coverImage: '/images/shop-electronics.jpg',
-        initials: 'TP',
-        colour: '#1e3a5f',
-        tradingNow: true,
-        hoursLabel: 'Mon–Sat 09:00–18:00 · Sun 09:00–14:00 (sample hours)',
-        fulfilment: ['delivery', 'collection'],
-        deliveryFee: 60,
-        participation: 'demo-partner',
-        featured: false,
-        prepTimeLabel: 'Ready in ±30 min (demo)',
-        unitLabel: 'Shop 5, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-careplus',
-        name: 'CarePlus Pharmacy',
-        category: 'pharmacy',
-        tagline: 'Health and wellness essentials, with a human to ask.',
-        description:
-          'Demo pharmacy tenant for non-prescription essentials, vitamins and personal care. Chat to check availability before making the trip. (Demonstration listing — no real medicine sales.)',
-        coverImage: '/images/shop-pharmacy.jpg',
-        initials: 'CP',
-        colour: '#0f766e',
-        tradingNow: true,
-        hoursLabel: 'Daily 08:00–20:00 (sample hours)',
-        fulfilment: ['delivery', 'collection'],
-        deliveryFee: 30,
-        participation: 'demo-partner',
-        featured: false,
-        prepTimeLabel: 'Ready in ±20 min (demo)',
-        unitLabel: 'Shop 31, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-home-comforts',
-        name: 'Home Comforts',
-        category: 'homeware',
-        tagline: 'Kitchen, bedding and small home upgrades.',
-        description:
-          'Directory-example homeware tenant. Describe what you need — a kettle, winter bedding, storage boxes — and staff confirm options and prices in the chat.',
-        coverImage: '/images/shop-homeware.jpg',
-        initials: 'HC',
-        colour: '#92400e',
-        tradingNow: false,
-        hoursLabel: 'Mon–Sat 09:00–17:30 (sample hours) · shown closed in demo',
-        fulfilment: ['collection', 'delivery'],
-        deliveryFee: 50,
-        participation: 'directory-example',
-        featured: false,
-        prepTimeLabel: 'Next trading day (demo)',
-        unitLabel: 'Shop 18, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-glow-beauty',
-        name: 'Glow Beauty Bar',
-        category: 'beauty',
-        tagline: 'Hair, skin and beauty products with advice included.',
-        description:
-          'Directory-example personal-care tenant. Ask which shade or product suits you and have it kept aside or delivered locally.',
-        coverImage: '/images/shop-beauty.jpg',
-        initials: 'GB',
-        colour: '#9d174d',
-        tradingNow: true,
-        hoursLabel: 'Mon–Sat 09:00–18:00 (sample hours)',
-        fulfilment: ['collection'],
-        deliveryFee: 0,
-        participation: 'directory-example',
-        featured: false,
-        prepTimeLabel: 'Collection in ±15 min (demo)',
-        unitLabel: 'Shop 22, Angelo Mall (example unit)',
-      },
-      {
-        id: 'shop-fix-print',
-        name: 'Fix & Print Services',
-        category: 'services',
-        tagline: 'Printing, copies, photos and small device help.',
-        description:
-          'Directory-example services tenant. Send your document list or ask about a repair before you come in, so your visit is quick.',
-        coverImage: '/images/shop-services.jpg',
-        initials: 'FP',
-        colour: '#374151',
-        tradingNow: true,
-        hoursLabel: 'Mon–Fri 08:30–17:00 (sample hours)',
-        fulfilment: ['collection'],
-        deliveryFee: 0,
-        participation: 'paused',
-        featured: false,
-        prepTimeLabel: 'By arrangement (demo)',
-        unitLabel: 'Kiosk K2, Angelo Mall (example unit)',
-      },
-    ],
+    shops: SHOPS.map((shop) => ({ ...shop })),
     conversations: [
       {
-        id: 'conv-mzansi-thandi',
-        shopId: 'shop-mzansi-fresh',
+        id: 'conv-superspar-thandi',
+        shopId: 'shop-superspar',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         customerArea: DEMO_CUSTOMER.area,
@@ -205,8 +169,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
         lastActivityAt: t(38),
       },
       {
-        id: 'conv-flame-thandi',
-        shopId: 'shop-flame-co',
+        id: 'conv-kfc-thandi',
+        shopId: 'shop-kfc',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         customerArea: DEMO_CUSTOMER.area,
@@ -216,8 +180,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
         lastActivityAt: t(64),
       },
       {
-        id: 'conv-tech-thandi',
-        shopId: 'shop-techpoint',
+        id: 'conv-mtn-thandi',
+        shopId: 'shop-mtn',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         customerArea: DEMO_CUSTOMER.area,
@@ -227,8 +191,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
         lastActivityAt: t(60 * 28),
       },
       {
-        id: 'conv-mzansi-Sipho',
-        shopId: 'shop-mzansi-fresh',
+        id: 'conv-superspar-Sipho',
+        shopId: 'shop-superspar',
         customerId: 'customer-Sipho',
         customerName: 'Sipho D. (demo customer)',
         customerArea: 'Alra Park',
@@ -238,8 +202,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
         lastActivityAt: t(6),
       },
       {
-        id: 'conv-mzansi-aisha',
-        shopId: 'shop-mzansi-fresh',
+        id: 'conv-superspar-aisha',
+        shopId: 'shop-superspar',
         customerId: 'customer-aisha',
         customerName: 'Aisha K. (demo customer)',
         customerArea: 'Nigel Central',
@@ -249,8 +213,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
         lastActivityAt: t(120),
       },
       {
-        id: 'conv-careplus-pieter',
-        shopId: 'shop-careplus',
+        id: 'conv-clicks-pieter',
+        shopId: 'shop-clicks',
         customerId: 'customer-pieter',
         customerName: 'Pieter v. (demo customer)',
         customerArea: 'Glenvarloch',
@@ -261,18 +225,18 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
     ],
     messages: [
-      // --- Signature scripted conversation (Mzansi Fresh × Thandi) ---
+      // --- Signature scripted conversation (SUPERSPAR × Thandi) ---
       {
         id: 'msg-001',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'system',
         kind: 'system',
-        text: 'Demo conversation — sample messages. No real shop staff are connected in Phase 1.',
+        text: 'Simulated sample conversation. The shop is a real Angelo Mall tenant, but it is not a Mall Go partner — nobody at the store sees or answers these messages.',
         createdAt: t(52),
       },
       {
         id: 'msg-002',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'customer',
         kind: 'text',
         text: 'Hi, I need bread, milk, eggs and mince.',
@@ -280,7 +244,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-003',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'shop',
         kind: 'text',
         text: 'Hi Thandi! Certainly. What size milk would you like, and how much mince do you need?',
@@ -288,7 +252,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-004',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'customer',
         kind: 'text',
         text: 'Two litres of milk and 500 g mince, please.',
@@ -296,7 +260,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-005',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'shop',
         kind: 'text',
         text: "No problem. I'll prepare your order summary now — white bread loaf, 2 L full-cream milk, 12 free-range eggs and 500 g beef mince.",
@@ -304,17 +268,25 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-006',
-        conversationId: 'conv-mzansi-thandi',
+        conversationId: 'conv-superspar-thandi',
         sender: 'shop',
         kind: 'order-card',
         text: 'Order summary ready for your review (demo prices).',
         orderId: 'ord-demo-1001',
         createdAt: t(38),
       },
-      // --- Flame & Co × Thandi (order already out for delivery) ---
+      // --- KFC × Thandi (order already out for delivery) ---
+      {
+        id: 'msg-106',
+        conversationId: 'conv-kfc-thandi',
+        sender: 'system',
+        kind: 'system',
+        text: 'Simulated sample conversation. KFC is a real tenant at Angelo Mall but has no Mall Go account — no staff member receives these messages.',
+        createdAt: t(192),
+      },
       {
         id: 'msg-101',
-        conversationId: 'conv-flame-thandi',
+        conversationId: 'conv-kfc-thandi',
         sender: 'customer',
         kind: 'text',
         text: 'Hi! Please can I get 2× chicken burger meals, one mild and one hot?',
@@ -322,7 +294,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-102',
-        conversationId: 'conv-flame-thandi',
+        conversationId: 'conv-kfc-thandi',
         sender: 'shop',
         kind: 'text',
         text: 'Of course — both with regular chips and cooldrinks? Summary coming up.',
@@ -330,7 +302,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-103',
-        conversationId: 'conv-flame-thandi',
+        conversationId: 'conv-kfc-thandi',
         sender: 'shop',
         kind: 'order-card',
         text: 'Meal summary (demo prices).',
@@ -339,7 +311,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-104',
-        conversationId: 'conv-flame-thandi',
+        conversationId: 'conv-kfc-thandi',
         sender: 'system',
         kind: 'system',
         text: 'Demo order AMG-1002 confirmed · Delivery.',
@@ -347,16 +319,24 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-105',
-        conversationId: 'conv-flame-thandi',
+        conversationId: 'conv-kfc-thandi',
         sender: 'system',
         kind: 'system',
         text: 'Demo order AMG-1002 is out for delivery.',
         createdAt: t(64),
       },
-      // --- TechPoint × Thandi (completed history order) ---
+      // --- MTN × Thandi (completed history order) ---
+      {
+        id: 'msg-205',
+        conversationId: 'conv-mtn-thandi',
+        sender: 'system',
+        kind: 'system',
+        text: 'Simulated sample conversation. MTN is a real tenant at Angelo Mall but has no Mall Go account — no staff member receives these messages.',
+        createdAt: t(60 * 30 + 2),
+      },
       {
         id: 'msg-201',
-        conversationId: 'conv-tech-thandi',
+        conversationId: 'conv-mtn-thandi',
         sender: 'customer',
         kind: 'text',
         text: 'Hi, do you have a USB-C fast-charge cable, about 1 m?',
@@ -364,7 +344,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-202',
-        conversationId: 'conv-tech-thandi',
+        conversationId: 'conv-mtn-thandi',
         sender: 'shop',
         kind: 'text',
         text: 'Yes — braided 1 m, demo price on the summary. Collect or delivery?',
@@ -372,7 +352,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-203',
-        conversationId: 'conv-tech-thandi',
+        conversationId: 'conv-mtn-thandi',
         sender: 'shop',
         kind: 'order-card',
         text: 'Order summary (demo prices).',
@@ -381,16 +361,16 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-204',
-        conversationId: 'conv-tech-thandi',
+        conversationId: 'conv-mtn-thandi',
         sender: 'system',
         kind: 'system',
         text: 'Demo order AMG-1003 completed · Collected.',
         createdAt: t(60 * 28),
       },
-      // --- Retailer inbox realism: other demo customers at Mzansi Fresh ---
+      // --- Retailer inbox realism: other demo customers at SUPERSPAR ---
       {
         id: 'msg-301',
-        conversationId: 'conv-mzansi-Sipho',
+        conversationId: 'conv-superspar-Sipho',
         sender: 'customer',
         kind: 'text',
         text: 'Morning! Do you have chicken braai packs today? Need for about 6 people.',
@@ -398,7 +378,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-302',
-        conversationId: 'conv-mzansi-Sipho',
+        conversationId: 'conv-superspar-Sipho',
         sender: 'customer',
         kind: 'text',
         text: 'And charcoal + firelighters if you stock them, please.',
@@ -406,7 +386,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-401',
-        conversationId: 'conv-mzansi-aisha',
+        conversationId: 'conv-superspar-aisha',
         sender: 'customer',
         kind: 'text',
         text: 'Hi, is the brown bread back in stock?',
@@ -414,7 +394,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-402',
-        conversationId: 'conv-mzansi-aisha',
+        conversationId: 'conv-superspar-aisha',
         sender: 'shop',
         kind: 'text',
         text: 'Hi Aisha — yes, fresh this morning. Shall I keep two loaves aside for collection?',
@@ -422,17 +402,25 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-403',
-        conversationId: 'conv-mzansi-aisha',
+        conversationId: 'conv-superspar-aisha',
         sender: 'shop',
         kind: 'order-card',
         text: 'Kept-aside summary (demo prices).',
         orderId: 'ord-demo-1005',
         createdAt: t(120),
       },
-      // --- CarePlus order awaiting a driver (delivery tab day-one content) ---
+      // --- Clicks order awaiting a driver (delivery tab day-one content) ---
+      {
+        id: 'msg-500',
+        conversationId: 'conv-clicks-pieter',
+        sender: 'system',
+        kind: 'system',
+        text: 'Simulated sample conversation. Clicks is a real tenant at Angelo Mall but has no Mall Go account — no staff member receives these messages.',
+        createdAt: t(242),
+      },
       {
         id: 'msg-501',
-        conversationId: 'conv-careplus-pieter',
+        conversationId: 'conv-clicks-pieter',
         sender: 'customer',
         kind: 'text',
         text: 'Hi, please can I get vitamin D and plasters delivered?',
@@ -440,7 +428,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-502',
-        conversationId: 'conv-careplus-pieter',
+        conversationId: 'conv-clicks-pieter',
         sender: 'shop',
         kind: 'order-card',
         text: 'Order summary (demo prices).',
@@ -449,7 +437,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       },
       {
         id: 'msg-503',
-        conversationId: 'conv-careplus-pieter',
+        conversationId: 'conv-clicks-pieter',
         sender: 'system',
         kind: 'system',
         text: 'Demo order AMG-1004 is awaiting driver assignment.',
@@ -460,8 +448,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'ord-demo-1001',
         ref: 'AMG-1001',
-        conversationId: 'conv-mzansi-thandi',
-        shopId: 'shop-mzansi-fresh',
+        conversationId: 'conv-superspar-thandi',
+        shopId: 'shop-superspar',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         destinationArea: DEMO_CUSTOMER.area,
@@ -482,8 +470,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'ord-demo-1002',
         ref: 'AMG-1002',
-        conversationId: 'conv-flame-thandi',
-        shopId: 'shop-flame-co',
+        conversationId: 'conv-kfc-thandi',
+        shopId: 'shop-kfc',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         destinationArea: DEMO_CUSTOMER.area,
@@ -511,8 +499,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'ord-demo-1003',
         ref: 'AMG-1003',
-        conversationId: 'conv-tech-thandi',
-        shopId: 'shop-techpoint',
+        conversationId: 'conv-mtn-thandi',
+        shopId: 'shop-mtn',
         customerId: DEMO_CUSTOMER.id,
         customerName: DEMO_CUSTOMER.name,
         destinationArea: DEMO_CUSTOMER.area,
@@ -536,8 +524,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'ord-demo-1004',
         ref: 'AMG-1004',
-        conversationId: 'conv-careplus-pieter',
-        shopId: 'shop-careplus',
+        conversationId: 'conv-clicks-pieter',
+        shopId: 'shop-clicks',
         customerId: 'customer-pieter',
         customerName: 'Pieter v. (demo customer)',
         destinationArea: 'Glenvarloch',
@@ -562,8 +550,8 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'ord-demo-1005',
         ref: 'AMG-1005',
-        conversationId: 'conv-mzansi-aisha',
-        shopId: 'shop-mzansi-fresh',
+        conversationId: 'conv-superspar-aisha',
+        shopId: 'shop-superspar',
         customerId: 'customer-aisha',
         customerName: 'Aisha K. (demo customer)',
         destinationArea: 'Nigel Central',
@@ -583,7 +571,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'job-demo-1002',
         orderId: 'ord-demo-1002',
-        shopId: 'shop-flame-co',
+        shopId: 'shop-kfc',
         destinationArea: 'Nigel Central',
         driverPayout: 22,
         distanceKm: 2.4,
@@ -596,7 +584,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
       {
         id: 'job-demo-1004',
         orderId: 'ord-demo-1004',
-        shopId: 'shop-careplus',
+        shopId: 'shop-clicks',
         destinationArea: 'Glenvarloch',
         driverPayout: 26,
         distanceKm: 3.8,
@@ -606,44 +594,47 @@ export function createSeedState(now: number = Date.now()): DemoState {
         updatedAt: t(95),
       },
     ],
+    /**
+     * Promotions are CONCEPT PLACEHOLDERS. They deliberately do not attribute an
+     * offer, discount or event to any real tenant: the mall directory gives us no
+     * promotional information, so inventing one would misrepresent a business.
+     */
     promotions: [
       {
-        id: 'promo-flame-weekend',
-        title: 'Weekend grill special — Flame & Co. (demo)',
+        id: 'promo-sample-nearby',
+        title: 'Sample sponsored slot (placeholder)',
         description:
-          'Sample sponsored placement: two chicken burger meals at a demo price this weekend. Chat to the shop to confirm today’s actual demo summary — no live offer exists in Phase 1.',
-        shopId: 'shop-flame-co',
-        image: '/images/shop-food.jpg',
+          'This is where a paid placement could appear. It is a placeholder, not an offer: no discount, price or campaign below belongs to any real shop at Angelo Mall.',
+        image: '/images/shop-grocery.jpg',
         placement: 'home-banner',
         sponsored: true,
         active: true,
         startsAt: '2026-10-23',
-        endsAt: '2026-10-26',
+        endsAt: '2026-10-31',
         impressions: 128,
         clicks: 17,
         conversationStarts: 5,
       },
       {
-        id: 'promo-mzansi-fresh',
-        title: 'Fresh basics for the week — Mzansi Fresh (demo)',
+        id: 'promo-sample-directory',
+        title: 'How a listed shop could promote itself (example copy)',
         description:
-          'Sample tenant promotion (unpaid demo content): send your grocery list by chat and staff prepare a priced summary. Prices are confirmed in the conversation before you order.',
-        shopId: 'shop-mzansi-fresh',
-        image: '/images/shop-grocery.jpg',
+          'Example of unpaid tenant content in the concept: a shop could send its own promotion and Mall Go would show it with the shop’s name. Nothing here is claimed on behalf of any tenant.',
+        image: '/images/shop-food.jpg',
         placement: 'home-banner',
         sponsored: false,
         active: true,
         startsAt: '2026-10-20',
-        endsAt: '2026-10-31',
+        endsAt: '2026-11-30',
         impressions: 204,
         clicks: 31,
         conversationStarts: 12,
       },
       {
         id: 'promo-mall-go-launch',
-        title: 'New: chat to mall shops from home (concept)',
+        title: 'Concept: chat to mall shops from home',
         description:
-          'Concept announcement space for mall management. In a live rollout this slot could promote participating tenants, mall events or seasonal trading hours.',
+          'Concept announcement space for mall management. In a live rollout this slot could carry mall events or confirmed tenant promotions — with each shop’s written approval.',
         image: '/images/hero-mall.jpg',
         placement: 'directory-banner',
         sponsored: false,
