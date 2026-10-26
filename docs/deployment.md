@@ -19,7 +19,8 @@ Known-good Preview history (all READY, retained as rollback points):
 
 | Deployment | Commit | Notes |
 | --- | --- | --- |
-| `dpl_EVF1TaCkGwhHNNmaW1Jv1SozbBLS` | `79b41c3` | Phase 5 logo system + image assets — **first CI-deployed Preview**, READY |
+| `dpl_296NVBMoB4S64TQgdXWGc1KdvuYd` | `9083754` | Batch 2 artwork (10 images wired in) — CI-deployed Preview, READY |
+| `dpl_EVF1TaCkGwhHNNmaW1Jv1SozbBLS` | `79b41c3` | Phase 5 logo system + image assets — first CI-deployed Preview, READY |
 | `dpl_DHzRhyqhtcckgpWPXxHtxSdVNsDJ` | `d5b07c7` | CI workflow fix (first successful CI run) |
 | `dpl_7NQnQgXrxYzx1JbeJdCeCs9x1HEB` | `0a403be` | Phase 4 real tenant directory (manual API Preview) |
 | `dpl_5tSwmVFqhXq9284WxJSH9ez8qCza` | `0a66ab2` | Phase 3 deployment docs |
@@ -42,6 +43,16 @@ typecheck+build, Vercel pull, Vercel build, deploy) and the resulting deployment
 `dpl_EVF1TaCkGwhHNNmaW1Jv1SozbBLS` reached **READY** with `githubCommitSha` matching the
 pushed commit. Preview URL:
 <https://angelo-mall-dpn5pwfob-mercels-projects-80f68ab7.vercel.app>.
+
+**Batch 2 re-verified (2026-10-27).** Run
+[`40413068684`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40413068684) for
+commit `908375497c9226174d7765dc0d97416df7063adf`: install, tests (148 passing), typecheck +
+build, Vercel pull/build and the Preview deploy were all green, and
+`dpl_296NVBMoB4S64TQgdXWGc1KdvuYd` is **READY** with a matching `githubCommitSha`. Preview:
+<https://angelo-mall-g5nbujpae-mercels-projects-80f68ab7.vercel.app>. The older `angelo-mall`
+project (a separate Vercel project with its own Git link) also built the same commit as
+`dpl_B2gFseK4CEvXVaq8ABcjDUhVmi7E`, READY; the CI-deployed `angelo-mall-go` deployment above is
+the one to review.
 
 Two facts worth remembering about CLI-made deployments:
 
