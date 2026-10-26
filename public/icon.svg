@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Angelo Mall Go">
+  <rect width="512" height="512" rx="112" fill="#0c3b2e"/>
+  <path d="M156 356c0 8 6 14 14 14h172c8 0 14-6 15-13l14-142c1-10-6-18-16-18H157c-10 0-17 8-16 18l15 141z" fill="#ffffff"/>
+  <path d="M205 210v-18a51 51 0 1 1 102 0v18" fill="none" stroke="#c9a227" stroke-width="22" stroke-linecap="round"/>
+  <path d="M218 286h76M264 256l30 30-30 30" fill="none" stroke="#0c3b2e" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
