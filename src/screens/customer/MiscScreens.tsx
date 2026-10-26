@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
+import { HELP_STEP_ILLUSTRATIONS } from '../../data/imageAssets';
 import { getShop } from '../../store/selectors';
 import { DemoTag, EmptyState, Modal, SectionHeader, ShopAvatar, SponsoredTag, useToast } from '../../components/ui';
 
@@ -159,24 +160,36 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
         <h2>
           <MessagesSquare size={19} aria-hidden /> How chat ordering works
         </h2>
-        <ol className="numbered-list">
-          <li>
-            <strong>Find a shop</strong> in the directory and start a conversation — no account needed for this demo.
+        <ol className="flow-steps">
+          <li className="flow-step">
+            <img src={HELP_STEP_ILLUSTRATIONS[0]} alt="" loading="lazy" decoding="async" aria-hidden />
+            <div>
+              <strong>1. Find a shop and say hello</strong>
+              <p>
+                Open a shop from the directory and start a conversation — no account needed for this demo. Ask a
+                question or send a list, the way you would message a person.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>Ask like a person.</strong> Send a list, a question about sizes or stock, or a photo of what you’re
-            looking for.
+          <li className="flow-step">
+            <img src={HELP_STEP_ILLUSTRATIONS[1]} alt="" loading="lazy" decoding="async" aria-hidden />
+            <div>
+              <strong>2. Review the summary, then confirm</strong>
+              <p>
+                The shop would build a priced summary in the thread; you check items, quantities and fees before
+                anything is confirmed. Here the summary is sample data with demo prices.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>The shop builds your summary</strong> with items, quantities and prices. Nothing is an order yet.
-          </li>
-          <li>
-            <strong>You review & confirm.</strong> Prices are shop-confirmed; quantity changes go back to the shop for
-            approval.
-          </li>
-          <li>
-            <strong>Follow progress</strong> from acceptance to delivery or collection — and keep chatting in the same
-            thread.
+          <li className="flow-step">
+            <img src={HELP_STEP_ILLUSTRATIONS[2]} alt="" loading="lazy" decoding="async" aria-hidden />
+            <div>
+              <strong>3. Follow delivery or collection</strong>
+              <p>
+                Progress runs through a simulated timeline — accepted, prepared, out for delivery. No real courier or
+                shop is involved, and the chat stays open the whole time.
+              </p>
+            </div>
           </li>
         </ol>
       </section>

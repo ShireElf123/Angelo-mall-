@@ -1,8 +1,15 @@
 /* Angelo Mall Go — Phase 1 PWA shell service worker.
    Caches the app shell for fast repeat loads. Demo data lives in
    localStorage; there is NO offline ordering, push or background sync. */
-const CACHE = 'angelo-mall-go-v1';
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg'];
+const CACHE = 'angelo-mall-go-v2';
+const SHELL = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/icon.svg',
+  '/images/app-icon-192.png',
+  '/images/app-icon-512.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

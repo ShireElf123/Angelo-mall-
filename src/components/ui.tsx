@@ -174,20 +174,28 @@ export function StatusPill({ status }: { status: OrderStatus }) {
 
 export function EmptyState({
   icon,
+  illustration,
   title,
   description,
   children,
 }: {
-  icon: ReactNode;
+  icon?: ReactNode;
+  /** Optional original app illustration (decorative, never a shop photo). */
+  illustration?: string;
   title: string;
   description: string;
   children?: ReactNode;
 }) {
   return (
     <div className="empty-state">
-      <div className="empty-state__icon" aria-hidden>
-        {icon}
-      </div>
+      {illustration && (
+        <img className="empty-state__art" src={illustration} alt="" loading="lazy" decoding="async" aria-hidden />
+      )}
+      {icon && (
+        <div className="empty-state__icon" aria-hidden>
+          {icon}
+        </div>
+      )}
       <h3>{title}</h3>
       <p>{description}</p>
       {children}

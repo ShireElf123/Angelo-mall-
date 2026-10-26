@@ -1,4 +1,4 @@
-# Angelo Mall Go — Phase 4 Frontend Prototype (real tenant directory)
+# Angelo Mall Go — Phase 5 Frontend Prototype (real tenant directory + brand-ready UI)
 
 **Your mall. Your shops. One easy way to shop.**
 
@@ -75,7 +75,8 @@ No environment variables, API keys or accounts are needed — demo state is seed
 ### Cross-cutting
 - Tenant data has a single source of truth: [`src/data/tenants.ts`](src/data/tenants.ts) (with source URL, check date and confidence per listing), projected into `Shop` records by `src/data/seed.ts`. Provenance, conflicts and exclusions are written up in [`docs/tenant-directory.md`](docs/tenant-directory.md).
 - Turning a **listing** into a **consenting partner** is a documented data task, not a redesign: see [`docs/tenant-onboarding-template.md`](docs/tenant-onboarding-template.md) for the per-shop record (approved logo file, image permission, confirmation status) and the minimum information required from the mall.
-- Shop identity is a **generated text wordmark** (monogram tile + shop name), not an imitation of any real retailer logo; covers are shared, logo-free category illustrations. See [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) for the inventory, fallback behaviour and remaining asset work.
+- Shop identity is a two-layer logo system: a **verified-official-logo slot** per tenant (`src/data/shopLogos.ts`, currently empty because no logo could be verified from this environment) over a **generated wordmark fallback** — monogram tile, original category glyph and the shop name. No real retailer mark is imitated, a failed logo load degrades to the wordmark, and covers stay shared, logo-free category illustrations. See [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) and [`docs/image-asset-manifest.md`](docs/image-asset-manifest.md).
+- Phase 5 finish: refreshed app identity in the header (mark + "Demo" chip), a brand plate that separates each shop's mark from its category illustration, a documented image-asset manifest covering every file in `public/images/`, original illustrations for the promotion banners, the Help walkthrough, and the empty/offline states, plus a small-mobile pass on touch targets and density.
 - Installable **PWA shell** (manifest, icons, app-shell service worker for fast repeat loads). No offline ordering, push or background sync is claimed.
 - Loading (skeleton), empty, error and offline states; accessible focus, labels, contrast and reduced-motion support; responsive from small Android phones to desktop.
 

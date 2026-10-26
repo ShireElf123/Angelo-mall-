@@ -159,11 +159,21 @@ export function Shell({
       </div>
 
       <header className="app-header">
-        <button type="button" className="brand" onClick={() => navigate(homeRouteForRole(role))} aria-label="Angelo Mall Go — go to start">
-          <img src="/icon.svg" alt="" width={42} height={42} />
+        <button
+          type="button"
+          className="brand"
+          onClick={() => navigate(homeRouteForRole(role))}
+          aria-label="Angelo Mall Go — go to start"
+        >
+          <span className="brand__mark" aria-hidden>
+            <img src="/icon.svg" alt="" width={40} height={40} />
+          </span>
           <span className="brand__text">
             <strong>Angelo Mall Go</strong>
-            <small>Your mall. Your shops. One easy way to shop.</small>
+            <small>Angelo Mall · Nigel</small>
+          </span>
+          <span className="brand__chip" aria-hidden>
+            Demo
           </span>
         </button>
         {nav('top-nav')}
@@ -183,9 +193,10 @@ export function Shell({
 
       <footer className="app-footer">
         <p>
-          <strong>Angelo Mall Go (Phase 1 prototype).</strong> Concept demonstration for Angelo Mall, Nigel, Gauteng —
-          prepared to show a possible chat-first shopping service. This demo does not imply endorsement by Angelo Mall
-          or any tenant, and no real orders, payments or deliveries take place.
+          <strong>Angelo Mall Go — concept prototype.</strong> A demonstration of a possible chat-first shopping service
+          for Angelo Mall, Nigel, Gauteng. Shops are real tenants listed from the mall’s own directory, but none is a
+          Mall Go partner: no real orders, payments, messages or deliveries take place, and no endorsement by the mall
+          or any tenant is implied.
         </p>
         <p className="app-footer__small">
           Demo Mode role switching is a presentation tool, not authentication. A production version requires secure

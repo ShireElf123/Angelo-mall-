@@ -18,6 +18,43 @@ source, check date and confidence), projected into `Shop` records by
 | `shopNumber`, `phones`, `website` | Transcription of the mall directory entry, shown on the shop page as listing details. |
 | `listingConfidence`, `listingCheckedOn`, `listingNote` | Provenance: `cross-verified` (directory + an independent source) or `directory-only`; the date checked; and any conflict or spelling note. |
 
+## Phase 5 update — verified logo slots (currently unfilled)
+
+Phase 5 replaced the ad-hoc wordmark with a proper two-layer system:
+
+| Layer | File | Behaviour |
+| --- | --- | --- |
+| Verified logo registry | `src/data/shopLogos.ts` | One entry per tenant that has a **verified official** mark: file in `public/images/logos/`, intrinsic aspect ratio, source URL, retrieval date, `verified: true`. Empty today (see below). |
+| `ShopLogo` component | `src/components/ShopLogo.tsx` | Renders the verified image when the registry has one, otherwise the monogram fallback. A failed image load silently degrades to the monogram, so a broken-image icon can never appear. |
+| Fallback | `src/data/shopLogos.ts` `CATEGORY_MONOGRAM_GLYPH` | Initials plus a small original category glyph (basket, cutlery, hanger, device, cross, tools, scissors, parcel, bank) on the tenant's colour tile. |
+
+**Status: 0 of 29 tenants have a verified logo.** Retrieving the remaining 29
+required downloading from brand websites and official media kits, which this
+build environment cannot reach (outbound network is limited to GitHub, npm and
+PyPI). Substituting an image-search thumbnail, a logo-CDN file or a screenshot
+would breach the verification rule, so the slots were left empty rather than
+filled with unverified marks. No shop detail, id or participation status changed.
+
+To add one later (no code change beyond the registry):
+
+1. Download the mark from the brand's own site, official press kit, or the tenant
+   (with written permission). Confirm it is that brand's current mark.
+2. Save as `public/images/logos/<shop-id>.svg` (preferred) or `.png`
+   (transparent, ≤ 24 kB).
+3. Add `SHOP_LOGO_ASSETS['<shop-id>']` with `aspectRatio`, `sourceUrl`,
+   `retrievedOn`, `sourceType` and `verified: true`.
+4. Add a row to [`image-asset-manifest.md`](image-asset-manifest.md) and run
+   `npm test` — `shopLogos.test.ts` checks the file exists, the aspect ratio is
+   sane, the tenant id is real and the asset is verified before it is served.
+
+Prioritised candidates (well-known brands with public brand pages), in the order
+they should be attempted: KFC, SUPERSPAR/TOPS at SPAR, Clicks, Vodacom, MTN,
+Nedbank, FNB, PEP, PostNet, Ocean Basket, The Crazy Store, Mica, Cash Crusaders,
+Scooters Pizza, Golden Buffalo Spur. The remaining independents (Zillion Hair,
+Ruiter Makelaars, Flesh Fashions, Neutell & Horowitz, Biltong Den, Maxi's, Aviya,
+Nigel Cellular, Just-u-2, Angel Kiss, Best Buy, Crazy Plastics, Carwash) are
+likely to have no official digital mark at all and should keep the wordmark.
+
 ## Logo and photography policy
 
 * **No retailer logo is bundled or imitated.** The tenants are real, but we hold

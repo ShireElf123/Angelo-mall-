@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Search, SearchX, SlidersHorizontal } from 'lucide-react';
 import { CATEGORIES, categoryLabel } from '../../data/seed';
+import { imageSrc } from '../../data/imageAssets';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import { activePromotions } from '../../store/selectors';
@@ -166,7 +167,8 @@ export function DirectoryScreen({
         <SkeletonList rows={3} />
       ) : results.length === 0 ? (
         <EmptyState
-          icon={<SearchX size={30} aria-hidden />}
+          illustration={imageSrc('state-empty-directory')}
+          icon={<SearchX size={26} aria-hidden />}
           title="No shops match those filters"
           description="Try a different word — or clear the filters. Remember: in Mall Go you don't need an exact product match; open a likely shop and ask in the chat."
         >

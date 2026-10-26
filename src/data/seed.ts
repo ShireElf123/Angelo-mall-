@@ -18,6 +18,7 @@
 import type { CategoryId, DemoState, FulfilmentMethod, Shop } from '../types';
 import { DEMO_CUSTOMER } from '../types';
 import { TENANTS, TENANT_SOURCE, type TenantRecord } from './tenants';
+import { imageSrc } from './imageAssets';
 
 export const CATEGORIES: { id: CategoryId; label: string; tagline: string }[] = [
   { id: 'groceries', label: 'Groceries', tagline: 'Supermarkets, liquor & convenience' },
@@ -605,7 +606,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
         title: 'Sample sponsored slot (placeholder)',
         description:
           'This is where a paid placement could appear. It is a placeholder, not an offer: no discount, price or campaign below belongs to any real shop at Angelo Mall.',
-        image: '/images/shop-grocery.jpg',
+        image: imageSrc('promo-groceries'),
         placement: 'home-banner',
         sponsored: true,
         active: true,
@@ -620,7 +621,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
         title: 'How a listed shop could promote itself (example copy)',
         description:
           'Example of unpaid tenant content in the concept: a shop could send its own promotion and Mall Go would show it with the shop’s name. Nothing here is claimed on behalf of any tenant.',
-        image: '/images/shop-food.jpg',
+        image: imageSrc('promo-takeaway'),
         placement: 'home-banner',
         sponsored: false,
         active: true,
@@ -635,7 +636,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
         title: 'Concept: chat to mall shops from home',
         description:
           'Concept announcement space for mall management. In a live rollout this slot could carry mall events or confirmed tenant promotions — with each shop’s written approval.',
-        image: '/images/hero-mall.jpg',
+        image: imageSrc('concept-map'),
         placement: 'directory-banner',
         sponsored: false,
         active: true,

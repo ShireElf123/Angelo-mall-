@@ -36,15 +36,13 @@ export function ShopCard({
       </button>
       <div className="shop-card__body">
         {sponsored && <SponsoredTag />}
-        <div className="shop-card__title-row">
-          <div className="shop-card__titles">
-            <h3>
-              <ShopLogo shop={shop} size="sm" />
-            </h3>
-            <p>{categoryLabel(shop.category)}</p>
-          </div>
+        <div className="shop-card__brand">
+          <h3 className="shop-card__titles">
+            <ShopLogo shop={shop} size="sm" />
+          </h3>
           <TradingPill tradingNow={shop.tradingNow} />
         </div>
+        <p className="shop-card__category">{categoryLabel(shop.category)}</p>
         <p className="shop-card__tagline">{shop.tagline}</p>
         <div className="shop-card__meta">
           {shop.participation === 'demo-scenario' ? (

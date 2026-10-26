@@ -1,0 +1,415 @@
+{
+  "$schema": "./image-asset-manifest.schema.json",
+  "project": "Angelo Mall Go",
+  "phase": 5,
+  "updated": "2026-10-27",
+  "notes": [
+    "Every image referenced by the app is listed here. src/data/imageAssets.ts projects this file into typed lookups and src/data/imageAssets.test.ts enforces one-to-one parity, so a new file cannot be added unnoticed.",
+    "Generated assets are original app artwork created for this project; they are never presented as a tenant's logo, shopfront or interior.",
+    "No official retailer logo is bundled: see docs/shop-asset-plan.md for the verification blocker."
+  ],
+  "assets": [
+    {
+      "id": "app-mark-master",
+      "file": "/images/app-icon-master.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Master artwork for the Angelo Mall Go app mark (PWA / social card).",
+      "screens": [
+        "manifest",
+        "social-card"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Original editable-palette mark: paper bag + chat bubble, no lettering."
+    },
+    {
+      "id": "app-icon-512",
+      "file": "/images/app-icon-512.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "PWA icon, 512\u00d7512.",
+      "screens": [
+        "manifest"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "app-icon-192",
+      "file": "/images/app-icon-192.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "PWA icon and apple-touch-icon, 192\u00d7192.",
+      "screens": [
+        "manifest",
+        "ios-home-screen"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "app-icon-maskable-512",
+      "file": "/images/app-icon-maskable-512.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "Maskable PWA icon with the 80% safe zone.",
+      "screens": [
+        "manifest"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "promo-groceries",
+      "file": "/images/promo-illustration-groceries.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Illustrative banner art for the placeholder sponsored slot and the home promotion stack.",
+      "screens": [
+        "home",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Illustration only \u2014 carries no tenant offer, product price or brand mark."
+    },
+    {
+      "id": "promo-takeaway",
+      "file": "/images/promo-illustration-takeaway.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Illustrative banner art for the second placeholder promotion.",
+      "screens": [
+        "home",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "promo-services",
+      "file": "/images/promo-illustration-services.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Reserve illustration for a services/delivery themed placeholder promotion.",
+      "screens": [
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved-but-unused",
+      "notes": "Retained for a future services placement; not wired to any promotion yet."
+    },
+    {
+      "id": "help-chat",
+      "file": "/images/help-illustration-chat.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 1 of the chat-ordering concept on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "help-summary",
+      "file": "/images/help-illustration-summary.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 2 (order summary review) on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "help-delivery",
+      "file": "/images/help-illustration-delivery.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 3 (delivery or collection) on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "state-empty-directory",
+      "file": "/images/illustration-empty-directory.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Empty state when a directory search returns no shops.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "state-offline",
+      "file": "/images/illustration-offline.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Offline state artwork.",
+      "screens": [
+        "shell-offline"
+      ],
+      "approved": true,
+      "review": "approved-but-unused",
+      "notes": "Retained for the offline banner; the current banner is text-only by design (it must stay readable at the top of the viewport)."
+    },
+    {
+      "id": "concept-map",
+      "file": "/images/illustration-concept-map.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Directory banner explaining the chat-first concept across the mall.",
+      "screens": [
+        "directory",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "hero-mall",
+      "file": "/images/hero-mall.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Home hero background.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Carried over from an earlier phase; audited and kept (no signage, no logos)."
+    },
+    {
+      "id": "category-groceries",
+      "file": "/images/shop-grocery.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Groceries category cover for supermarket/liquor/convenience tenants.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-food",
+      "file": "/images/shop-food.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Food category cover for restaurants and takeaways.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-fashion",
+      "file": "/images/shop-fashion.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Fashion category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-electronics",
+      "file": "/images/shop-electronics.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Electronics category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Replaced in Phase 1 after third-party branding appeared in the earlier image."
+    },
+    {
+      "id": "category-pharmacy",
+      "file": "/images/shop-pharmacy.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Pharmacy/health category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-homeware",
+      "file": "/images/shop-homeware.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Home/hardware category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-beauty",
+      "file": "/images/shop-beauty.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Hair and beauty category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-services",
+      "file": "/images/shop-services.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Services category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved"
+    },
+    {
+      "id": "category-finance",
+      "file": "/images/shop-finance.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Banking/finance category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Added in Phase 4 with the banking category."
+    }
+  ],
+  "logos": {
+    "directory": "/images/logos/",
+    "bundled": 0,
+    "status": "none-verified",
+    "blocker": "Phase 5 could not retrieve official logo files: this environment's outbound network is restricted to GitHub, npm and PyPI, so brand sites and official media kits were unreachable. No unverified third-party image was substituted.",
+    "registry": "src/data/shopLogos.ts",
+    "addingAnAsset": [
+      "Download from the brand's own site, official media kit, or the tenant (with written permission).",
+      "Save as public/images/logos/<shop-id>.<svg|png>, transparent, SVG preferred, PNG <= 24 kB.",
+      "Add an entry to SHOP_LOGO_ASSETS with aspectRatio, sourceUrl, retrievedOn and verified: true.",
+      "Add a row here and run npm test."
+    ]
+  },
+  "plannedBatches": [
+    {
+      "batch": 2,
+      "status": "blocked-per-turn-limit",
+      "reason": "The image tool enforces a hard limit of 10 generations per turn; batch 1 used all 10. No files were created for batch 2, so nothing here is referenced by the app yet.",
+      "resume": "Run this batch in a later turn, review, optimise, then add manifest entries and wire the empty states.",
+      "planned": [
+        {
+          "id": "state-empty-orders",
+          "purpose": "Orders list empty state (timeline + blank receipt).",
+          "screens": [
+            "orders"
+          ]
+        },
+        {
+          "id": "state-empty-chats",
+          "purpose": "Chats list empty state (two blank bubbles under an awning).",
+          "screens": [
+            "chats"
+          ]
+        },
+        {
+          "id": "state-empty-basket",
+          "purpose": "Basket empty state (empty paper bag).",
+          "screens": [
+            "basket"
+          ]
+        },
+        {
+          "id": "state-empty-thread",
+          "purpose": "New conversation with no messages yet.",
+          "screens": [
+            "chat"
+          ]
+        },
+        {
+          "id": "state-empty-delivery",
+          "purpose": "Delivery job board with no available jobs.",
+          "screens": [
+            "delivery"
+          ]
+        },
+        {
+          "id": "og-social-card",
+          "purpose": "1200x630 social preview card for share links.",
+          "screens": [
+            "social-card"
+          ]
+        },
+        {
+          "id": "concept-four-views",
+          "purpose": "Help screen section explaining the four demo workspaces.",
+          "screens": [
+            "help"
+          ]
+        },
+        {
+          "id": "concept-tenant-onboarding",
+          "purpose": "Admin explainer: what onboarding a tenant would require.",
+          "screens": [
+            "admin-shops"
+          ]
+        },
+        {
+          "id": "concept-privacy",
+          "purpose": "Help screen privacy/roles explanation.",
+          "screens": [
+            "help"
+          ]
+        },
+        {
+          "id": "state-not-found",
+          "purpose": "Route not found / unknown promotion empty state.",
+          "screens": [
+            "not-found"
+          ]
+        }
+      ]
+    }
+  ]
+}

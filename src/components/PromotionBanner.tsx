@@ -26,12 +26,17 @@ export function PromotionBanner({
     }
   }, [promotion.id, recordEvent]);
 
+  // Generated artwork is pale, so it gets a slightly softer scrim than photos did;
+  // the class is derived from the asset path, not hard-coded per promotion.
+  const isIllustration = promotion.image.includes('illustration');
+
   return (
-    <article className="promo-banner">
+    <article className={`promo-banner ${isIllustration ? 'promo-banner--illustration' : ''}`.trim()}>
       <img
         src={promotion.image}
         alt=""
         loading="lazy"
+        decoding="async"
         onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
       />
       <div className="promo-banner__shade" aria-hidden />
@@ -40,7 +45,7 @@ export function PromotionBanner({
           <SponsoredTag />
         ) : (
           <span className="promo-banner__kicker">
-            <Megaphone size={13} aria-hidden /> Mall Go notice · demo content
+            <Megaphone size={13} aria-hidden /> Mall Go notice · illustrative, not an offer
           </span>
         )}
         <h3>{promotion.title}</h3>
