@@ -133,6 +133,13 @@ Verified: `tsc --noEmit` clean, production build clean, dev preview served and s
 > by screenshotting a rendered device. A manual phone/desktop pass is still
 > recommended.
 
+## Deployment
+
+Preview deployments are currently triggered manually — the Vercel project is not linked to
+GitHub, so pushes do not deploy. See [`docs/deployment.md`](docs/deployment.md) for the
+verified project configuration, the known-good Preview/rollback deployments, and the exact
+dashboard steps to enable push-to-Preview. Preview only: nothing is promoted to Production.
+
 ## Known limitations (by design, Phase 1)
 
 - Mock data persists only in the browser (`localStorage`); photo attachments are downscaled data URLs kept on-device and may stop persisting if storage fills — the demo keeps running in memory.
