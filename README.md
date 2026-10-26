@@ -50,6 +50,7 @@ No environment variables, API keys or accounts are needed — demo state is seed
 - Searchable/filterable shop directory (category, delivery/collection, open-now demo state) with honest participation labels ("Demo tenant" vs "Directory example — not a confirmed partner").
 - Shop pages with sample hours, fulfilment options, "popular things to ask" shortcuts and a prominent **Start chatting** action. **No product-catalogue grid.**
 - WhatsApp-style conversation (original UI, no WhatsApp branding): text + photo attach (downscaled in-browser, stored on-device only, labelled as demo), day separators, timestamps, typing indicator, and **structured order cards** embedded in the thread.
+- **Expandable chat:** an Expand / Minimise control in the chat header opens the same conversation as a full-screen panel on phones (safe-area padding for the status bar and home indicator, background scroll locked, Esc to close, focus kept inside the panel) or as a large centred overlay on desktop. Compact mode is unchanged, and the conversation, draft, attachment preview, basket and order state carry across because the panel is never unmounted.
 - Basket with shop-confirmed prices (locked), quantity/removal **change requests** that the shop must approve, transparent totals incl. delivery fee, delivery-vs-collection choice, and explicit confirmation. A chat message is never silently a purchase.
 - Fulfilment-aware order tracking timeline + order history, always linked back to the conversation.
 
@@ -72,6 +73,7 @@ No environment variables, API keys or accounts are needed — demo state is seed
 - Delivery-job oversight and simple activity reports (orders by status, GMV by shop, promotion funnel).
 
 ### Cross-cutting
+- Shop identity is a **generated text wordmark** (monogram tile + shop name), not an imitation of any real retailer logo — see [`docs/shop-asset-plan.md`](docs/shop-asset-plan.md) for the full asset inventory, fallback behaviour and remaining asset work.
 - Installable **PWA shell** (manifest, icons, app-shell service worker for fast repeat loads). No offline ordering, push or background sync is claimed.
 - Loading (skeleton), empty, error and offline states; accessible focus, labels, contrast and reduced-motion support; responsive from small Android phones to desktop.
 
@@ -106,14 +108,27 @@ src/
 - **Money is explicit.** Totals are computed cent-safely; the delivery fee is snapshotted at confirmation; customers cannot edit shop-confirmed prices (only request changes).
 - **Honesty is a feature.** Simulated replies, demo tenants, sample prices, sponsored placements and illustrative metrics are all labelled in the UI.
 
-## Tests (19, all passing)
+## Tests (66, all passing)
 
 - `orderWorkflow.test.ts` — ZAR totals (delivery vs collection), formatting, item validation, transition guards, fulfilment-specific timelines.
 - `reducer.test.ts` — the full acceptance journey on shared state (chat → draft → change request → confirm → prepare → driver → delivered), failed-delivery re-publish, demo reset.
 - `ChatThread.test.tsx` — message rendering, order-card CTA, simulated-reply label, composer send + Enter/Shift+Enter behaviour.
 - `router.test.ts` — hash round-trips incl. directory search/category deep links and role mapping.
+- `ChatScreen.test.tsx` — expand/collapse, preserved draft + conversation with no duplicate messages, scroll lock and restore, Esc-to-close with focus return, sending and simulated-reply indicator while expanded.
+- `ChatStatePreservation.test.tsx` — basket bar survives toggling, messages sent while expanded persist, shop switching shows the right shop, automated demo reply appears.
+- `ChatOverlayKeyboard.test.tsx` — Tab stays inside the expanded panel; compact mode leaves Tab alone.
+- `styles.responsive.test.ts` — the stylesheet contract for the expanded overlay (fixed 100dvh, safe-area padding, scroll lock, desktop centred panel) and the shared shop-card image ratio.
+- `ShopCard.test.tsx` — wordmark, cover image, monogram fallback on image error, both open actions.
+- `seedAssets.test.ts` — every shop/promo/hero asset referenced by demo data exists in `public/` and no two shops share an image.
+- `App.smoke.test.tsx` — all 22 demo routes (customer, shop staff, delivery partner, mall admin) mount after the Phase 2 changes.
 
 Verified: `tsc --noEmit` clean, production build clean, dev preview served and smoke-checked (home, manifest, service worker, images).
+
+> Phase 2 note: no real browser could be launched in the build environment (no
+> Chromium, and the sandbox blocks browser downloads), so the expanded chat was
+> verified through the DOM/behaviour tests above plus stylesheet assertions, not
+> by screenshotting a rendered device. A manual phone/desktop pass is still
+> recommended.
 
 ## Known limitations (by design, Phase 1)
 

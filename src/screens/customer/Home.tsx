@@ -31,8 +31,8 @@ const CATEGORY_ICONS: Record<string, string> = {
   electronics: '/images/shop-electronics.jpg',
   pharmacy: '/images/shop-pharmacy.jpg',
   homeware: '/images/shop-homeware.jpg',
-  beauty: '/images/shop-pharmacy.jpg',
-  services: '/images/shop-electronics.jpg',
+  beauty: '/images/shop-beauty.jpg',
+  services: '/images/shop-services.jpg',
 };
 
 export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {

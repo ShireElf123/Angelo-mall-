@@ -160,7 +160,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
         tagline: 'Hair, skin and beauty products with advice included.',
         description:
           'Directory-example personal-care tenant. Ask which shade or product suits you and have it kept aside or delivered locally.',
-        coverImage: '/images/shop-pharmacy.jpg',
+        coverImage: '/images/shop-beauty.jpg',
         initials: 'GB',
         colour: '#9d174d',
         tradingNow: true,
@@ -179,7 +179,7 @@ export function createSeedState(now: number = Date.now()): DemoState {
         tagline: 'Printing, copies, photos and small device help.',
         description:
           'Directory-example services tenant. Send your document list or ask about a repair before you come in, so your visit is quick.',
-        coverImage: '/images/shop-electronics.jpg',
+        coverImage: '/images/shop-services.jpg',
         initials: 'FP',
         colour: '#374151',
         tradingNow: true,

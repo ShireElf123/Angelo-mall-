@@ -17,6 +17,9 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Needed so a test can read the real stylesheet source (`?raw`) and guard
+    // the responsive/overlay CSS contract; otherwise CSS imports are stubbed.
+    css: true,
     // Enables @testing-library/react auto-cleanup between component tests.
     globals: true,
     include: ['src/**/*.{test,spec}.{ts,tsx}'],

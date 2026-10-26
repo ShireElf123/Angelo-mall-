@@ -2,7 +2,8 @@ import { ArrowRight, Bike, Clock, ShoppingBag, Star } from 'lucide-react';
 import { categoryLabel } from '../data/seed';
 import type { Shop } from '../types';
 import { formatZAR } from '../utils/format';
-import { ParticipationPill, ShopAvatar, SponsoredTag, TradingPill } from './ui';
+import { ParticipationPill, SponsoredTag, TradingPill } from './ui';
+import { ShopLogo } from './ShopLogo';
 
 export function ShopCard({
   shop,
@@ -16,7 +17,14 @@ export function ShopCard({
   return (
     <article className="shop-card">
       <button type="button" className="shop-card__media" onClick={() => onOpen(shop.id)} aria-label={`Open ${shop.name}`}>
-        <img src={shop.coverImage} alt="" loading="lazy" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+        {/* Decorative: the shop wordmark below is the accessible name. */}
+        <img
+          src={shop.coverImage}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
+        />
         <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>
           {shop.initials}
         </span>
@@ -29,9 +37,10 @@ export function ShopCard({
       <div className="shop-card__body">
         {sponsored && <SponsoredTag />}
         <div className="shop-card__title-row">
-          <ShopAvatar shop={shop} size="sm" />
           <div className="shop-card__titles">
-            <h3>{shop.name}</h3>
+            <h3>
+              <ShopLogo shop={shop} size="sm" />
+            </h3>
             <p>{categoryLabel(shop.category)}</p>
           </div>
           <TradingPill tradingNow={shop.tradingNow} />

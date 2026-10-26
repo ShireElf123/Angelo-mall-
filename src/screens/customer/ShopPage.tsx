@@ -9,7 +9,8 @@ import {
 } from '../../store/selectors';
 import { formatZAR, formatRelative } from '../../utils/format';
 import { PromotionBanner } from '../../components/PromotionBanner';
-import { DemoTag, EmptyState, ParticipationPill, ShopAvatar, StatusPill, TradingPill, useToast } from '../../components/ui';
+import { DemoTag, EmptyState, ParticipationPill, StatusPill, TradingPill, useToast } from '../../components/ui';
+import { ShopLogo } from '../../components/ShopLogo';
 
 const SUGGESTED_ASKS: Record<string, string[]> = {
   groceries: ['Hi, I need bread, milk, eggs and mince.', 'Do you have chicken braai packs today?', 'What fresh veg arrived this morning?'],
@@ -79,9 +80,10 @@ export function ShopPageScreen({
         </div>
         <div className="shop-hero__body">
           <div className="shop-hero__title">
-            <ShopAvatar shop={shop} size="lg" />
             <div>
-              <h1>{shop.name}</h1>
+              <h1>
+                <ShopLogo shop={shop} size="lg" />
+              </h1>
               <p>{categoryLabel(shop.category)}</p>
             </div>
             <TradingPill tradingNow={shop.tradingNow} />

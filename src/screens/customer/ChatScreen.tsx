@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, MessageCircleDashed, ReceiptText, TriangleAlert } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ArrowLeft,
+  Maximize2,
+  MessageCircleDashed,
+  Minimize2,
+  ReceiptText,
+  TriangleAlert,
+} from 'lucide-react';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import { getShop, messagesForConversation, openBasketForConversation, orderById } from '../../store/selectors';
@@ -7,6 +14,9 @@ import { formatZAR } from '../../utils/format';
 import { calculateTotals } from '../../utils/orderWorkflow';
 import { ChatThread, type OutgoingMessage } from '../../components/ChatThread';
 import { EmptyState, ShopAvatar, TradingPill } from '../../components/ui';
+
+/** Class set on <html>/<body> while the mobile full-screen chat is open. */
+const SCROLL_LOCK_CLASS = 'chat-expanded';
 
 /** Clearly-labelled simulated staff replies (no real employee is connected). */
 function simulatedReply(customerText: string): string {
@@ -35,6 +45,14 @@ export function ChatScreen({
 }) {
   const { state, service } = useDemoStore();
   const [typing, setTyping] = useState(false);
+  /**
+   * Compact vs expanded chat. The panel is the same component tree in both
+   * modes, so messages, draft text, attachments, basket and order state are
+   * never unmounted or duplicated when the mode changes.
+   */
+  const [expanded, setExpanded] = useState(false);
+  const expandButtonRef = useRef<HTMLButtonElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
 
   const conversation = state.conversations.find((c) => c.id === conversationId);
@@ -47,6 +65,60 @@ export function ChatScreen({
   }, [conversationId, messages.length, service]);
 
   useEffect(() => () => timers.current.forEach((t) => window.clearTimeout(t)), []);
+
+  const collapse = useCallback(() => {
+    setExpanded(false);
+    // Return focus to the control that opened the overlay so keyboard users
+    // are not dropped at the top of the page.
+    window.requestAnimationFrame?.(() => expandButtonRef.current?.focus());
+  }, []);
+
+  // Lock background scrolling while the full-screen overlay is open and
+  // always release the lock if the screen unmounts mid-expansion.
+  useEffect(() => {
+    if (!expanded) return;
+    const roots = [document.documentElement, document.body];
+    roots.forEach((node) => node?.classList.add(SCROLL_LOCK_CLASS));
+    return () => roots.forEach((node) => node?.classList.remove(SCROLL_LOCK_CLASS));
+  }, [expanded]);
+
+  // Escape closes the overlay; Tab stays inside it while open so keyboard and
+  // screen-reader users cannot wander into the page hidden behind the panel.
+  useEffect(() => {
+    if (!expanded) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        collapse();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const root = frameRef.current;
+      if (!root) return;
+      // Only ignore hidden inputs; jsdom has no layout, so offsetParent-based
+      // visibility checks would wrongly drop every control in tests.
+      const focusable = Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((node) => !node.hidden);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || !root.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [expanded, collapse]);
 
   if (!conversation || !shop) {
     return (
@@ -85,8 +157,15 @@ export function ChatScreen({
     : undefined;
 
   return (
-    <div className="page page--chat">
-      <div className="chat-frame">
+    <div className={`page page--chat${expanded ? ' page--chat--expanded' : ''}`}>
+      <div
+        ref={frameRef}
+        className="chat-frame"
+        id="chat-panel"
+        role={expanded ? 'dialog' : 'region'}
+        aria-modal={expanded || undefined}
+        aria-label={`Chat with ${shop.name}`}
+      >
         <header className="chat-header">
           <button type="button" className="icon-btn" onClick={() => navigate({ name: 'chats' })} aria-label="Back to chats">
             <ArrowLeft size={21} aria-hidden />
@@ -99,6 +178,21 @@ export function ChatScreen({
             </span>
           </button>
           <TradingPill tradingNow={shop.tradingNow} />
+          <button
+            ref={expandButtonRef}
+            type="button"
+            className="icon-btn chat-header__expand"
+            onClick={() => setExpanded((current) => !current)}
+            aria-label={expanded ? 'Minimise chat' : 'Expand chat'}
+            aria-expanded={expanded}
+            aria-controls="chat-panel"
+            title={expanded ? 'Minimise chat' : 'Expand chat'}
+          >
+            {expanded ? <Minimize2 size={20} aria-hidden /> : <Maximize2 size={20} aria-hidden />}
+            <span className="chat-header__expand-label" aria-hidden>
+              {expanded ? 'Minimise' : 'Expand'}
+            </span>
+          </button>
         </header>
 
         {!shop.tradingNow && (
