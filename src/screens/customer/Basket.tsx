@@ -106,6 +106,21 @@ export function BasketScreen({
         <StatusPill status={order.status} />
       </div>
 
+      <figure className="journey-strip">
+        <img
+          className="journey-strip__art"
+          src={imageSrc('journey-basket')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
+        <figcaption>
+          How this works: the chat, a shop-prepared summary, then a basket you confirm. Confirming is still simulated —
+          no payment is taken and no shop receives this basket.
+        </figcaption>
+      </figure>
+
       {order.status === 'draft' ? (
         <InfoBanner>
           The shop is still preparing this summary in the demo — items may change. You’ll be able to confirm once they

@@ -77,6 +77,21 @@ export function DirectoryScreen({
         subtitle="Angelo Mall’s shops, transcribed from the mall’s own store directory. Every listing is a real tenant; none of them is a Mall Go partner and no ordering, payment or delivery is connected."
       />
 
+      <div className="discovery-strip">
+        <img
+          className="discovery-strip__art"
+          src={imageSrc('discover-shops')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
+        <p>
+          <strong>Find a shop, then ask.</strong> Search by name or need, filter by category — or open any shop and
+          describe what you’re after in the chat. In this demo the shop’s replies are scripted samples.
+        </p>
+      </div>
+
       <ListingDisclosure />
 
       <div className="directory-controls">
@@ -189,7 +204,7 @@ export function DirectoryScreen({
         </div>
       )}
 
-      <InfoBanner>
+      <InfoBanner illustration={imageSrc('journey-navigation')}>
         Directory data is centralised demo content. In a live rollout, mall management would verify each tenant before
         it can take chat orders — the admin workspace (Demo Mode switch) shows that control.
       </InfoBanner>

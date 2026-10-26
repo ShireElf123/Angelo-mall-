@@ -448,6 +448,166 @@
       "approved": true,
       "review": "approved",
       "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "discover-shops",
+      "file": "/images/discover-shops.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "One shopper with a phone in front of stylised mall shopfronts \u2014 finding a shop and starting a chat.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 67,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-food",
+      "file": "/images/category-food.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Food & dining need shortcut: caf\u00e9 table with takeaway box, burger and cup.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 55,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-fashion",
+      "file": "/images/category-fashion.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Fashion & accessories need shortcut: shirt, sneaker, sunglasses, bag, scarf.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 86,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-electronics",
+      "file": "/images/category-electronics.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Electronics & mobile need shortcut: blank-screen phone, earbuds, cable, power bank.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 49,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-beauty",
+      "file": "/images/category-beauty.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Beauty & personal care need shortcut: pump bottle, serum, cream tube, compact mirror.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 58,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-home-hardware",
+      "file": "/images/category-home-hardware.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Home & hardware need shortcut: paint tin, brush, hammer and potted plant.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 72,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-navigation",
+      "file": "/images/journey-navigation.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Isometric mall concourse with a blank signpost \u2014 browsing different shop categories.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 86,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-basket",
+      "file": "/images/journey-basket.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Three-step basket journey: chat, paper summary, bag. No prices or totals shown.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 57,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-delivery",
+      "file": "/images/journey-delivery.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Simulated delivery route: shop awning, scooter with plain box, house doorway.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 68,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "intro-mall-go",
+      "file": "/images/intro-mall-go.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Welcoming mall archway \u2014 first-time visitor introduction, used with the install panel.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 81,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
     }
   ],
   "logos": {

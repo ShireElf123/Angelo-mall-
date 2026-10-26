@@ -79,6 +79,39 @@ Generated at 1672×941 and downsized to 1280×720 (the social card cropped to
 and Twitter tags in `index.html` now point at `og-social-card.jpg` instead of
 borrowing a promotion illustration.
 
+## Batch 3 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
+
+Batch 3 is the shop-discovery set: an illustrated way into the directory, five
+"need" shortcuts, wayfinding, the basket and delivery journeys, and a welcome
+image. All ten were inspected for relevance, duplicates, corruption, accidental
+lettering and watermarks: every one is word-free, brand-free and on-palette.
+Originals (1536×1024 / 1774×887 / 1693×929) were cropped to their target aspect
+and recompressed; nothing was upscaled.
+
+| 1 | `discover-shops` | `discover-shops.jpg` (1000x667 (3:2), 67 kB) | One shopper with a phone in front of stylised mall shopfronts — finding a shop and starting a chat. | directory | approved |
+| 2 | `need-food` | `category-food.jpg` (900x675 (4:3), 55 kB) | Food & dining need shortcut: café table with takeaway box, burger and cup. | home | approved |
+| 3 | `need-fashion` | `category-fashion.jpg` (900x675 (4:3), 86 kB) | Fashion & accessories need shortcut: shirt, sneaker, sunglasses, bag, scarf. | home | approved |
+| 4 | `need-electronics` | `category-electronics.jpg` (900x675 (4:3), 49 kB) | Electronics & mobile need shortcut: blank-screen phone, earbuds, cable, power bank. | home | approved |
+| 5 | `need-beauty` | `category-beauty.jpg` (900x675 (4:3), 58 kB) | Beauty & personal care need shortcut: pump bottle, serum, cream tube, compact mirror. | home | approved |
+| 6 | `need-home-hardware` | `category-home-hardware.jpg` (900x675 (4:3), 72 kB) | Home & hardware need shortcut: paint tin, brush, hammer and potted plant. | home | approved |
+| 7 | `journey-navigation` | `journey-navigation.jpg` (1000x667 (3:2), 86 kB) | Isometric mall concourse with a blank signpost — browsing different shop categories. | directory | approved |
+| 8 | `journey-basket` | `journey-basket.jpg` (1280x720 (16:9), 57 kB) | Three-step basket journey: chat, paper summary, bag. No prices or totals shown. | basket | approved |
+| 9 | `journey-delivery` | `journey-delivery.jpg` (1280x720 (16:9), 68 kB) | Simulated delivery route: shop awning, scooter with plain box, house doorway. | order-detail | approved |
+| 10 | `intro-mall-go` | `intro-mall-go.jpg` (1000x667 (3:2), 81 kB) | Welcoming mall archway — first-time visitor introduction, used with the install panel. | help | approved |
+
+**Why these are not duplicates of the category covers.** The nine
+`shop-*.jpg` files are photographic scene covers used on shop cards. The batch 3
+`need-*.jpg` files are a separate illustrated layer used only by the Home
+"Explore by need" row, which is a shortcut into the directory, not a shop image.
+`discover-shops` (shopfront row) is the Directory prompt, while
+`journey-navigation` (isometric concourse) illustrates browsing categories in
+the directory's closing banner; `journey-basket` and `journey-delivery` are
+process illustrations, not empty states (batch 2 already covers those).
+
+**Honesty in the artwork.** No image shows a price, a discount, stock, a real
+tenant's shopfront, or a real brand mark. The basket and delivery journeys
+illustrate *simulated* steps and sit beside text that says so.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5
@@ -106,6 +139,12 @@ exact steps to add a verified mark.
 | Delivery board (no open jobs) | `state-empty-delivery` |
 | Help — four views, privacy | `concept-four-views`, `concept-privacy` |
 | Admin → shops banner | `concept-tenant-onboarding` |
+| Home → Explore by need | `need-food`, `need-fashion`, `need-electronics`, `need-beauty`, `need-home-hardware` |
+| Directory prompt | `discover-shops` |
+| Directory closing banner | `journey-navigation` |
+| Basket explanation | `journey-basket` |
+| Order tracking | `journey-delivery` |
+| Help → install panel | `intro-mall-go` |
 | Share preview (OG/Twitter) | `og-social-card` |
 | Help — how chat ordering works | `help-chat`, `help-summary`, `help-delivery` |
 | App header, PWA install | `icon.svg` (SVG) plus the three PNG icons |

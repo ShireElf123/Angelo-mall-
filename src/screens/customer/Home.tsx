@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/seed';
+import { NEED_SHORTCUTS } from '../../data/imageAssets';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import {
@@ -189,6 +190,33 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
             );
           })}
         </div>
+      </section>
+
+      <section aria-label="Explore by need">
+        <SectionHeader
+          title="Explore by need"
+          subtitle="Five quick ways in. Each one filters the same mall directory — there is no catalogue, and prices only appear if a shop replies in a chat."
+        />
+        <ul className="need-grid">
+          {NEED_SHORTCUTS.map((need) => (
+            <li key={need.category}>
+              <button
+                type="button"
+                className="need-tile"
+                onClick={() => navigate({ name: 'shops', category: need.category })}
+              >
+                <img src={need.art} alt="" loading="lazy" decoding="async" aria-hidden />
+                <span>
+                  <strong>{need.label}</strong>
+                  <small>{need.caption}</small>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p className="need-grid__note">
+          Illustrations only — no shop in this demo has product photographs, confirmed stock or offers.
+        </p>
       </section>
 
       {promos.length > 0 && (

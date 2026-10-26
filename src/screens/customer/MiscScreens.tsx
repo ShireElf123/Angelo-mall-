@@ -250,6 +250,14 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
 
       <section className="panel" aria-label="Install this demo">
         <h2>Add to your home screen</h2>
+        <img
+          className="panel__art panel__art--landscape"
+          src={imageSrc('intro-mall-go')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
         <p>
           Angelo Mall Go is built as a Progressive Web App. On most Android phones: open the browser menu →{' '}
           <strong>“Install app” / “Add to Home screen”</strong>. On iPhone Safari: Share →{' '}

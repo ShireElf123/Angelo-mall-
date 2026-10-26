@@ -44,6 +44,19 @@ export const APPROVED_ASSETS = IMAGE_ASSETS.filter(
   (asset) => asset.approved && asset.review !== 'rejected' && asset.review !== 'pending',
 );
 
+/**
+ * Illustrated shortcuts for the Home "Explore by need" row. Each one filters the
+ * mall directory by a real category id — the artwork is illustrative, never a
+ * product claim, price or tenant offer.
+ */
+export const NEED_SHORTCUTS = [
+  { category: 'food', label: 'Food & dining', caption: 'Takeaway, sit-down, biltong', art: imageSrc('need-food') },
+  { category: 'fashion', label: 'Fashion & accessories', caption: 'Clothing, shoes, jewellery', art: imageSrc('need-fashion') },
+  { category: 'electronics', label: 'Electronics & mobile', caption: 'Phones, networks, appliances', art: imageSrc('need-electronics') },
+  { category: 'beauty', label: 'Beauty & personal care', caption: 'Hair, skin, beauty supplies', art: imageSrc('need-beauty') },
+  { category: 'homeware', label: 'Home & hardware', caption: 'Hardware, plastics, homeware', art: imageSrc('need-home-hardware') },
+] as const;
+
 /** Reserved helper image slots shown in the Help screen steps. */
 export const HELP_STEP_ILLUSTRATIONS = [
   imageSrc('help-chat'),

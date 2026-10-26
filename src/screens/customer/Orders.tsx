@@ -158,6 +158,20 @@ export function OrderDetailScreen({
             No live map tracking exists in Phase 1.
           </p>
         )}
+        <figure className="journey-strip journey-strip--tight">
+          <img
+            className="journey-strip__art"
+            src={imageSrc('journey-delivery')}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden
+          />
+          <figcaption>
+            Simulated stages: the shop accepts and prepares, then a demo delivery partner collects and delivers. There
+            is no live courier and no map tracking.
+          </figcaption>
+        </figure>
         <div className="demo-next-step">
           <strong>Move this demo along:</strong> use the Demo Mode switch above — <em>Shop staff</em> accepts and
           prepares the order, then a <em>Delivery partner</em> completes the delivery. This timeline updates instantly.
