@@ -17,6 +17,7 @@ import type { FulfilmentMethod } from '../../types';
 import { formatZAR } from '../../utils/format';
 import { calculateTotals, isBasketOrder, lineTotal } from '../../utils/orderWorkflow';
 import { EmptyState, InfoBanner, Modal, ShopAvatar, StatusPill, useToast } from '../../components/ui';
+import { imageSrc } from '../../data/imageAssets';
 
 export function BasketScreen({
   orderId,
@@ -43,7 +44,8 @@ export function BasketScreen({
     return (
       <div className="page page--narrow">
         <EmptyState
-          icon={<ShoppingBag size={30} aria-hidden />}
+          illustration={imageSrc('state-empty-basket')}
+          icon={<ShoppingBag size={26} aria-hidden />}
           title="Basket not found"
           description="This demo basket may have been cleared by a reset. Your chats are the best place to pick things up again."
         >

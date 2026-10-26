@@ -541,6 +541,17 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: flex-start;
 }
 .info-banner svg { flex: none; margin-top: 2px; }
+.info-banner--illustrated { align-items: flex-start; flex-wrap: wrap; }
+.info-banner--illustrated > div { flex: 1 1 260px; }
+.info-banner__art {
+  order: 3;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  flex: none;
+}
 
 .empty-state {
   text-align: center;
@@ -569,6 +580,11 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 2px;
+}
+/* Inside the chat panel the empty state is narrow: keep the art modest. */
+.chat-thread .empty-state__art { width: min(100%, 280px); }
+@media (max-width: 420px) {
+  .empty-state__art { width: 100%; }
 }
 
 .group-title { font-size: 1.02rem; margin: 18px 0 10px; color: var(--forest-950); }
@@ -1292,6 +1308,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   font-weight: 800; font-size: 0.84rem;
 }
 .role-explain { display: flex; flex-direction: column; gap: 12px; }
+.panel__art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  display: block;
+}
+.panel__art--narrow { max-width: 420px; margin-inline: auto; }
 .role-explain li { display: flex; gap: 11px; align-items: flex-start; color: var(--ink-2); }
 .role-explain svg { color: var(--forest-800); flex: none; margin-top: 2px; }
 

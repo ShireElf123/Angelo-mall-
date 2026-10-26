@@ -53,28 +53,31 @@ the nine category covers `shop-grocery.jpg`, `shop-food.jpg`, `shop-fashion.jpg`
 `shop-electronics.jpg`, `shop-pharmacy.jpg`, `shop-homeware.jpg`,
 `shop-beauty.jpg`, `shop-services.jpg`, `shop-finance.jpg`.
 
-## Batch 2 — defined, not generated (per-turn limit)
+## Batch 2 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
 
-The image tool enforces a **hard limit of 10 generations per turn**, and batch 1
-used all ten, so batch 2 could not run in the same turn. Nothing was faked and no
-placeholder file was created: the app references only batch-1 assets, and the
-existence tests would fail on any phantom path.
+Batch 1 used the tool's hard limit of 10 generations in that turn, so batch 2 was
+specified in `plannedBatches` and generated in the following turn. All ten were
+inspected for relevance, duplicates, corruption, lettering and watermarks: every
+image was word-free, watermark-free and distinct. Off-palette or unusable output
+would have been rejected and re-specified; none was needed.
 
-Batch 2 is specified in the JSON manifest under `plannedBatches` and will be
-generated, reviewed and wired in a later turn:
+| # | Asset id | File (final size) | Purpose | Screens | Review |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `state-empty-basket` | `state-empty-basket.jpg` (1280×720, 31 kB) | Empty basket / basket not found | basket | approved |
+| 2 | `state-empty-chats` | `state-empty-chats.jpg` (1280×720, 50 kB) | No conversations yet | chats | approved |
+| 3 | `state-empty-orders` | `state-empty-orders.jpg` (1280×720, 36 kB) | Nothing confirmed yet | orders | approved |
+| 4 | `state-empty-thread` | `state-empty-thread.jpg` (1280×720, 45 kB) | Conversation with no messages | chat | approved |
+| 5 | `state-empty-delivery` | `state-empty-delivery.jpg` (1280×720, 52 kB) | No open delivery jobs | delivery | approved |
+| 6 | `og-social-card` | `og-social-card.jpg` (1200×630, 63 kB) | Social preview, empty text zone | `index.html` OG tags | approved |
+| 7 | `concept-four-views` | `concept-four-views.jpg` (1280×720, 44 kB) | The four demo workspaces | help | approved |
+| 8 | `concept-tenant-onboarding` | `concept-tenant-onboarding.jpg` (1280×720, 54 kB) | What tenant onboarding needs | admin → shops | approved |
+| 9 | `concept-privacy` | `concept-privacy.jpg` (1280×720, 26 kB) | Privacy / what is simulated | help | approved |
+| 10 | `state-not-found` | `state-not-found.jpg` (1280×720, 49 kB) | Unknown order or promotion | orders, promotion detail | approved |
 
-| Planned id | Purpose | Screen |
-| --- | --- | --- |
-| `state-empty-orders` | Orders list empty (ticket-style) | orders |
-| `state-empty-chats` | Chats list empty (bubbles under an awning) | chats |
-| `state-empty-basket` | Basket empty (empty paper bag) | basket |
-| `state-empty-thread` | New conversation, no messages yet | chat |
-| `state-empty-delivery` | No available delivery jobs | delivery |
-| `og-social-card` | 1200×630 social preview card | share links |
-| `concept-four-views` | Help: the four demo workspaces | help |
-| `concept-tenant-onboarding` | Admin: what tenant onboarding needs | admin shops |
-| `concept-privacy` | Help: privacy and roles | help |
-| `state-not-found` | Unknown route / promotion | not-found |
+Generated at 1672×941 and downsized to 1280×720 (the social card cropped to
+1200×630) and recompressed, which cut each file by roughly 45%. The Open Graph
+and Twitter tags in `index.html` now point at `og-social-card.jpg` instead of
+borrowing a promotion illustration.
 
 ## Logos — zero bundled, and why
 
@@ -97,5 +100,12 @@ exact steps to add a verified mark.
 | Home promotion stack | `promo-groceries`, `promo-takeaway` |
 | Directory banner | `concept-map` |
 | Directory empty state | `state-empty-directory` |
+| Orders list / order not found | `state-empty-orders`, `state-not-found` |
+| Chats list / empty conversation | `state-empty-chats`, `state-empty-thread` |
+| Basket not found | `state-empty-basket` |
+| Delivery board (no open jobs) | `state-empty-delivery` |
+| Help — four views, privacy | `concept-four-views`, `concept-privacy` |
+| Admin → shops banner | `concept-tenant-onboarding` |
+| Share preview (OG/Twitter) | `og-social-card` |
 | Help — how chat ordering works | `help-chat`, `help-summary`, `help-delivery` |
 | App header, PWA install | `icon.svg` (SVG) plus the three PNG icons |

@@ -7,6 +7,7 @@ import { formatRelative, formatZAR } from '../../utils/format';
 import { calculateTotals, canTransition, isBasketOrder } from '../../utils/orderWorkflow';
 import { FulfilmentLabel, OrderItemsTable, OrderTimeline } from '../../components/OrderBits';
 import { EmptyState, Modal, SectionHeader, ShopAvatar, StatusPill, useToast } from '../../components/ui';
+import { imageSrc } from '../../data/imageAssets';
 
 export function OrdersScreen({ navigate }: { navigate: (route: Route) => void }) {
   const { state } = useDemoStore();
@@ -60,7 +61,8 @@ export function OrdersScreen({ navigate }: { navigate: (route: Route) => void })
 
       {orders.length === 0 ? (
         <EmptyState
-          icon={<ClipboardList size={30} aria-hidden />}
+          illustration={imageSrc('state-empty-orders')}
+          icon={<ClipboardList size={26} aria-hidden />}
           title="No orders yet"
           description="When a shop sends you a priced summary and you confirm it, the order will appear here with live (demo) tracking."
         >
@@ -112,7 +114,8 @@ export function OrderDetailScreen({
     return (
       <div className="page page--narrow">
         <EmptyState
-          icon={<PackageSearch size={30} aria-hidden />}
+          illustration={imageSrc('state-not-found')}
+          icon={<PackageSearch size={26} aria-hidden />}
           title="Order not found"
           description="This demo order may have been cleared by a reset."
         >

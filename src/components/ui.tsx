@@ -203,10 +203,20 @@ export function EmptyState({
   );
 }
 
-export function InfoBanner({ children }: { children: ReactNode }) {
+export function InfoBanner({
+  children,
+  illustration,
+}: {
+  children: ReactNode;
+  /** Optional original app illustration; decorative, so alt is empty. */
+  illustration?: string;
+}) {
   return (
-    <div className="info-banner" role="note">
+    <div className={`info-banner ${illustration ? 'info-banner--illustrated' : ''}`.trim()} role="note">
       <Info size={18} aria-hidden />
+      {illustration && (
+        <img className="info-banner__art" src={illustration} alt="" loading="lazy" decoding="async" aria-hidden />
+      )}
       <div>{children}</div>
     </div>
   );

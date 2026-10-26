@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
+import { imageSrc } from '../../data/imageAssets';
 import { getShop, messagesForConversation, openBasketForConversation, orderById } from '../../store/selectors';
 import { formatZAR } from '../../utils/format';
 import { calculateTotals } from '../../utils/orderWorkflow';
@@ -284,7 +285,8 @@ export function ChatScreen({
           composerPlaceholder={`Message ${shop.name}…`}
           emptyState={
             <EmptyState
-              icon={<MessageCircleDashed size={28} aria-hidden />}
+              illustration={imageSrc('state-empty-thread')}
+              icon={<MessageCircleDashed size={24} aria-hidden />}
               title="Say hello"
               description="Ask about stock, sizes, prices — or send your whole list. Staff will build a priced summary with you."
             />

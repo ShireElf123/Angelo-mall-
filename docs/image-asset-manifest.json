@@ -317,6 +317,137 @@
       "approved": true,
       "review": "approved",
       "notes": "Added in Phase 4 with the banking category."
+    },
+    {
+      "id": "state-empty-basket",
+      "file": "/images/state-empty-basket.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Basket screen: the basket or order could not be found.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "state-empty-chats",
+      "file": "/images/state-empty-chats.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Chats list empty state (no conversations yet).",
+      "screens": [
+        "chats"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "state-empty-orders",
+      "file": "/images/state-empty-orders.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Orders list empty state (nothing confirmed yet).",
+      "screens": [
+        "orders"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "state-empty-thread",
+      "file": "/images/state-empty-thread.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "A conversation with no messages yet (chat composer prompt).",
+      "screens": [
+        "chat"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "state-empty-delivery",
+      "file": "/images/state-empty-delivery.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Delivery board with no open jobs.",
+      "screens": [
+        "delivery"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "og-social-card",
+      "file": "/images/og-social-card.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "1200x630 social preview card (Open Graph / Twitter) with an empty text zone.",
+      "screens": [
+        "social-card"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "concept-four-views",
+      "file": "/images/concept-four-views.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Help: the four demo workspaces shown as abstract role panels.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "concept-tenant-onboarding",
+      "file": "/images/concept-tenant-onboarding.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Admin shops banner: what tenant onboarding requires (checklist + ID card).",
+      "screens": [
+        "admin-shops"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "concept-privacy",
+      "file": "/images/concept-privacy.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Help: privacy and simulated-data explanation.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+    },
+    {
+      "id": "state-not-found",
+      "file": "/images/state-not-found.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Unknown order or promotion (dead end of the dotted path).",
+      "screens": [
+        "orders",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
     }
   ],
   "logos": {
@@ -335,8 +466,8 @@
   "plannedBatches": [
     {
       "batch": 2,
-      "status": "blocked-per-turn-limit",
-      "reason": "The image tool enforces a hard limit of 10 generations per turn; batch 1 used all 10. No files were created for batch 2, so nothing here is referenced by the app yet.",
+      "status": "complete",
+      "reason": "All 10 planned assets were generated in the next turn, reviewed, optimised, integrated and documented.",
       "resume": "Run this batch in a later turn, review, optimise, then add manifest entries and wire the empty states.",
       "planned": [
         {
@@ -409,7 +540,8 @@
             "not-found"
           ]
         }
-      ]
+      ],
+      "remaining": []
     }
   ]
 }

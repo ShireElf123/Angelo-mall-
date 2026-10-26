@@ -15,6 +15,7 @@ import {
 import type { AdminTab, Route } from '../../router';
 import { categoryLabel } from '../../data/seed';
 import { useDemoStore } from '../../store/DemoStore';
+import { imageSrc } from '../../data/imageAssets';
 import { getShop } from '../../store/selectors';
 import type { ParticipationStatus, Promotion, PromotionPlacement } from '../../types';
 import { formatRelative, formatZAR, roundMoney } from '../../utils/format';
@@ -149,7 +150,7 @@ function ShopsAdmin() {
 
   return (
     <div>
-      <InfoBanner>
+      <InfoBanner illustration={imageSrc('concept-tenant-onboarding')}>
         Listing status is a management decision. Changing a status here updates the customer directory immediately —
         e.g. move a listing into the “sample walkthrough” group to present an onboarding conversation. Nothing here
         enrols a real tenant: every business in this directory is listed from public mall information only.

@@ -9,6 +9,7 @@ import {
 } from '../../store/selectors';
 import { formatRelative } from '../../utils/format';
 import { EmptyState, SectionHeader, ShopAvatar } from '../../components/ui';
+import { imageSrc } from '../../data/imageAssets';
 
 export function ChatsListScreen({ navigate }: { navigate: (route: Route) => void }) {
   const { state } = useDemoStore();
@@ -23,7 +24,8 @@ export function ChatsListScreen({ navigate }: { navigate: (route: Route) => void
 
       {conversations.length === 0 ? (
         <EmptyState
-          icon={<MessagesSquare size={30} aria-hidden />}
+          illustration={imageSrc('state-empty-chats')}
+          icon={<MessagesSquare size={26} aria-hidden />}
           title="No conversations yet"
           description="Open a shop and tap “Start chatting” to ask about stock, sizes or prices. Your chats will live here."
         >

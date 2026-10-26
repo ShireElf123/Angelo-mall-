@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
-import { HELP_STEP_ILLUSTRATIONS } from '../../data/imageAssets';
+import { HELP_STEP_ILLUSTRATIONS, imageSrc } from '../../data/imageAssets';
 import { getShop } from '../../store/selectors';
 import { DemoTag, EmptyState, Modal, SectionHeader, ShopAvatar, SponsoredTag, useToast } from '../../components/ui';
 
@@ -35,7 +35,8 @@ export function PromotionDetailScreen({
     return (
       <div className="page page--narrow">
         <EmptyState
-          icon={<Megaphone size={30} aria-hidden />}
+          illustration={imageSrc('state-not-found')}
+          icon={<Megaphone size={26} aria-hidden />}
           title="Promotion not found"
           description="This demo promotion may have ended or been removed in the admin workspace."
         >
@@ -210,6 +211,14 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
 
       <section className="panel" aria-label="The four demo views">
         <h2>The four demo views (Demo Mode switch)</h2>
+        <img
+          className="panel__art"
+          src={imageSrc('concept-four-views')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
         <ul className="role-explain">
           <li>
             <Store size={18} aria-hidden />
@@ -253,6 +262,14 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
         <h2>
           <ShieldCheck size={19} aria-hidden /> What’s real, what’s not
         </h2>
+        <img
+          className="panel__art panel__art--narrow"
+          src={imageSrc('concept-privacy')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
         <ul className="tick-list">
           <li>
             <strong>Real in this demo:</strong> navigation, chat state, baskets, order workflow, delivery hand-offs,

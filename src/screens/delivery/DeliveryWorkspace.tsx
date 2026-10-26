@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { DeliveryTab, Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
+import { imageSrc } from '../../data/imageAssets';
 import { getShop, orderById } from '../../store/selectors';
 import type { DeliveryJob } from '../../types';
 import { formatRelative, formatZAR } from '../../utils/format';
@@ -241,7 +242,8 @@ export function DeliveryWorkspace({
         {tab === 'available' &&
           (available.length === 0 ? (
             <EmptyState
-              icon={<Bike size={30} aria-hidden />}
+              illustration={imageSrc('state-empty-delivery')}
+              icon={<Bike size={26} aria-hidden />}
               title="No open jobs right now"
               description="When a shop marks a delivery order ready, the job appears here instantly. Try it: confirm AMG-1001 as the customer, then prepare it in the Shop staff workspace."
             />
