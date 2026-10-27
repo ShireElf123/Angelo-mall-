@@ -153,6 +153,42 @@ journey and sits beside text that says there is no live courier or map
 tracking; the shop page labels `shop-detail` as "not this shop's shopfront";
 `admin-reporting` contains blank bars with no figures.
 
+## Batch 5 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
+
+Batch 5 was planned from a UI gap audit of the running app rather than a theme:
+every asset below closes a state that had no artwork, or that had *wrong*
+artwork. The audit also found work that needed code rather than images, and
+that was fixed in the same pass (see "Code fixes chosen over new images").
+
+| 1 | `order-cancelled` | `order-cancelled.jpg` (1280x720 (16:9), 62 kB) | Empty open kraft box set aside with a blank notice card — a cancelled demo order. | order-detail | approved |
+| 2 | `order-collection` | `order-collection.jpg` (1280x720 (16:9), 62 kB) | Shop collection counter with a tied parcel, bell and a dotted gold path — collecting in store, no courier. | order-detail | approved |
+| 3 | `state-basket-confirmed` | `state-basket-confirmed.jpg` (1280x720 (16:9), 66 kB) | Phone with a blank confirmed card beside a ribboned kraft bag — a basket that already became an order. | basket | approved |
+| 4 | `shop-all-caught-up` | `shop-all-caught-up.jpg` (1280x720 (16:9), 66 kB) | Tidy end-of-shift counter with tied boxes and a mug under a gold arc — nothing waiting on the shop. | retailer-today | approved |
+| 5 | `shop-orders-empty` | `shop-orders-empty.jpg` (1280x720 (16:9), 74 kB) | Wall order rail with empty brass clips and one blank kraft tag — no orders yet for this shop. | retailer-orders | approved |
+| 6 | `shop-thread-empty` | `shop-thread-empty.jpg` (1280x720 (16:9), 45 kB) | Brass counter bell with a blank folded note — waiting for the customer's first message. | retailer-chat | approved |
+| 7 | `delivery-mine-empty` | `delivery-mine-empty.jpg` (1280x720 (16:9), 73 kB) | Parked forest green delivery scooter with an empty insulated box — no accepted jobs. | delivery-mine | approved |
+| 8 | `delivery-done-empty` | `delivery-done-empty.jpg` (1280x720 (16:9), 103 kB) | End-of-shift bench with a folded high-vis vest, blank pay card, mug and plant — no completed jobs yet. | delivery-done | approved |
+| 9 | `admin-promotions-empty` | `admin-promotions-empty.jpg` (1280x720 (16:9), 85 kB) | Plain pin-board with three blank pinned cards — no promotions created yet. | admin-promotions | approved |
+| 10 | `admin-deliveries-empty` | `admin-deliveries-empty.jpg` (1280x720 (16:9), 69 kB) | Empty courier backpack with a blank route card on a bench — no delivery jobs in the marketplace. | admin-deliveries | approved |
+
+**Code fixes chosen over new images (no asset added):**
+
+* `orderTracing()` now selects art from status *and* fulfilment, so a cancelled
+  order no longer shows a moving delivery route and a collection order no longer
+  shows a courier scooter. The "Move this demo along" hint is hidden once an
+  order is finished or cancelled.
+* The offline illustration (`state-offline`, documented since batch 1 but never
+  wired) is now used as a small decorative thumbnail in the offline banner.
+* The chat "conversation not found" screen now uses the documented
+  `state-not-found` art instead of an icon-only empty state.
+* The admin promotions tab gained a real empty state (it previously rendered an
+  empty list with no explanation).
+
+**Still deliberately unillustrated:** the promotions admin form, admin overview
+figures, the directory skeleton loader and toast messages — these are better
+served by text, controls and existing CSS. `promo-services` remains
+`approved-but-unused` on purpose: nothing on a screen needs a third banner.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5
@@ -195,6 +231,18 @@ exact steps to add a verified mark.
 | Admin → reports banner | `admin-reporting` |
 | Shop staff → inbox empty / filtered | `shop-staff-inbox`, `search-guidance` |
 | Shop staff → order panel, no summary yet | `order-summary-building` |
+| Order tracking → cancelled | `order-cancelled` |
+| Order tracking → collection in progress | `order-collection` |
+| Basket → already confirmed | `state-basket-confirmed` |
+| Shop staff → Today, nothing waiting | `shop-all-caught-up` |
+| Shop staff → Orders, none yet | `shop-orders-empty` |
+| Shop staff → thread with no messages | `shop-thread-empty` |
+| Delivery → My jobs empty | `delivery-mine-empty` |
+| Delivery → Completed empty | `delivery-done-empty` |
+| Admin → Promotions empty | `admin-promotions-empty` |
+| Admin → Deliveries empty | `admin-deliveries-empty` |
+| Shell → offline banner (thumbnail) | `state-offline` |
+| Chat → conversation not found | `state-not-found` |
 | Share preview (OG/Twitter) | `og-social-card` |
 | Help — how chat ordering works | `help-chat`, `help-summary`, `help-delivery` |
 | App header, PWA install | `icon.svg` (SVG) plus the three PNG icons |

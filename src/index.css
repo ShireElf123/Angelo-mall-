@@ -473,11 +473,20 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: flex;
   gap: 9px;
   align-items: center;
+  flex-wrap: wrap;
   background: var(--warning-bg);
   color: var(--warning);
   padding: 10px 16px;
   font-size: 0.9rem;
   font-weight: 500;
+}
+.offline-banner__art {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: none;
+  order: -1;
 }
 
 .shell-main { flex: 1; width: 100%; }

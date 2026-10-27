@@ -16,6 +16,7 @@ import {
   User,
   WifiOff,
 } from 'lucide-react';
+import { imageSrc } from '../data/imageAssets';
 import { homeRouteForRole, roleForRoute, type Route } from '../router';
 import { useDemoStore } from '../store/DemoStore';
 import { customerUnreadTotal, shopUnreadTotal } from '../store/selectors';
@@ -182,6 +183,7 @@ export function Shell({
 
       {!online && (
         <div className="offline-banner" role="alert">
+          <img className="offline-banner__art" src={imageSrc('state-offline')} alt="" aria-hidden decoding="async" />
           <WifiOff size={17} aria-hidden />
           You appear to be offline. This demo keeps working on this device — live ordering would need a connection.
         </div>

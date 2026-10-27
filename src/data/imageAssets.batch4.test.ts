@@ -44,8 +44,11 @@ describe('batch 4 image assets', () => {
     expect(batch.map((asset) => asset.id).sort()).toEqual([...BATCH_4_IDS].sort());
   });
 
-  it('keeps the total inventory at 53 documented assets', () => {
-    expect(IMAGE_ASSETS).toHaveLength(53);
+  it('keeps every batch 1–4 asset in the inventory as later batches are added', () => {
+    // Inventory only grows: later batches must never drop or replace earlier work.
+    expect(IMAGE_ASSETS.length).toBeGreaterThanOrEqual(53);
+    const ids = new Set(IMAGE_ASSETS.map((asset) => asset.id));
+    for (const id of BATCH_4_IDS) expect(ids.has(id)).toBe(true);
   });
 
   it.each(BATCH_4_IDS)('%s is on disk, approved and documented', (id) => {

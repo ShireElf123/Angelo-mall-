@@ -40,7 +40,8 @@ describe('order tracking status art', () => {
     const art = container.querySelector('.journey-strip__art') as HTMLImageElement | null;
     expect(art?.getAttribute('src')).toBe('/images/order-pending.jpg');
     expect(art?.getAttribute('alt')).toBe('');
-    expect(container.querySelector('.journey-strip')?.textContent).toMatch(/simulated stages/i);
+    // Batch 5 made the caption status-specific; it must still be explicitly simulated.
+    expect(container.querySelector('.journey-strip')?.textContent).toMatch(/next demo update/i);
   });
 
   it('shows the delivery route illustration while the order is in flight', () => {
@@ -53,7 +54,8 @@ describe('order tracking status art', () => {
     const { container } = wrap(<OrderDetailScreen orderId="ord-demo-1003" navigate={vi.fn()} />);
     const art = container.querySelector('.journey-strip__art') as HTMLImageElement | null;
     expect(art?.getAttribute('src')).toBe('/images/order-complete.jpg');
-    expect(container.querySelector('.journey-strip')?.textContent).toMatch(/no live courier and no map tracking/i);
+    expect(container.querySelector('.journey-strip')?.textContent).toMatch(/simulated journey finished/i);
+    expect(container.querySelector('.journey-strip')?.textContent).toMatch(/no real shop hand-over/i);
   });
 
   it('renders exactly one status illustration at a time', () => {

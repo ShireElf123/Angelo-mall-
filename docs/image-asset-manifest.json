@@ -162,7 +162,8 @@
       ],
       "approved": true,
       "review": "approved-but-unused",
-      "notes": "Retained for the offline banner; the current banner is text-only by design (it must stay readable at the top of the viewport)."
+      "notes": "Retained for the offline banner; the current banner is text-only by design (it must stay readable at the top of the viewport). Wired into the offline banner in batch 5 as a small decorative thumbnail.",
+      "usage": "banner"
     },
     {
       "id": "concept-map",
@@ -768,6 +769,176 @@
       "sizeKb": 31,
       "usage": "panel",
       "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-cancelled",
+      "file": "/images/order-cancelled.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Empty open kraft box set aside with a blank notice card \u2014 a cancelled demo order.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 62,
+      "usage": "status",
+      "gapAddressed": "Cancelled orders used to show the delivery route; this separates 'stopped' from 'in flight'.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "order-collection",
+      "file": "/images/order-collection.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Shop collection counter with a tied parcel, bell and a dotted gold path \u2014 collecting in store, no courier.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 62,
+      "usage": "status",
+      "gapAddressed": "Collection orders previously borrowed the delivery scooter route; this shows an in-store hand-over.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "state-basket-confirmed",
+      "file": "/images/state-basket-confirmed.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Phone with a blank confirmed card beside a ribboned kraft bag \u2014 a basket that already became an order.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 66,
+      "usage": "empty-state",
+      "gapAddressed": "The 'already confirmed' basket dead end had an icon only.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-all-caught-up",
+      "file": "/images/shop-all-caught-up.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Tidy end-of-shift counter with tied boxes and a mug under a gold arc \u2014 nothing waiting on the shop.",
+      "screens": [
+        "retailer-today"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 66,
+      "usage": "empty-state",
+      "gapAddressed": "The shop's 'What needs attention' all-clear was a single text line.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-orders-empty",
+      "file": "/images/shop-orders-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Wall order rail with empty brass clips and one blank kraft tag \u2014 no orders yet for this shop.",
+      "screens": [
+        "retailer-orders"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 74,
+      "usage": "empty-state",
+      "gapAddressed": "Three empty order buckets previously said 'Nothing here right now' with no explanation.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-thread-empty",
+      "file": "/images/shop-thread-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Brass counter bell with a blank folded note \u2014 waiting for the customer's first message.",
+      "screens": [
+        "retailer-chat"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 45,
+      "usage": "empty-state",
+      "gapAddressed": "The shop-side empty conversation was icon only; the customer-side art is a different perspective.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "delivery-mine-empty",
+      "file": "/images/delivery-mine-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Parked forest green delivery scooter with an empty insulated box \u2014 no accepted jobs.",
+      "screens": [
+        "delivery-mine"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 73,
+      "usage": "empty-state",
+      "gapAddressed": "The 'My jobs' tab had no artwork; the available-jobs board art is a different state.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "delivery-done-empty",
+      "file": "/images/delivery-done-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "End-of-shift bench with a folded high-vis vest, blank pay card, mug and plant \u2014 no completed jobs yet.",
+      "screens": [
+        "delivery-done"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 103,
+      "usage": "empty-state",
+      "gapAddressed": "Nothing covered the completed/earnings history state.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "admin-promotions-empty",
+      "file": "/images/admin-promotions-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Plain pin-board with three blank pinned cards \u2014 no promotions created yet.",
+      "screens": [
+        "admin-promotions"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 85,
+      "usage": "empty-state",
+      "gapAddressed": "The promotions tab had no empty state at all, only an empty list.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "admin-deliveries-empty",
+      "file": "/images/admin-deliveries-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Empty courier backpack with a blank route card on a bench \u2014 no delivery jobs in the marketplace.",
+      "screens": [
+        "admin-deliveries"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 69,
+      "usage": "empty-state",
+      "gapAddressed": "Dispatch oversight showed a bare text line.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
     }
   ],
   "logos": {

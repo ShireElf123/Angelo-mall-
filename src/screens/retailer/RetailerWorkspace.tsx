@@ -98,7 +98,8 @@ function RetailerChat({
           quickReplies={QUICK_REPLIES}
           emptyState={
             <EmptyState
-              icon={<MessagesSquare size={28} aria-hidden />}
+              illustration={imageSrc('shop-thread-empty')}
+              icon={<MessagesSquare size={24} aria-hidden />}
               title="No messages yet"
               description="When the customer writes, it lands here. Reply, agree the items, then build the order in the panel."
             />
@@ -346,6 +347,22 @@ export function RetailerWorkspace({
 
       {tab === 'orders' && (
         <div className="orders-board">
+          {shopOrders.length === 0 && (
+            <div className="panel">
+              <img
+                className="panel__art"
+                src={imageSrc('shop-orders-empty')}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                aria-hidden
+              />
+              <p className="panel__empty">
+                No orders for this shop yet. An order appears here as soon as you send a priced summary from a chat and
+                the customer confirms it.
+              </p>
+            </div>
+          )}
           {orderBuckets.map((bucket) => (
             <section key={bucket.title} className="orders-bucket" aria-label={bucket.title}>
               <h2>
@@ -409,7 +426,19 @@ export function RetailerWorkspace({
           <section className="panel" aria-label="What needs attention">
             <h2>What needs attention</h2>
             {actionCount === 0 ? (
-              <p className="panel__empty">All caught up — no unread chats, new orders or change requests for this shop.</p>
+              <>
+                <img
+                  className="panel__art"
+                  src={imageSrc('shop-all-caught-up')}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  aria-hidden
+                />
+                <p className="panel__empty">
+                  All caught up — no unread chats, new orders or change requests for this shop.
+                </p>
+              </>
             ) : (
               <ul className="attention-list">
                 {conversations

@@ -254,7 +254,8 @@ export function DeliveryWorkspace({
         {tab === 'mine' &&
           (mine.length === 0 ? (
             <EmptyState
-              icon={<PackageOpen size={30} aria-hidden />}
+              illustration={imageSrc('delivery-mine-empty')}
+              icon={<PackageOpen size={26} aria-hidden />}
               title="No active jobs"
               description="Accept an available job and it will wait for you here with big, thumb-friendly status buttons."
             >
@@ -269,7 +270,8 @@ export function DeliveryWorkspace({
         {tab === 'done' &&
           (done.length === 0 ? (
             <EmptyState
-              icon={<PackageCheck size={30} aria-hidden />}
+              illustration={imageSrc('delivery-done-empty')}
+              icon={<PackageCheck size={26} aria-hidden />}
               title="Nothing completed yet"
               description="Delivered (and released) jobs collect here with their demo payouts — the start of an earnings history in a live system."
             />

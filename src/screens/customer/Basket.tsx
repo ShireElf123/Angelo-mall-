@@ -61,7 +61,8 @@ export function BasketScreen({
     return (
       <div className="page page--narrow">
         <EmptyState
-          icon={<Check size={30} aria-hidden />}
+          illustration={imageSrc('state-basket-confirmed')}
+          icon={<Check size={26} aria-hidden />}
           title={`Order ${order.ref} is already confirmed`}
           description="A chat message is never a purchase on its own — this one was explicitly confirmed, so it now lives in order tracking."
         >

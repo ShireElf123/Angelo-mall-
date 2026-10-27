@@ -175,7 +175,8 @@ export function ChatScreen({
     return (
       <div className="page page--narrow">
         <EmptyState
-          icon={<MessageCircleDashed size={30} aria-hidden />}
+          illustration={imageSrc('state-not-found')}
+          icon={<MessageCircleDashed size={26} aria-hidden />}
           title="Conversation not found"
           description="This demo chat may have been cleared by a reset. Start again from the shop directory."
         >

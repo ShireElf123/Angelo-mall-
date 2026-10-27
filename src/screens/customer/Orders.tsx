@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, ClipboardList, MessageCircle, PackageSearch, Repeat, XCircle } from 'lucide-react';
 import type { Route } from '../../router';
-import type { OrderStatus } from '../../types';
+import type { Order } from '../../types';
 import { useDemoStore } from '../../store/DemoStore';
 import { getShop, jobForOrder, orderById, ordersForCustomer } from '../../store/selectors';
 import { formatRelative, formatZAR } from '../../utils/format';
@@ -97,16 +97,55 @@ export function OrdersScreen({ navigate }: { navigate: (route: Route) => void })
   );
 }
 
+type TracingArtId =
+  | 'order-pending'
+  | 'order-collection'
+  | 'journey-delivery'
+  | 'order-complete'
+  | 'order-cancelled';
+
 /**
- * One status illustration at a time in the tracking panel: a parcel waiting for
- * an update, the simulated delivery route while it is in flight, and the end of
- * the journey once it is delivered. All three are illustrations — none is proof
- * of a real order, courier or delivery.
+ * One illustration at a time in the tracking panel, chosen from the real status
+ * *and* the fulfilment method — a collection order must never show a courier
+ * route, and a cancelled order must never look like it is still moving.
+ * Captions are supplied alongside so the artwork can never claim more than the
+ * demo does.
  */
-function orderTracingArt(status: OrderStatus): 'order-pending' | 'journey-delivery' | 'order-complete' {
-  if (status === 'delivered' || status === 'completed') return 'order-complete';
-  if (status === 'draft' || status === 'awaiting-customer' || status === 'awaiting-shop') return 'order-pending';
-  return 'journey-delivery';
+function orderTracing(order: Order): { art: TracingArtId; caption: string } {
+  const { status, fulfilment } = order;
+  if (status === 'cancelled') {
+    return {
+      art: 'order-cancelled',
+      caption: 'This demo order was cancelled — nothing was bought, paid for or delivered.',
+    };
+  }
+  if (status === 'delivered' || status === 'completed') {
+    return {
+      art: 'order-complete',
+      caption:
+        fulfilment === 'collection'
+          ? 'Simulated journey finished: this collection was marked as picked up. No real shop hand-over happened.'
+          : 'Simulated journey finished: the demo delivery was marked delivered. No real courier was involved.',
+    };
+  }
+  if (status === 'draft' || status === 'awaiting-customer' || status === 'awaiting-shop') {
+    return {
+      art: 'order-pending',
+      caption: 'Waiting for the next demo update — a sample summary, then your confirmation.',
+    };
+  }
+  if (fulfilment === 'collection') {
+    return {
+      art: 'order-collection',
+      caption:
+        'Simulated stages: the shop accepts and prepares, then you collect at the shop. Nothing is reserved, paid for or held in this demo.',
+    };
+  }
+  return {
+    art: 'journey-delivery',
+    caption:
+      'Simulated stages: the shop accepts and prepares, then a demo delivery partner collects and delivers. There is no live courier and no map tracking.',
+  };
 }
 
 export function OrderDetailScreen({
@@ -141,6 +180,7 @@ export function OrderDetailScreen({
   }
 
   const canCancel = canTransition(order, 'cancelled') && !isBasketOrder(order);
+  const tracing = orderTracing(order);
 
   return (
     <div className="page page--narrow">
@@ -174,21 +214,30 @@ export function OrderDetailScreen({
         <figure className="journey-strip journey-strip--tight">
           <img
             className="journey-strip__art"
-            src={imageSrc(orderTracingArt(order.status))}
+            src={imageSrc(tracing.art)}
             alt=""
             loading="lazy"
             decoding="async"
             aria-hidden
           />
-          <figcaption>
-            Simulated stages: the shop accepts and prepares, then a demo delivery partner collects and delivers. There
-            is no live courier and no map tracking.
-          </figcaption>
+          <figcaption>{tracing.caption}</figcaption>
         </figure>
-        <div className="demo-next-step">
-          <strong>Move this demo along:</strong> use the Demo Mode switch above — <em>Shop staff</em> accepts and
-          prepares the order, then a <em>Delivery partner</em> completes the delivery. This timeline updates instantly.
-        </div>
+        {order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'completed' && (
+          <div className="demo-next-step">
+            <strong>Move this demo along:</strong> use the Demo Mode switch above — <em>Shop staff</em> accepts and
+            prepares the order, then{' '}
+            {order.fulfilment === 'collection' ? (
+              <>
+                mark it <em>ready for collection</em>, and the customer completes it at the shop.
+              </>
+            ) : (
+              <>
+                a <em>Delivery partner</em> completes the delivery.
+              </>
+            )}{' '}
+            This timeline updates instantly.
+          </div>
+        )}
       </section>
 
       <section className="panel" aria-label="Order items">

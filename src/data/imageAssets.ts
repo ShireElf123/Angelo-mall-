@@ -27,6 +27,8 @@ export interface ImageAsset {
   /** Compressed file size in kB, recorded from batch 3 on. */
   sizeKb?: number;
   usage?: string;
+  /** The verified UI gap this asset closes (batch 5 onward). */
+  gapAddressed?: string;
 }
 
 export const IMAGE_ASSETS = manifest.assets as ImageAsset[];

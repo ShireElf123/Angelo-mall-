@@ -254,6 +254,22 @@ function PromotionsAdmin() {
 
   return (
     <div>
+      {state.promotions.length === 0 && (
+        <div className="panel">
+          <img
+            className="panel__art"
+            src={imageSrc('admin-promotions-empty')}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden
+          />
+          <p className="panel__empty">
+            No demo promotions yet. Create one below and it appears on the customer home page straight away — it is
+            labelled demo content and is never a real tenant offer.
+          </p>
+        </div>
+      )}
       <ul className="admin-promo-list">
         {state.promotions.map((promotion) => {
           const shop = promotion.shopId ? getShop(state, promotion.shopId) : undefined;
@@ -386,7 +402,19 @@ function DeliveriesAdmin() {
         pool can serve the whole mall.
       </InfoBanner>
       {state.deliveryJobs.length === 0 ? (
-        <p className="panel__empty">No delivery jobs yet — they appear when shops mark orders ready for delivery.</p>
+        <>
+          <img
+            className="panel__art"
+            src={imageSrc('admin-deliveries-empty')}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden
+          />
+          <p className="panel__empty">
+            No delivery jobs yet — they appear when shops mark orders ready for delivery.
+          </p>
+        </>
       ) : (
         <ul className="admin-job-list">
           {[...state.deliveryJobs]
