@@ -300,6 +300,14 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
 
       <section className="panel" aria-label="Reset demo data">
         <h2>Start the demo over</h2>
+        <img
+          className="panel__art panel__art--narrow"
+          src={imageSrc('help-troubleshooting')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
         <p>Restore the original sample shops, conversations, orders and jobs on this device.</p>
         <button type="button" className="btn btn--danger-ghost" onClick={() => setConfirmReset(true)}>
           <RotateCcw size={16} aria-hidden /> Reset demo data…

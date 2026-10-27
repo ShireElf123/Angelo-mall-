@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/seed';
-import { NEED_SHORTCUTS } from '../../data/imageAssets';
+import { NEED_SHORTCUTS, imageSrc } from '../../data/imageAssets';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import {
@@ -98,7 +98,19 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           {query.trim() && (
             <div className="hero__results" aria-live="polite">
               {searchResults.length === 0 ? (
-                <p>No listed shops match “{query}”. Try a category below, or browse the full mall directory.</p>
+                <div className="hero__no-match">
+                  <img
+                    src={imageSrc('search-guidance')}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    aria-hidden
+                  />
+                  <p>
+                    No listed shops match “{query}”. Try a need instead of a product — “cable”, “mince”, “burgers” — or
+                    browse the full directory below.
+                  </p>
+                </div>
               ) : (
                 <ul>
                   {searchResults.map((shop) => (
@@ -127,6 +139,35 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </div>
         </div>
       </section>
+
+      {conversations.length === 0 && activeOrders.length === 0 && (
+        <section className="welcome-card" aria-label="New here?">
+          <img
+            className="welcome-card__art"
+            src={imageSrc('welcome-mall')}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden
+          />
+          <div className="welcome-card__body">
+            <h2>New here? Start with one shop.</h2>
+            <p>
+              Angelo Mall Go is a concept demo: the shops are real mall tenants, but nothing you send reaches them.
+              Pick a shop, say hello, and watch a sample conversation build a basket — then switch to the Shop staff
+              view to answer as the shop.
+            </p>
+            <div className="hero__actions">
+              <button type="button" className="btn btn--primary" onClick={() => navigate({ name: 'shops' })}>
+                Browse the shops
+              </button>
+              <button type="button" className="btn btn--ghost" onClick={() => navigate({ name: 'help' })}>
+                How the demo works
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {activeOrders.length > 0 && (
         <section aria-label="Your active demo orders">

@@ -1,5 +1,6 @@
 import { ArrowLeft, Bike, Clock, Globe, MapPin, MessageCircle, Phone, ShoppingBag } from 'lucide-react';
 import { categoryLabel } from '../../data/seed';
+import { imageSrc } from '../../data/imageAssets';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import {
@@ -185,6 +186,18 @@ export function ShopPageScreen({
               our own summary of the business type, not wording supplied by the shop. No logo, photograph or product
               image from any business is used.
             </p>
+            <figure className="shop-source__art">
+              <img
+                src={imageSrc('shop-detail')}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                aria-hidden
+              />
+              <figcaption>
+                Illustration of a generic shopfront — deliberately not this shop’s shopfront, signage or branding.
+              </figcaption>
+            </figure>
           </div>
         </div>
       </article>
@@ -192,6 +205,14 @@ export function ShopPageScreen({
       <section className="panel" aria-label="Popular things to ask">
         <h2>Popular things to ask</h2>
         <p className="panel__lede">Tap one to drop it straight into your demo conversation.</p>
+        <img
+          className="panel__art panel__art--banner"
+          src={imageSrc('contact-shop')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
         <div className="ask-chips">
           {asks.map((ask) => (
             <button key={ask} type="button" className="chip chip--button" onClick={() => void startChat(ask)}>

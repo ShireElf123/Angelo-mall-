@@ -112,6 +112,47 @@ process illustrations, not empty states (batch 2 already covers those).
 tenant's shopfront, or a real brand mark. The basket and delivery journeys
 illustrate *simulated* steps and sit beside text that says so.
 
+## Batch 4 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
+
+Batch 4 fills the states that were still text-only: the first-run welcome, a
+no-match search, the shop-staff inbox, the shop page's listing provenance, a
+shopper preparing a question, both ends of the order journey, demo reset help,
+admin reporting and the shop's order-summary panel. All ten were inspected for
+artifacts, lettering, brand marks, OS-dialog imitation and misleading claims;
+none needed regeneration. Cropped to the display aspect (3:2, 16:9, 1:1 or 4:5)
+from the generated original and recompressed.
+
+| 1 | `welcome-mall` | `welcome-mall.jpg` (1000x667 (3:2), 69 kB) | Friendly adult and child entering a warmly lit mall archway — first-run welcome for new visitors. | home | approved |
+| 2 | `search-guidance` | `search-guidance.jpg` (1000x563 (16:9), 32 kB) | Blank search field with magnifier in front of three simple awnings — guidance when a home search finds no shops. | home | approved |
+| 3 | `shop-staff-inbox` | `shop-staff-inbox.jpg` (1000x563 (16:9), 52 kB) | Shop counter with tablet showing blank chat bubbles, apron and kraft bag — the shop-staff inbox before any customer writes. | retailer-inbox | approved |
+| 4 | `shop-detail` | `shop-detail.jpg` (1000x667 (3:2), 71 kB) | Generic empty shopfront with blank signboard — illustrates that a listing is a directory entry, not this shop's own shopfront. | shop-page | approved |
+| 5 | `contact-shop` | `contact-shop.jpg` (1000x563 (16:9), 73 kB) | Shopper writing a short list beside a phone with a blank message field — preparing a question for a shop. | shop-page | approved |
+| 6 | `order-pending` | `order-pending.jpg` (1000x667 (3:2), 40 kB) | Taped kraft parcel beside a plain clock face — a simulated order waiting for the next update. | order-detail | approved |
+| 7 | `order-complete` | `order-complete.jpg` (1000x667 (3:2), 68 kB) | Parcel on a doormat before a green door with a small gold tick — the end of the simulated journey, not proof of delivery. | order-detail | approved |
+| 8 | `help-troubleshooting` | `help-troubleshooting.jpg` (720x900 (4:5), 29 kB) | Blank help card with a question bubble and a refresh arrow — resetting the demo and finding guidance. | help | approved |
+| 9 | `admin-reporting` | `admin-reporting.jpg` (1000x667 (3:2), 42 kB) | Clipboard of blank bar shapes, plain cards and a magnifier — illustrative activity reporting, containing no real figures. | admin-reports | approved |
+| 10 | `order-summary-building` | `order-summary-building.jpg` (700x700 (1:1), 31 kB) | Overhead clipboard with empty ruled rows, pencil and kraft bag — the shop building an order summary. | retailer-order-panel | approved |
+
+**Proposed candidates that were replaced to avoid duplication.** Three of the
+suggested concepts were already covered and were swapped for genuinely
+unillustrated states:
+
+* *Directory filter guidance* — batch 3's `discover-shops` prompt and the
+  category chips already carry this; replaced by `shop-staff-inbox` (the shop
+  workspace's true empty inbox had no art).
+* *Privacy and safe-use* — batch 2's `concept-privacy` covers this in Help;
+  replaced by `order-summary-building` (the shop building a summary, the one
+  step of the flow with no visual).
+* *Install / share app* — batch 3's `intro-mall-go` already illustrates the
+  install panel; no OS-chrome imitation was made. Replaced by `admin-reporting`
+  (the management reports tab had no illustration).
+
+**Honesty.** No image contains a price, a discount, stock, a real tenant's
+shopfront or a brand mark. `order-complete` shows the end of a *simulated*
+journey and sits beside text that says there is no live courier or map
+tracking; the shop page labels `shop-detail` as "not this shop's shopfront";
+`admin-reporting` contains blank bars with no figures.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5
@@ -145,6 +186,15 @@ exact steps to add a verified mark.
 | Basket explanation | `journey-basket` |
 | Order tracking | `journey-delivery` |
 | Help → install panel | `intro-mall-go` |
+| Home → first-run welcome | `welcome-mall` |
+| Home → search finds nothing | `search-guidance` |
+| Shop page → listing provenance | `shop-detail` |
+| Shop page → popular things to ask | `contact-shop` |
+| Order tracking (pending / in flight / done) | `order-pending`, `journey-delivery`, `order-complete` |
+| Help → reset demo panel | `help-troubleshooting` |
+| Admin → reports banner | `admin-reporting` |
+| Shop staff → inbox empty / filtered | `shop-staff-inbox`, `search-guidance` |
+| Shop staff → order panel, no summary yet | `order-summary-building` |
 | Share preview (OG/Twitter) | `og-social-card` |
 | Help — how chat ordering works | `help-chat`, `help-summary`, `help-delivery` |
 | App header, PWA install | `icon.svg` (SVG) plus the three PNG icons |

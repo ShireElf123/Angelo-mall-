@@ -22,6 +22,11 @@ export interface ImageAsset {
   review: ReviewStatus | string;
   derivedFrom?: string;
   notes?: string;
+  /** Documented display size, e.g. `1000x667 (3:2)` — recorded from batch 3 on. */
+  dimensions?: string;
+  /** Compressed file size in kB, recorded from batch 3 on. */
+  sizeKb?: number;
+  usage?: string;
 }
 
 export const IMAGE_ASSETS = manifest.assets as ImageAsset[];

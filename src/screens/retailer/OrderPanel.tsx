@@ -26,6 +26,7 @@ import {
   validateLineItem,
 } from '../../utils/orderWorkflow';
 import { Modal, StatusPill, useToast } from '../../components/ui';
+import { imageSrc } from '../../data/imageAssets';
 
 function ItemEditor({
   order,
@@ -292,10 +293,20 @@ export function OrderPanel({
       </div>
 
       {orders.length === 0 && (
-        <p className="panel__empty">
-          No orders yet in this conversation. Chat first, agree the items, then start a summary — no product catalogue
-          required.
-        </p>
+        <>
+          <img
+            className="panel__art panel__art--square"
+            src={imageSrc('order-summary-building')}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            aria-hidden
+          />
+          <p className="panel__empty">
+            No orders yet in this conversation. Chat first, agree the items, then start a summary — no product catalogue
+            required.
+          </p>
+        </>
       )}
 
       {orders.length > 1 && (

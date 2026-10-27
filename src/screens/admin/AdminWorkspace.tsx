@@ -442,7 +442,7 @@ function Reports() {
 
   return (
     <div className="reports">
-      <InfoBanner>
+      <InfoBanner illustration={imageSrc('admin-reporting')}>
         Simple activity reporting from live demo state. A production rollout would add date ranges, exports and
         audited financial reports — and real tenant data would replace every sample figure here.
       </InfoBanner>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, ClipboardList, MessageCircle, PackageSearch, Repeat, XCircle } from 'lucide-react';
 import type { Route } from '../../router';
+import type { OrderStatus } from '../../types';
 import { useDemoStore } from '../../store/DemoStore';
 import { getShop, jobForOrder, orderById, ordersForCustomer } from '../../store/selectors';
 import { formatRelative, formatZAR } from '../../utils/format';
@@ -96,6 +97,18 @@ export function OrdersScreen({ navigate }: { navigate: (route: Route) => void })
   );
 }
 
+/**
+ * One status illustration at a time in the tracking panel: a parcel waiting for
+ * an update, the simulated delivery route while it is in flight, and the end of
+ * the journey once it is delivered. All three are illustrations — none is proof
+ * of a real order, courier or delivery.
+ */
+function orderTracingArt(status: OrderStatus): 'order-pending' | 'journey-delivery' | 'order-complete' {
+  if (status === 'delivered' || status === 'completed') return 'order-complete';
+  if (status === 'draft' || status === 'awaiting-customer' || status === 'awaiting-shop') return 'order-pending';
+  return 'journey-delivery';
+}
+
 export function OrderDetailScreen({
   orderId,
   navigate,
@@ -161,7 +174,7 @@ export function OrderDetailScreen({
         <figure className="journey-strip journey-strip--tight">
           <img
             className="journey-strip__art"
-            src={imageSrc('journey-delivery')}
+            src={imageSrc(orderTracingArt(order.status))}
             alt=""
             loading="lazy"
             decoding="async"

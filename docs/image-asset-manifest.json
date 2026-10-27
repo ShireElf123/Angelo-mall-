@@ -608,6 +608,166 @@
       "sizeKb": 81,
       "usage": "strip",
       "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "welcome-mall",
+      "file": "/images/welcome-mall.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Friendly adult and child entering a warmly lit mall archway \u2014 first-run welcome for new visitors.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 69,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "search-guidance",
+      "file": "/images/search-guidance.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Blank search field with magnifier in front of three simple awnings \u2014 guidance when a home search finds no shops.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 32,
+      "usage": "inline",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "shop-staff-inbox",
+      "file": "/images/shop-staff-inbox.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Shop counter with tablet showing blank chat bubbles, apron and kraft bag \u2014 the shop-staff inbox before any customer writes.",
+      "screens": [
+        "retailer-inbox"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 52,
+      "usage": "empty-state",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "shop-detail",
+      "file": "/images/shop-detail.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Generic empty shopfront with blank signboard \u2014 illustrates that a listing is a directory entry, not this shop's own shopfront.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 71,
+      "usage": "inline",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "contact-shop",
+      "file": "/images/contact-shop.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Shopper writing a short list beside a phone with a blank message field \u2014 preparing a question for a shop.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 73,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-pending",
+      "file": "/images/order-pending.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Taped kraft parcel beside a plain clock face \u2014 a simulated order waiting for the next update.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 40,
+      "usage": "status",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-complete",
+      "file": "/images/order-complete.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Parcel on a doormat before a green door with a small gold tick \u2014 the end of the simulated journey, not proof of delivery.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 68,
+      "usage": "status",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "help-troubleshooting",
+      "file": "/images/help-troubleshooting.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Blank help card with a question bubble and a refresh arrow \u2014 resetting the demo and finding guidance.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "720x900 (4:5)",
+      "sizeKb": 29,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "admin-reporting",
+      "file": "/images/admin-reporting.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Clipboard of blank bar shapes, plain cards and a magnifier \u2014 illustrative activity reporting, containing no real figures.",
+      "screens": [
+        "admin-reports"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 42,
+      "usage": "banner",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-summary-building",
+      "file": "/images/order-summary-building.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Overhead clipboard with empty ruled rows, pencil and kraft bag \u2014 the shop building an order summary.",
+      "screens": [
+        "retailer-order-panel"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "700x700 (1:1)",
+      "sizeKb": 31,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
     }
   ],
   "logos": {

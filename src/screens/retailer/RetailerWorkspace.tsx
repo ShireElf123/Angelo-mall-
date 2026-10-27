@@ -25,6 +25,7 @@ import { formatRelative, formatZAR } from '../../utils/format';
 import { calculateTotals, isBasketOrder, isConfirmedOrder } from '../../utils/orderWorkflow';
 import { ChatThread } from '../../components/ChatThread';
 import { EmptyState, InfoBanner, StatusPill } from '../../components/ui';
+import { imageSrc } from '../../data/imageAssets';
 import { OrderPanel } from './OrderPanel';
 
 const QUICK_REPLIES = [
@@ -279,7 +280,8 @@ export function RetailerWorkspace({
 
           {filteredConversations.length === 0 ? (
             <EmptyState
-              icon={<Inbox size={30} aria-hidden />}
+              illustration={conversations.length === 0 ? imageSrc('shop-staff-inbox') : imageSrc('search-guidance')}
+              icon={<Inbox size={26} aria-hidden />}
               title={conversations.length === 0 ? 'No customer chats yet for this shop' : 'Nothing matches that filter'}
               description={
                 conversations.length === 0
