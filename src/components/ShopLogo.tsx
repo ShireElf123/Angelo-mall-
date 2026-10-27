@@ -6,9 +6,9 @@ import { CATEGORY_MONOGRAM_GLYPH, shopLogoAsset } from '../data/shopLogos';
  * Shop identity lock-up used across the demo directory.
  *
  * Two layers, in this order:
- * 1. A **verified official logo** (`src/data/shopLogos.ts`) when the tenant has
- *    one that was retrieved from an official source. The image is bundled
- *    locally, sized from its intrinsic aspect ratio (no layout shift) and
+ * 1. A **verified logo** (`src/data/shopLogos.ts`) when the tenant has one from
+ *    an official source or an identified third-party logo host. It may be a
+ *    hosted URL or a bundled file, sized from its recorded aspect ratio and
  *    removed from the accessibility tree; the shop name carries the label.
  * 2. A **generated monogram tile** otherwise: initials in the shop's colour plus
  *    a category glyph. This is app artwork, not a brand mark, and it is what the
