@@ -207,6 +207,25 @@ to Production or disable SSO.
 The Vercel project IDs are stored as non-secret workflow environment variables. The native
 Vercel Git integration remains disconnected/disabled; this workflow is a separate route.
 
+### Phase 13 production release (2026-10-27)
+
+Owner explicitly approved promoting to Production for this release, overriding the
+earlier preview-only rule. Created through the Vercel API with
+`target: "production"`, project **angelo-mall** (`prj_PtigAGDE20XpCd8LMMwk6YTuosfk`),
+Git source `arena/aeeb5cff-angelo-mall` at
+`c8ceaf262fa35650f583d6d98df954bf87bf2411`.
+
+- `dpl_HUpRZ6qdT6aeVTH3bKWJCtuEczPu` — **READY**, `readySubstate: "PROMOTED"`,
+  `oidcTokenClaims.environment: "production"`, owns `angelo-mall.vercel.app`.
+- Build log: `Cloning … Commit: c8ceaf2`, then
+  `dist/assets/index-BVD-VbVn.css 64.66 kB` and `dist/assets/index-E9Bmp2sk.js
+  495.68 kB` — the same content hashes as the local `npm run build`, so the
+  public site serves the Phase 13 bundle and not a cached earlier one.
+- CI run [`40475542385`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40475542385)
+  is green for the same commit.
+- `main` was not touched: this is a Production *deployment* of a feature-branch
+  commit, not a merge.
+
 ## Optional: native Vercel Git integration
 
 If you later prefer Vercel's built-in deployment integration instead, these are the
