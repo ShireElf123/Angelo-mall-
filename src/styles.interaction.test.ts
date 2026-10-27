@@ -207,7 +207,9 @@ describe('native-app shell', () => {
   it('marks the selected tab with a pill that cannot shift the label', () => {
     // Padding lives on every icon wrapper; only the background changes.
     expect(blocks('.bottom-nav .nav-item__icon')).toContain('padding: 3px 14px');
-    expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).toContain('var(--forest-50)');
+    // forest-100, not forest-50: the pill has to survive a bright phone screen.
+    const pill = blocks('.bottom-nav .nav-item--active .nav-item__icon');
+    expect(pill).toMatch(/background: var\(--forest-100\)/);
     expect(css).toContain('.bottom-nav .nav-item--active svg { stroke-width: 2.4; }');
     // Padding is not introduced by the active rule, which is what would reflow.
     expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).not.toContain('padding');

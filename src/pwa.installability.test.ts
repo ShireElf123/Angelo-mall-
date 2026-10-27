@@ -65,7 +65,9 @@ describe('web app manifest', () => {
 
   it('keeps the native window colours in the brand palette', () => {
     expect(manifest.theme_color.toLowerCase()).toBe('#0c3b2e');
-    expect(manifest.background_color.toLowerCase()).toBe('#faf7f2');
+    // PWA splash must match --bg, otherwise install shows a flash of a
+    // different page colour than the app.
+    expect(manifest.background_color.toLowerCase()).toBe('#f4eee2');
   });
 
   it('matches the page theme-color meta tag to the manifest', () => {

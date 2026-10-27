@@ -13,14 +13,21 @@
   --gold-600: #7f6212; /* darkened for AA text contrast (was #a8841c, 3.5:1) */
   --gold-500: #c9a227;
   --gold-100: #f6ecd2;
-  --bg: #faf7f2;
+  /* Page vs card was #faf7f2 vs #ffffff: 1.07:1, i.e. a white card on an
+     almost-white page. No shadow can sell depth against that, which is why
+     earlier elevation work read as invisible. The page now sits a clear
+     step below the card (1.16:1) and carries more of the contrast so the
+     shadows only have to do the edge. */
+  --bg: #f4eee2;
   --surface: #ffffff;
-  --surface-warm: #f4efe6;
+  --surface-warm: #efe8d9;
   --ink: #1e2a24;
   --ink-2: #43524a;
   --muted: #5a6961; /* darkened for AA text contrast (was #6d7c73, 3.8:1 on warm panels) */
-  --border: #e6ddcd;
-  --border-strong: #d5c9ae;
+  /* 1.35:1 -> 1.64:1 against white: the card edge is now a real line, not a
+     suggestion. --border-strong reaches 2.1:1 for focusable edges. */
+  --border: #d5c9ae;
+  --border-strong: #c2b193;
   --danger: #b3261e;
   --danger-bg: #fdecea;
   --warning: #8a5a00;
@@ -36,11 +43,15 @@
   /* Elevation — four honest levels and one for the fixed chrome.
      Restraint is the point: a card never looks like a dialog, and nothing in
      the app floats above --elev-4. */
-  --elev-1: 0 1px 2px rgba(12, 59, 46, 0.06);
-  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.06), 0 8px 24px -12px rgba(12, 59, 46, 0.18);
-  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.08), 0 20px 44px -16px rgba(12, 59, 46, 0.28);
-  --elev-4: 0 8px 16px -8px rgba(7, 35, 27, 0.26), 0 32px 64px -24px rgba(7, 35, 27, 0.4);
-  --elev-nav: 0 -6px 20px -12px rgba(12, 59, 46, 0.25);
+  /* Tight, dark contact shadow + a wider soft one. The old values spread their
+     ink over 24-44px at 12-18% alpha behind a -12px/-16px negative spread, so
+     almost nothing landed where the card meets the page. If a shadow cannot be
+     seen on a phone in daylight it is decoration, not elevation. */
+  --elev-1: 0 1px 2px rgba(12, 59, 46, 0.1), 0 1px 1px rgba(12, 59, 46, 0.06);
+  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.12), 0 4px 10px -2px rgba(12, 59, 46, 0.14);
+  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.14), 0 10px 24px -6px rgba(12, 59, 46, 0.22);
+  --elev-4: 0 8px 20px -6px rgba(7, 35, 27, 0.3), 0 28px 60px -20px rgba(7, 35, 27, 0.42);
+  --elev-nav: 0 -8px 24px -10px rgba(12, 59, 46, 0.3);
   /* The shadow a control collapses to while it is being pressed. */
   --elev-press: 0 1px 1px rgba(12, 59, 46, 0.1);
   /* Tonal alternatives to shadows where a hairline reads more precisely. */
@@ -127,15 +138,29 @@ input, select, textarea { font: inherit; color: inherit; }
   padding: 10px 18px;
   border-radius: 999px;
   border: 1px solid transparent;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s ease, transform 0.05s ease;
+  /* Two speeds: colour for hover, transform for the press. */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
 }
 .btn:active:not(:disabled) { transform: translateY(0) scale(0.97); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.btn--primary { background: var(--forest-900); color: #fff; }
-.btn--primary:hover:not(:disabled) { background: var(--forest-800); }
+.btn--primary {
+  /* Deeper stops (1.78:1) so the face reads as a curved, raised key rather
+     than a flat filled rectangle. */
+  background: linear-gradient(180deg, var(--forest-700) 0%, var(--forest-900) 100%);
+  color: #fff;
+  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--forest-800) 0%, var(--forest-950) 100%);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 .btn--gold { background: var(--gold-500); color: var(--forest-950); }
 .btn--gold:hover:not(:disabled) { background: #d9b13b; }
 .btn--ghost { background: transparent; color: var(--forest-800); border-color: var(--border-strong); }
@@ -154,7 +179,8 @@ input, select, textarea { font: inherit; color: inherit; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px; height: 42px;
+  /* 44px is the Android touch-target floor. */
+  width: 44px; height: 44px;
   border-radius: 50%;
   border: 1px solid transparent;
   background: transparent;
@@ -163,7 +189,7 @@ input, select, textarea { font: inherit; color: inherit; }
   flex: none;
 }
 .icon-btn:hover { background: var(--forest-50); }
-.icon-btn--sm { width: 34px; height: 34px; }
+.icon-btn--sm { width: 36px; height: 36px; }
 
 .back-btn {
   display: inline-flex;
@@ -194,6 +220,7 @@ input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.9rem;
   cursor: pointer;
   text-align: left;
+  box-shadow: var(--elev-1);
 }
 .chip:hover { background: var(--forest-50); }
 .chip--active { background: var(--forest-900); color: #fff; border-color: var(--forest-900); }
@@ -404,9 +431,20 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   justify-content: space-between;
   gap: 16px;
   padding: 12px 16px;
-  background: rgba(250, 247, 242, 0.94);
+  /* Sticky, translucent chrome: content slides under it instead of stopping
+     at a solid slab. The tint tracks --bg so the blur reads as the page. */
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(244, 238, 226, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 0 rgba(12, 59, 46, 0.06), 0 12px 28px -26px rgba(12, 59, 46, 0.6);
+  /* Safety net: on a narrow laptop the brand and five nav items must never
+     force a horizontal scrollbar — the nav drops to a second row instead. */
+  flex-wrap: wrap;
+  row-gap: 4px;
 }
 
 /* `.shell-chrome` deliberately does not stick — only `.app-header` does,
@@ -423,6 +461,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   text-align: left;
   padding: 2px;
   min-width: 0;
+  min-height: 44px;
 }
 .brand__mark {
   display: grid;
@@ -452,7 +491,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .brand__text strong { color: var(--forest-900); font-size: 1.12rem; letter-spacing: -0.01em; white-space: nowrap; }
 .brand__text small { color: var(--muted); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.top-nav { display: none; }
+.top-nav { display: none; min-width: 0; }
 
 .nav-item {
   display: flex;
@@ -467,8 +506,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   cursor: pointer;
   padding: 6px 4px;
   min-width: 58px;
-  min-height: 52px;
+  min-height: 54px;
   justify-content: center;
+  position: relative;
 }
 .nav-item__icon { position: relative; display: inline-flex; }
 .nav-badge {
@@ -491,13 +531,18 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   position: fixed;
   left: 0; right: 0; bottom: 0;
   z-index: 55;
-  min-height: 56px;
+  min-height: 64px;
   display: flex;
   justify-content: space-around;
-  background: var(--surface);
+  /* Frosted, not opaque: page content keeps sliding under the bar instead of
+     stopping dead at a white slab. This is the strongest "app, not website"
+     cue available without new components. */
+  background: rgba(255, 255, 255, 0.84);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
   border-top: 1px solid var(--border);
-  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
-  box-shadow: 0 -6px 20px -12px rgba(12, 59, 46, 0.25);
+  padding: 4px 4px calc(6px + env(safe-area-inset-bottom));
+  box-shadow: var(--elev-nav);
 }
 
 .offline-banner {
@@ -537,14 +582,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .page--narrow { max-width: 760px; }
 .page--wide { max-width: 1240px; }
-.page--chat { max-width: 1180px; }
+.page--chat { max-width: 1180px; display: grid; gap: 16px; }
 
 .section-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 14px;
+  margin-bottom: var(--space-3);
 }
 .section-header h2 { font-size: 1.35rem; color: var(--forest-950); }
 .section-header p { color: var(--muted); font-size: 0.93rem; margin-top: 4px; max-width: 640px; }
@@ -645,7 +690,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 0.92rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--elev-4);
+  animation: toast-rise var(--dur) var(--ease-out);
 }
 .toast svg { flex: none; margin-top: 1px; color: #7fd6a4; }
 
@@ -658,6 +704,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: flex-end;
   justify-content: center;
   padding: 0;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 }
 .modal {
   background: var(--surface);
@@ -667,6 +715,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   padding: 8px 20px calc(20px + env(safe-area-inset-bottom));
   max-height: 88dvh;
   overflow-y: auto;
+  box-shadow: var(--elev-4);
+  animation: sheet-rise var(--dur) var(--ease-out);
 }
 .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
 .modal-head h2 { font-size: 1.15rem; }
@@ -941,21 +991,29 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .shop-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  box-shadow: var(--elev-2);
   display: flex;
   flex-direction: column;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
 }
 .shop-card__media {
   position: relative;
   border: none; padding: 0; cursor: pointer;
-  height: 150px;
+  /* Every tenant hero is 1280x720. A fixed 150px window cropped 10% off the
+     top and bottom of the counters and seating the art was composed around,
+     so the frame now follows the image's own ratio. */
+  aspect-ratio: 16 / 9;
+  min-height: 148px;
   background: var(--forest-100);
   overflow: hidden;
   display: block; width: 100%;
 }
-.shop-card__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.shop-card__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 0.25s ease; }
 .shop-card__media-fallback {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -970,7 +1028,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   padding: 4px 10px; border-radius: 999px;
 }
 .shop-card__body { padding: 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
-.shop-card__title-row { display: flex; align-items: center; gap: 10px; }
+.shop-card__title-row { display: flex; align-items: flex-start; gap: 10px; }
 /* Brand plate: keeps the shop mark visually separate from the category illustration.
    Name and trading status are stacked, not side by side. Measured with Inter 800,
    the status pill is ~142px wide; sharing one row left the name 0-30px on a
@@ -1089,7 +1147,6 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 /* ---------------- Chat ---------------- */
 
-.page--chat { display: grid; gap: 16px; }
 
 .chat-frame {
   background: var(--surface);
@@ -1292,6 +1349,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   border-top: 1px solid var(--border);
   padding: 9px 10px calc(8px + env(safe-area-inset-bottom));
   flex: none;
+  box-shadow: 0 -1px 0 var(--border), 0 -10px 24px -20px rgba(12, 59, 46, 0.4);
 }
 .composer__preview {
   display: flex; align-items: center; gap: 11px;
@@ -1328,6 +1386,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer;
   flex: none;
+  box-shadow: var(--elev-1);
 }
 .composer__send:disabled { background: #c9d4cc; cursor: not-allowed; }
 .composer__hint { font-size: 0.72rem; color: var(--muted); margin-top: 6px; padding: 0 6px; }
@@ -1812,19 +1871,10 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .shop-logo--on-dark .shop-logo__image { background: rgba(255, 255, 255, 0.92); padding: 3px 6px; }
 
 .shop-card__brand h3 { font-size: inherit; }
-.shop-card__title-row { align-items: flex-start; }
 .shop-card__title-row > .pill { margin-top: 4px; }
 
 /* ---------------- Consistent media framing ---------------- */
 
-.shop-card__media {
-  height: auto;
-  /* Every tenant hero is 1280x720. A 16:10 window cropped 10% off the top and
-     bottom of the counters and seating the art was composed around. */
-  aspect-ratio: 16 / 9;
-  min-height: 148px;
-  display: block;
-}
 @supports not (aspect-ratio: 4 / 3) {
   .shop-card__media { height: 172px; }
 }
@@ -1844,7 +1894,6 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   letter-spacing: 0.02em;
   backdrop-filter: blur(4px);
 }
-.shop-card__media img { transition: transform 0.25s ease; }
 .shop-card__media:hover img { transform: scale(1.03); }
 /* (wordmark wrapping is handled once, in .shop-logo__word) */
 
@@ -1968,16 +2017,9 @@ body.chat-expanded {
   border-radius: var(--radius);
 }
 
-.btn {
-  border-radius: var(--radius-pill);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  transition: transform 0.12s ease, box-shadow 0.18s ease, background-color 0.18s ease;
-}
 .btn:active { transform: translateY(1px); }
 .btn--block { border-radius: var(--radius-sm); }
 
-.chip { border-radius: var(--radius-pill); }
 
 /* Focus affordance that reads on both light surfaces and the dark header. */
 .btn:focus-visible,
@@ -1989,7 +2031,6 @@ body.chat-expanded {
 }
 
 /* Section headers get a consistent rhythm. */
-.section-header { margin-bottom: var(--space-3); }
 
 /* Small phones: 44px minimum touch targets, tighter type, no cramped headers. */
 @media (max-width: 420px) {
@@ -2051,9 +2092,7 @@ body.chat-expanded {
 
 /* --- Primary controls ---------------------------------------------------- */
 
-.btn { box-shadow: var(--elev-1); }
 /* Filled buttons carry a one-pixel top highlight: the lip of a physical key. */
-.btn--primary,
 .btn--gold,
 .btn--danger {
   box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.14);
@@ -2071,22 +2110,16 @@ body.chat-expanded {
 /* --- Icon buttons, chips, back ------------------------------------------ */
 
 /* 44px, not 42: the Android touch-target floor, and room around the glyph. */
-.icon-btn { width: 44px; height: 44px; }
-.icon-btn--sm { width: 36px; height: 36px; }
 .icon-btn:active:not(:disabled) { transform: scale(0.92); background: var(--forest-100); }
 
-.chip { min-height: 44px; box-shadow: var(--elev-1); }
 .chip:active { transform: scale(0.97); box-shadow: var(--elev-press); }
 .chip--active { box-shadow: var(--elev-1); }
 
 .back-btn { min-height: 44px; }
 .back-btn:active { transform: translateX(-2px); }
-.brand { min-height: 44px; }
 
 /* --- Navigation ---------------------------------------------------------- */
 
-.bottom-nav { box-shadow: var(--elev-nav); }
-.nav-item { min-height: 54px; position: relative; }
 /* "Promotions" is 63.9px at 11.5px/600; five labels plus padding overflowed a
    320-375px phone. Items now share the row equally and the label ellipsises
    rather than pushing the nav wider than the screen. */
@@ -2103,28 +2136,21 @@ body.chat-expanded {
 .bottom-nav .nav-item--active::before {
   content: '';
   position: absolute;
-  top: 1px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 18px;
+  width: 22px;
   height: 3px;
   border-radius: 999px;
   background: var(--gold-500);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
 }
 .top-nav .nav-item--active { background: var(--forest-50); }
 
-/* Sticky chrome: a hairline, not a drop shadow, so content sits under it.
-   `flex-wrap` is a safety net: on a narrow laptop the brand and the five nav
-   items must never force a horizontal scrollbar — the nav drops to a second
-   row instead. */
-.app-header { box-shadow: 0 1px 0 var(--border); flex-wrap: wrap; row-gap: 4px; }
-.top-nav { min-width: 0; }
 
 /* --- Cards and lists ----------------------------------------------------- */
 
-.shop-card { box-shadow: var(--elev-2); }
 .shop-card__media:active { box-shadow: inset 0 0 0 999px rgba(12, 59, 46, 0.06); }
-.shop-hero { box-shadow: var(--elev-2); }
 
 .conversation-list li button:active,
 .hero__results li button:active,
@@ -2136,20 +2162,12 @@ body.chat-expanded {
 
 /* --- Chat composer ------------------------------------------------------- */
 
-.composer {
-  background: var(--surface-raised);
-  box-shadow: 0 -1px 0 var(--border), 0 -10px 24px -20px rgba(12, 59, 46, 0.4);
-}
-.composer__send { box-shadow: var(--elev-1); }
 .composer__send:active:not(:disabled) { transform: scale(0.92); box-shadow: var(--elev-press); }
 .composer__send:disabled { box-shadow: none; }
 
 
 /* --- Dialogs and toasts -------------------------------------------------- */
 
-.modal-backdrop { backdrop-filter: blur(3px); }
-.modal { box-shadow: var(--elev-4); animation: sheet-rise var(--dur) var(--ease-out); }
-.toast { box-shadow: var(--elev-4); animation: toast-rise var(--dur) var(--ease-out); }
 
 @keyframes sheet-rise {
   from { transform: translateY(16px); opacity: 0.7; }
@@ -2224,31 +2242,13 @@ body.chat-expanded {
 /* Stated once, here, rather than overridden below: the wrapper never sticks. */
 .shell-chrome { position: static; }
 
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  background: rgba(250, 247, 242, 0.82);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 0 var(--border), 0 12px 28px -26px rgba(12, 59, 46, 0.6);
-  flex-wrap: wrap;
-}
+/* `.app-header` is declared once, in the shell section above. */
 
 /* --- 2. A real tab bar ---------------------------------------------------
    Frosted rather than opaque: content keeps sliding under it instead of
    stopping dead at a white slab, which is the single strongest "this is an
    app" cue available without new components. */
-.bottom-nav {
-  min-height: 64px;
-  padding: 4px 4px calc(6px + env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, 0.82);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  border-top: 1px solid var(--border);
-  box-shadow: var(--elev-nav);
-}
+/* `.bottom-nav` is declared once, in the shell section above. */
 
 /* Older browsers get the solid surface rather than a washed-out 82% white. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -2264,26 +2264,13 @@ body.chat-expanded {
   border-radius: 999px;
   transition: background-color var(--dur) var(--ease-out);
 }
-.bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-50); }
+.bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-100); }
 .bottom-nav .nav-item--active svg { stroke-width: 2.4; }
 .bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); }
-.bottom-nav .nav-item--active::before {
-  top: 0;
-  width: 22px;
-  box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
-}
 
 /* --- 3. Cards that respond to a thumb -----------------------------------
    20px radii and a press that collapses the shadow: the card looks pushed
    into the page rather than merely tinted. */
-.shop-card {
-  border-radius: 20px;
-  box-shadow: var(--elev-2);
-  transition:
-    transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out),
-    border-color var(--dur) var(--ease-out);
-}
 .shop-card:active {
   transform: scale(0.985);
   box-shadow: var(--elev-1);
@@ -2293,10 +2280,6 @@ body.chat-expanded {
 /* --- 4. Primary action reads as a raised key ----------------------------
    A one-step vertical gradient plus the existing top highlight; the flat
    single-colour fill is what made it look like a web link with a border. */
-.btn--primary {
-  background: linear-gradient(180deg, var(--forest-800) 0%, var(--forest-900) 100%);
-  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
 
 @media (hover: hover) and (pointer: fine) {
   .btn--primary:hover:not(:disabled) {

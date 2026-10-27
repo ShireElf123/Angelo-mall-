@@ -113,7 +113,7 @@ Shared assets:
 | `shop-tops` | TOPS at SPAR | Tops | 12 | groceries | /images/shop-grocery.jpg | `TP` |
 | `shop-superspar` | The Angelo SUPERSPAR | Superspar | 13 | groceries | /images/shop-grocery.jpg | `SS` |
 | `shop-biltong-den` | Biltong Den | Biltong Den | 14 | food | /images/shop-food.jpg | `BD` |
-| `shop-maxis` | Maxi's | Maxis | 15 | groceries | /images/shop-grocery.jpg | `MX` |
+| `shop-maxis` | Maxi's | Maxis | 15 | food | /images/shop-food.jpg | `MX` |
 | `shop-aviya` | Aviya Photography & Graphics | Aviya Photography & Graphics | 16b | services | /images/shop-services.jpg | `AV` |
 | `shop-nigel-cellular` | Nigel Cellular | Nigel Cellular | 17 | electronics | /images/shop-electronics.jpg | `NC` |
 | `shop-mtn` | MTN @ The Angelo Mall | MTN @ The Angelo Mall | 18a | electronics | /images/shop-electronics.jpg | `MTN` |

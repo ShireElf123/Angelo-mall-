@@ -192,3 +192,80 @@ and the icon-pill transition, while keeping colour and shadow feedback.
   no system Chrome) and the Vercel preview is SSO-protected, so no rendered
   pixel was inspected. The changes are verified structurally, not visually —
   a real device check at 320/360/390/430/480px is still outstanding.
+
+## Phase 15 — the measurements behind "it still looks flat"
+
+After Phase 13 shipped, and with the live preview confirmed to be built from it,
+the interface still had no depth. Rather than restructure the CSS a third time on
+a guess, the palette was measured — and the measurement was the whole answer.
+
+### What the preview was doing wrong
+
+Nothing, as it turned out. The preview deployment was verified to be built from
+the Phase 12/13 commit (`target: null`, `prebuilt: true`, matching sha), so a
+stale deploy was ruled out. The cause was the palette:
+
+| pair | ratio | verdict |
+| --- | --- | --- |
+| page `#faf7f2` ↔ white card | **1.07 : 1** | invisible |
+| page ↔ border `#e6ddcd` | 1.26 : 1 | invisible |
+| white card ↔ border `#e6ddcd` | 1.35 : 1 | invisible |
+| primary gradient `#10503d` → `#0c3b2e` | 1.33 : 1 | invisible |
+
+A white card on a near-white page leaves a shadow nothing to separate. Elevation
+was being asked to create depth that the surface colours had already erased. The
+negative `-12px`/`-16px` spreads on the old shadows made it worse: most of the
+ink landed under the card instead of at its edge.
+
+### What changed
+
+1. **Surface separation raised.** Page background `#faf7f2` → `#f4eee2`
+   (**1.16 : 1** against the card), `--surface-warm` `#f4efe6` → `#efe8d9`.
+   Border `#e6ddcd` → `#d5c9ae` (**1.64 : 1**), `--border-strong` `#c2b193`
+   (**2.10 : 1**). Text contrast was unaffected and `--muted` still clears AA at
+   **5.01 : 1** on the new page colour.
+2. **Shadows rebuilt tight.** Each step now pairs a 1–2px dark contact shadow
+   with a wider soft one at higher alpha and much smaller negative spread, so the
+   ink lands on the card edge where it is read as depth. `--elev-nav` likewise.
+3. **Primary button gradient deepened** to `--forest-700` → `--forest-900`
+   (**1.78 : 1**; hover `--forest-800` → `--forest-950`, 1.77 : 1) against the
+   old 1.33 : 1, so the face curves instead of flat-filling.
+4. **Duplication removed, not overridden.** The stylesheet had grown a second
+   copy of itself, and later blocks silently won — the same disease that made
+   Phase 12 invisible. Counting only *truly* shadowed rules (same selector *and*
+   same at-rule context, so media queries are not miscounted), 31 rules were
+   declared twice or more, five of them three times: `.btn`, `.chip`,
+   `.app-header`, `.bottom-nav` and `.shop-card`. Each was folded into its base
+   rule instead of being layered over.
+
+   Two of these were not cosmetic. `.shop-card__media` set `height: 150px` and
+   then `height: auto` + `aspect-ratio: 16/9` further down, so the first value
+   was dead code that read as the real one. And `.btn--primary` was declared
+   again after the primary rule, which **overwrote the new gradient with the old
+   one** — the palette fix would have been silently undone had the check not
+   run.
+
+   After the pass: **31 → 8 shadowed rules, and 0 that declare a property in
+   more than one block** (verified by a property-collision scan, not by eye); the
+   8 remaining pairs are purely additive state rules. The built stylesheet got
+   *smaller*, 64.74 → 63.60 kB (12.33 kB gzip), while gaining comments and a
+   stronger palette. `.app-header`, `.bottom-nav`, `.shop-card`, `.shop-card__media`,
+   `.modal`, `.composer` and `.page--chat` are now each declared exactly once.
+5. **PWA splash colour** in `manifest.webmanifest` tracks the new `--bg`, so an
+   installed launch no longer flashes a different page colour than the app.
+
+### Verification — and what is *not* verified
+
+- `npx tsc --noEmit` clean; **311/311 tests across 33 files**; production build
+  succeeds (CSS 63.60 kB / 12.33 kB gzip, JS 496.64 kB / 133.11 kB gzip).
+- The new values were read back out of the **built** bundle, not just the source,
+  and the per-selector duplicate count was re-measured on the compiled CSS so a
+  minifier artefact could not be mistaken for a fix.
+- Contrast figures above are computed from the WCAG relative-luminance formula
+  applied to the exact hex values in `src/index.css`, not eyeballed.
+- **No browser screenshot was taken.** Playwright's Chromium is not in this
+  sandbox's network allowlist and no browser binary is installed, so the four
+  required widths (360 / 390 / 768 / 1280) could not be captured here. Computed
+  colour separations are arithmetic; they are not a substitute for looking at the
+  rendered page, and this document does not claim otherwise. Confirming the
+  result visually remains open.

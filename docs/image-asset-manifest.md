@@ -536,6 +536,47 @@ studies, press coverage and branch evidence rather than on inspected photographs
 of each retailer's interior.** That is a weaker evidence base than batch 10 and is
 recorded here so the difference is not lost.
 
+## Audit — 2026-10-27 (29 inventoried, 29 inspected, 0 regenerated)
+
+A full pass over all 29 tenant scenes: every file was confirmed present on disk
+(106–232 kB each, all 1280×720), mapped to the tenant that references it, and
+inspected by eye in labelled contact sheets and at full size where the sheet was
+too small to judge. The result was **zero replacements**.
+
+**Why nothing was regenerated.** The one scene that looked wrong on the sheet was
+`maxis.jpg`, which reads as a restaurant — booths, a kitchen pass, an espresso
+machine and a cake display. That was treated as a possible regression until the
+tenant record was checked. It was not a regression: batch 11 had already replaced
+the old convenience counter for exactly this reason, and `tenants.ts` had never
+been updated to match. The image was right; the *data* said `groceries`. The
+record is now `food`, with restaurant copy and the `shop-food` category scene, so
+the card, the filter and the illustration all agree with the artwork and with
+`maxisfood.com`.
+
+This is recorded because the failure mode matters: a wrong-business-type image
+looks like an image problem and is usually a data problem. Checking the tenant
+record before spending a generation is the cheaper order of operations.
+
+The remaining 28 scenes were retained as-is. Two were examined closely and
+deliberately kept:
+
+* `mtn.jpg` — a bright white-and-yellow handset wall with a service counter. Not
+  a stock "phone shop": it has the SIM/airtime counter and the wall of live
+  devices a network store actually uses.
+* `just-u-2.jpg` — a green-velvet-and-brass jewellery case with a loupe and
+  cloth. Period jewellery retail, which is the shop's trade; no invented brand
+  mark and no gibberish lettering.
+
+Two similar scenes — `crazy-plastics.jpg` and `crazy-store.jpg` — were compared
+directly. They depict the same retail family (plastics/housewares) from different
+angles and both are used by their own tenant, so neither is a duplicate of the
+other's *purpose* and neither is a shared tenant image.
+
+**Shared-image rule still holds.** Category scenes under `/images/shop-<category>.jpg`
+are shared by design (they are illustrations, never presented as a tenant
+photograph — enforced by `src/data/tenants.test.ts`), while all 29
+`/images/tenants/<id>.jpg` concept scenes are unique per tenant.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5

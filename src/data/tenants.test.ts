@@ -69,6 +69,24 @@ describe('tenant source of truth', () => {
   });
 });
 
+describe('trading format is derived, not copied from the directory', () => {
+  it("lists Maxi's as a restaurant, not a convenience store", () => {
+    // The mall's directory publishes shop, hours, phone and fax — it has no
+    // category column, so every tenant's format in this app is inferred. Maxi's
+    // was left as `groceries` after batch 11 had already corrected its artwork
+    // to a restaurant interior, so the card contradicted its own image.
+    // Format corroborated by maxisfood.com and by a directory listing recording
+    // Shop 15 as a restaurant. This pins the correction.
+    const maxis = tenantById('shop-maxis');
+    expect(maxis).toBeDefined();
+    expect(maxis!.category).toBe('food');
+    expect(maxis!.coverImage).toBe('/images/shop-food.jpg');
+    expect(maxis!.summary.toLowerCase()).toMatch(/restaurant/);
+    // The spelling note is still a fact about the directory and must survive.
+    expect(maxis!.listingNote).toMatch(/Maxis/);
+  });
+});
+
 describe('seed shops are the real directory', () => {
   it('projects every listed tenant and nothing else', () => {
     expect(SHOPS.map((shop) => shop.id).sort()).toEqual(TENANTS.map((tenant) => tenant.id).sort());
