@@ -29,6 +29,17 @@ export interface ImageAsset {
   usage?: string;
   /** The verified UI gap this asset closes (batch 5 onward). */
   gapAddressed?: string;
+  /**
+   * Set when this asset replaced an earlier approved image at the same path
+   * (batch 10 superseded batch 7). Records what was replaced and where the old
+   * file can still be recovered, so a swap is auditable rather than silent.
+   */
+  revision?: {
+    replacesBatch: number;
+    replacedOn: string;
+    reason: string;
+    previousFileInGitHistory: string;
+  };
 }
 
 export const IMAGE_ASSETS = manifest.assets as ImageAsset[];

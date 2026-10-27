@@ -177,11 +177,15 @@ Two different image layers sit on a shop for two different jobs:
   in the UI with a "Concept art" chip and the line "AI-generated concept
   illustration — not this shop's logo or shopfront."
 
-Per-tenant art currently ships in two styles on purpose: **illustration** for
-tenants 1–10 (batch 7) and **photographic-style generated interiors** for tenants
-11–29 (batches 8 and 9). Both are AI-generated concept imagery with the same label
-and the same rules — no lettering, no brand marks, no real branch, no endorsement
-claim. Batch 9 held nine images because only nine tenants were left.
+Per-tenant art is now uniformly **photographic-style generated interiors** after
+batch 10 replaced the ten batch 7 still-life illustrations (which showed objects,
+not shops) at the same file paths. All 29 heroes are AI-generated concept imagery
+with the same label and the same rules — no lettering, no brand marks, no real
+branch, no endorsement claim. Batch 9 held nine images because only nine tenants
+were left; batch 10 replaced rather than added, so the asset count stayed at 92.
+
+Each replacement records the batch it superseded in the manifest (`revision`),
+including the commit where the old artwork can still be recovered.
 
 Neither layer is a logo, and neither replaces the monogram-and-name fallback: the
 verified-logo registry (`src/data/shopLogos.ts`) holds only hosted marks with a

@@ -228,7 +228,13 @@ environment, so the audit used the actual files (ImageMagick crops at display
 aspect and at real display sizes) plus arithmetic contrast checks, and reported
 the absence of device-level visual QA rather than claiming it.
 
-## Batch 7 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
+## Batch 7 — 2026-10-27 (superseded by batch 10; kept as a record)
+
+> **Status: replaced.** All ten batch 7 images were flat still-life object
+> illustrations with no shop interior in them, so they were replaced at the same
+> file paths by batch 10. This section is kept because the batch log is a record,
+> not a changelog that gets edited; the superseded files remain recoverable at
+> commit `2adfb8687db9faa867b7965c5defb8bc4163bb6c`. Do not restore them.
 
 Batch 7 starts the per-tenant concept set: until now all 29 listings shared nine
 category covers, so every shop page opened with the same hero photograph. Each
@@ -372,6 +378,83 @@ batch 8 and lazy-loaded like the category covers.
 concept image; the category-cover fallback remains in the hero code for any future
 tenant or missing file, and `tenantConceptImages.test.ts` still exercises it (with
 art deliberately removed from one seeded shop).
+
+## Batch 10 — 2026-10-27 (10 replacements, 10 reviewed, 10 retained)
+
+Batch 10 is the first **replacement** batch rather than an addition. Batch 7's ten
+images were flat still-life illustrations — a chicken box, a steak on a plate, a
+guitar, plastic crates — with no shop in them at all. They read as product art,
+not as a recognisable South African retailer, and they were the weakest ten
+heroes in the set. Each is now replaced **at the same file path**, so no tenant
+record, route or component changed.
+
+The previous artwork is not deleted from history: every batch 10 entry carries a
+`revision` block naming the batch it superseded (`replacesBatch: 7`), the date,
+why, and the commit where the old file still lives
+(`2adfb8687db9faa867b7965c5defb8bc4163bb6c`). `tenantConceptImages.test.ts`
+enforces that block, so a future replacement cannot be silent.
+
+| # | Tenant | File (1280×720, 16:9) | Researched scene | Review |
+| --- | --- | --- | --- | --- |
+| 1 | `shop-kfc` | `tenants/kfc.jpg` (129 kB) | Mall outlet: two self-order kiosks, white counter with quartz top, stainless kitchen pass, blank menu monitors, red fascia, red moulded chairs | approved |
+| 2 | `shop-golden-buffalo-spur` | `tenants/golden-buffalo-spur.jpg` (141 kB) | Family steakhouse: navy leather booths with red piping, timber tables, pattern-tile floor, woven pendants, coloured stained-glass wall panel | approved |
+| 3 | `shop-cash-crusaders` | `tenants/cash-crusaders.jpg` (154 kB) | Second-hand shop: mixed pre-owned appliances, five unmatched TVs on plinths, glass case, pawn/buy counter behind mesh | approved |
+| 4 | `shop-mica` | `tenants/mica.jpg` (220 kB) | Hardware aisle: paint tins and colour charts, pegboard tools, powertools, fastener bins, tinting counter, cement pallet, PVC rack | approved |
+| 5 | `shop-crazy-plastics` | `tenants/crazy-plastics.jpg` (209 kB) | Plastics store: clip-lid storage boxes, nested baskets and buckets, wheeled trunk, catering trays, brooms, checkout | approved |
+| 6 | `shop-zillion-hair` | `tenants/zillion-hair.jpg` (111 kB) | Small salon: four mirror stations on blush wall, black hydraulic chairs, product shelf, basin area, reception desk | approved |
+| 7 | `shop-ruiter-makelaars` | `tenants/ruiter-makelaars.jpg` (134 kB) | Estate agency: oak reception counter, blank window listing grid, blank listing board on teal wall, consultation table, glass meeting room | approved |
+| 8 | `shop-flesh-fashions` | `tenants/flesh-fashions.jpg` (199 kB) | Independent clothing shop: two dense chrome rails, folded stacks on a low table, handbag shelf, counter, open stock carton | approved |
+| 9 | `shop-clicks` | `tenants/clicks.jpg` (172 kB) | Health & beauty: back-lit cosmetics bays, personal-care gondolas, supplements end-cap, raised dispensary with green cross panel | approved |
+| 10 | `shop-neutell-horowitz` | `tenants/neutell-horowitz.jpg` (135 kB) | Optometry: full-height backlit frame wall, glass display counter with trial lens set, consultation desk, glazed exam room with phoropter | approved |
+
+### Research actually performed
+
+Three sources were reachable and used: web search results, company/fit-out pages,
+and — importantly — an **image search whose results were downloaded and inspected
+at full size** before any prompt was written. Inspection was real, not assumed:
+contact sheets and 150–170 % crops were rendered and read.
+
+| Tenant | Sources consulted | What the images actually showed |
+| --- | --- | --- |
+| KFC | savilerow.co.za flagship case study (arrivals/orders/collections zones, "longer Colonel's table", warm timber, custom pendants); branddna.co.za; global.kfc.com Pinelands 2022 ("dark grey vs white with strong pops of red and the warmth of wood"); fermag.com (self-service kiosks, digital menu boards); restaurantguru photo sets | Ordinary outlets have a *blank/dark* backlit menu band over a stainless pass, a pale counter, red accent banding and red bucket chairs; kiosks sit on slim pedestals in the queue lane. The flagship finishes are the exception, so the brief asks for an ordinary mall outlet. |
+| Golden Buffalo Spur | dp-group.com "Spur – Vaal Mall" fit-out; crushmag-online.com refresh report (navy leather booths, red stitching, stained-glass chandeliers, geometric tiles); iol.co.za and capetownetc.com revamp pieces; academic UJ study of Spur décor (imitiation-leather booths, faux stained-glass, teepee-form light fittings) | Booths are built-in high-backed benches facing each other over dark timber tables; navy leather with red piping is the current palette; floors are patterned encaustic-look tile; a large geometric coloured-glass decorative panel is a signature wall feature. |
+| Cash Crusaders | cashcrusaders.co.za (pre-owned category, store locator), gasta.co.za (what they buy: consoles, appliances, TVs, phones, tools, jewellery, gym equipment), pretoria.co.za branch pages, inverters.co.za photo sets, reddit user photo | Real stores are tightly packed with **unmatched** used appliances and older flat TVs, not a uniform electronics showroom; a locked glass case and a barred/mesh buy-and-pawn counter are the recognisable service fixtures; deep-blue banding and counter fronts. |
+| Mica | mica.co.za Paint Centre and Millside/Oranje/Ladybrand store reports (deeper shelving, department counters, tinting and mixing machines, gondola ends, "build, paint, power tools, hardware, key-cutting, garden, pool"); LinkedIn revamp posts | Aisle format: paint tins + colour fan decks on one side, pegboard hand tools and boxed power tools on the other, fastener bins low, single tinting counter mid-floor, timber/PVC/cement yard glimpse at the back. Green banding. |
+| Crazy Plastics | crazyplastics.co.za category pages (Salsa Mighty containers up to 150 L, clip-lid boxes, crates, shoe storage, party & catering), store pages, Bloemfontein store-opening post ("shelves jam packed"), magalieshillsshoppingcentre.co.za | Merchandise is *large-format* plastic: stacked clip-lid boxes, nested buckets/baskets, wheeled trunks, catering platters; bright yellow band above shelving, glossy floor, dense shelf-filling. |
+| Zillion Hair | angelomall.co.za directory line "6 Zillion Hair"; nigel.infoisinfo.co.za and beauty-salon directories: **"Zillion Hair and Nails, Ferryvale, Nigel — Werner has 25 years experience in barbering"**, i.e. a small local hair/nail salon, not a wig retailer | Salon-reference photos show the mirror-station row, black hydraulic chairs, product shelf, basin area — which is what the brief specifies. Limitation: no photograph of the Angelo Mall branch exists online, so the interior is an approximation of a small SA salon. |
+| Ruiter Makelaars | angelomall.co.za listing ("Ruiter Makelaars FSP 13510"); local estate-agency display references (window card grids, interior digital showcases) | Agency offices in small centres are mainly a window listing grid + reception counter + a board of listings; consultation table and a glass meeting room. Limitation: no interior photo of this agency exists publicly. |
+| Flesh Fashions | brabys.com and infoisinfo Nigel directory entries (Shop 7 Angelo Mall, fleshnigel.co.za); a photographed *small independent fashion store in Johannesburg* used as the format reference | Independent SA clothing shops are crowded: dense mixed rails of men's and women's stock, folded stacks on a centre table, exposed brick, concrete floor, stock cartons. Not a boutique. |
+| Clicks | clicksgroup.co.za profile; businessexplainer.co.za and shore.africa 1,000th-store reports (wider aisles, expanded Beauty Hall, fragrance counter, digital screens, pharmacy-led layout); bizcommunity beauty store-in-store pieces; retailcustomerexperience.com digital-signage breakdown (beauty first, then FMCG, dispensary deeper in) | Store sequence is beauty front-right (back-lit bays, colour-ordered cosmetics), personal care mid, dispensary at the back behind a raised counter, with Clicks blue banding. The green cross is the pharmacy cue. |
+| Neutell & Horowitz | valuevisionneutel.co.za (Shop 9B Angelo Mall, "Value Vision" banner, established 2001, glaucoma screening/tonometry, drivers-licence exams); sayellow and valuevision.co.za listings | A working optometry practice, not a fashion eyewear shop: frame wall + display counter, a consulting desk, and an examination room with a phoropter. "Value Vision" affiliation informs the modest finish level. |
+
+### What the generated images reproduce, and what remains unverified
+
+Reproduced from evidence: the *format-defining* elements above — booth geometry and
+navy/red palette for Spur, the blank dark menu band and kiosk queue for KFC,
+unmatched used appliances and a barred pawn counter for Cash Crusaders, the paint
+wall + pegboard + tinting counter for Mica, the large-format stacked plastic ranges
+for Crazy Plastics, mirror-station rows for Zillion, a window listing grid for
+Ruiter Makelaars, a crowded mixed-rail shop for Flesh Fashions, beauty-front /
+dispensary-back for Clicks, and frame wall + exam room for Neutell & Horowitz.
+
+**Not verified, and deliberately so:** none of these is a photograph of the Angelo
+Mall branch; no branch interior photograph exists online for any of the ten. Brand
+identity is withheld on purpose — every menu panel, lightbox, price strip, carton
+and poster is blank, so the images cannot be mistaken for the chain's real
+shopfront, its logo or an endorsement. Logos, signage and prices remain out of scope
+by project rule.
+
+### Review gate
+
+Each candidate was compared side by side with the image it replaces, at the same
+display size, and zoomed to 150–170 % on the four densest areas (KFC menu band,
+Clicks cosmetics wall, Flesh Fashions rails, Cash Crusaders shelving). All ten
+passed: correct business format, the defining fixtures present, no legible
+lettering or logo, no malformed furniture, and a clear improvement over a flat
+product illustration. Nothing was rejected, so no regeneration was needed.
+
+Files are cropped to exact 16:9, downscaled to 1280×720 and recompressed at q82
+with metadata stripped (111–220 kB).
 
 ## Logos — zero bundled, and why
 

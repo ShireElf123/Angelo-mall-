@@ -20,17 +20,22 @@ const PUBLIC_FILES = new Set(
 const exists = (file: string) => PUBLIC_FILES.has(file);
 
 const CONCEPT_ASSETS = IMAGE_ASSETS.filter((asset) => asset.usage === 'shop-concept');
-const BATCH_7 = IMAGE_ASSETS.filter((asset) => asset.batch === 7);
 const BATCH_8 = IMAGE_ASSETS.filter((asset) => asset.batch === 8);
 const BATCH_9 = IMAGE_ASSETS.filter((asset) => asset.batch === 9);
+// Batch 10 replaced the ten batch 7 still-lifes with researched interiors. The
+// originals were not "removed" from history: each replacement records the batch
+// it superseded via `revision`, which is what makes the swap auditable.
+const BATCH_10 = IMAGE_ASSETS.filter((asset) => asset.batch === 10);
 
 describe('tenant concept illustrations', () => {
   it('ships the documented concept images, ten per approved batch', () => {
-    expect(BATCH_7).toHaveLength(10);
     expect(BATCH_8).toHaveLength(10);
-    // Batch 9 closes the run: nine tenants were left, so nine images — not ten.
+    // Batch 9 closed the run: nine tenants were left, so nine images — not ten.
     expect(BATCH_9).toHaveLength(9);
-    expect(CONCEPT_ASSETS).toHaveLength(BATCH_7.length + BATCH_8.length + BATCH_9.length);
+    // Batch 10 is a replacement batch, not an addition: ten tenant heroes whose
+    // batch 7 still-life was a product photograph rather than a shop.
+    expect(BATCH_10).toHaveLength(10);
+    expect(CONCEPT_ASSETS).toHaveLength(BATCH_8.length + BATCH_9.length + BATCH_10.length);
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.kind, `${asset.id} kind`).toBe('generated');
       expect(asset.usage, `${asset.id} usage`).toBe('shop-concept');
@@ -41,6 +46,20 @@ describe('tenant concept illustrations', () => {
       expect(exists(asset.file), `${asset.id} -> ${asset.file} is missing from public/`).toBe(true);
       expect(asset.sizeKb ?? 0, `${asset.id} size recorded`).toBeGreaterThan(0);
     }
+  });
+
+  it('keeps a one-to-one record of every replaced image', () => {
+    const replaced = BATCH_10.map((asset) => asset.revision);
+    for (const [index, revision] of replaced.entries()) {
+      expect(revision, `${BATCH_10[index].id} revision block`).toBeTruthy();
+      expect(revision?.replacesBatch, `${BATCH_10[index].id} replaced batch`).toBe(7);
+      expect(revision?.reason.length ?? 0, `${BATCH_10[index].id} reason`).toBeGreaterThan(30);
+      // The superseded file must still be recoverable: the commit holding the
+      // previous artwork is recorded, so the swap is never a silent deletion.
+      expect(revision?.previousFileInGitHistory, `${BATCH_10[index].id} history commit`).toMatch(/^[0-9a-f]{40}$/);
+    }
+    // Nothing else claims to be batch 7 any more, so no entry is double-counted.
+    expect(IMAGE_ASSETS.filter((asset) => asset.batch === 7)).toHaveLength(0);
   });
 
   it('maps every concept file to an existing tenant that actually uses it', () => {
@@ -90,7 +109,7 @@ describe('tenant concept illustrations', () => {
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/not a logo/i);
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/AI-generated concept imagery/i);
-      // Batch 7 is illustrated, batches 8-9 are photographic-style; all are concepts.
+      // Batches 8-10 are photographic-style interior scenes; all are concepts.
       expect(asset.purpose, `${asset.id} purpose`).toMatch(/listing hero|concept illustration/i);
     }
   });

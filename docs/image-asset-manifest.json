@@ -1008,7 +1008,7 @@
       "id": "tenant-kfc",
       "file": "/images/tenants/kfc.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Kraft takeaway box of fried chicken with folded paper and a plain cup on a cream counter \u2014 the KFC listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1016,16 +1016,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 68,
+      "sizeKb": 130,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for KFC: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-golden-buffalo-spur",
       "file": "/images/tenants/golden-buffalo-spur.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Cast-iron grill, sirloin and a wooden board in a warm steakhouse booth \u2014 the Golden Buffalo Spur listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1033,16 +1039,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 84,
+      "sizeKb": 141,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Golden Buffalo Spur: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-cash-crusaders",
       "file": "/images/tenants/cash-crusaders.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Pre-owned guitar, film camera, drill and blender with blank cardboard tags \u2014 the Cash Crusaders listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1050,16 +1062,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 61,
+      "sizeKb": 155,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Cash Crusaders: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-mica",
       "file": "/images/tenants/mica.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Stacked paint tins, brush, rope coil and an open toolbox on a store shelf \u2014 the Mica listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1067,16 +1085,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 73,
+      "sizeKb": 220,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Mica: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-crazy-plastics",
       "file": "/images/tenants/crazy-plastics.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "A tall stack of plastic crates, basins and buckets \u2014 the Crazy Plastics Express listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1084,16 +1108,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 70,
+      "sizeKb": 210,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Crazy Plastics Express: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-zillion-hair",
       "file": "/images/tenants/zillion-hair.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Headless wig blocks, braiding-hair bundles and combs on a salon shelf \u2014 the Zillion Hair listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1101,16 +1131,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 107,
+      "sizeKb": 112,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Zillion Hair: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-ruiter-makelaars",
       "file": "/images/tenants/ruiter-makelaars.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "House keys, a plain wooden house model, a blank clipboard and a magnifier on a desk \u2014 the Ruiter Makelaars listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1118,16 +1154,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 66,
+      "sizeKb": 135,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Ruiter Makelaars: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-flesh-fashions",
       "file": "/images/tenants/flesh-fashions.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "A clothing rail with a plain jacket and folded denim \u2014 the Flesh Fashions listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1135,16 +1177,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 103,
+      "sizeKb": 200,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Flesh Fashions: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-clicks",
       "file": "/images/tenants/clicks.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "Amber bottles with blank labels, plasters and a sanitiser pump on a pharmacy counter \u2014 the Clicks listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1152,16 +1200,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 84,
+      "sizeKb": 172,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Clicks: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-neutell-horowitz",
       "file": "/images/tenants/neutell-horowitz.jpg",
       "kind": "generated",
-      "batch": 7,
+      "batch": 10,
       "purpose": "A trial frame, lens cases and an abstract ring chart on an optometrist's desk \u2014 the Neutell & Horowitz listing's concept illustration.",
       "screens": [
         "shop-page"
@@ -1169,10 +1223,16 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 68,
+      "sizeKb": 136,
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
-      "notes": "AI-generated concept imagery for Neutell & Horowitz: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
     },
     {
       "id": "tenant-vodacom",
