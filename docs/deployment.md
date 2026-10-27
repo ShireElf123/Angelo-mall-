@@ -20,6 +20,7 @@ Known-good Preview history (all READY, retained as rollback points):
 
 | Deployment | Commit | Notes |
 | --- | --- | --- |
+| `dpl_8uqrcDjtFEJnDw7jEDBkJ2c3FFen` | `2eabb05` | Batch 8 ten photographic-style per-tenant concept images — CI-deployed Preview, READY |
 | `dpl_6UtMWjRigbrzQgFnzS8DjoEF9JoS` | `4b235e6` | Batch 7 ten per-tenant concept illustrations — CI-deployed Preview, READY |
 | `dpl_2jaxwy3jpAhzT8faFtwd3P35j1kx` | `87d2328` | Batch 6 asset/visual audit (no new images) — CI-deployed Preview, READY |
 | `dpl_HYEM95nMWi9qMzgaMTBK76aboYLe` | `0e383aa` | Batch 5 artwork (10 gap-audit state illustrations) — CI-deployed Preview, READY |
@@ -49,6 +50,17 @@ typecheck+build, Vercel pull, Vercel build, deploy) and the resulting deployment
 `dpl_EVF1TaCkGwhHNNmaW1Jv1SozbBLS` reached **READY** with `githubCommitSha` matching the
 pushed commit. Preview URL:
 <https://angelo-mall-dpn5pwfob-mercels-projects-80f68ab7.vercel.app>.
+
+**Batch 8 re-verified (2026-10-27).** Run
+[`40461084358`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40461084358) for
+commit `2eabb05cca5e9ff048da4712f3308d387880d06e`: install, tests (263 passing), typecheck +
+build, Vercel pull/build and the Preview deploy were all green, and
+`dpl_8uqrcDjtFEJnDw7jEDBkJ2c3FFen` is **READY** with a matching `githubCommitSha`. Preview:
+<https://angelo-mall-z0epm9twi-mercels-projects-80f68ab7.vercel.app>. Note: the three commits
+before this one (`5149d89`, `dd87aea`, `930fae1`, `29ff5e5`) landed with **failing** CI (runs
+`40459103564`, `40459117930`, `40459530448`, `40459797627`) because two logo tests still assumed
+an empty registry after the hosted-logo change; batch 8 repaired them, so `2eabb05` is the first
+green run since.
 
 **Batch 7 re-verified (2026-10-27).** Run
 [`40453908629`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40453908629) for
