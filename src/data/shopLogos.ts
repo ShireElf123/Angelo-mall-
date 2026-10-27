@@ -143,6 +143,17 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     verified: true,
     notes: 'Direct SVG from Brandfetch PostNet Southern Africa brand profile.',
   },
+  'shop-fnb': {
+    shopId: 'shop-fnb',
+    file: 'https://cdn.brandfetch.io/idMm5AKGl0/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1668074463386',
+    aspectRatio: 2.5,
+    alt: 'FNB',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://brandfetch.com/fnb.co.za',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Direct SVG from Brandfetch profile for FNB South Africa.',
+  },
   'shop-superspar': {
     shopId: 'shop-superspar',
     file: 'https://thespargroup.com/wp-content/uploads/photo-gallery/SUPERSPAR_Horizontal_Logo.jpg',
