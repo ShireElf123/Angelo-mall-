@@ -125,6 +125,14 @@ build, Vercel pull/build and the Preview deploy were all green, and
 `dpl_7Sc796NRx4QjSTuX5nT1it852HaZ` is **READY** with a matching `githubCommitSha`. Preview:
 <https://angelo-mall-awyjwrtjn-mercels-projects-80f68ab7.vercel.app>.
 
+**Phase 12 verified (2026-10-27).** Run
+[`40471835912`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40471835912) for commit
+`8170d1b639f9f5ca04ee6cce2f1dcb07290453d7`: tests (294 passing), typecheck + build, Vercel
+pull/build and the Preview deploy were green. `dpl_3oJyqzK22XjB5FMAnonNkGkfQMF2` is **READY** and
+serves the two bundles produced by `npm run build` at that commit — `index-CPqp0MXH.css` and
+`index-Bu958SLn.js` — with all 29 tenant images and the updated `manifest.webmanifest`, so the
+elevation/interaction work is what the preview actually runs.
+
 **UI fix verified (2026-10-27).** Run
 [`40468770408`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40468770408) for commit
 `4f7d9cc8739115bf2b687dbfc4f2259c0e0819ba`: install, tests (272 passing), typecheck + build,
