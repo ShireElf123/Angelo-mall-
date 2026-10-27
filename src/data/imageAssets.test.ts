@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import manifest from '../../docs/image-asset-manifest.json';
 import manifestRaw from '../../docs/image-asset-manifest.json?raw';
-import { IMAGE_ASSETS, imageSrc, imageAsset, APPROVED_ASSETS } from './imageAssets';
+import { IMAGE_ASSETS, imageSrc, imageAsset, APPROVED_ASSETS, RESPONSIVE_DERIVATIVES } from './imageAssets';
 import { createSeedState } from './seed';
 
 /**
@@ -58,7 +58,9 @@ describe('image asset manifest', () => {
   });
 
   it('accounts for every image file in public/images', () => {
-    const documented = new Set(IMAGE_ASSETS.map((a) => a.file));
+    // Delivery derivatives are documented separately: they belong to an asset
+    // rather than being one, but the rule is the same — no undocumented file.
+    const documented = new Set([...IMAGE_ASSETS.map((a) => a.file), ...RESPONSIVE_DERIVATIVES]);
     const actual = [...PUBLIC_FILES].filter(
       (file) => file.startsWith('/images/') && !file.startsWith('/images/logos/'),
     );
@@ -67,6 +69,17 @@ describe('image asset manifest', () => {
     }
     // And nothing in the manifest is a phantom.
     expect(actual.length).toBeGreaterThanOrEqual(documented.size);
+  });
+
+  it('documents every responsive derivative and only real WebP files', () => {
+    expect(RESPONSIVE_DERIVATIVES.length).toBe(89);
+    for (const file of RESPONSIVE_DERIVATIVES) {
+      expect(file.endsWith('.webp'), `${file} should be a .webp`).toBe(true);
+      expect(exists(file), `${file} is documented but missing from public/`).toBe(true);
+    }
+    // Each tenant image must have its full set of widths, not a partial ladder.
+    const tenants = RESPONSIVE_DERIVATIVES.filter((f) => f.startsWith('/images/tenants/'));
+    expect(tenants.length).toBe(29 * 3);
   });
 
   it('keeps the manifest JSON and its TypeScript projection in sync', () => {

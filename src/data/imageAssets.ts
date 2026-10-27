@@ -58,6 +58,15 @@ export function imageSrc(id: string): string {
 }
 
 /** Assets that are approved for use (excludes rejected/pending). */
+/**
+ * Delivery derivatives (Phase 14): WebP copies of the tenant concept images and
+ * the Home hero, generated at fixed widths so a phone stops downloading a
+ * 1280px JPEG for a 340px card. They are documented in the manifest but are not
+ * separate assets — they never render on their own, and the original JPEG stays
+ * as the `<img>` fallback.
+ */
+export const RESPONSIVE_DERIVATIVES: string[] = manifest.responsiveDerivatives.files;
+
 export const APPROVED_ASSETS = IMAGE_ASSETS.filter(
   (asset) => asset.approved && asset.review !== 'rejected' && asset.review !== 'pending',
 );

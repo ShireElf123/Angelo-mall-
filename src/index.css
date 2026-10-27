@@ -2322,3 +2322,11 @@ body.chat-expanded {
   .shop-card:active { transform: none; }
   .bottom-nav .nav-item__icon { transition: none; }
 }
+
+/* --- Responsive images (Phase 14) ---------------------------------------
+   `<picture>` is used only to offer a WebP source, never to add a box, so it
+   must not participate in layout: the media images are absolutely positioned
+   (`inset: 0`) inside their frame and a wrapper would collapse that. */
+.shop-card__media picture,
+.shop-hero__media picture,
+.hero picture { display: contents; }

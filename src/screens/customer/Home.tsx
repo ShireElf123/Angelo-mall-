@@ -1,4 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
+import { ResponsiveImage } from '../../components/ResponsiveImage';
+import { HOME_HERO_SRC, HOME_HERO_SRCSET } from '../../utils/responsiveImages';
 import {
   ArrowRight,
   Bike,
@@ -67,7 +69,16 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   return (
     <div className="page">
       <section className="hero">
-        <img src="/images/hero-mall.jpg" alt="" className="hero__img" />
+        <ResponsiveImage
+          src={HOME_HERO_SRC}
+          webpSrcSet={HOME_HERO_SRCSET}
+          sizes="100vw"
+          alt=""
+          className="hero__img"
+          width={1408}
+          height={768}
+          fetchPriority="high"
+        />
         <div className="hero__shade" aria-hidden />
         <div className="hero__content">
           <span className="hero__kicker">

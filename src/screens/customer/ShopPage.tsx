@@ -1,4 +1,6 @@
 import { ArrowLeft, Bike, Clock, Globe, MapPin, MessageCircle, Phone, ShoppingBag } from 'lucide-react';
+import { ResponsiveImage } from '../../components/ResponsiveImage';
+import { HERO_IMAGE_SIZES, webpSrcSetFor } from '../../utils/responsiveImages';
 import { categoryLabel } from '../../data/seed';
 import { imageSrc } from '../../data/imageAssets';
 import type { Route } from '../../router';
@@ -81,9 +83,14 @@ export function ShopPageScreen({
 
       <article className="shop-hero">
         <div className="shop-hero__media">
-          <img
+          <ResponsiveImage
             src={shop.conceptImage ?? shop.coverImage}
+            webpSrcSet={webpSrcSetFor(shop.conceptImage ?? shop.coverImage)}
+            sizes={HERO_IMAGE_SIZES}
             alt=""
+            width={1280}
+            height={720}
+            fetchPriority="high"
             onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
           />
           <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>

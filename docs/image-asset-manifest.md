@@ -593,3 +593,51 @@ exact steps to add a verified mark.
 | Share preview (OG/Twitter) | `og-social-card` |
 | Help — how chat ordering works | `help-chat`, `help-summary`, `help-delivery` |
 | App header, PWA install | `icon.svg` (SVG) plus the three PNG icons |
+
+## Delivery derivatives (Phase 14)
+
+The featured shop cards appeared to load slowly. Nothing was missing: every
+tenant image was a 1280x720 JPEG of roughly 170 kB, served at full size to a
+card that paints at about 340 CSS px. Five featured cards plus the Home hero
+meant a phone fetching well over a megabyte of pixels it could not display.
+
+The originals are **not** replaced, renamed or rewritten — the convention that
+the JPEG is the canonical asset still holds, and it remains the `<img>` fallback.
+
+| file set | what it is |
+| --- | --- |
+| `/images/tenants/{slug}.jpg` | unchanged 1280x720 original, the fallback |
+| `/images/tenants/{slug}-480.webp` | 480x270, quality 74 — what a phone card picks |
+| `/images/tenants/{slug}-960.webp` | 960x540, quality 76 |
+| `/images/tenants/{slug}-1280.webp` | 1280x720, quality 78 — large desktop hero |
+| `/images/hero-mall-800.webp` | 800x436, quality 74 — Home hero on a phone |
+| `/images/hero-mall-1408.webp` | 1408x768, quality 78 |
+
+Encoded with ImageMagick 6.9.11 / libwebp 1.2.4, `-strip` (metadata removed),
+progressive-free WebP. Verified by eye after generation: the 480w card
+variant shows no blocking on the KFC interior, and the 800w hero keeps the
+atrium detail.
+
+Measured, not estimated:
+
+| what a 390px phone loads | before | after |
+| --- | --- | --- |
+| 5 featured cards | 872 kB | 109 kB |
+| Home hero | 333 kB | 78 kB |
+| first Home paint (cards + hero) | 1205 kB | 187 kB |
+
+Roughly **85% less image data** for the same visual result.
+
+### How it is wired
+
+- `src/utils/responsiveImages.ts` builds the `srcSet` and the `sizes` string,
+  and returns `undefined` for art with no derivatives (the shared category
+  covers) so a missing file is never advertised.
+- `src/components/ResponsiveImage.tsx` wraps the image in `<picture>` with a
+  `<source type="image/webp">`. The wrapper is `display: contents`, because the
+  media images are absolutely positioned inside their frame and a real box
+  would collapse the layout.
+- `src/utils/responsiveImages.test.ts` reads the filesystem and asserts every
+  derivative exists, is a genuine WebP (RIFF/WEBP header), and is smaller than
+  its JPEG. `imageAssets.test.ts` keeps the new files documented here, so an
+  undocumented image still fails the build.

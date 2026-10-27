@@ -4,6 +4,8 @@ import type { Shop } from '../types';
 import { formatZAR } from '../utils/format';
 import { ParticipationPill, SponsoredTag, TradingPill } from './ui';
 import { ShopLogo } from './ShopLogo';
+import { ResponsiveImage } from './ResponsiveImage';
+import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../utils/responsiveImages';
 
 export function ShopCard({
   shop,
@@ -25,8 +27,10 @@ export function ShopCard({
     <article className="shop-card">
       <button type="button" className="shop-card__media" onClick={() => onOpen(shop.id)} aria-label={`Open ${shop.name}`}>
         {/* Decorative: the shop wordmark below is the accessible name. */}
-        <img
+        <ResponsiveImage
           src={media}
+          webpSrcSet={webpSrcSetFor(media)}
+          sizes={CARD_IMAGE_SIZES}
           alt=""
           width={1280}
           height={720}
