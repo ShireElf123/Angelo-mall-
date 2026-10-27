@@ -125,6 +125,15 @@ build, Vercel pull/build and the Preview deploy were all green, and
 `dpl_7Sc796NRx4QjSTuX5nT1it852HaZ` is **READY** with a matching `githubCommitSha`. Preview:
 <https://angelo-mall-awyjwrtjn-mercels-projects-80f68ab7.vercel.app>.
 
+**Batch 11 verified (2026-10-27).** Run
+[`40466917208`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40466917208) for commit
+`49f216656ad25b0e2e96c3c7089c11704bbfd30d`: install, tests, typecheck + build, Vercel pull/build and
+the Preview deploy were all green, and `dpl_CuNK625UbUCmqQSrA5EMMnfVA7jw` (`angelo-mall-go`) is
+**READY** with a matching `githubCommitSha`. Preview:
+<https://angelo-mall-l73wxjvqk-mercels-projects-80f68ab7.vercel.app>. The legacy `angelo-mall`
+project also built the same commit as `dpl_CKwGE7nQ93ZJ6VsVg5rAgSojHzbK`, READY. Both remain
+SSO-protected, so this is a status-and-SHA check, not a rendered-page check.
+
 **Batch 2 re-verified (2026-10-27).** Run
 [`40413068684`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40413068684) for
 commit `908375497c9226174d7765dc0d97416df7063adf`: install, tests (148 passing), typecheck +
