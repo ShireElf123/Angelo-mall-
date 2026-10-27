@@ -185,7 +185,11 @@ branch, no endorsement claim. Batch 9 held nine images because only nine tenants
 were left; batch 10 replaced rather than added, so the asset count stayed at 92.
 
 Each replacement records the batch it superseded in the manifest (`revision`),
-including the commit where the old artwork can still be recovered.
+including the commit where the old artwork can still be recovered. Two batches
+have now run on that basis: batch 10 replaced the ten batch 7 still-lifes, and
+batch 11 replaced the ten weakest remaining scenes (MTN, Vodacom, Nedbank, TOPS,
+SUPERSPAR, Maxi's, Aviya, Nigel Cellular, Scooters, Ocean Basket). Replacing an
+image moves its manifest entry to the new batch; it never changes the total.
 
 Neither layer is a logo, and neither replaces the monogram-and-name fallback: the
 verified-logo registry (`src/data/shopLogos.ts`) holds only hosted marks with a

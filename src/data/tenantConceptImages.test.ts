@@ -20,22 +20,26 @@ const PUBLIC_FILES = new Set(
 const exists = (file: string) => PUBLIC_FILES.has(file);
 
 const CONCEPT_ASSETS = IMAGE_ASSETS.filter((asset) => asset.usage === 'shop-concept');
+// Every image now belongs to the batch that produced the file currently on
+// disk. Batches 8 and 9 shrank because batch 11 replaced eight of their scenes;
+// the superseded files stay recoverable through each entry's `revision` block.
 const BATCH_8 = IMAGE_ASSETS.filter((asset) => asset.batch === 8);
 const BATCH_9 = IMAGE_ASSETS.filter((asset) => asset.batch === 9);
-// Batch 10 replaced the ten batch 7 still-lifes with researched interiors. The
-// originals were not "removed" from history: each replacement records the batch
-// it superseded via `revision`, which is what makes the swap auditable.
 const BATCH_10 = IMAGE_ASSETS.filter((asset) => asset.batch === 10);
+const BATCH_11 = IMAGE_ASSETS.filter((asset) => asset.batch === 11);
 
 describe('tenant concept illustrations', () => {
-  it('ships the documented concept images, ten per approved batch', () => {
-    expect(BATCH_8).toHaveLength(10);
-    // Batch 9 closed the run: nine tenants were left, so nine images — not ten.
-    expect(BATCH_9).toHaveLength(9);
-    // Batch 10 is a replacement batch, not an addition: ten tenant heroes whose
-    // batch 7 still-life was a product photograph rather than a shop.
+  it('ships the documented concept images, and every batch is accounted for', () => {
+    // Batch 8 and 9 lost scenes to the batch 11 replacements, so the surviving
+    // members are pinned by id instead of by a convenient round number.
+    expect(BATCH_8.map((asset) => asset.id).sort()).toEqual(['tenant-biltong-den', 'tenant-just-u-2']);
+    expect(BATCH_9).toHaveLength(7);
+    // Batch 10 and 11 are replacement batches, not additions.
     expect(BATCH_10).toHaveLength(10);
-    expect(CONCEPT_ASSETS).toHaveLength(BATCH_8.length + BATCH_9.length + BATCH_10.length);
+    expect(BATCH_11).toHaveLength(10);
+    expect(CONCEPT_ASSETS).toHaveLength(
+      BATCH_8.length + BATCH_9.length + BATCH_10.length + BATCH_11.length,
+    );
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.kind, `${asset.id} kind`).toBe('generated');
       expect(asset.usage, `${asset.id} usage`).toBe('shop-concept');
@@ -49,17 +53,23 @@ describe('tenant concept illustrations', () => {
   });
 
   it('keeps a one-to-one record of every replaced image', () => {
-    const replaced = BATCH_10.map((asset) => asset.revision);
-    for (const [index, revision] of replaced.entries()) {
-      expect(revision, `${BATCH_10[index].id} revision block`).toBeTruthy();
-      expect(revision?.replacesBatch, `${BATCH_10[index].id} replaced batch`).toBe(7);
-      expect(revision?.reason.length ?? 0, `${BATCH_10[index].id} reason`).toBeGreaterThan(30);
+    const replaced = IMAGE_ASSETS.filter((asset) => asset.revision);
+    // Ten batch 7 still-lifes (batch 10) plus ten batch 8-9 scenes (batch 11).
+    expect(replaced).toHaveLength(20);
+    for (const asset of replaced) {
+      const revision = asset.revision!;
+      expect([7, 8, 9], `${asset.id} replaced batch`).toContain(revision.replacesBatch);
+      // A replacement always lands in a later batch than the one it supersedes.
+      expect(asset.batch, `${asset.id} batch must be later`).toBeGreaterThan(revision.replacesBatch);
+      expect(revision.reason.length, `${asset.id} reason`).toBeGreaterThan(30);
       // The superseded file must still be recoverable: the commit holding the
       // previous artwork is recorded, so the swap is never a silent deletion.
-      expect(revision?.previousFileInGitHistory, `${BATCH_10[index].id} history commit`).toMatch(/^[0-9a-f]{40}$/);
+      expect(revision.previousFileInGitHistory, `${asset.id} history commit`).toMatch(/^[0-9a-f]{40}$/);
     }
-    // Nothing else claims to be batch 7 any more, so no entry is double-counted.
+    // Nothing left behind claims to be batch 7, so no entry is double-counted.
     expect(IMAGE_ASSETS.filter((asset) => asset.batch === 7)).toHaveLength(0);
+    // Every tenant still has exactly one concept asset, replaced or original.
+    expect(CONCEPT_ASSETS).toHaveLength(TENANTS.length);
   });
 
   it('maps every concept file to an existing tenant that actually uses it', () => {

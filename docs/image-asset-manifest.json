@@ -1238,7 +1238,7 @@
       "id": "tenant-vodacom",
       "file": "/images/tenants/vodacom.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Mobile-store interior: blank-screen handsets in wall cradles, a glass SIM and accessory counter, warm spotlights \u2014 Vodacom listing hero.",
       "screens": [
         "shop-page"
@@ -1246,16 +1246,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 138,
+      "sizeKb": 134,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Vodacom: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene used a green and oak palette borrowed from another fit-out, not the documented Vodacom red identity, and showed no service counter.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-nedbank",
       "file": "/images/tenants/nedbank.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Bank-branch interior: warm timber teller counters with glass screens, queue posts, a plant, soft daylight \u2014 Nedbank listing hero.",
       "screens": [
         "shop-page"
@@ -1263,16 +1269,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 122,
+      "sizeKb": 148,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Nedbank: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a glass-screened teller line with queue posts - the branch format Nedbank has been removing - instead of the self-service, open-counter, advisory layout it now rolls out.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-tops",
       "file": "/images/tenants/tops.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Liquor-store aisle: timber wine racks with blank-labelled bottles, kraft cartons, deep green wall \u2014 Tops at Spar listing hero.",
       "screens": [
         "shop-page"
@@ -1280,16 +1292,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 155,
+      "sizeKb": 217,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Tops at Spar: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a boutique timber wine cellar. TOPS at SPAR is a value bottle store: gondola wine shelving, glass-door fridges, crate stacks and a till bulkhead.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-superspar",
       "file": "/images/tenants/superspar.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Fresh-produce aisle: tiered timber crates of tomatoes, peppers, greens and citrus under cool mist \u2014 The Angelo SUPERSPAR listing hero.",
       "screens": [
         "shop-page"
@@ -1297,10 +1315,16 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 191,
+      "sizeKb": 197,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for The Angelo SUPERSPAR: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a produce-only close-up. A SUPERSPAR is a full supermarket, so the aisle of groceries running to the checkouts is the honest subject.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-biltong-den",
@@ -1323,7 +1347,7 @@
       "id": "tenant-maxis",
       "file": "/images/tenants/maxis.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Convenience-store counter: sweet jars, bread rack, glowing cold-drink fridge, turn-away packaging \u2014 Maxi's listing hero.",
       "screens": [
         "shop-page"
@@ -1331,16 +1355,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 164,
+      "sizeKb": 156,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Maxi's: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene depicted a convenience counter with a drinks fridge and bakery shelf. Maxi's is a sit-down family restaurant (breakfast, burgers, grills, shakes), so the format was wrong.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-aviya",
       "file": "/images/tenants/aviya.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Studio interior: seamless paper backdrop, two softboxes, camera on tripod, blank prints and colour swatches \u2014 Aviya listing hero.",
       "screens": [
         "shop-page"
@@ -1348,16 +1378,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 97,
+      "sizeKb": 139,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Aviya Photography & Graphics: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a photography studio only. The business is photography AND graphics/printing, so the print and design side was missing.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-nigel-cellular",
       "file": "/images/tenants/nigel-cellular.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Repair bench close-up: opened handset, precision tools, screen protectors, desk lamp \u2014 Nigel Cellular listing hero.",
       "screens": [
         "shop-page"
@@ -1365,16 +1401,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 146,
+      "sizeKb": 177,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Nigel Cellular: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was an extreme close-up of an opened handset on a bench - craft detail, but it showed no shop and no service counter.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-mtn",
       "file": "/images/tenants/mtn.jpg",
       "kind": "generated",
-      "batch": 8,
+      "batch": 11,
       "purpose": "Telecoms store interior: handset display wall, earbud and SIM trays, bright ceiling strip lighting \u2014 MTN listing hero.",
       "screens": [
         "shop-page"
@@ -1382,10 +1424,16 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 111,
+      "sizeKb": 106,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for MTN @ The Angelo Mall: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a white handset wall with no visible counter, service desk or MTN yellow; it read as any brand-neutral phone store.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-just-u-2",
@@ -1442,7 +1490,7 @@
       "id": "tenant-scooters",
       "file": "/images/tenants/scooters.jpg",
       "kind": "generated",
-      "batch": 9,
+      "batch": 11,
       "purpose": "Pizza takeaway counter: a floured marble prep bench, dough, a wooden peel, plain kraft boxes and a glowing oven, with three bar stools \u2014 Scooters Pizza listing hero.",
       "screens": [
         "shop-page"
@@ -1450,16 +1498,22 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 127,
+      "sizeKb": 108,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Scooters Pizza: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 9,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 9 scene put the oven and prep line in the foreground. The customer counter, menu band and seating are what a customer actually sees, so the kitchen dominated the hero.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-ocean-basket",
       "file": "/images/tenants/ocean-basket.jpg",
       "kind": "generated",
-      "batch": 9,
+      "batch": 11,
       "purpose": "Seafood dining room: dark timber tables with white crockery, blue banquette seating, a tiled service counter and amber pendants \u2014 Ocean Basket listing hero.",
       "screens": [
         "shop-page"
@@ -1467,10 +1521,16 @@
       "approved": true,
       "review": "approved",
       "dimensions": "1280x720 (16:9)",
-      "sizeKb": 161,
+      "sizeKb": 222,
       "usage": "shop-concept",
       "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
-      "notes": "AI-generated concept imagery for Ocean Basket: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 9,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 9 scene was the generic blue-and-white seafood cliche. Documented Ocean Basket design uses mixed painted fisherman's chairs, striped bench seating, blue tile, mosaic and stencilled fish, wave and anchor graphics.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
     },
     {
       "id": "tenant-angel-kiss",

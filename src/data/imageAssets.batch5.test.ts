@@ -45,18 +45,18 @@ describe('batch 5 image assets', () => {
   });
 
   it('keeps the whole inventory accounted for as batches are added', () => {
-    // 63 through batch 5, plus 10 tenant concept images in batch 8, the nine
-    // that completed the run in batch 9, and the ten replacements in batch 10
-    // (which supersede batch 7 at the same file paths). The number moves with
-    // the batch log; it must never drift from the manifest or from disk.
+    // 63 through batch 5, the surviving concept images from batches 8 and 9,
+    // and the twenty replacements in batches 10 and 11 (which supersede earlier
+    // files at the same paths). Replacing an image moves an entry between
+    // batches; it never changes the total. The number must not drift from disk.
     const batches = IMAGE_ASSETS.map((asset) => asset.batch);
-    const expected = [0, 1, 2, 3, 4, 5, 8, 9, 10].reduce(
+    const expected = [0, 1, 2, 3, 4, 5, 8, 9, 10, 11].reduce(
       (total, batch) => total + batches.filter((value) => value === batch).length,
       0,
     );
     expect(IMAGE_ASSETS).toHaveLength(expected);
     expect(IMAGE_ASSETS).toHaveLength(92);
-    expect(batches.filter((batch) => batch > 10)).toHaveLength(0);
+    expect(batches.filter((batch) => batch > 11)).toHaveLength(0);
   });
 
   it.each(BATCH_5_IDS)('%s is approved, on disk and documented as a gap fix', (id) => {

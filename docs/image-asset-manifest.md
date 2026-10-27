@@ -278,7 +278,7 @@ the set. Resized/compressed copies are not counted as new images.
 shared category cover in their hero until batch 8 and batch 9 are separately
 approved.
 
-## Batch 8 — 2026-10-27 (10 images generated, 10 reviewed, 10 retained)
+## Batch 8 — 2026-10-27 (10 generated; 2 still current, 8 superseded by batch 11)
 
 Batch 8 continues the per-tenant hero set for tenants 11–20 and deliberately
 switches to a **photographic style**: realistic interiors, believable lighting
@@ -322,7 +322,7 @@ than the illustrated batches, so files land at 97–218 kB — in line with the
 **Remaining at the time.** Tenants 21–29 kept their category cover for one more
 turn; batch 9 below closed that gap.
 
-## Batch 9 — 2026-10-27 (9 images generated, 9 reviewed, 9 retained)
+## Batch 9 — 2026-10-27 (9 generated; 7 still current, 2 superseded by batch 11)
 
 Batch 9 is the last remaining slice of the per-tenant set and therefore **nine
 images, not ten**: only nine tenants (`shop-postnet` … `shop-carwash`) still had
@@ -455,6 +455,86 @@ product illustration. Nothing was rejected, so no regeneration was needed.
 
 Files are cropped to exact 16:9, downscaled to 1280×720 and recompressed at q82
 with metadata stripped (111–220 kB).
+
+## Batch 11 — 2026-10-27 (10 replacements, 10 reviewed, 10 retained)
+
+Batch 11 audits the ten scenes still standing after batch 10 and replaces the
+weakest of them. Five were not merely generic — they had the **wrong format**:
+
+* `shop-maxis` showed a convenience counter with a drinks fridge and a bakery
+  shelf. Maxi's is a sit-down family restaurant (breakfast, burgers, grills,
+  shakes, ~30 years old, dine-in plus takeaway). The format was wrong.
+* `shop-aviya` showed only a photo studio. The business is *photography and
+  graphics*, so the print/design side was missing.
+* `shop-nigel-cellular` was an extreme close-up of an opened handset on a bench:
+  craft detail, no shop, no counter.
+* `shop-scooters` foregrounded the oven and prep line; a customer sees the
+  counter, menu band and seating.
+* `shop-ocean-basket` was the blue-and-white seafood cliché. Documented Ocean
+  Basket interiors use mixed painted fisherman's chairs, striped cotton bench
+  seating, blue tile and mosaic, and stencilled fish/wave/anchor graphics.
+
+The other five were readable but generic on the defining details: MTN had no
+yellow and no service desk, Vodacom wore a green/oak palette instead of its red
+identity and had no counter, Nedbank showed the glass teller line it is
+deliberately removing, TOPS was a boutique timber cellar rather than a value
+bottle store, and SUPERSPAR was a produce-only close-up rather than a full
+supermarket.
+
+| # | Tenant | File (1280×720, 16:9) | Researched scene | Review |
+| --- | --- | --- | --- | --- |
+| 1 | `shop-mtn` | `tenants/mtn.jpg` (106 kB) | Franchise outlet: backlit handset wall, yellow feature panel, demo tables, assist counter, repairs alcove | approved |
+| 2 | `shop-vodacom` | `tenants/vodacom.jpg` (134 kB) | Mall shop: red feature wall, timber-and-white handset run, lit glass cabinet, service counter | approved |
+| 3 | `shop-nedbank` | `tenants/nedbank.jpg` (148 kB) | Hybrid branch: self-service and card-dispensing kiosks, glassless assisted counter, advisory pod, lockers | approved |
+| 4 | `shop-tops` | `tenants/tops.jpg` (216 kB) | Value bottle store: gondola wine shelving, glass-door fridges, crate stacks, till bulkhead | approved |
+| 5 | `shop-superspar` | `tenants/superspar.jpg` (196 kB) | Full supermarket: grocery aisle, dairy fridges, produce, checkouts | approved |
+| 6 | `shop-maxis` | `tenants/maxis.jpg` (155 kB) | Family restaurant: timber/red host counter with dessert case, booths, tables, kitchen pass | approved |
+| 7 | `shop-aviya` | `tenants/aviya.jpg` (138 kB) | Photo studio *plus* print/graphics counter, wide-format printer, frame display | approved |
+| 8 | `shop-nigel-cellular` | `tenants/nigel-cellular.jpg` (176 kB) | Independent dealer: glass cabinet, service counter, accessory pegboard, repair bench | approved |
+| 9 | `shop-scooters` | `tenants/scooters.jpg` (107 kB) | Takeaway from the customer side: counter, glass screen, blank menu band, oven glow behind | approved |
+| 10 | `shop-ocean-basket` | `tenants/ocean-basket.jpg` (222 kB) | Casual seafood: mixed painted chairs, striped bench, blue tile servery, stencilled murals | approved |
+
+### Research actually performed
+
+| Tenant | Sources consulted | Details extracted |
+| --- | --- | --- |
+| MTN | [Impact Display MTN retail design](https://impactdisplay.co.za/work/mtn/) (Help Me / Inspire Me / Engage Me zones, each with its own furniture), [invidis on MTN's Digital Experience Centre](https://invidis.com/news/2026/07/telco-mtn-turns-retail-into-experience/) (interactive phone tables, discreet queue management), [MyBroadband on the first digital store](https://mybroadband.co.za/news/cellular/165106-mtn-opens-its-first-cutting-edge-digital-store-in-south-africa.html) (quick-service desk, kiosks, in-store repairs) | Yellow is architecture (feature panels, bulkheads), handsets sit in backlit niches, demo tables are the comparison surface, and small outlets still have a queue/assist counter plus a repairs corner. |
+| Vodacom | [BRAND DNA Vodacom retail concept](https://branddna.co.za/portfolio/vodacom-retail-concept/) (rollout from flagship to dealer kiosk; "red is introduced to reflect Vodafone's share"), [Design Clarity Vodafone store frames](https://designclarity.net/projects/vodafone/the-overall-view) (long light counter, light-wood ceiling, plan literature, red banners), [Vodacom "Store of Tomorrow"](https://www.vodacom.com/news-article.php?articleID=7724) (digital-first formats) | Red is a wall/accent, not a whole-shop flood; white-and-timber counters carry the handsets; a long front counter plus glass cabinets is the merchandising spine; kiosks are the small-footprint variant. |
+| Nedbank | [BusinessTech on the new-concept rollout](https://businesstech.co.za/news/banking/587222/nedbank-rolling-out-new-concept-design-to-all-branches-in-south-africa/) (**three zones: self-service, staff-assisted, expert advice**; card-dispensing kiosks, appointment booking), [ITWeb Client Connect Zone](https://www.itweb.co.za/article/nedbank-tests-next-gen-self-service-branches/GxwQDq1DPg6MlPVu), [Nedbank self-service kiosks page](https://personal.nedbank.co.za/bank/digital-banking/channels/physical-channels/self-service-kiosks.html), [Enterprise Africa](https://enterprise-africa.net/nedbank/) (**protection glass phased out, screens and bilock doors removed** to open the teller conversation) | So: kiosks in front, an open glassless assisted counter, an advisory pod, card lockers. The old image's glass teller line with queue posts is the format being retired. |
+| TOPS at SPAR | [TOPS at SPAR about](https://www.topsatspar.co.za/About) and [SPAR brand page](https://www.spar.co.za/Assets/Our-Brands/In-Store/TOPS) (value, owner-managed, spirits/wine/refreshments), [Regent Light TOPS Highlands and Langebaan lighting case studies](https://www.regentlight.co.za/applications/shop-lighting-applications/tops-at-spar-highlands/) (**4000K lighting on the trading floor, separately lit till points in the bulkhead, IP-rated luminaires for the walk-in fridges**), branch reviews mentioning walk-in fridges and specials-driven volume | Value bottle store: wine gondolas, lit fridges, crate stacks, tills under a bulkhead. Not a timber cellar. |
+| SUPERSPAR | [SPAR SUPERSPAR format page](https://www.spar.co.za/superspar) (fresh produce, bakery, butchery, pantry staples, household, "spacious aisles"), [SPAR fact sheet](https://thespargroup.com/pdf/Our_brands_and_store_formats_2021.pdf) (≥700 m² large format, full grocery range), [SPAR International store formats](https://spar-international.com/aboutus/store-formats/), branch write-ups (service departments, checkouts) | A full supermarket needs grocery gondolas *and* fridges *and* produce *and* checkouts in one frame; produce alone reads as a greengrocer. |
+| Maxi's | [maxisfood.com](https://maxisfood.com/) (breakfast, handcrafted burgers, grills, shakes, "welcoming sit-down dining experience", family restaurant), [FASA listing](https://fasa.co.za/directory-accredited_f/listing/maxis-restaurant-franchise/) ("quick service sit-down", established 1993), branch listings confirming mall sit-down sites | Sit-down tables and booths, host/till counter with a dessert or shake display, open kitchen pass, menu band above the counter. |
+| Aviya Photography & Graphics | [iVote East Rand photography directory](https://www.ivote.co.za/@2?AsG_AssociationGroup=0&SearchCategoryCode=1598&SearchLocationID=13&wr=6) — "Aviya Photography & Graphics, Nigel" listed among photo/graphic studios whose services include film developing, digital printing, canvas prints, graphic design and a studio; Angelo Mall listing | Two-function shop: a shooting corner with backdrop and softboxes **and** a print/design counter with a wide-format printer and canvas samples. |
+| Nigel Cellular | Angelo Mall directory (shop 17, own phone numbers, trading 7 days) plus the [MTN/telecom dealer formats](https://impactdisplay.co.za/work/mtn/) above | An independent dealer is a *shop*: glass handset cabinet, service counter with card machine and SIM trays, accessory pegboard, small repair bench at the back. |
+| Scooters Pizza | [NEWS24 relaunch coverage](https://www.news24.com/business/companies/scooters-pizza-is-back-39-minute-promise-and-all-20251021-0823), [whichfranchise on the Newcastle revamp](https://whichfranchise.co.za/newcastleocos-scooters-pizza-gets-a-complete-brand-overhaul/) (**red and yellow walls, silver counters/chairs/lighting, clean white menu boards**), [grab-and-go concept note](https://whichfranchise.co.za/scooters-pizza-franchise-enhances-development-portfolio/) (**counter design and large graphics are the signature**) | Customer-facing counter and menu wall are the branded assets; the oven is support, not subject. |
+| Ocean Basket | [Bizcommunity "Sharing" relaunch](https://www.bizcommunity.com/Article/196/82/164517.html) (**fisherman's chairs in different colours, bench seating for sharing, bold blue tiles, stencilled waves/fish/anchors, cotton tablecloths, long sushi bar, mosaic family tables**), [smaller-format strategy](https://www.bizcommunity.com/Article/196/785/200579.html), Wikipedia on the 2016 decor/menu rebrand | Mixed painted chairs + striped bench + blue tile + stencil graphics + a servery/sushi bar. The uniform blue-and-white restaurant is the cliché, not the brand. |
+
+### What the images reproduce, and what stays unverified
+
+Reproduced: the format-defining elements above. **Not verified:** these are not
+photographs of the Angelo Mall branches — no branch interior photographs exist
+publicly for any tenant — and no logo, wordmark, menu text or price appears in
+any scene, so nothing implies the chain's real shopfront or an endorsement.
+
+### Review gate
+
+Each candidate was compared side by side with the file it replaces at equal
+display size, and zoomed to 160–170 % on the four densest areas (SUPERSPAR shelf
+labels, TOPS bottle labels, MTN display wall, Vodacom accessory hooks). All ten
+passed: correct format, defining fixtures present, no legible lettering, no
+malformed furniture, and a clear improvement. Nothing required regeneration.
+
+### Image-retrieval limitation (batch 11)
+
+Web *search* was available and used extensively, and the reference photographs
+found for batch 10 were inspected directly. For this batch, image search returned
+mostly stock-library or unrelated results (for MTN it returned South African
+wall-art canvases; for Nedbank and SUPERSPAR, generic stock). Only the Vodacom
+Getty frames and the liquor-store stock frames were real interiors, and neither
+is brand-specific. **The ten briefs therefore rest on written fit-out case
+studies, press coverage and branch evidence rather than on inspected photographs
+of each retailer's interior.** That is a weaker evidence base than batch 10 and is
+recorded here so the difference is not lost.
 
 ## Logos — zero bundled, and why
 
