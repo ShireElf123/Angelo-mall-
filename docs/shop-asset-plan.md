@@ -177,6 +177,11 @@ Two different image layers sit on a shop for two different jobs:
   in the UI with a "Concept art" chip and the line "AI-generated concept
   illustration — not this shop's logo or shopfront."
 
+Per-tenant art currently ships in two styles on purpose: **illustration** for
+tenants 1–10 (batch 7) and **photographic-style generated interiors** for tenants
+11–20 (batch 8). Both are AI-generated concept imagery with the same label and the
+same rules — no lettering, no brand marks, no real branch, no endorsement claim.
+
 Neither layer is a logo, and neither replaces the monogram-and-name fallback: the
 verified-logo registry (`src/data/shopLogos.ts`) is still empty, and a concept
 illustration is never accepted as an official brand asset. Tenants without a

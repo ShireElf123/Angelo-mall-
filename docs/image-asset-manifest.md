@@ -272,6 +272,52 @@ the set. Resized/compressed copies are not counted as new images.
 shared category cover in their hero until batch 8 and batch 9 are separately
 approved.
 
+## Batch 8 — 2026-10-27 (10 images generated, 10 reviewed, 10 retained)
+
+Batch 8 continues the per-tenant hero set for tenants 11–20 and deliberately
+switches to a **photographic style**: realistic interiors, believable lighting
+and ordinary retail environments, so the shop page reads like a shop rather than
+a flat illustration. Batch 7's ten illustrations are untouched and keep their own
+style — mixing them is intentional (illustration for 1–10, photograph-style for
+11–20) and is recorded here so nobody later "fixes" the inconsistency.
+
+**They are still AI-generated concept imagery.** None is a photograph of the real
+branch, none is a logo or an official brand asset, and none implies that the
+tenant endorses or partners with Mall Go. Every image is word-free and
+brand-free: no signage, no lettering, no prices, no packaging text, no people.
+The hero keeps the visible **"Concept art"** chip and the caption *"AI-generated
+concept illustration — not this shop's logo or shopfront."*
+
+| # | Tenant | Asset id | File (1280×720, 16:9) | Scene | Review |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `shop-vodacom` | `tenant-vodacom` | `tenants/vodacom.jpg` (138 kB) | Mobile store: handset wall, glass SIM counter | approved |
+| 2 | `shop-nedbank` | `tenant-nedbank` | `tenants/nedbank.jpg` (122 kB) | Bank branch: teller counters, queue posts | approved |
+| 3 | `shop-tops` | `tenant-tops` | `tenants/tops.jpg` (155 kB) | Liquor aisle: wine racks, blank-labelled bottles | approved |
+| 4 | `shop-superspar` | `tenant-superspar` | `tenants/superspar.jpg` (191 kB) | Fresh-produce aisle with misted crates | approved |
+| 5 | `shop-biltong-den` | `tenant-biltong-den` | `tenants/biltong-den.jpg` (218 kB) | Biltong counter: hanging strips, spice jars | approved |
+| 6 | `shop-maxis` | `tenant-maxis` | `tenants/maxis.jpg` (164 kB) | Convenience counter: sweets, bread, cold drinks | approved |
+| 7 | `shop-aviya` | `tenant-aviya` | `tenants/aviya.jpg` (97 kB) | Photo studio: backdrop, softboxes, blank prints | approved |
+| 8 | `shop-nigel-cellular` | `tenant-nigel-cellular` | `tenants/nigel-cellular.jpg` (146 kB) | Repair bench: opened handset, precision tools | approved |
+| 9 | `shop-mtn` | `tenant-mtn` | `tenants/mtn.jpg` (111 kB) | Telecoms store: handset display wall | approved |
+| 10 | `shop-just-u-2` | `tenant-just-u-2` | `tenants/just-u-2.jpg` (149 kB) | Jeweller: lit glass cases, gold on velvet | approved |
+
+**Inspection.** Each image was viewed after generation and again after resizing.
+Zoomed crops of the three densest scenes (`tenant-tops` bottle labels,
+`tenant-maxis` shelf packaging, `tenant-mtn` SIM trays) confirmed there is no
+legible lettering, no brand names and no readable prices — the packaging is
+blurred colour blocks by design. No OS chrome, no watermarks, no corruption, and
+no duplicate of the nine category covers or of batch 7.
+
+**Optimisation.** Generated at 1672×941, cropped to exact 16:9, downscaled to
+1280×720 and recompressed (q82, metadata stripped). Photographs compress worse
+than the illustrated batches, so files land at 97–218 kB — in line with the
+209–334 kB category covers already shipped and still lazy-loaded.
+
+**Remaining.** Tenants 21–29 (`shop-postnet` … `shop-carwash`) have no concept
+art yet and keep the shared category cover in their hero. Their batch was planned
+and specified but hit the tool's hard limit of ten generated images per turn, so
+it was not generated.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5

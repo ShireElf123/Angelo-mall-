@@ -19,11 +19,15 @@ const PUBLIC_FILES = new Set(
 
 const exists = (file: string) => PUBLIC_FILES.has(file);
 
-const CONCEPT_ASSETS = IMAGE_ASSETS.filter((asset) => asset.batch === 7);
+const CONCEPT_ASSETS = IMAGE_ASSETS.filter((asset) => asset.usage === 'shop-concept');
+const BATCH_7 = IMAGE_ASSETS.filter((asset) => asset.batch === 7);
+const BATCH_8 = IMAGE_ASSETS.filter((asset) => asset.batch === 8);
 
 describe('tenant concept illustrations', () => {
-  it('ships exactly ten documented concept images for batch 7', () => {
-    expect(CONCEPT_ASSETS).toHaveLength(10);
+  it('ships the documented concept images, ten per approved batch', () => {
+    expect(BATCH_7).toHaveLength(10);
+    expect(BATCH_8).toHaveLength(10);
+    expect(CONCEPT_ASSETS).toHaveLength(BATCH_7.length + BATCH_8.length);
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.kind, `${asset.id} kind`).toBe('generated');
       expect(asset.usage, `${asset.id} usage`).toBe('shop-concept');
@@ -57,10 +61,20 @@ describe('tenant concept illustrations', () => {
   it('keeps concept art out of the verified-logo registry', () => {
     // The logo registry is still empty; if that ever changes, no entry may point
     // at tenant concept art or be marked verified without a recorded source.
-    expect(LOGO_COVERAGE.withVerifiedLogo).toBe(Object.keys(SHOP_LOGO_ASSETS).length);
+    expect(LOGO_COVERAGE.withVerifiedLogo).toBe(
+      Object.values(SHOP_LOGO_ASSETS).filter((asset) => asset.verified).length,
+    );
     for (const [shopId, asset] of Object.entries(SHOP_LOGO_ASSETS)) {
-      expect(asset.file.startsWith(SHOP_LOGO_DIR), `${shopId} logo must live in ${SHOP_LOGO_DIR}`).toBe(true);
+      // A logo is either a bundled file in the logo folder or a direct hosted
+      // brand URL. Anything else (concept art, a category cover) is not a logo.
+      const bundled = asset.file.startsWith(SHOP_LOGO_DIR);
+      const hosted = /^https:\/\//.test(asset.file);
+      expect(bundled || hosted, `${shopId} logo must be bundled or hosted`).toBe(true);
       expect(asset.file.includes('/images/tenants/'), `${shopId} logo must not be concept art`).toBe(false);
+      expect(asset.file.includes('/images/shop-'), `${shopId} logo must not be a category cover`).toBe(false);
+      // Provenance is mandatory either way.
+      expect(asset.sourceUrl, `${shopId} source`).toMatch(/^https:\/\//);
+      expect(asset.retrievedOn, `${shopId} retrieval date`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
     const conceptFiles = new Set(IMAGE_ASSETS.filter((a) => a.usage === 'shop-concept').map((a) => a.file));
     for (const asset of IMAGE_ASSETS) {
@@ -73,7 +87,8 @@ describe('tenant concept illustrations', () => {
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/not a logo/i);
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/AI-generated concept imagery/i);
-      expect(asset.purpose, `${asset.id} purpose`).toMatch(/concept illustration/i);
+         // Batch 7 is illustrated, batch 8 is photographic-style; both are concepts.
+      expect(asset.purpose, `${asset.id} purpose`).toMatch(/listing hero|concept illustration/i);
     }
   });
 

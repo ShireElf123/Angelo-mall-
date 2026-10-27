@@ -1173,6 +1173,176 @@
       "usage": "shop-concept",
       "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
       "notes": "AI-generated concept imagery for Neutell & Horowitz: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-vodacom",
+      "file": "/images/tenants/vodacom.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Mobile-store interior: blank-screen handsets in wall cradles, a glass SIM and accessory counter, warm spotlights \u2014 Vodacom listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 138,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Vodacom: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-nedbank",
+      "file": "/images/tenants/nedbank.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Bank-branch interior: warm timber teller counters with glass screens, queue posts, a plant, soft daylight \u2014 Nedbank listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 122,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Nedbank: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-tops",
+      "file": "/images/tenants/tops.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Liquor-store aisle: timber wine racks with blank-labelled bottles, kraft cartons, deep green wall \u2014 Tops at Spar listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 155,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Tops at Spar: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-superspar",
+      "file": "/images/tenants/superspar.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Fresh-produce aisle: tiered timber crates of tomatoes, peppers, greens and citrus under cool mist \u2014 The Angelo SUPERSPAR listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 191,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for The Angelo SUPERSPAR: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-biltong-den",
+      "file": "/images/tenants/biltong-den.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Biltong counter: cured strips on stainless hooks, spice jars, wooden cutting block, dark green tiles \u2014 Biltong Den listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 218,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Biltong Den: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-maxis",
+      "file": "/images/tenants/maxis.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Convenience-store counter: sweet jars, bread rack, glowing cold-drink fridge, turn-away packaging \u2014 Maxi's listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 164,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Maxi's: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-aviya",
+      "file": "/images/tenants/aviya.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Studio interior: seamless paper backdrop, two softboxes, camera on tripod, blank prints and colour swatches \u2014 Aviya listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 97,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Aviya Photography & Graphics: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-nigel-cellular",
+      "file": "/images/tenants/nigel-cellular.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Repair bench close-up: opened handset, precision tools, screen protectors, desk lamp \u2014 Nigel Cellular listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 146,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Nigel Cellular: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-mtn",
+      "file": "/images/tenants/mtn.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Telecoms store interior: handset display wall, earbud and SIM trays, bright ceiling strip lighting \u2014 MTN listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 111,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for MTN @ The Angelo Mall: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-just-u-2",
+      "file": "/images/tenants/just-u-2.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Jewellery shop interior: lit glass cases with plain gold rings and chains on velvet, loupe and cloth, brass and green \u2014 Just-u-2 listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 149,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Just-u-2 Jewellers: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
     }
   ],
   "logos": {

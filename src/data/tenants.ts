@@ -296,6 +296,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'VD',
     colour: '#b31b1b',
     coverImage: IMG.electronics,
+    conceptImage: '/images/tenants/vodacom.jpg',
   },
   {
     id: 'shop-nedbank',
@@ -311,6 +312,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'NB',
     colour: '#0b6b3a',
     coverImage: IMG.finance,
+    conceptImage: '/images/tenants/nedbank.jpg',
   },
   {
     id: 'shop-tops',
@@ -330,6 +332,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'TP',
     colour: '#14532d',
     coverImage: IMG.groceries,
+    conceptImage: '/images/tenants/tops.jpg',
   },
   {
     id: 'shop-superspar',
@@ -348,6 +351,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'SS',
     colour: '#0f5132',
     coverImage: IMG.groceries,
+    conceptImage: '/images/tenants/superspar.jpg',
     featured: true,
     demoScenario: true,
   },
@@ -365,6 +369,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'BD',
     colour: '#7a3b1d',
     coverImage: IMG.food,
+    conceptImage: '/images/tenants/biltong-den.jpg',
   },
   {
     id: 'shop-maxis',
@@ -381,6 +386,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'MX',
     colour: '#8a5a00',
     coverImage: IMG.groceries,
+    conceptImage: '/images/tenants/maxis.jpg',
   },
   {
     id: 'shop-aviya',
@@ -396,6 +402,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'AV',
     colour: '#4c1d95',
     coverImage: IMG.services,
+    conceptImage: '/images/tenants/aviya.jpg',
   },
   {
     id: 'shop-nigel-cellular',
@@ -411,6 +418,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'NC',
     colour: '#1e3a5f',
     coverImage: IMG.electronics,
+    conceptImage: '/images/tenants/nigel-cellular.jpg',
   },
   {
     id: 'shop-mtn',
@@ -427,6 +435,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'MTN',
     colour: '#1a1a1a',
     coverImage: IMG.electronics,
+    conceptImage: '/images/tenants/mtn.jpg',
     demoScenario: true,
   },
   {
@@ -443,6 +452,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'J2',
     colour: '#92400e',
     coverImage: IMG.fashion,
+    conceptImage: '/images/tenants/just-u-2.jpg',
   },
   {
     id: 'shop-postnet',

@@ -48,11 +48,12 @@ describe('shop-page concept art', () => {
   });
 
   it('falls back to the category cover, with no concept-art caption, when a shop has no art', () => {
-    const superspar = shop('shop-superspar');
-    const { container } = renderShop(superspar.id);
+    // Tenants 21-29 have no concept art yet, so the cover must still carry them.
+    const carwash = shop('shop-carwash');
+    const { container } = renderShop(carwash.id);
 
     const hero = container.querySelector('.shop-hero__media img') as HTMLImageElement;
-    expect(hero.getAttribute('src')).toBe(superspar.coverImage);
+    expect(hero.getAttribute('src')).toBe(carwash.coverImage);
     expect(container.querySelector('.shop-hero__caption')).toBeNull();
     expect(screen.queryByText(/AI-generated concept illustration/)).toBeNull();
   });

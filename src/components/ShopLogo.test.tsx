@@ -32,29 +32,34 @@ afterEach(() => {
   vi.doUnmock('../data/shopLogos');
 });
 
+// The real registry now carries hosted brand marks for some tenants, so the
+// fallback path is exercised with a tenant that has no logo entry at all.
+const NO_LOGO_ID = 'shop-carwash';
+
 describe('ShopLogo fallback (no verified asset)', () => {
   it('renders the initials, the shop name and the category glyph', () => {
-    const kfc = shop('shop-kfc');
-    const { container } = render(<ShopLogo shop={kfc} />);
+    const carwash = shop(NO_LOGO_ID);
+    const { container } = render(<ShopLogo shop={carwash} />);
 
-    expect(container.querySelector('.shop-logo__initials')?.textContent).toBe('KFC');
-    expect(container.querySelector('.shop-logo__word')?.textContent).toBe('KFC');
+    expect(container.querySelector('.shop-logo__initials')?.textContent).toBe(carwash.initials);
+    expect(container.querySelector('.shop-logo__word')?.textContent).toBe(carwash.name);
     expect(container.querySelector('.shop-logo__glyph')).toBeTruthy();
     // No <img> at all -> no broken-image icon can ever appear.
     expect(container.querySelector('img')).toBeNull();
   });
 
   it('never duplicates the shop name in the accessibility tree', () => {
-    render(<ShopLogo shop={shop('shop-superspar')} />);
+    const carwash = shop(NO_LOGO_ID);
+    render(<ShopLogo shop={carwash} />);
     // The monogram is decorative (aria-hidden); only the name text is exposed.
-    expect(screen.getAllByText('The Angelo SUPERSPAR')).toHaveLength(1);
+    expect(screen.getAllByText(carwash.name)).toHaveLength(1);
   });
 
   it('scales its tile per size and supports dark surfaces', () => {
-    const { container, rerender } = render(<ShopLogo shop={shop('shop-mica')} size="lg" onDark />);
+    const { container, rerender } = render(<ShopLogo shop={shop(NO_LOGO_ID)} size="lg" onDark />);
     expect(container.querySelector('.shop-logo--lg')).toBeTruthy();
     expect(container.querySelector('.shop-logo--on-dark')).toBeTruthy();
-    rerender(<ShopLogo shop={shop('shop-mica')} size="sm" />);
+    rerender(<ShopLogo shop={shop(NO_LOGO_ID)} size="sm" />);
     expect(container.querySelector('.shop-logo--sm')).toBeTruthy();
     expect(container.querySelector('.shop-logo__glyph')).toBeNull();
   });
