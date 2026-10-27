@@ -139,8 +139,14 @@ the Vercel API from the same GitHub source instead: `target: staging` (requested
 produced `dpl_7XamVJUS1VLHPVDkB7qEXkfW8rLZ`, **READY** in 19 s, and the plain Git-source
 request produced `dpl_5LmizPktLk3gH7ZTXxNtPAgiG2r3`, **READY** in 15 s. Both clone
 `arena/aeeb5cff-angelo-mall` at `636a556e492dda3c54dcf6557ab6c761b0ae0fef`, and the second
-one now owns the `angelo-mall-go.vercel.app` branch alias, so the shareable URL serves the
-Phase 12 build. Neither deployment touched Production.
+one took the `angelo-mall-go.vercel.app` branch alias. Pushing the record commit
+`ca5b159` then let the workflow deploy as designed: run
+[`40473014196`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40473014196) went green
+and produced `dpl_AJsdCEqxW7YahX4bMsWptBc4a4yM` (**READY**), whose file tree holds
+`index-CPqp0MXH.css`, `index-Bu958SLn.js`, `manifest.webmanifest`, `sw.js`, the icons and all 29
+tenant images — the Phase 12 build, not a stale one. The branch-pinned domain
+`angelo-mall-go.vercel.app` always serves the newest READY deployment from
+`arena/aeeb5cff-angelo-mall`, so that is the URL to share. None of these touched Production.
 
 **UI fix verified (2026-10-27).** Run
 [`40468770408`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40468770408) for commit
