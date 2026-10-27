@@ -40,7 +40,7 @@ describe('shop logo registry', () => {
     for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
       expect(asset.sourceUrl).toMatch(/^https:\/\//);
       expect(asset.retrievedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(['official-brand-site', 'official-media-kit', 'tenant-supplied']).toContain(asset.sourceType);
+      expect(['official-brand-site', 'official-media-kit', 'tenant-supplied', 'third-party-logo-host']).toContain(asset.sourceType);
       expect(asset.aspectRatio).toBeGreaterThan(0.3);
       expect(asset.aspectRatio).toBeLessThan(4.5);
       expect(asset.alt.length).toBeGreaterThan(1);
