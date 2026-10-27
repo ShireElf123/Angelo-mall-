@@ -144,8 +144,32 @@ Shared assets:
   cards never jump when an image loads.
 * **Fallbacks.** `onError` hides the broken image and reveals the monogram tile
   behind it, so a deleted file degrades to a readable identity, not an empty box.
-* **Weight.** JPEGs are kept in the 230–340 kB range; directory images are
-  lazy-loaded and `decoding="async"`.
+* **Weight.** The full-width hero and category covers are kept in the
+  210–335 kB range (the later state and process art is much smaller, 26–103 kB);
+  directory images are lazy-loaded and `decoding="async"`.
+
+## Batch 6 visual audit — fixes that needed no new artwork
+
+The batch 6 pass checked every shipped asset against the place it is actually
+rendered, and every finding was fixable in code, CSS or metadata. No image was
+generated, replaced or deleted.
+
+* **Contrast.** `--muted` (#6d7c73) measured 3.84–4.11:1 on the warm surfaces it
+  is used on, and `--gold-600` (#a8841c) measured 3.51:1 on white — both below
+  the WCAG AA 4.5:1 text threshold. They are now `--muted: #5a6961`
+  (4.73–5.83:1) and `--gold-600: #7f6212` (4.81–5.83:1). Same hue family, same
+  brand feel, readable text.
+* **Aspect ratios follow the source.** `help-troubleshooting` is 4:5 art whose
+  subject bleeds to the right edge; the old 16:9 `panel__art--narrow` box sliced
+  the accent off. It now uses a new `.panel__art--portrait` (4:5, max 300 px).
+* **An unreadable thumbnail is not decoration.** The offline banner rendered
+  `state-offline` at 34 px, where its 1672×941 detail became noise. The thumbnail
+  is gone and the banner relies on its icon and text, which already say the same
+  thing in words.
+* **No browser, no claims.** Real-browser and small-Android screenshots were not
+  available in this environment, so the audit relied on the files themselves
+  (crops at display aspect and at true display sizes) and measured contrast
+  rather than asserting how it looks.
 
 ## Remaining asset work
 

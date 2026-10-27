@@ -30,7 +30,7 @@ optimised in place.
 
 | # | Asset id | File | Purpose | Screens | Review |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `app-mark-master` | `app-icon-master.jpg` (1024², 78 kB) | Master app mark: paper bag + chat bubble | manifest / social card | approved |
+| 1 | `app-mark-master` | `app-icon-master.jpg` (1024², 78 kB) | Master app mark: paper bag + chat bubble | — (source master, no screen) | approved, not rendered |
 | 2 | `app-icon-512` | `app-icon-512.png` | PWA icon | manifest | approved |
 | 3 | `app-icon-192` | `app-icon-192.png` | PWA + apple-touch icon | manifest, iOS home screen | approved |
 | 4 | `app-icon-maskable-512` | `app-icon-maskable-512.png` | Maskable icon, 80% safe zone | manifest | approved |
@@ -41,7 +41,7 @@ optimised in place.
 | 9 | `help-summary` | `help-illustration-summary.jpg` | Help step 2 | help | approved |
 | 10 | `help-delivery` | `help-illustration-delivery.jpg` | Help step 3 | help | approved |
 | 11 | `state-empty-directory` | `illustration-empty-directory.jpg` | No-results empty state | directory | approved |
-| 12 | `state-offline` | `illustration-offline.jpg` | Offline state reserve | (shell) | approved, not yet wired |
+| 12 | `state-offline` | `illustration-offline.jpg` | Offline state reserve, no screen today | — (reserve) | approved, unused |
 | 13 | `concept-map` | `illustration-concept-map.jpg` | Concept banner | directory, promotion detail | approved |
 
 Batch 1 actually produced **13 files** because the single app-mark master was
@@ -177,8 +177,10 @@ that was fixed in the same pass (see "Code fixes chosen over new images").
   order no longer shows a moving delivery route and a collection order no longer
   shows a courier scooter. The "Move this demo along" hint is hidden once an
   order is finished or cancelled.
-* The offline illustration (`state-offline`, documented since batch 1 but never
-  wired) is now used as a small decorative thumbnail in the offline banner.
+* The offline illustration (`state-offline`) was tried as a small decorative
+  thumbnail in the offline banner. A batch 6 review found it unreadable at that
+  size, so the banner keeps its icon and text and the file stays unused (see
+  batch 6 below).
 * The chat "conversation not found" screen now uses the documented
   `state-not-found` art instead of an icon-only empty state.
 * The admin promotions tab gained a real empty state (it previously rendered an
@@ -188,6 +190,43 @@ that was fixed in the same pass (see "Code fixes chosen over new images").
 figures, the directory skeleton loader and toast messages — these are better
 served by text, controls and existing CSS. `promo-services` remains
 `approved-but-unused` on purpose: nothing on a screen needs a third banner.
+
+## Batch 6 — 2026-10-27 (asset and UI audit, **zero images generated**)
+
+This batch added no artwork by design: it audited the 63 existing files against
+the code and fixed what was wrong in code, CSS or metadata. Every gap found was
+solvable without a new image, so no generation was requested.
+
+**Inventory.** Manifest 63 entries = 63 files in `public/images/` = 63 files in
+`dist/images/`. No duplicate ids, no duplicate files, no undocumented file and
+no phantom entry. Every file has a `dimensions` and `sizeKb` value (the batch
+0–2 entries were backfilled during this audit).
+
+**What the audit changed:**
+
+* **Open Graph / Twitter image was a root-relative path.** Social crawlers do not
+  resolve relative URLs, so `og:image`, `og:image:secure_url`, `og:image:url`,
+  `og:url`, `og:site_name` and `twitter:image` in `index.html` are now absolute.
+* **`manifest.webmanifest` listed a 1024×1024 JPEG logo as a "screenshot".** It
+  is an app mark, not a UI screenshot, so the `screenshots` array was removed
+  rather than advertising a misleading install-prompt preview.
+* **`app-mark-master` is documented as `usage: "source-master"`** with no screen
+  claim, and `imageAssets.test.ts` now enforces the stronger rule: a source
+  master must claim no screen *and* at least one entry must record it in
+  `derivedFrom`. The three PWA icons do, so the master's purpose is provable.
+* **`state-offline` is `approved-but-unused`.** At 34 px in the alert bar the
+  1672×941 scene was illegible noise, so the banner uses its icon and text only.
+  The file is retained for a possible future full-screen offline page.
+* **`help-troubleshooting` is 4:5, not 16:9.** The subject runs to the right edge
+  of the source, so the old 16:9 `panel__art--narrow` box cropped the accent off.
+  A new `.panel__art--portrait` (4:5, max 300 px) presents it intact.
+* **`promo-services` stays unused** after re-checking every screen, seed
+  promotion and test. Kept deliberately as a spare banner.
+
+**Measured, not guessed.** No browser or screenshot tool exists in this
+environment, so the audit used the actual files (ImageMagick crops at display
+aspect and at real display sizes) plus arithmetic contrast checks, and reported
+the absence of device-level visual QA rather than claiming it.
 
 ## Logos — zero bundled, and why
 

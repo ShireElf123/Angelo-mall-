@@ -39,13 +39,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "/images/app-icon-master.jpg",
-      "sizes": "1024x1024",
-      "type": "image/jpeg",
-      "label": "Angelo Mall Go app mark (illustrative)"
-    }
   ]
 }

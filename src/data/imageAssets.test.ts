@@ -39,7 +39,18 @@ describe('image asset manifest', () => {
   it('records purpose, screen usage, batch and review status', () => {
     for (const asset of IMAGE_ASSETS) {
       expect(asset.purpose.length, `${asset.id} purpose`).toBeGreaterThan(10);
-      expect(asset.screens.length, `${asset.id} screens`).toBeGreaterThan(0);
+      if (asset.usage === 'source-master') {
+        // A generation master is never rendered directly, so it has no screen.
+        // In exchange it must document the assets derived from it, otherwise
+        // nothing would prove it is still doing a job.
+        expect(asset.screens, `${asset.id} is a source master and must not claim a screen`).toEqual([]);
+        expect(
+          IMAGE_ASSETS.some((other) => other.derivedFrom === asset.id),
+          `${asset.id} is a source master but nothing records derivedFrom: it`,
+        ).toBe(true);
+      } else {
+        expect(asset.screens.length, `${asset.id} screens`).toBeGreaterThan(0);
+      }
       expect(typeof asset.batch, `${asset.id} batch`).toBe('number');
       expect(['approved', 'approved-but-unused']).toContain(asset.review);
       expect(asset.approved).toBe(true);

@@ -73,11 +73,15 @@ describe('batch 5 image assets', () => {
     expect(new Set(batch5Files).size).toBe(10);
   });
 
-  it('keeps the offline and not-found favourites wired rather than orphaned', () => {
-    // These two existed since batch 1/2 but had no consumer before batch 5.
+  it('keeps state-not-found wired and state-offline honestly marked as unused', () => {
     const all = SCREEN_SOURCES.map(([, source]) => source).join('\n');
-    expect(all).toContain("'state-offline'");
     expect(all).toContain("'state-not-found'");
+    // Batch 6: the 34px banner thumbnail was unreadable, so the offline bar keeps
+    // icon + text only. The asset stays documented rather than deleted.
+    const offline = imageAsset('state-offline');
+    expect(offline.file).toBe('/images/illustration-offline.jpg');
+    expect(offline.review).toBe('approved-but-unused');
+    expect(all).not.toContain('offline-banner__art');
   });
 
   it('does not imply real fulfilment in the new purposes', () => {

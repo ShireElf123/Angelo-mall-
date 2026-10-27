@@ -61,7 +61,10 @@ describe('batch 2 image assets', () => {
     const match = html.match(/<meta property="og:image" content="([^"]+)"/);
     expect(match).not.toBeNull();
     const src = match?.[1] ?? '';
-    expect(src).toBe(imageSrc('og-social-card'));
+    // Crawlers need an absolute URL; it must still point at the documented file.
+    expect(src).toMatch(/^https:\/\/[a-z0-9.-]+\/images\/[a-z0-9-]+\.jpg$/);
+    expect(src.endsWith(imageSrc('og-social-card'))).toBe(true);
+    expect(html).toContain('<meta property="og:url"');
     // The share card is a dedicated 1200x630 treatment, not a promotion banner.
     expect(src).not.toContain('promo-illustration');
     expect(html).toContain('<meta property="og:image:width" content="1200" />');

@@ -14,14 +14,14 @@
       "file": "/images/app-icon-master.jpg",
       "kind": "generated",
       "batch": 1,
-      "purpose": "Master artwork for the Angelo Mall Go app mark (PWA / social card).",
-      "screens": [
-        "manifest",
-        "social-card"
-      ],
+      "purpose": "Master app mark (source for the PNG icons) \u2014 retained on purpose, not rendered by the app.",
+      "screens": [],
       "approved": true,
-      "review": "approved",
-      "notes": "Original editable-palette mark: paper bag + chat bubble, no lettering."
+      "review": "approved-but-unused",
+      "notes": "Kept as the documented generation master for app-icon-192/512. The PWA manifest previously listed it as a \"screenshot\", which mislabelled a square logo; that entry was removed in the batch 6 audit.",
+      "dimensions": "1024x1024",
+      "sizeKb": 78,
+      "usage": "source-master"
     },
     {
       "id": "app-icon-512",
@@ -34,7 +34,9 @@
         "manifest"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "512x512",
+      "sizeKb": 170
     },
     {
       "id": "app-icon-192",
@@ -48,7 +50,9 @@
         "ios-home-screen"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "192x192",
+      "sizeKb": 21
     },
     {
       "id": "app-icon-maskable-512",
@@ -61,7 +65,9 @@
         "manifest"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "512x512",
+      "sizeKb": 117
     },
     {
       "id": "promo-groceries",
@@ -75,7 +81,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Illustration only \u2014 carries no tenant offer, product price or brand mark."
+      "notes": "Illustration only \u2014 carries no tenant offer, product price or brand mark.",
+      "dimensions": "1672x941",
+      "sizeKb": 133
     },
     {
       "id": "promo-takeaway",
@@ -88,7 +96,9 @@
         "promotion-detail"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 152
     },
     {
       "id": "promo-services",
@@ -101,7 +111,9 @@
       ],
       "approved": true,
       "review": "approved-but-unused",
-      "notes": "Retained for a future services placement; not wired to any promotion yet."
+      "notes": "Verified in the batch 6 audit: no seed promotion, screen or test references this file. Retained as a spare banner illustration; nothing on screen needs a third promotion image.",
+      "dimensions": "1672x941",
+      "sizeKb": 85
     },
     {
       "id": "help-chat",
@@ -113,7 +125,9 @@
         "help"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 57
     },
     {
       "id": "help-summary",
@@ -125,7 +139,9 @@
         "help"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 74
     },
     {
       "id": "help-delivery",
@@ -137,7 +153,9 @@
         "help"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 122
     },
     {
       "id": "state-empty-directory",
@@ -149,7 +167,9 @@
         "directory"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 97
     },
     {
       "id": "state-offline",
@@ -162,8 +182,10 @@
       ],
       "approved": true,
       "review": "approved-but-unused",
-      "notes": "Retained for the offline banner; the current banner is text-only by design (it must stay readable at the top of the viewport). Wired into the offline banner in batch 5 as a small decorative thumbnail.",
-      "usage": "banner"
+      "notes": "Audited in batch 6: tried as a 34px thumbnail in the offline alert bar, where the detail became unreadable noise, so the bar keeps its icon and text only. Retained for a future full offline screen; no other screen needs it today.",
+      "usage": "reserve",
+      "dimensions": "1672x941",
+      "sizeKb": 51
     },
     {
       "id": "concept-map",
@@ -176,7 +198,9 @@
         "promotion-detail"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 91
     },
     {
       "id": "hero-mall",
@@ -189,7 +213,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Carried over from an earlier phase; audited and kept (no signage, no logos)."
+      "notes": "Carried over from an earlier phase; audited and kept (no signage, no logos).",
+      "dimensions": "1408x768",
+      "sizeKb": 334
     },
     {
       "id": "category-groceries",
@@ -203,7 +229,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 277
     },
     {
       "id": "category-food",
@@ -217,7 +245,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 229
     },
     {
       "id": "category-fashion",
@@ -231,7 +261,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 266
     },
     {
       "id": "category-electronics",
@@ -246,7 +278,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Replaced in Phase 1 after third-party branding appeared in the earlier image."
+      "notes": "Replaced in Phase 1 after third-party branding appeared in the earlier image.",
+      "dimensions": "1672x941",
+      "sizeKb": 232
     },
     {
       "id": "category-pharmacy",
@@ -260,7 +294,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 227
     },
     {
       "id": "category-homeware",
@@ -274,7 +310,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 245
     },
     {
       "id": "category-beauty",
@@ -288,7 +326,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 237
     },
     {
       "id": "category-services",
@@ -302,7 +342,9 @@
         "shop-page"
       ],
       "approved": true,
-      "review": "approved"
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 224
     },
     {
       "id": "category-finance",
@@ -317,7 +359,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Added in Phase 4 with the banking category."
+      "notes": "Added in Phase 4 with the banking category.",
+      "dimensions": "1672x941",
+      "sizeKb": 209
     },
     {
       "id": "state-empty-basket",
@@ -330,7 +374,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 31
     },
     {
       "id": "state-empty-chats",
@@ -343,7 +389,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 50
     },
     {
       "id": "state-empty-orders",
@@ -356,7 +404,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 36
     },
     {
       "id": "state-empty-thread",
@@ -369,7 +419,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 45
     },
     {
       "id": "state-empty-delivery",
@@ -382,7 +434,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 52
     },
     {
       "id": "og-social-card",
@@ -395,7 +449,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1200x630",
+      "sizeKb": 63
     },
     {
       "id": "concept-four-views",
@@ -408,7 +464,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 44
     },
     {
       "id": "concept-tenant-onboarding",
@@ -421,7 +479,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 54
     },
     {
       "id": "concept-privacy",
@@ -434,7 +494,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 26
     },
     {
       "id": "state-not-found",
@@ -448,7 +510,9 @@
       ],
       "approved": true,
       "review": "approved",
-      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed."
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 49
     },
     {
       "id": "discover-shops",

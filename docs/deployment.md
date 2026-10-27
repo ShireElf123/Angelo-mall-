@@ -14,6 +14,7 @@ output `dist/`.
 | Production | Never deployed deliberately. One Production-targeted deployment was created by mistake in Phase 1 and cancelled immediately; it was never aliased. |
 | Access protection | Vercel SSO protection is **on** (`all_except_custom_domains`). Anonymous fetches redirect to the Vercel login page. Keep it on. |
 | Domain mapping | `angelo-mall-go.vercel.app` is mapped to the `arena/aeeb5cff-angelo-mall` branch. Do not change it without the owner's sign-off. |
+| Social preview tags | `index.html` hard-codes absolute `og:url` / `og:image` / `twitter:image` URLs on `https://angelo-mall-go.vercel.app/` because crawlers do not resolve relative paths. If that domain ever changes, update those tags in the same change. |
 
 Known-good Preview history (all READY, retained as rollback points):
 

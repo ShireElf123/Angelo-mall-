@@ -10,7 +10,7 @@
   --forest-700: #14654d;
   --forest-100: #dcebe3;
   --forest-50: #eef5f0;
-  --gold-600: #a8841c;
+  --gold-600: #7f6212; /* darkened for AA text contrast (was #a8841c, 3.5:1) */
   --gold-500: #c9a227;
   --gold-100: #f6ecd2;
   --bg: #faf7f2;
@@ -18,7 +18,7 @@
   --surface-warm: #f4efe6;
   --ink: #1e2a24;
   --ink-2: #43524a;
-  --muted: #6d7c73;
+  --muted: #5a6961; /* darkened for AA text contrast (was #6d7c73, 3.8:1 on warm panels) */
   --border: #e6ddcd;
   --border-strong: #d5c9ae;
   --danger: #b3261e;
@@ -479,14 +479,6 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   padding: 10px 16px;
   font-size: 0.9rem;
   font-weight: 500;
-}
-.offline-banner__art {
-  width: 34px;
-  height: 34px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex: none;
-  order: -1;
 }
 
 .shell-main { flex: 1; width: 100%; }
@@ -1442,6 +1434,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: block;
 }
 .panel__art--narrow { max-width: 420px; margin-inline: auto; }
+/* 4:5 source art (e.g. help-troubleshooting): show it at its own ratio rather
+   than cropping it into a 16:9 box that cuts the subject off. */
+.panel__art--portrait {
+  max-width: 300px;
+  aspect-ratio: 4 / 5;
+  margin-inline: auto;
+}
 .role-explain li { display: flex; gap: 11px; align-items: flex-start; color: var(--ink-2); }
 .role-explain svg { color: var(--forest-800); flex: none; margin-top: 2px; }
 

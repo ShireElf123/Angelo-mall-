@@ -301,7 +301,7 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
       <section className="panel" aria-label="Reset demo data">
         <h2>Start the demo over</h2>
         <img
-          className="panel__art panel__art--narrow"
+          className="panel__art panel__art--portrait"
           src={imageSrc('help-troubleshooting')}
           alt=""
           loading="lazy"
