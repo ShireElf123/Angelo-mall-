@@ -55,6 +55,17 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     verified: true,
     notes: 'KFC Global brand-assets image URL; usage notice on the source page applies.',
   },
+  'shop-golden-buffalo-spur': {
+    shopId: 'shop-golden-buffalo-spur',
+    file: 'https://cdn.brandfetch.io/idzvBW8J-u/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1732697103583',
+    aspectRatio: 2.8,
+    alt: 'Spur Steak Ranches',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://brandfetch.com/spursteakranches.com',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Brandfetch profile for Spur Steak Ranches; tenant is listed by the mall as Golden Buffalo Spur. Use as the parent-brand mark, not a claim of partnership.',
+  },
   'shop-clicks': {
     shopId: 'shop-clicks',
     file: 'https://companieslogo.com/img/orig/CLS.JO_BIG-e435f2e6.svg?download=true&t=1720244491',
