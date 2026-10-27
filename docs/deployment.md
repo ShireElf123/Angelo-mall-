@@ -51,6 +51,19 @@ typecheck+build, Vercel pull, Vercel build, deploy) and the resulting deployment
 pushed commit. Preview URL:
 <https://angelo-mall-dpn5pwfob-mercels-projects-80f68ab7.vercel.app>.
 
+**Batch 10 re-verified (2026-10-27).** Run
+[`40465350543`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40465350543) for
+commit `f036824177bb6fa2f436a02bc396057c343a7da3`: install, tests (265 passing, 30 files),
+typecheck + build, Vercel pull/build and the Preview deploy were all green, and the Git
+deployment `dpl_4mfnttgvfBknCZDCnyphz8cxghzx` reached **READY** with a matching
+`githubCommitSha`. Preview:
+<https://angelo-mall-rfxitxedy-mercels-projects-80f68ab7.vercel.app>. Batch 10 replaced the
+ten batch 7 still-life hero images with researched interiors at the same file paths, so the
+manifest total stayed at 92 while ten entries moved to batch 10 and gained a `revision`
+block. Test count rose by one (the new replacement-record guard). As before, the deployment's
+`GET /v6/deployments/{id}/files` returns 404, so the green run plus the matching SHA are the
+verification, and SSO-blocked page-load was not attempted.
+
 **Batch 9 re-verified (2026-10-27).** Run
 [`40463461159`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40463461159) for
 commit `1dc263b9488e76e99ab5c9b33df9202f136a5a72`: install, tests (264 passing, 30 files),
