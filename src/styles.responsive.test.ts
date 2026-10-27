@@ -31,7 +31,14 @@ describe('expandable chat stylesheet contract', () => {
   });
 
   it('turns the overlay into a large centred panel on desktop instead of a full bleed takeover', () => {
-    const desktop = css.split('@media (min-width: 900px)').at(-1) ?? '';
+    // Locate the desktop block by what it contains rather than assuming it is
+    // the last `min-width: 900px` query in the file: later feature sections add
+    // their own 900px-and-up rules, and the assertion is about this panel.
+    const desktopBlocks = [...css.matchAll(/@media \(min-width: 900px\)\s*\{([\s\S]*?)\n\}/g)].map(
+      (match) => match[1],
+    );
+    const desktop = desktopBlocks.find((block) => block.includes('.page--chat--expanded .chat-frame')) ?? '';
+    expect(desktop, 'no 900px+ block styles the expanded chat panel').not.toBe('');
     expect(desktop).toMatch(/\.page--chat--expanded \.chat-frame\s*\{[^}]*width:\s*min\(1080px/s);
     expect(desktop).toContain('border-radius: 20px');
     expect(desktop).toContain('.chat-header__expand-label { display: inline; }');

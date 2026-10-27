@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Angelo Mall Go (Demo)",
   "short_name": "Mall Go",
   "description": "Chat-first shopping and local delivery \u2014 demonstration prototype for Angelo Mall, Nigel. Demo data only.",
@@ -6,6 +7,10 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#faf7f2",
   "theme_color": "#0c3b2e",
@@ -14,6 +19,7 @@
     "food",
     "lifestyle"
   ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icon.svg",
