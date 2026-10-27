@@ -125,6 +125,14 @@ build, Vercel pull/build and the Preview deploy were all green, and
 `dpl_7Sc796NRx4QjSTuX5nT1it852HaZ` is **READY** with a matching `githubCommitSha`. Preview:
 <https://angelo-mall-awyjwrtjn-mercels-projects-80f68ab7.vercel.app>.
 
+**UI fix verified (2026-10-27).** Run
+[`40468770408`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40468770408) for commit
+`4f7d9cc8739115bf2b687dbfc4f2259c0e0819ba`: install, tests (272 passing), typecheck + build,
+Vercel pull/build and the Preview deploy were green. `dpl_FLkotytwxDCwRk5hYVBanktNLmxz` is
+**READY**, owns the `angelo-mall-go.vercel.app` alias, and serves the bundle hashes produced by
+`npm run build` at that commit (`index-mP7caGZd.css`, `index-K7scbPwV.js`), i.e. the deployed UI
+is the fixed one rather than a cached earlier build.
+
 **Which preview URL to share (audited 2026-10-27).** Two Vercel projects build this
 repository and they are not interchangeable:
 
