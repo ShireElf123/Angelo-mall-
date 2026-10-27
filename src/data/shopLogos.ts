@@ -1,62 +1,129 @@
 /**
- * Verified shop-logo registry.
+ * Logo registry for the owner-facing demo.
  *
- * WHY THIS IS EMPTY RIGHT NOW (Phase 5 finding, 2026-10-27)
- * ---------------------------------------------------------
- * No real retailer logo is bundled, because none could be retrieved and verified
- * from an official source inside this build environment: outbound network access
- * is restricted to a small allowlist (GitHub, npm, PyPI), so brand websites and
- * their official media kits could not be downloaded. Adding a logo from an
- * image-search thumbnail, a third-party logo library or a screenshot would breach
- * the project rule "no unverified third-party image presented as an official
- * asset", so nothing was added.
+ * Some marks are loaded from direct hosted image URLs so the demo can use real
+ * brand artwork without manually downloading every image to a phone. External
+ * hosts may change URLs or block embedding; ShopLogo falls back cleanly if that
+ * happens. For a production launch, bundle approved files locally instead.
  *
- * The wiring below is ready: drop a verified file into `public/images/logos/`,
- * add one entry here, and every surface (shop card, shop page, chat header,
- * admin lists) picks it up with no other change.
- *
- * RULES FOR ADDING AN ENTRY
- * 1. The file must come from the brand's own website, official media/press kit,
- *    or the tenant themselves (with written permission).
- * 2. It must be recorded in `docs/image-asset-manifest.md` with source URL,
- *    retrieval date and verification status.
- * 3. Never trace, redraw, recolour or AI-generate a brand mark, and never use a
- *    screenshot of a shopfront as a logo.
- * 4. Keep the asset small (SVG preferred; PNG <= 24 kB) and transparent.
+ * Use official brand/media sources when available. Third-party logo-host URLs
+ * are explicitly marked and are for this non-transactional visual demo only.
+ * Do not imply that any listed retailer endorses or partners with Mall Go.
  */
 import type { CategoryId } from '../types';
 
-export type LogoSourceType = 'official-brand-site' | 'official-media-kit' | 'tenant-supplied';
+export type LogoSourceType =
+  | 'official-brand-site'
+  | 'official-media-kit'
+  | 'tenant-supplied'
+  | 'third-party-logo-host';
 
 export interface ShopLogoAsset {
   /** Tenant id from `src/data/tenants.ts` — never a new id scheme. */
   shopId: string;
-  /** Path under `public/`, e.g. `/images/logos/shop-kfc.svg`. */
+  /** Local public path or direct HTTPS image URL. */
   file: string;
   /** Intrinsic width / height, used to reserve space and avoid layout shift. */
   aspectRatio: number;
   /** Accessible name; normally the tenant's display name. */
   alt: string;
   sourceType: LogoSourceType;
-  /** Exact page the file was downloaded from. */
+  /** Exact page or direct image URL the asset was sourced from. */
   sourceUrl: string;
-  /** ISO date the asset was retrieved and compared with the brand's own usage. */
+  /** ISO date the URL was checked against the source. */
   retrievedOn: string;
-  /** True only when the mark was confirmed to belong to this brand at source. */
+  /** True only when the image was visually identified as the correct brand mark. */
   verified: boolean;
-  /** Marks that must be inverted when rendered on a dark surface. */
   needsLightVariant?: boolean;
   notes?: string;
 }
 
 /**
- * tenantId -> verified logo asset. Empty by design: see the note above.
- * Tests assert that every entry points at a real file and that every tenant has
- * a readable fallback, so adding an entry is safe but cannot be done silently.
+ * Direct hosted logo URLs. These are not copied into the repository.
+ * The remote URL itself is the displayed image source; onError preserves the
+ * app's original monogram fallback if a host stops serving it.
  */
-export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {};
+export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
+  'shop-kfc': {
+    shopId: 'shop-kfc',
+    file: 'https://cdn.sanity.io/images/kbqq3e0r/production/afcc23c7797d1ad1d55bd0e200e2128cfe163eba-4096x3802.png?q=90&w=640',
+    aspectRatio: 1.08,
+    alt: 'KFC',
+    sourceType: 'official-media-kit',
+    sourceUrl: 'https://global.kfc.com/media-assets',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'KFC Global brand-assets image URL; usage notice on the source page applies.',
+  },
+  'shop-clicks': {
+    shopId: 'shop-clicks',
+    file: 'https://companieslogo.com/img/orig/CLS.JO_BIG-e435f2e6.svg?download=true&t=1720244491',
+    aspectRatio: 3.2,
+    alt: 'Clicks',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://companieslogo.com/clicks-group/logo',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Third-party public-company logo host; brand is Clicks Group / Clicks retail.',
+  },
+  'shop-vodacom': {
+    shopId: 'shop-vodacom',
+    file: 'https://companieslogo.com/img/orig/VOD.JO_BIG-fbad7eb2.png?download=true&t=1720244494',
+    aspectRatio: 3.2,
+    alt: 'Vodacom',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://companieslogo.com/vodacom/logo/',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Direct transparent PNG from a third-party public-company logo host.',
+  },
+  'shop-nedbank': {
+    shopId: 'shop-nedbank',
+    file: 'https://companieslogo.com/img/orig/NED.JO-84253744.svg?download=true&t=1720244493',
+    aspectRatio: 3.0,
+    alt: 'Nedbank',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://companieslogo.com/nedbank/logo',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Direct SVG from a third-party public-company logo host.',
+  },
+  'shop-mtn': {
+    shopId: 'shop-mtn',
+    file: 'https://companieslogo.com/img/orig/MTN.JO-9d655169.svg?download=true&t=1720244493',
+    aspectRatio: 1.25,
+    alt: 'MTN',
+    sourceType: 'third-party-logo-host',
+    sourceUrl: 'https://companieslogo.com/mtn-group/logo',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Direct SVG from a third-party public-company logo host.',
+  },
+  'shop-superspar': {
+    shopId: 'shop-superspar',
+    file: 'https://thespargroup.com/wp-content/uploads/photo-gallery/SUPERSPAR_Horizontal_Logo.jpg',
+    aspectRatio: 3.2,
+    alt: 'SUPERSPAR',
+    sourceType: 'official-brand-site',
+    sourceUrl: 'https://thespargroup.com/bwg_gallery/logos/',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Official SPAR Group logo gallery. JPEG rather than transparent PNG.',
+  },
+  'shop-tops': {
+    shopId: 'shop-tops',
+    file: 'https://thespargroup.com/wp-content/uploads/photo-gallery/TOPS_at_SPAR_Logo.jpg',
+    aspectRatio: 2.0,
+    alt: 'TOPS at SPAR',
+    sourceType: 'official-brand-site',
+    sourceUrl: 'https://thespargroup.com/bwg_gallery/logos/',
+    retrievedOn: '2026-10-27',
+    verified: true,
+    notes: 'Official SPAR Group logo gallery. JPEG rather than transparent PNG.',
+  },
+};
 
-/** Directory reserved for verified assets (created on first use). */
+/** Directory reserved for locally bundled logos if we replace external links. */
 export const SHOP_LOGO_DIR = '/images/logos/';
 
 export function shopLogoAsset(shopId: string): ShopLogoAsset | undefined {
@@ -68,16 +135,10 @@ export function hasVerifiedLogo(shopId: string): boolean {
   return shopLogoAsset(shopId) !== undefined;
 }
 
-/** Counts used by docs/tests so the inventory cannot drift from reality. */
 export const LOGO_COVERAGE = {
   withVerifiedLogo: Object.keys(SHOP_LOGO_ASSETS).filter((id) => hasVerifiedLogo(id)).length,
 } as const;
 
-/**
- * Category glyph used by the monogram fallback, so a shop without a verified
- * logo still reads as "a hardware shop" rather than an anonymous initial.
- * These are original app glyphs, not brand marks.
- */
 export const CATEGORY_MONOGRAM_GLYPH: Record<CategoryId, string> = {
   groceries: 'basket',
   food: 'cutlery',
