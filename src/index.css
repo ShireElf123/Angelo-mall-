@@ -409,7 +409,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   backdrop-filter: blur(8px);
 }
 
-.shell-chrome { position: sticky; top: 0; z-index: 60; }
+/* `.shell-chrome` deliberately does not stick — only `.app-header` does,
+   so the demo banner scrolls away instead of owning the viewport. See the
+   Phase 13 section at the end of this file. */
 
 .brand {
   display: flex;
@@ -2204,4 +2206,119 @@ body.chat-expanded {
    navigation: measured, this saves ~55px and keeps every label intact. */
 @media (min-width: 900px) and (max-width: 1080px) {
   .top-nav .nav-item { padding: 9px 10px; font-size: 0.84rem; gap: 6px; }
+}
+
+/* ==========================================================================
+   Phase 13 — Native-app shell
+   Phase 12 tokenised the shadows but kept the website layout: a flat white bar
+   at the bottom, a static header, cards that only moved on desktop hover. This
+   section changes the things a person actually perceives — what is pinned,
+   what the tab bar is made of, how a card responds to a thumb — while the
+   palette, radii language and every route stay exactly as they were.
+   ========================================================================== */
+
+/* --- 1. Only the app header is pinned ------------------------------------
+   The demo banner used to share `.shell-chrome`'s sticky box, so a phone gave
+   ~110px of every scroll to a notice nobody needs twice. It now scrolls away
+   and the header alone stays, blurred, over the content. */
+/* Stated once, here, rather than overridden below: the wrapper never sticks. */
+.shell-chrome { position: static; }
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(250, 247, 242, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--border), 0 12px 28px -26px rgba(12, 59, 46, 0.6);
+  flex-wrap: wrap;
+}
+
+/* --- 2. A real tab bar ---------------------------------------------------
+   Frosted rather than opaque: content keeps sliding under it instead of
+   stopping dead at a white slab, which is the single strongest "this is an
+   app" cue available without new components. */
+.bottom-nav {
+  min-height: 64px;
+  padding: 4px 4px calc(6px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--elev-nav);
+}
+
+/* Older browsers get the solid surface rather than a washed-out 82% white. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bottom-nav { background: var(--surface); }
+  .app-header { background: var(--bg); }
+}
+
+/* The selected tab keeps its gold marker and adds a soft forest pill behind
+   the icon, plus a heavier glyph weight. The pill is padding on EVERY item, so
+   only the background changes — switching tabs cannot shift the label. */
+.bottom-nav .nav-item__icon {
+  padding: 3px 14px;
+  border-radius: 999px;
+  transition: background-color var(--dur) var(--ease-out);
+}
+.bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-50); }
+.bottom-nav .nav-item--active svg { stroke-width: 2.4; }
+.bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); }
+.bottom-nav .nav-item--active::before {
+  top: 0;
+  width: 22px;
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
+}
+
+/* --- 3. Cards that respond to a thumb -----------------------------------
+   20px radii and a press that collapses the shadow: the card looks pushed
+   into the page rather than merely tinted. */
+.shop-card {
+  border-radius: 20px;
+  box-shadow: var(--elev-2);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.shop-card:active {
+  transform: scale(0.985);
+  box-shadow: var(--elev-1);
+}
+.shop-card .btn--block { min-height: 50px; }
+
+/* --- 4. Primary action reads as a raised key ----------------------------
+   A one-step vertical gradient plus the existing top highlight; the flat
+   single-colour fill is what made it look like a web link with a border. */
+.btn--primary {
+  background: linear-gradient(180deg, var(--forest-800) 0%, var(--forest-900) 100%);
+  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--forest-700) 0%, var(--forest-800) 100%);
+    box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  .bottom-nav .nav-item:hover:not(.nav-item--active) { color: var(--forest-800); }
+}
+
+/* --- 5. Route changes arrive, they do not blink -------------------------
+   Each screen mounts fresh, so a short rise-and-fade plays on every
+   navigation. No fill-mode: a lingering `transform` would turn `.page` into a
+   containing block for the fixed toast/modal layers. */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.shell-main .page { animation: page-in 240ms var(--ease-out); }
+
+/* --- 6. Motion preferences, restated for the new rules ------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .shell-main .page { animation: none; transform: none; }
+  .shop-card:active { transform: none; }
+  .bottom-nav .nav-item__icon { transition: none; }
 }

@@ -133,28 +133,29 @@ export function Shell({
       </a>
 
       <div className="shell-chrome">
-      <div className="demo-bar">
-        <span className="demo-bar__label">
-          <strong>Demo Mode</strong> — sample tenants, prices & orders. Not live shopping.
-        </span>
-        <div className="demo-bar__actions">
-          <div className="role-switcher" role="group" aria-label="Demo Mode role switcher (not real sign-in)">
-            {ROLE_OPTIONS.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className={`role-switcher__btn ${role === option.id ? 'role-switcher__btn--active' : ''}`}
-                onClick={() => switchRole(option.id)}
-                aria-pressed={role === option.id}
-              >
-                {option.icon}
-                <span>{option.label}</span>
-              </button>
-            ))}
+        <div className="demo-bar">
+          <span className="demo-bar__label">
+            <strong>Demo Mode</strong> — sample tenants, prices & orders. Not live shopping.
+          </span>
+          <div className="demo-bar__actions">
+            <div className="role-switcher" role="group" aria-label="Demo Mode role switcher (not real sign-in)">
+              {ROLE_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`role-switcher__btn ${role === option.id ? 'role-switcher__btn--active' : ''}`}
+                  onClick={() => switchRole(option.id)}
+                  aria-pressed={role === option.id}
+                >
+                  {option.icon}
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
+            <button type="button" className="demo-bar__reset" onClick={() => setConfirmReset(true)}>
+              <RotateCcw size={15} aria-hidden /> Reset demo
+            </button>
           </div>
-          <button type="button" className="demo-bar__reset" onClick={() => setConfirmReset(true)}>
-            <RotateCcw size={15} aria-hidden /> Reset demo
-          </button>
         </div>
       </div>
 
@@ -178,7 +179,6 @@ export function Shell({
         </button>
         {nav('top-nav')}
       </header>
-      </div>
 
       {!online && (
         <div className="offline-banner" role="alert">

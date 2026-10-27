@@ -133,3 +133,62 @@ internally consistent and the icons are the sizes they advertise.
   review at 320/360/390/430/480 and 1024/1280/1440/1920 is still required.
 - `@types/node` was added as a dev dependency so the icon test can read PNG
   headers; no runtime dependency changed.
+
+## Phase 13 — why Phase 12 did not look different, and what changed
+
+Phase 12 was audited after the fact and the honest finding is that it was
+mostly invisible. The elevation "system" renamed values that already existed:
+
+| surface | before | after |
+| --- | --- | --- |
+| cards, hero | `--shadow` = `0 1px 2px …, 0 8px 24px -12px …` | `--elev-2`, **identical value** |
+| hover lift | `--shadow-lg` = `0 2px 4px …, 0 20px 44px -16px …` | `--elev-3`, **identical value** |
+| bottom bar | `0 -6px 20px -12px rgba(12,59,46,.25)` | `--elev-nav`, **identical value** |
+
+Everything else was additive and small: a gold 3px tab marker, +2px nav
+height, 2–6px larger touch targets, press transforms that only exist while a
+finger is down, and two real overflow bug fixes (320–375px nav, 900–1080px
+header). On a phone at rest the only perceptible delta was a slightly taller
+white bar. That is not an app feel, and saying otherwise would have been a
+false claim.
+
+Phase 13 changes what a person actually perceives:
+
+1. **Only the header is pinned.** The demo banner used to share
+   `.shell-chrome`'s sticky box, costing ~110px of every scroll on a phone.
+   The wrapper is now `position: static`; `.app-header` alone is sticky, with
+   `saturate(180%) blur(16px)` so content slides under it.
+2. **The tab bar is frosted glass**, 64px + safe-area, over
+   `rgba(255,255,255,0.82)` with `blur(20px)`. `@supports not (backdrop-filter)`
+   falls back to the opaque surface rather than a washed-out 82% white.
+3. **Selected tab**: soft `--forest-50` pill behind the icon, `stroke-width:
+   2.4` glyph, and the gold marker moved to the bar's top edge. The pill's
+   padding is declared on *every* icon wrapper, so switching tabs changes only
+   the background — no label shift, no reflow.
+4. **Cards** reach `border-radius: 20px` and press to `scale(0.985)` while the
+   shadow collapses to `--elev-1`: pushed into the page, not tinted.
+5. **Primary buttons** gain a one-step vertical gradient plus the existing
+   1px top highlight, so they read as a raised key rather than a coloured link.
+6. **Route changes** play a 240ms rise-and-fade (`page-in`). No `fill-mode`,
+   because a lingering `transform` would make `.page` a containing block for
+   the fixed toast/modal layers.
+
+Reduced motion turns the page animation off, drops the card press transform
+and the icon-pill transition, while keeping colour and shadow feedback.
+
+### Verification for Phase 13
+
+- `npx tsc --noEmit` clean.
+- 300/300 tests across 32 files, including 6 new assertions in
+  `src/styles.interaction.test.ts` (`native-app shell`) that pin the sticky
+  header, the frosted bar, the no-reflow pill, the card press, the gradient CTA
+  and the reduced-motion opt-out.
+- `npm run build` succeeds: CSS 64.66 kB (from 62.57 kB), JS unchanged at
+  495.68 kB.
+- The built stylesheet was grepped to confirm the rules survived minification
+  and ordering: `.shell-chrome{position:static}`, `.app-header{position:sticky…}`,
+  `min-height:64px`, `@keyframes page-in`.
+- **No screenshots.** This environment has no browser (Chromium download fails,
+  no system Chrome) and the Vercel preview is SSO-protected, so no rendered
+  pixel was inspected. The changes are verified structurally, not visually —
+  a real device check at 320/360/390/430/480px is still outstanding.

@@ -170,3 +170,68 @@ describe('touch targets and focus', () => {
     expect(css).toContain('touch-action: manipulation');
   });
 });
+
+/**
+ * Native-app shell (Phase 13).
+ *
+ * Phase 12 tokenised shadows without changing the layout, and the result read
+ * as a website with a white bar glued to the bottom. These assertions pin the
+ * handful of decisions that create the app feel, because every one of them can
+ * be reverted by a single innocent-looking CSS edit:
+ *
+ * - the demo banner creeping back into the sticky box and eating the viewport,
+ * - the tab bar going back to an opaque slab,
+ * - the selected tab shifting its label when the pill appears,
+ * - cards that stop responding to a thumb,
+ * - page transitions that ignore reduced-motion.
+ */
+describe('native-app shell', () => {
+  it('pins the app header only, not the demo banner around it', () => {
+    expect(blocks('.app-header')).toContain('position: sticky');
+    expect(blocks('.app-header')).toContain('backdrop-filter');
+    // The banner's wrapper must not be sticky again, or a phone loses ~110px.
+    expect(blocks('.shell-chrome')).toContain('position: static');
+    expect(blocks('.shell-chrome')).not.toContain('position: sticky');
+  });
+
+  it('builds the tab bar out of frosted glass with a solid fallback', () => {
+    const nav = blocks('.bottom-nav');
+    expect(nav).toContain('backdrop-filter');
+    expect(nav).toContain('min-height: 64px');
+    // Depth still comes from the Phase 12 scale, not a new ad-hoc shadow.
+    expect(nav).toContain('var(--elev-nav)');
+    // Browsers without backdrop-filter must get an opaque surface, never 82% white.
+    expect(css).toContain('@supports not ((backdrop-filter: blur(1px))');
+  });
+
+  it('marks the selected tab with a pill that cannot shift the label', () => {
+    // Padding lives on every icon wrapper; only the background changes.
+    expect(blocks('.bottom-nav .nav-item__icon')).toContain('padding: 3px 14px');
+    expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).toContain('var(--forest-50)');
+    expect(css).toContain('.bottom-nav .nav-item--active svg { stroke-width: 2.4; }');
+    // Padding is not introduced by the active rule, which is what would reflow.
+    expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).not.toContain('padding');
+  });
+
+  it('presses a shop card into the page instead of only tinting it', () => {
+    const card = blocks('.shop-card');
+    expect(card).toContain('border-radius: 20px');
+    expect(card).toContain('transform var(--dur-fast)');
+    const active = blocks('.shop-card:active');
+    expect(active).toContain('transform: scale(');
+    // The press collapses depth rather than adding it.
+    expect(active).toContain('var(--elev-1)');
+  });
+
+  it('gives the primary action a raised-key gradient', () => {
+    expect(blocks('.btn--primary')).toContain('linear-gradient(');
+    expect(blocks('.btn--primary')).toContain('inset 0 1px 0');
+  });
+
+  it('animates route changes and turns that animation off for reduced motion', () => {
+    expect(css).toContain('@keyframes page-in');
+    expect(blocks('.shell-main .page')).toContain('animation: page-in');
+    const reduced = css.split('@media (prefers-reduced-motion: reduce)').pop() ?? '';
+    expect(reduced).toContain('.shell-main .page { animation: none; transform: none; }');
+  });
+});
