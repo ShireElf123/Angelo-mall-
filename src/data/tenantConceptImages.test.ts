@@ -22,12 +22,15 @@ const exists = (file: string) => PUBLIC_FILES.has(file);
 const CONCEPT_ASSETS = IMAGE_ASSETS.filter((asset) => asset.usage === 'shop-concept');
 const BATCH_7 = IMAGE_ASSETS.filter((asset) => asset.batch === 7);
 const BATCH_8 = IMAGE_ASSETS.filter((asset) => asset.batch === 8);
+const BATCH_9 = IMAGE_ASSETS.filter((asset) => asset.batch === 9);
 
 describe('tenant concept illustrations', () => {
   it('ships the documented concept images, ten per approved batch', () => {
     expect(BATCH_7).toHaveLength(10);
     expect(BATCH_8).toHaveLength(10);
-    expect(CONCEPT_ASSETS).toHaveLength(BATCH_7.length + BATCH_8.length);
+    // Batch 9 closes the run: nine tenants were left, so nine images — not ten.
+    expect(BATCH_9).toHaveLength(9);
+    expect(CONCEPT_ASSETS).toHaveLength(BATCH_7.length + BATCH_8.length + BATCH_9.length);
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.kind, `${asset.id} kind`).toBe('generated');
       expect(asset.usage, `${asset.id} usage`).toBe('shop-concept');
@@ -87,15 +90,23 @@ describe('tenant concept illustrations', () => {
     for (const asset of CONCEPT_ASSETS) {
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/not a logo/i);
       expect(asset.notes ?? '', `${asset.id} notes`).toMatch(/AI-generated concept imagery/i);
-         // Batch 7 is illustrated, batch 8 is photographic-style; both are concepts.
+      // Batch 7 is illustrated, batches 8-9 are photographic-style; all are concepts.
       expect(asset.purpose, `${asset.id} purpose`).toMatch(/listing hero|concept illustration/i);
     }
   });
 
-  it('keeps the category-cover fallback for tenants without concept art', () => {
-    const withoutArt = TENANTS.filter((tenant) => !tenant.conceptImage);
-    expect(withoutArt.length).toBe(TENANTS.length - CONCEPT_ASSETS.length);
-    for (const tenant of withoutArt) {
+  it('covers every tenant in the directory, one file each', () => {
+    // Batch 9 completed the run: all 29 tenants now open with their own concept
+    // image, so no tenant is left on the shared category cover.
+    const withArt = TENANTS.filter((tenant) => tenant.conceptImage);
+    expect(withArt).toHaveLength(TENANTS.length);
+    expect(new Set(withArt.map((tenant) => tenant.conceptImage)).size).toBe(TENANTS.length);
+  });
+
+  it('keeps the category-cover fallback path intact for any tenant without art', () => {
+    // Nothing ships without art now, but the fallback is what a future tenant or
+    // a dropped file lands on, so every tenant must still carry a real cover.
+    for (const tenant of TENANTS) {
       expect(tenant.coverImage, `${tenant.id} fallback cover`).toMatch(/^\/images\/shop-[a-z]+\.jpg$/);
       expect(exists(tenant.coverImage), `${tenant.id} fallback cover is missing`).toBe(true);
     }

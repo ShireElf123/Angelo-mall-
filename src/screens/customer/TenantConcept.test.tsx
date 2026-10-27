@@ -2,6 +2,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { createSeedState } from '../../data/seed';
+
+// Batch 9 gave every tenant its own concept image, so the cover fallback can no
+// longer be reached from the shipped seed data. The store provider is fed a seed
+// with one tenant's art deliberately removed to keep the fallback path covered.
+const NO_ART_ID = 'shop-carwash';
 import { DemoStoreProvider } from '../../store/DemoStore';
 import { ToastProvider } from '../../components/ui';
 import { ShopPageScreen } from './ShopPage';
@@ -12,6 +17,22 @@ import { ShopPageScreen } from './ShopPage';
  * logo or an endorsement) and must fall back to the shared category cover for
  * shops that have no concept art yet.
  */
+vi.mock('../../data/seed', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../data/seed')>();
+  return {
+    ...actual,
+    createSeedState: () => {
+      const seed = actual.createSeedState();
+      return {
+        ...seed,
+        shops: seed.shops.map((entry) =>
+          entry.id === 'shop-carwash' ? { ...entry, conceptImage: undefined } : entry,
+        ),
+      };
+    },
+  };
+});
+
 const state = createSeedState();
 
 const shop = (id: string) => {
@@ -48,8 +69,9 @@ describe('shop-page concept art', () => {
   });
 
   it('falls back to the category cover, with no concept-art caption, when a shop has no art', () => {
-    // Tenants 21-29 have no concept art yet, so the cover must still carry them.
-    const carwash = shop('shop-carwash');
+    // Simulated gap: NO_ART_ID is seeded without a concept image above.
+    const carwash = shop(NO_ART_ID);
+    expect(carwash.conceptImage).toBeUndefined();
     const { container } = renderShop(carwash.id);
 
     const hero = container.querySelector('.shop-hero__media img') as HTMLImageElement;

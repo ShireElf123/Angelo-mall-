@@ -179,14 +179,16 @@ Two different image layers sit on a shop for two different jobs:
 
 Per-tenant art currently ships in two styles on purpose: **illustration** for
 tenants 1–10 (batch 7) and **photographic-style generated interiors** for tenants
-11–20 (batch 8). Both are AI-generated concept imagery with the same label and the
-same rules — no lettering, no brand marks, no real branch, no endorsement claim.
+11–29 (batches 8 and 9). Both are AI-generated concept imagery with the same label
+and the same rules — no lettering, no brand marks, no real branch, no endorsement
+claim. Batch 9 held nine images because only nine tenants were left.
 
 Neither layer is a logo, and neither replaces the monogram-and-name fallback: the
-verified-logo registry (`src/data/shopLogos.ts`) is still empty, and a concept
-illustration is never accepted as an official brand asset. Tenants without a
-`conceptImage` fall back to their category cover, so nothing breaks when a file
-is missing or a batch has not run yet.
+verified-logo registry (`src/data/shopLogos.ts`) holds only hosted marks with a
+recorded source, and a concept illustration is never accepted as an official brand
+asset. Every tenant now has a `conceptImage`; a tenant without one still falls
+back to its category cover, so nothing breaks when a file is missing or a new
+tenant is added before its art exists.
 
 ## Remaining asset work
 

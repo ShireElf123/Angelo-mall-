@@ -469,6 +469,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'PN',
     colour: '#0c3b2e',
     coverImage: IMG.services,
+conceptImage: '/images/tenants/postnet.jpg',
   },
   {
     id: 'shop-pep',
@@ -486,6 +487,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'PEP',
     colour: '#b3261e',
     coverImage: IMG.fashion,
+conceptImage: '/images/tenants/pep.jpg',
     featured: true,
   },
   {
@@ -502,6 +504,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'SP',
     colour: '#9a3412',
     coverImage: IMG.food,
+conceptImage: '/images/tenants/scooters.jpg',
   },
   {
     id: 'shop-ocean-basket',
@@ -520,6 +523,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'OB',
     colour: '#0b4f6c',
     coverImage: IMG.food,
+conceptImage: '/images/tenants/ocean-basket.jpg',
   },
   {
     id: 'shop-angel-kiss',
@@ -535,6 +539,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'AK',
     colour: '#9d174d',
     coverImage: IMG.fashion,
+conceptImage: '/images/tenants/angel-kiss.jpg',
   },
   {
     id: 'shop-crazy-store',
@@ -552,6 +557,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'CS',
     colour: '#c2410c',
     coverImage: IMG.homeware,
+conceptImage: '/images/tenants/crazy-store.jpg',
   },
   {
     id: 'shop-fnb',
@@ -569,6 +575,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'FNB',
     colour: '#0b5aa0',
     coverImage: IMG.finance,
+conceptImage: '/images/tenants/fnb.jpg',
   },
   {
     id: 'shop-best-buy',
@@ -584,6 +591,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'BB',
     colour: '#1f2937',
     coverImage: IMG.electronics,
+conceptImage: '/images/tenants/best-buy.jpg',
   },
   {
     id: 'shop-carwash',
@@ -599,6 +607,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'CW',
     colour: '#374151',
     coverImage: IMG.services,
+conceptImage: '/images/tenants/carwash.jpg',
   },
 ];
 

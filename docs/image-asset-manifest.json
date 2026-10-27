@@ -1343,6 +1343,159 @@
       "usage": "shop-concept",
       "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
       "notes": "AI-generated concept imagery for Just-u-2 Jewellers: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-postnet",
+      "file": "/images/tenants/postnet.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Chrome-and-glass print counter: kraft courier cartons, bubble wrap, a copier, a wall of blank poster frames and a grey pigeonhole mailbox bank \u2014 PostNet listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 115,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for PostNet: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-pep",
+      "file": "/images/tenants/pep.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Value-clothing floor: folded plain tees and jeans on a low island, densely hung children's rails, a wire basket, bright blue banding \u2014 PEP listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 232,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for PEP: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-scooters",
+      "file": "/images/tenants/scooters.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Pizza takeaway counter: a floured marble prep bench, dough, a wooden peel, plain kraft boxes and a glowing oven, with three bar stools \u2014 Scooters Pizza listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 127,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Scooters Pizza: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-ocean-basket",
+      "file": "/images/tenants/ocean-basket.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Seafood dining room: dark timber tables with white crockery, blue banquette seating, a tiled service counter and amber pendants \u2014 Ocean Basket listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 161,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Ocean Basket: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-angel-kiss",
+      "file": "/images/tenants/angel-kiss.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Small ladies' boutique: two chrome rails of dresses, a headless mannequin in cream, a brass mirror, blush fitting curtain \u2014 Angel Kiss Boutique listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 185,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Angel Kiss Boutique: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-crazy-store",
+      "file": "/images/tenants/crazy-store.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Discount variety aisle: stacked plastic tubs, party balloons, wrapping-paper bin, cheap glassware and a trolley under bright fluorescents \u2014 The Crazy Store listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 233,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for The Crazy Store: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-fnb",
+      "file": "/images/tenants/fnb.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Modern bank branch: a self-service kiosk zone with a light-oak bench, oak teller counters behind glass, an oak-slat feature wall and a glass private room \u2014 FNB listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 140,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for FNB: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-best-buy",
+      "file": "/images/tenants/best-buy.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Modest family appliance-and-houseware store: white shelving of kettles, fans, cookware, bedding and two small televisions, with a plain pay counter \u2014 Best Buy listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 146,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Best Buy: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-carwash",
+      "file": "/images/tenants/carwash.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Open wash bay: tiled floor and channel drain, a soaped car, a wall hose and coloured buckets, shade-cloth roof and the centre's parking beyond \u2014 Carwash @ Angelo Mall listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 229,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Carwash @ Angelo Mall: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
     }
   ],
   "logos": {

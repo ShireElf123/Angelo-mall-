@@ -313,10 +313,65 @@ no duplicate of the nine category covers or of batch 7.
 than the illustrated batches, so files land at 97–218 kB — in line with the
 209–334 kB category covers already shipped and still lazy-loaded.
 
-**Remaining.** Tenants 21–29 (`shop-postnet` … `shop-carwash`) have no concept
-art yet and keep the shared category cover in their hero. Their batch was planned
-and specified but hit the tool's hard limit of ten generated images per turn, so
-it was not generated.
+**Remaining at the time.** Tenants 21–29 kept their category cover for one more
+turn; batch 9 below closed that gap.
+
+## Batch 9 — 2026-10-27 (9 images generated, 9 reviewed, 9 retained)
+
+Batch 9 is the last remaining slice of the per-tenant set and therefore **nine
+images, not ten**: only nine tenants (`shop-postnet` … `shop-carwash`) still had
+no hero art. No ten-th image was invented to fill the batch — a duplicate or a
+second scene for an already-covered tenant would have violated the no-near-
+duplicate rule. Style continues the photographic interiors of batch 8; batch 7's
+illustrations and batch 8's images are untouched.
+
+**They are still AI-generated concept imagery.** None is a photograph of the real
+branch, none is a logo or an official brand asset, and none implies that the
+tenant endorses or partners with Mall Go. Every image is word-free and brand-free:
+no signage, no lettering, no prices, no packaging text, no number plates, no
+people. The hero keeps the visible **"Concept art"** chip and the caption
+*"AI-generated concept illustration — not this shop's logo or shopfront."*
+
+| # | Tenant | Asset id | File (1280×720, 16:9) | Scene | Review |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `shop-postnet` | `tenant-postnet` | `tenants/postnet.jpg` (115 kB) | Print/courier counter: kraft cartons, copier, mailbox grid | approved |
+| 2 | `shop-pep` | `tenant-pep` | `tenants/pep.jpg` (232 kB) | Value clothing: folded tees, kids' rails, wire basket | approved |
+| 3 | `shop-scooters` | `tenant-scooters` | `tenants/scooters.jpg` (127 kB) | Pizza takeaway: floured bench, peel, glowing oven | approved |
+| 4 | `shop-ocean-basket` | `tenant-ocean-basket` | `tenants/ocean-basket.jpg` (160 kB) | Seafood room: timber tables, blue banquettes | approved |
+| 5 | `shop-angel-kiss` | `tenant-angel-kiss` | `tenants/angel-kiss.jpg` (184 kB) | Ladies' boutique: two rails, mannequin, blush curtain | approved |
+| 6 | `shop-crazy-store` | `tenant-crazy-store` | `tenants/crazy-store.jpg` (232 kB) | Variety aisle: tubs, balloons, gift wrap, trolley | approved |
+| 7 | `shop-fnb` | `tenant-fnb` | `tenants/fnb.jpg` (140 kB) | Bank branch: kiosk zone, oak tellers, glass room | approved |
+| 8 | `shop-best-buy` | `tenant-best-buy` | `tenants/best-buy.jpg` (146 kB) | Family appliance store: kettles, fans, bedding, counter | approved |
+| 9 | `shop-carwash` | `tenant-carwash` | `tenants/carwash.jpg` (229 kB) | Open wash bay: soaped car, hose, buckets, slick tiles | approved |
+
+**Research notes.** Most scenes follow the documented South African format for
+their category. Two tenants needed the real listing rather than the category
+default, and both were checked: **Best Buy** at The Angelo Mall is a Nigel family
+store stocking babycare, appliances, houseware, luggage, stationery and toys
+(`nigel.co.za/bestbuy/`) — *not* the US big-box chain, so the brief asked for a
+modest local shop, not a superstore. **Carwash @ Angelo Mall** is listed by the
+mall as an on-site service with no shop number, so the brief is an open bay on the
+centre's property, not a detailing studio. FNB's branch cues (self-service kiosks,
+light-oak counters, a glass private room) follow the bank's recent SA branch
+refits. Every prompt stayed brand-neutral: colour and material cues only, never a
+logo or a wordmark.
+
+**Inspection.** Each image was viewed at 1672×941 after generation and again after
+resizing, with zoomed crops of the four densest scenes — `tenant-crazy-store`
+shelf packaging, `tenant-best-buy` cartons, `tenant-fnb` kiosk screens and
+`tenant-carwash` vehicle rear. Result: no legible words, no brand names, no prices,
+no number plate; packaging reads as blurred colour blocks. No OS chrome, no
+watermarks, no corruption, and no duplicate of the nine category covers or of
+batches 7–8.
+
+**Optimisation.** Generated at 1672×941, cropped to exact 16:9, downscaled to
+1280×720 and recompressed (q82, metadata stripped) → 115–232 kB, the same range as
+batch 8 and lazy-loaded like the category covers.
+
+**Coverage after batch 9.** All 29 tenants now open their shop page with their own
+concept image; the category-cover fallback remains in the hero code for any future
+tenant or missing file, and `tenantConceptImages.test.ts` still exercises it (with
+art deliberately removed from one seeded shop).
 
 ## Logos — zero bundled, and why
 
