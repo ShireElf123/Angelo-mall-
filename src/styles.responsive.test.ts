@@ -36,9 +36,73 @@ describe('expandable chat stylesheet contract', () => {
     expect(desktop).toContain('border-radius: 20px');
     expect(desktop).toContain('.chat-header__expand-label { display: inline; }');
   });
+});
 
-  it('keeps shop cards on one consistent image ratio', () => {
-    expect(css).toMatch(/\.shop-card__media\s*\{[^}]*aspect-ratio:\s*16 \/ 10/s);
+/**
+ * Tenant name / logo lock-up regression guard.
+ *
+ * Measured in Inter 800: the trading pill renders ~142px wide, a hosted wordmark
+ * is up to 108px wide at 34px tall, and a 3-column card leaves the brand plate
+ * ~266-306px. While the name shared a row with the pill, the text column was
+ * left with 0-30px, and because the card hides overflow the name was clipped.
+ * Each rule below is load-bearing; losing one brings the clipping back.
+ *
+ * jsdom cannot lay out CSS, so this asserts the declarations rather than
+ * measuring a viewport - browser review is reported separately.
+ */
+/** Every declaration block for a selector, concatenated in source order. */
+function cssRule(selector: string): string {
+  const needle = `${selector} {`;
+  const blocks: string[] = [];
+  let index = css.indexOf(needle);
+  while (index !== -1) {
+    const end = css.indexOf('}', index);
+    blocks.push(css.slice(index, end + 1));
+    index = css.indexOf(needle, end);
+  }
+  return blocks.join('\n');
+}
+
+describe('tenant name and logo layout contract', () => {
+  it('keeps shop cards on one consistent image ratio that matches the 16:9 art', () => {
+    // The tenant heroes are 1280x720; a 16:10 window cropped 10% off them.
+    expect(cssRule('.shop-card__media')).toContain('aspect-ratio: 16 / 9');
+    expect(css).not.toContain('aspect-ratio: 16 / 10');
     expect(css).toContain('object-fit: cover');
+  });
+
+  it('stacks the name above the trading status so the pill cannot starve it', () => {
+    expect(cssRule('.shop-card__brand')).toContain('flex-direction: column');
+    expect(cssRule('.shop-card__titles')).toContain('width: 100%');
+  });
+
+  it('lets the wordmark shrink and wrap instead of overflowing its container', () => {
+    const word = cssRule('.shop-logo__word');
+    expect(word).toContain('min-width: 0');
+    expect(word).toContain('overflow-wrap: break-word');
+    // `anywhere` split words mid-syllable even when they would have fitted.
+    expect(word).not.toContain('overflow-wrap: anywhere');
+  });
+
+  it('bounds the logo tile and preserves its proportions', () => {
+    const image = cssRule('.shop-logo__image');
+    expect(image).toContain('object-fit: contain');
+    expect(image).toContain('max-width: min(108px, 45%)');
+    // A flex:none logo could not give width back to the name.
+    expect(image).toContain('flex: 0 1 auto');
+    expect(image).toContain('min-width: 0');
+  });
+
+  it('wraps the hero title row instead of squeezing the name beside the pill', () => {
+    expect(cssRule('.shop-hero__title')).toContain('flex-wrap: wrap');
+    expect(cssRule('.shop-hero__title > div')).toContain('flex: 1 1 12rem');
+    // Hero wordmark scales with the viewport instead of a flat 1.3rem.
+    expect(cssRule('.shop-logo--lg .shop-logo__word')).toContain('clamp(');
+  });
+
+  it('shows the whole 16:9 hero instead of cropping it into a letterbox strip', () => {
+    expect(cssRule('.shop-hero__media')).toContain('aspect-ratio: 16 / 9');
+    // The old fixed clamp height turned the hero into a 3:1 strip on desktop.
+    expect(css).not.toContain('height: clamp(170px, 32vw, 250px)');
   });
 });

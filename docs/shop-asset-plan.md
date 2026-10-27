@@ -110,7 +110,7 @@ Shared assets:
 | `shop-neutell-horowitz` | Neutell & Horowitz | Neutell & Horowitz | 9b | pharmacy | /images/shop-pharmacy.jpg | `NH` |
 | `shop-vodacom` | Vodacom | Vodacom | 10 | electronics | /images/shop-electronics.jpg | `VD` |
 | `shop-nedbank` | Nedbank | Nedbank | 11 | finance | /images/shop-finance.jpg | `NB` |
-| `shop-tops` | Tops at Spar | Tops | 12 | groceries | /images/shop-grocery.jpg | `TP` |
+| `shop-tops` | TOPS at SPAR | Tops | 12 | groceries | /images/shop-grocery.jpg | `TP` |
 | `shop-superspar` | The Angelo SUPERSPAR | Superspar | 13 | groceries | /images/shop-grocery.jpg | `SS` |
 | `shop-biltong-den` | Biltong Den | Biltong Den | 14 | food | /images/shop-food.jpg | `BD` |
 | `shop-maxis` | Maxi's | Maxis | 15 | groceries | /images/shop-grocery.jpg | `MX` |

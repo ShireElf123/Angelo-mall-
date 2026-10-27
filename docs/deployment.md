@@ -125,6 +125,21 @@ build, Vercel pull/build and the Preview deploy were all green, and
 `dpl_7Sc796NRx4QjSTuX5nT1it852HaZ` is **READY** with a matching `githubCommitSha`. Preview:
 <https://angelo-mall-awyjwrtjn-mercels-projects-80f68ab7.vercel.app>.
 
+**Which preview URL to share (audited 2026-10-27).** Two Vercel projects build this
+repository and they are not interchangeable:
+
+* `https://angelo-mall-go.vercel.app` — project `angelo-mall-go`, domain pinned to
+  `arena/aeeb5cff-angelo-mall`, so it follows every push on this branch. **Share this one.**
+* `https://angelo-mall.vercel.app` — the older `angelo-mall` project. Its production
+  alias still serves commit `0a403be4` (Phase 4, 2026-10-26), which contains no
+  `public/images/tenants` files at all. It is left untouched on purpose: moving it is a
+  production deployment and out of scope for this branch.
+
+Byte-level delivery check: the deployment file listing returns a SHA-1 per file, and for
+all ten batch 11 heroes that SHA-1 equals `sha1sum` of the working tree, so the served
+images are the accepted ones rather than an older copy. Full evidence in
+`docs/preview-and-ui-audit.md`.
+
 **Batch 11 verified (2026-10-27).** Run
 [`40466917208`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40466917208) for commit
 `49f216656ad25b0e2e96c3c7089c11704bbfd30d`: install, tests, typecheck + build, Vercel pull/build and

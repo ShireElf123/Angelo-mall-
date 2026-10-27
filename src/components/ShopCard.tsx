@@ -14,13 +14,22 @@ export function ShopCard({
   sponsored?: boolean;
   onOpen: (shopId: string) => void;
 }) {
+  // The tenant's own researched interior stands in for the shared category
+  // illustration. Cards used to show `coverImage` for all 29 tenants, so a
+  // directory full of different shops showed the same eight pictures and every
+  // concept-image batch looked like it had changed nothing. `coverImage` stays
+  // as the fallback for a tenant with no concept art yet.
+  const media = shop.conceptImage ?? shop.coverImage;
+
   return (
     <article className="shop-card">
       <button type="button" className="shop-card__media" onClick={() => onOpen(shop.id)} aria-label={`Open ${shop.name}`}>
         {/* Decorative: the shop wordmark below is the accessible name. */}
         <img
-          src={shop.coverImage}
+          src={media}
           alt=""
+          width={1280}
+          height={720}
           loading="lazy"
           decoding="async"
           onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
@@ -28,6 +37,8 @@ export function ShopCard({
         <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>
           {shop.initials}
         </span>
+        {/* Same disclosure as the shop page: AI concept art, never a shopfront photo. */}
+        {shop.conceptImage && <span className="shop-card__concept-chip">Concept art</span>}
         {shop.featured && (
           <span className="featured-ribbon">
             <Star size={13} aria-hidden /> Featured

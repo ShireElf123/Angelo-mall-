@@ -940,19 +940,24 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .shop-card__body { padding: 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
 .shop-card__title-row { display: flex; align-items: center; gap: 10px; }
-/* Brand plate: keeps the shop mark visually separate from the category illustration. */
+/* Brand plate: keeps the shop mark visually separate from the category illustration.
+   Name and trading status are stacked, not side by side. Measured with Inter 800,
+   the status pill is ~142px wide; sharing one row left the name 0-30px on a
+   3-column card, which clipped long names (SUPERSPAR, Ocean Basket, Cash
+   Crusaders) inside a plate that hides its overflow. */
 .shop-card__brand {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
   padding: 9px 11px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: linear-gradient(180deg, #ffffff 0%, #fbf9f5 100%);
 }
-.shop-card__brand .shop-logo { flex: 1; }
-.shop-card__brand .pill { flex: none; }
-.shop-card__titles { flex: 1; min-width: 0; font-size: 1.05rem; margin: 0; }
+.shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
+.shop-card__brand .pill { flex: none; align-self: flex-start; }
+.shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.05rem; margin: 0; }
 .shop-card__category { color: var(--muted); font-size: 0.82rem; margin-top: -4px; }
 .shop-card__tagline { color: var(--ink-2); font-size: 0.93rem; }
 .shop-card__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 0.82rem; }
@@ -974,7 +979,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 /* ---------------- Shop page ---------------- */
 
 .shop-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-.shop-hero__media { position: relative; height: 190px; background: var(--forest-100); }
+.shop-hero__media { position: relative; aspect-ratio: 16 / 9; height: auto; background: var(--forest-100); }
 .shop-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .shop-hero__caption {
   display: flex;
@@ -1002,8 +1007,10 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   text-transform: uppercase;
 }
 .shop-hero__body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
-.shop-hero__title { display: flex; align-items: center; gap: 13px; }
-.shop-hero__title > div { flex: 1; min-width: 0; }
+.shop-hero__title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 13px; }
+/* 12rem basis: at 360px the name block and the ~142px status pill cannot share
+   a row, so the pill drops underneath and the name keeps the full width. */
+.shop-hero__title > div { flex: 1 1 12rem; min-width: 0; }
 .shop-hero__title h1 { font-size: 1.5rem; }
 .shop-hero__title p { color: var(--muted); }
 .shop-hero__tagline { font-size: 1.05rem; color: var(--forest-900); font-weight: 600; }
@@ -1740,24 +1747,34 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: block;
   height: 34px;
   width: auto;
-  max-width: 108px;
+  /* Bounded, not fixed: the widest hosted marks are 3.2:1, which is 108px at
+     34px tall. Capping at 45% of the lock-up keeps the name at least half the
+     row on any card width and still lets `contain` preserve the proportions. */
+  max-width: min(108px, 45%);
   object-fit: contain;
-  flex: none;
+  object-position: center;
+  flex: 0 1 auto;
+  min-width: 0;
   border-radius: 6px;
 }
 .shop-logo__word {
+  flex: 1 1 auto;
+  /* A flex child defaults to min-width:auto, which refuses to shrink below the
+     longest word and pushes the text out of the card. 0 + break-word wraps only
+     when a word genuinely cannot fit, instead of splitting mid-word always. */
+  min-width: 0;
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.15;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .shop-logo--sm .shop-logo__word { font-size: 1rem; }
 .shop-logo--md .shop-logo__word { font-size: 1.08rem; }
 .shop-logo--lg { gap: 12px; }
 .shop-logo--lg .shop-logo__monogram { width: 46px; height: 46px; border-radius: 13px; font-size: 1rem; }
 .shop-logo--lg .shop-logo__glyph { width: 26px; height: 26px; }
-.shop-logo--lg .shop-logo__image { height: 42px; max-width: 140px; }
-.shop-logo--lg .shop-logo__word { font-size: 1.3rem; }
+.shop-logo--lg .shop-logo__image { height: 42px; max-width: min(140px, 45%); }
+.shop-logo--lg .shop-logo__word { font-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.3rem); }
 .shop-logo--on-dark .shop-logo__word { color: #fff; }
 .shop-logo--on-dark .shop-logo__monogram { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); }
 /* Verified logo images that are dark-inked need a light plate on dark surfaces. */
@@ -1771,18 +1788,39 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 .shop-card__media {
   height: auto;
-  aspect-ratio: 16 / 10;
+  /* Every tenant hero is 1280x720. A 16:10 window cropped 10% off the top and
+     bottom of the counters and seating the art was composed around. */
+  aspect-ratio: 16 / 9;
   min-height: 148px;
   display: block;
 }
 @supports not (aspect-ratio: 4 / 3) {
   .shop-card__media { height: 172px; }
 }
+.shop-card__concept-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
 .shop-card__media img { transition: transform 0.25s ease; }
 .shop-card__media:hover img { transform: scale(1.03); }
-.shop-card__brand .shop-logo__word { overflow-wrap: anywhere; }
+/* (wordmark wrapping is handled once, in .shop-logo__word) */
 
-.shop-hero__media { height: clamp(170px, 32vw, 250px); }
+/* The hero used to be a fixed clamp(170px, 32vw, 250px) tall, so at 1440px it
+   was 758x250 (3.03:1) and `cover` threw away ~41% of a 16:9 concept scene.
+   It now shares the art's 16:9 frame, so the scene is shown whole. */
+.shop-hero__media img { object-position: center; }
 
 /* ---------------- Chat header expand control ---------------- */
 

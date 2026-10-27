@@ -316,7 +316,9 @@ export const TENANTS: TenantRecord[] = [
   },
   {
     id: 'shop-tops',
-    name: 'Tops at Spar',
+    // Official franchise styling: TOPS at SPAR (the mall prints the short form
+    // "Tops", the logo registry and the brand's own site use the long form).
+    name: 'TOPS at SPAR',
     directoryName: 'Tops',
     shopNumber: '12',
     category: 'groceries',
