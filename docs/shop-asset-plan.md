@@ -18,22 +18,17 @@ source, check date and confidence), projected into `Shop` records by
 | `shopNumber`, `phones`, `website` | Transcription of the mall directory entry, shown on the shop page as listing details. |
 | `listingConfidence`, `listingCheckedOn`, `listingNote` | Provenance: `cross-verified` (directory + an independent source) or `directory-only`; the date checked; and any conflict or spelling note. |
 
-## Phase 5 update — verified logo slots (currently unfilled)
+## Phase 5 update — hosted logo registry (13 entries; source/runtime checks still ongoing)
 
-Phase 5 replaced the ad-hoc wordmark with a proper two-layer system:
+Phase 5 replaced the ad-hoc wordmark with a proper two-layer system. The current registry contains 13 sourced hosted-logo entries; these are not bundled local files, and a source being identified does not mean every browser runtime has been verified:
 
 | Layer | File | Behaviour |
 | --- | --- | --- |
-| Verified logo registry | `src/data/shopLogos.ts` | One entry per tenant that has a **verified official** mark: file in `public/images/logos/`, intrinsic aspect ratio, source URL, retrieval date, `verified: true`. Empty today (see below). |
+| Logo registry | `src/data/shopLogos.ts` | Sourced official or third-party hosted image URLs, aspect ratio, source URL, retrieval date, and `verified` flag. Current list is 13 entries; remote host availability and browser rendering still need checking. |
 | `ShopLogo` component | `src/components/ShopLogo.tsx` | Renders the verified image when the registry has one, otherwise the monogram fallback. A failed image load silently degrades to the monogram, so a broken-image icon can never appear. |
 | Fallback | `src/data/shopLogos.ts` `CATEGORY_MONOGRAM_GLYPH` | Initials plus a small original category glyph (basket, cutlery, hanger, device, cross, tools, scissors, parcel, bank) on the tenant's colour tile. |
 
-**Status: 0 of 29 tenants have a verified logo.** Retrieving the remaining 29
-required downloading from brand websites and official media kits, which this
-build environment cannot reach (outbound network is limited to GitHub, npm and
-PyPI). Substituting an image-search thumbnail, a logo-CDN file or a screenshot
-would breach the verification rule, so the slots were left empty rather than
-filled with unverified marks. No shop detail, id or participation status changed.
+**Current status: 13 of 29 tenants have a sourced logo URL in the registry.** Sources include official brand/media pages and third-party logo hosts such as Brandfetch and CompaniesLogo. The app uses remote URLs for this demo and falls back to the monogram if loading fails. These marks are not proof of endorsement or partnership, and third-party-hosted marks should be replaced with approved local files before a public production launch. No shop detail, id or participation status changed.
 
 To add one later (no code change beyond the registry):
 
@@ -135,8 +130,7 @@ Shared assets:
 
 ## Image rules applied
 
-* **Local only.** No remote image URLs anywhere in the app, so nothing breaks
-  offline and no third-party hotlinking or licensing risk is introduced.
+* **Category art is local; some logo marks are remote.** Category covers and per-tenant concept art live under `public/images/`. The logo registry currently references remote hosted images, so those marks require network access and may be blocked or changed by their hosts.
 * **Generated supporting imagery** is an original category scene: no signage, no
   lettering, no invented logos, no watermarks, no people, no real shop interiors.
 * **Framing.** `ShopCard` media uses a fixed `16 / 10` aspect ratio with
