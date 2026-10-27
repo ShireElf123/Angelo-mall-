@@ -133,6 +133,15 @@ serves the two bundles produced by `npm run build` at that commit — `index-CPq
 `index-Bu958SLn.js` — with all 29 tenant images and the updated `manifest.webmanifest`, so the
 elevation/interaction work is what the preview actually runs.
 
+**Re-deployed on request (2026-10-27).** `gh workflow run` is unavailable to the agent
+identity (403 *Resource not accessible by integration*), so the Preview was created through
+the Vercel API from the same GitHub source instead: `target: staging` (requested Preview)
+produced `dpl_7XamVJUS1VLHPVDkB7qEXkfW8rLZ`, **READY** in 19 s, and the plain Git-source
+request produced `dpl_5LmizPktLk3gH7ZTXxNtPAgiG2r3`, **READY** in 15 s. Both clone
+`arena/aeeb5cff-angelo-mall` at `636a556e492dda3c54dcf6557ab6c761b0ae0fef`, and the second
+one now owns the `angelo-mall-go.vercel.app` branch alias, so the shareable URL serves the
+Phase 12 build. Neither deployment touched Production.
+
 **UI fix verified (2026-10-27).** Run
 [`40468770408`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40468770408) for commit
 `4f7d9cc8739115bf2b687dbfc4f2259c0e0819ba`: install, tests (272 passing), typecheck + build,
@@ -221,10 +230,14 @@ owner-controlled dashboard steps. They are not required for the GitHub Actions w
 
 Notes and gotchas:
 
-- `target: null` is treated as **Production**. Never omit the target.
-- `target: "preview"` is rejected by the API (`'production' | 'staging' | custom`).
-  Preview deployments report `target: "staging"` and carry
-  `oidcTokenClaims.environment: "preview"`.
+- `target: "preview"` is rejected by the API (`'production' | 'staging' | custom`), so
+  send `target: "staging"` when you mean Preview.
+- Omitting `target` is ambiguous and best avoided: the 2026-10-27 request that omitted it
+  came back with `target: null`, `readySubstate: "STAGED"`,
+  `oidcTokenClaims.environment: "preview"` and the branch alias — i.e. Preview behaviour —
+  but the response alone does not read as Preview. Ask for `staging` explicitly.
+- Preview deployments carry `oidcTokenClaims.environment: "preview"`; that claim, not the
+  `target` field, is the reliable statement about which environment a build went to.
 - The short SHA is rejected in `git_source.sha`; always pass the full SHA.
 - `GET /v6/deployments/{id}/files` returns 404 for this project, so the build log is the
   source of truth for what was produced.
