@@ -20,6 +20,7 @@ Known-good Preview history (all READY, retained as rollback points):
 
 | Deployment | Commit | Notes |
 | --- | --- | --- |
+| `dpl_2jaxwy3jpAhzT8faFtwd3P35j1kx` | `87d2328` | Batch 6 asset/visual audit (no new images) — CI-deployed Preview, READY |
 | `dpl_HYEM95nMWi9qMzgaMTBK76aboYLe` | `0e383aa` | Batch 5 artwork (10 gap-audit state illustrations) — CI-deployed Preview, READY |
 | `dpl_HPHhvZn8wfswzUtaFrveARTYw7YT` | `774dbd9` | Batch 4 artwork (10 journey/state illustrations) — CI-deployed Preview, READY |
 | `dpl_7Sc796NRx4QjSTuX5nT1it852HaZ` | `f4f6e0a` | Batch 3 artwork (10 discovery illustrations) — CI-deployed Preview, READY |
@@ -47,6 +48,15 @@ typecheck+build, Vercel pull, Vercel build, deploy) and the resulting deployment
 `dpl_EVF1TaCkGwhHNNmaW1Jv1SozbBLS` reached **READY** with `githubCommitSha` matching the
 pushed commit. Preview URL:
 <https://angelo-mall-dpn5pwfob-mercels-projects-80f68ab7.vercel.app>.
+
+**Batch 6 re-verified (2026-10-27).** Run
+[`40450957521`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40450957521) for
+commit `87d23280a7447a9879e0a3c4f0b475ecc28badd8`: install, tests (255 passing), typecheck +
+build, Vercel pull/build and the Preview deploy were all green, and
+`dpl_2jaxwy3jpAhzT8faFtwd3P35j1kx` is **READY** with a matching `githubCommitSha`. Preview:
+<https://angelo-mall-6jx6okww8-mercels-projects-80f68ab7.vercel.app>. Batch 6 generated no
+images; it audited the existing 63 and fixed contrast, aspect-ratio, manifest and social-tag
+issues in code.
 
 **Batch 5 re-verified (2026-10-27).** Run
 [`40449367058`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40449367058) for
