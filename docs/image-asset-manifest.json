@@ -1003,6 +1003,176 @@
       "usage": "empty-state",
       "gapAddressed": "Dispatch oversight showed a bare text line.",
       "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "tenant-kfc",
+      "file": "/images/tenants/kfc.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Kraft takeaway box of fried chicken with folded paper and a plain cup on a cream counter \u2014 the KFC listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 68,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for KFC: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-golden-buffalo-spur",
+      "file": "/images/tenants/golden-buffalo-spur.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Cast-iron grill, sirloin and a wooden board in a warm steakhouse booth \u2014 the Golden Buffalo Spur listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 84,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Golden Buffalo Spur: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-cash-crusaders",
+      "file": "/images/tenants/cash-crusaders.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Pre-owned guitar, film camera, drill and blender with blank cardboard tags \u2014 the Cash Crusaders listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 61,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Cash Crusaders: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-mica",
+      "file": "/images/tenants/mica.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Stacked paint tins, brush, rope coil and an open toolbox on a store shelf \u2014 the Mica listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 73,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Mica: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-crazy-plastics",
+      "file": "/images/tenants/crazy-plastics.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "A tall stack of plastic crates, basins and buckets \u2014 the Crazy Plastics Express listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 70,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Crazy Plastics Express: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-zillion-hair",
+      "file": "/images/tenants/zillion-hair.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Headless wig blocks, braiding-hair bundles and combs on a salon shelf \u2014 the Zillion Hair listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 107,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Zillion Hair: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-ruiter-makelaars",
+      "file": "/images/tenants/ruiter-makelaars.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "House keys, a plain wooden house model, a blank clipboard and a magnifier on a desk \u2014 the Ruiter Makelaars listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 66,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Ruiter Makelaars: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-flesh-fashions",
+      "file": "/images/tenants/flesh-fashions.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "A clothing rail with a plain jacket and folded denim \u2014 the Flesh Fashions listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 103,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Flesh Fashions: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-clicks",
+      "file": "/images/tenants/clicks.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "Amber bottles with blank labels, plasters and a sanitiser pump on a pharmacy counter \u2014 the Clicks listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 84,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Clicks: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-neutell-horowitz",
+      "file": "/images/tenants/neutell-horowitz.jpg",
+      "kind": "generated",
+      "batch": 7,
+      "purpose": "A trial frame, lens cases and an abstract ring chart on an optometrist's desk \u2014 the Neutell & Horowitz listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 68,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for Neutell & Horowitz: not a logo, not an official brand asset and not a photograph of this shop. Word-free and brand-free by design; the shop name and category stay as HTML text and the hero is labelled \"Concept art\"."
     }
   ],
   "logos": {

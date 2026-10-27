@@ -171,6 +171,24 @@ generated, replaced or deleted.
   (crops at display aspect and at true display sizes) and measured contrast
   rather than asserting how it looks.
 
+## Per-tenant concept art (batch 7 onward)
+
+Two different image layers sit on a shop for two different jobs:
+
+* **Card cover (`coverImage`)** — one of nine shared, logo-free *category
+  scenes*. Cards keep these: it keeps the directory visually coherent and keeps
+  the "a card shows the category, not a shop's premises" reading.
+* **Shop-page hero (`conceptImage`)** — an optional per-tenant **AI-generated
+  concept illustration** for tenants that have one. It is app artwork, labelled
+  in the UI with a "Concept art" chip and the line "AI-generated concept
+  illustration — not this shop's logo or shopfront."
+
+Neither layer is a logo, and neither replaces the monogram-and-name fallback: the
+verified-logo registry (`src/data/shopLogos.ts`) is still empty, and a concept
+illustration is never accepted as an official brand asset. Tenants without a
+`conceptImage` fall back to their category cover, so nothing breaks when a file
+is missing or a batch has not run yet.
+
 ## Remaining asset work
 
 1. Per-tenant photography or logos — only with written permission from each

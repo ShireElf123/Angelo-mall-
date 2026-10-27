@@ -228,6 +228,50 @@ environment, so the audit used the actual files (ImageMagick crops at display
 aspect and at real display sizes) plus arithmetic contrast checks, and reported
 the absence of device-level visual QA rather than claiming it.
 
+## Batch 7 — 2026-10-27 (10 images requested, 10 generated, 10 reviewed, 10 retained)
+
+Batch 7 starts the per-tenant concept set: until now all 29 listings shared nine
+category covers, so every shop page opened with the same hero photograph. Each
+tenant now gets **one original concept illustration** in its shop-page hero,
+while directory cards keep the shared category covers (so the nine covers stay
+in use and `tenants.test.ts`'s "card uses its category scene" rule is untouched).
+
+These are **AI-generated concept illustrations**. They are never a tenant's
+logo, never an official brand asset, never a photograph of that business's
+shopfront, and they imply no partnership or endorsement. Every one is word-free
+(no shop names, prices, product lettering or signage) and brand-free (no logos,
+trade dress or mascots), and the hero carries a visible **"Concept art"** chip
+next to the caption *"AI-generated concept illustration — not this shop's logo
+or shopfront."* The shop name, category and description remain HTML text.
+
+| # | Tenant | Asset id | File | Concept | Review |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `shop-kfc` | `tenant-kfc` | `tenants/kfc.jpg` (1280×720, 68 kB) | Kraft box of fried chicken, folded paper, plain cup | approved |
+| 2 | `shop-golden-buffalo-spur` | `tenant-golden-buffalo-spur` | `tenants/golden-buffalo-spur.jpg` (1280×720, 84 kB) | Cast-iron grill, sirloin and board in a booth | approved |
+| 3 | `shop-cash-crusaders` | `tenant-cash-crusaders` | `tenants/cash-crusaders.jpg` (1280×720, 61 kB) | Guitar, camera, drill, blender, blank tags | approved |
+| 4 | `shop-mica` | `tenant-mica` | `tenants/mica.jpg` (1280×720, 73 kB) | Paint tins with blank labels, brush, rope, toolbox | approved |
+| 5 | `shop-crazy-plastics` | `tenant-crazy-plastics` | `tenants/crazy-plastics.jpg` (1280×720, 70 kB) | Stacked plastic crates, basins and buckets | approved |
+| 6 | `shop-zillion-hair` | `tenant-zillion-hair` | `tenants/zillion-hair.jpg` (1280×720, 107 kB) | Headless wig blocks, hair bundles, combs | approved |
+| 7 | `shop-ruiter-makelaars` | `tenant-ruiter-makelaars` | `tenants/ruiter-makelaars.jpg` (1280×720, 66 kB) | Keys, wooden house, blank clipboard, magnifier | approved |
+| 8 | `shop-flesh-fashions` | `tenant-flesh-fashions` | `tenants/flesh-fashions.jpg` (1280×720, 103 kB) | Clothing rail, plain jacket, folded denim | approved |
+| 9 | `shop-clicks` | `tenant-clicks` | `tenants/clicks.jpg` (1280×720, 84 kB) | Amber bottles with blank labels, plasters, sanitiser | approved |
+| 10 | `shop-neutell-horowitz` | `tenant-neutell-horowitz` | `tenants/neutell-horowitz.jpg` (1280×720, 68 kB) | Trial frame, lens cases, abstract ring chart | approved |
+
+**Inspection.** All ten were viewed after generation and again after resizing:
+each is on-palette, distinct from the nine category covers and from every
+earlier batch, free of lettering, logos, trade dress, price marks, people and
+watermarks, and uncorrupted. A zoomed check of `tenant-cash-crusaders` (the only
+image with fine detail on hardware) confirmed the guitar headstock and drill
+label carry only unreadable decorative marks, not text or a brand name.
+
+**Optimisation.** Generated at 1672×941, cropped to exactly 16:9, downscaled to
+1280×720 and recompressed (q82, metadata stripped): 61–107 kB each, 816 kB for
+the set. Resized/compressed copies are not counted as new images.
+
+**Remaining.** Tenants 11–20 and 21–29 have no concept art yet and keep the
+shared category cover in their hero until batch 8 and batch 9 are separately
+approved.
+
 ## Logos — zero bundled, and why
 
 No official retailer logo is in this repository. The environment used for Phase 5

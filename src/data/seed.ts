@@ -121,6 +121,7 @@ function buildShop(tenant: TenantRecord): Shop {
     tagline: tenant.tagline,
     description: descriptionFor(tenant, location),
     coverImage: tenant.coverImage,
+    conceptImage: tenant.conceptImage,
     initials: tenant.initials,
     colour: tenant.colour,
     shopNumber: tenant.shopNumber,

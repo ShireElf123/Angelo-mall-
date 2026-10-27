@@ -55,7 +55,14 @@ export interface TenantRecord {
   listingNote?: string;
   initials: string;
   colour: string;
+  /** Shared category scene used on directory cards. */
   coverImage: string;
+  /**
+   * Optional AI-generated concept illustration for the shop-page hero.
+   * It is app artwork, not a logo and not a photo of this business; the UI
+   * labels it as concept art wherever it is shown.
+   */
+  conceptImage?: string;
   featured?: boolean;
   /** Carries the scripted sample conversation/order walkthrough (still simulated). */
   demoScenario?: boolean;
@@ -114,6 +121,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'KFC',
     colour: '#a1121b',
     coverImage: IMG.food,
+    conceptImage: '/images/tenants/kfc.jpg',
     featured: true,
     demoScenario: true,
   },
@@ -131,6 +139,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'GBS',
     colour: '#7a2e12',
     coverImage: IMG.food,
+    conceptImage: '/images/tenants/golden-buffalo-spur.jpg',
     featured: true,
   },
   {
@@ -147,6 +156,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'CC',
     colour: '#1f3b73',
     coverImage: IMG.electronics,
+    conceptImage: '/images/tenants/cash-crusaders.jpg',
   },
   {
     id: 'shop-mica',
@@ -164,6 +174,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'MC',
     colour: '#8a3b12',
     coverImage: IMG.homeware,
+    conceptImage: '/images/tenants/mica.jpg',
   },
   {
     id: 'shop-crazy-plastics',
@@ -181,6 +192,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'CPX',
     colour: '#0f5f66',
     coverImage: IMG.homeware,
+    conceptImage: '/images/tenants/crazy-plastics.jpg',
   },
   {
     id: 'shop-zillion-hair',
@@ -197,6 +209,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'ZH',
     colour: '#7c1d4f',
     coverImage: IMG.beauty,
+    conceptImage: '/images/tenants/zillion-hair.jpg',
   },
   {
     id: 'shop-ruiter-makelaars',
@@ -213,6 +226,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'RM',
     colour: '#334155',
     coverImage: IMG.services,
+    conceptImage: '/images/tenants/ruiter-makelaars.jpg',
   },
   {
     id: 'shop-flesh-fashions',
@@ -229,6 +243,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'FF',
     colour: '#7c2d12',
     coverImage: IMG.fashion,
+    conceptImage: '/images/tenants/flesh-fashions.jpg',
   },
   {
     id: 'shop-clicks',
@@ -247,6 +262,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'CL',
     colour: '#0b5aa0',
     coverImage: IMG.pharmacy,
+    conceptImage: '/images/tenants/clicks.jpg',
     featured: true,
     demoScenario: true,
   },
@@ -264,6 +280,7 @@ export const TENANTS: TenantRecord[] = [
     initials: 'NH',
     colour: '#0f766e',
     coverImage: IMG.pharmacy,
+    conceptImage: '/images/tenants/neutell-horowitz.jpg',
   },
   {
     id: 'shop-vodacom',

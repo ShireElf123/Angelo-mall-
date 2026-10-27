@@ -44,8 +44,14 @@ describe('batch 5 image assets', () => {
     expect(batch.map((asset) => asset.id).sort()).toEqual([...BATCH_5_IDS].sort());
   });
 
-  it('keeps the whole inventory at 63 documented assets', () => {
-    expect(IMAGE_ASSETS).toHaveLength(63);
+  it('keeps the whole inventory accounted for as batches are added', () => {
+    // 63 through batch 5, plus 10 tenant concept illustrations in batch 7.
+    // The number moves with the batch log; it must never drift from the manifest.
+    const batches = IMAGE_ASSETS.map((asset) => asset.batch);
+    const expected = batches.filter((batch) => batch <= 5).length + batches.filter((batch) => batch === 7).length;
+    expect(IMAGE_ASSETS).toHaveLength(expected);
+    expect(IMAGE_ASSETS).toHaveLength(73);
+    expect(batches.filter((batch) => batch > 7)).toHaveLength(0);
   });
 
   it.each(BATCH_5_IDS)('%s is approved, on disk and documented as a gap fix', (id) => {

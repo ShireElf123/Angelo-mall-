@@ -81,11 +81,21 @@ export function ShopPageScreen({
 
       <article className="shop-hero">
         <div className="shop-hero__media">
-          <img src={shop.coverImage} alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+          <img
+            src={shop.conceptImage ?? shop.coverImage}
+            alt=""
+            onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
+          />
           <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>
             {shop.initials}
           </span>
         </div>
+        {shop.conceptImage && (
+          <p className="shop-hero__caption">
+            <span className="shop-hero__caption-chip">Concept art</span>
+            AI-generated concept illustration — not this shop&apos;s logo or shopfront.
+          </p>
+        )}
         <div className="shop-hero__body">
           <div className="shop-hero__title">
             <div>

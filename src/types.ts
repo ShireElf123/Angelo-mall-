@@ -45,6 +45,13 @@ export interface Shop {
   tagline: string;
   description: string;
   coverImage: string;
+  /**
+   * Optional per-tenant concept illustration shown in the shop-page hero.
+   * AI-generated concept art only: never a logo, brand asset or photograph of
+   * this shop. The app always labels it as such, and cards keep the shared
+   * category cover. Absent for shops that have no concept art yet.
+   */
+  conceptImage?: string;
   initials: string;
   colour: string;
   /** Shop number exactly as printed in the mall directory, when it gives one. */
