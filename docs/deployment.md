@@ -51,6 +51,19 @@ typecheck+build, Vercel pull, Vercel build, deploy) and the resulting deployment
 pushed commit. Preview URL:
 <https://angelo-mall-dpn5pwfob-mercels-projects-80f68ab7.vercel.app>.
 
+**Batch 9 re-verified (2026-10-27).** Run
+[`40463461159`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40463461159) for
+commit `1dc263b9488e76e99ab5c9b33df9202f136a5a72`: install, tests (264 passing, 30 files),
+typecheck + build, Vercel pull/build and the Preview deploy were all green, and
+`dpl_7mHZrD8kVRBv7rq8GGUd6GAvsAKM` is **READY** with a matching `githubCommitSha`. Preview:
+<https://angelo-mall-4lh50rtu2-mercels-projects-80f68ab7.vercel.app>. Batch 9 added the last
+nine tenant concept images (tenants 21–29) and wired every remaining `conceptImage`, so the
+manifest now holds 92 assets and 29 tenant heroes; the test count rose by one because the
+shop-page cover-fallback test now builds its own no-art seed instead of relying on a tenant
+that lacked art. As before, the deployment's `GET /v6/deployments/{id}/files` returns 404, so
+the green build log and the matching SHA are the verification, and SSO-blocked page-load was
+not attempted.
+
 **Batch 8 re-verified (2026-10-27).** Run
 [`40461084358`](https://github.com/ShireElf123/Angelo-mall-/actions/runs/40461084358) for
 commit `2eabb05cca5e9ff048da4712f3308d387880d06e`: install, tests (263 passing), typecheck +
