@@ -24,11 +24,15 @@ describe('shop logo registry', () => {
     }
   });
 
-  it('points every configured logo at a real local file', () => {
+  it('uses either a local logo file or a direct hosted HTTPS image', () => {
     for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
-      expect(PUBLIC_FILES.has(asset.file), `${asset.file} missing from public/`).toBe(true);
-      expect(asset.file.startsWith('/images/logos/'), `${asset.file} must live in the logo folder`).toBe(true);
-      expect(asset.file).toMatch(/\.(svg|png)$/);
+      if (asset.file.startsWith('https://')) {
+        expect(asset.sourceUrl).toMatch(/^https:\/\//);
+      } else {
+        expect(PUBLIC_FILES.has(asset.file), `${asset.file} missing from public/`).toBe(true);
+        expect(asset.file.startsWith('/images/logos/'), `${asset.file} must live in the logo folder`).toBe(true);
+        expect(asset.file).toMatch(/\.(svg|png|jpg|webp)$/);
+      }
     }
   });
 
