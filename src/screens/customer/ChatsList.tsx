@@ -8,7 +8,7 @@ import {
   openBasketForConversation,
 } from '../../store/selectors';
 import { formatRelative } from '../../utils/format';
-import { EmptyState, SectionHeader, ShopAvatar } from '../../components/ui';
+import { EmptyState, PageHeader, ShopAvatar } from '../../components/ui';
 import { imageSrc } from '../../data/imageAssets';
 
 export function ChatsListScreen({ navigate }: { navigate: (route: Route) => void }) {
@@ -17,9 +17,11 @@ export function ChatsListScreen({ navigate }: { navigate: (route: Route) => void
 
   return (
     <div className="page page--narrow">
-      <SectionHeader
+      <PageHeader
+        eyebrow="Customer · Messages"
         title="Your chats"
-        subtitle="Every order lives inside its conversation — reopen a chat any time to ask about an order. Demo customer: Thandi M."
+        subtitle="Every order lives inside its conversation — reopen a chat any time to ask about an order."
+        meta={<span>Demo customer: Thandi M.</span>}
       />
 
       {conversations.length === 0 ? (

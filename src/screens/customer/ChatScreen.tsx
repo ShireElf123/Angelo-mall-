@@ -219,6 +219,11 @@ export function ChatScreen({
         aria-label={`Chat with ${shop.name}`}
       >
         <header className="chat-header">
+          {/* The visible shop name sits inside the button that opens the shop,
+              and a button may not contain a heading. Rather than bolt a second
+              competing title into the header, give the screen a programmatic
+              h1 so heading navigation announces where the user is. */}
+          <h1 className="visually-hidden">Chat with {shop.name}</h1>
           <button type="button" className="icon-btn" onClick={() => navigate({ name: 'chats' })} aria-label="Back to chats">
             <ArrowLeft size={21} aria-hidden />
           </button>

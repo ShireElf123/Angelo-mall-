@@ -18,7 +18,7 @@ import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import { HELP_STEP_ILLUSTRATIONS, imageSrc } from '../../data/imageAssets';
 import { getShop } from '../../store/selectors';
-import { DemoTag, EmptyState, Modal, SectionHeader, ShopAvatar, SponsoredTag, useToast } from '../../components/ui';
+import { DemoTag, EmptyState, Modal, PageHeader, ShopAvatar, SponsoredTag, useToast } from '../../components/ui';
 
 export function PromotionDetailScreen({
   promotionId,
@@ -136,7 +136,8 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
 
   return (
     <div className="page page--narrow">
-      <SectionHeader
+      <PageHeader
+        eyebrow="Customer · Support"
         title="Help & about this demo"
         subtitle="Angelo Mall Go is a front-end prototype: real interface behaviour, sample data from the mall’s own store directory, no live services."
       />

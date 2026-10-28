@@ -7,7 +7,7 @@ import { getShop, jobForOrder, orderById, ordersForCustomer } from '../../store/
 import { formatRelative, formatZAR } from '../../utils/format';
 import { calculateTotals, canTransition, isBasketOrder } from '../../utils/orderWorkflow';
 import { FulfilmentLabel, OrderItemsTable, OrderTimeline } from '../../components/OrderBits';
-import { EmptyState, Modal, SectionHeader, ShopAvatar, StatusPill, useToast } from '../../components/ui';
+import { EmptyState, Modal, PageHeader, ShopAvatar, StatusPill, useToast } from '../../components/ui';
 import { imageSrc } from '../../data/imageAssets';
 
 export function OrdersScreen({ navigate }: { navigate: (route: Route) => void }) {
@@ -55,9 +55,11 @@ export function OrdersScreen({ navigate }: { navigate: (route: Route) => void })
 
   return (
     <div className="page page--narrow">
-      <SectionHeader
+      <PageHeader
+        eyebrow="Customer · Orders"
         title="Your orders"
-        subtitle="Demo order history for Thandi M. Every order stays linked to its shop conversation."
+        subtitle="Every order stays linked to its shop conversation."
+        meta={<span>Demo order history for Thandi M.</span>}
       />
 
       {orders.length === 0 ? (

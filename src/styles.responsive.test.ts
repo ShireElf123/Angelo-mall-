@@ -40,7 +40,9 @@ describe('expandable chat stylesheet contract', () => {
     const desktop = desktopBlocks.find((block) => block.includes('.page--chat--expanded .chat-frame')) ?? '';
     expect(desktop, 'no 900px+ block styles the expanded chat panel').not.toBe('');
     expect(desktop).toMatch(/\.page--chat--expanded \.chat-frame\s*\{[^}]*width:\s*min\(1080px/s);
-    expect(desktop).toContain('border-radius: 20px');
+    // 20px, expressed through the radius scale rather than a bare literal.
+    expect(desktop).toContain('border-radius: var(--radius-xl)');
+    expect(css).toMatch(/--radius-xl:\s*20px;/);
     expect(desktop).toContain('.chat-header__expand-label { display: inline; }');
   });
 });

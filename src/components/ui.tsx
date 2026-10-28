@@ -242,6 +242,46 @@ export function SectionHeader({
   );
 }
 
+/**
+ * The title block at the top of a screen.
+ *
+ * `SectionHeader` is a *section* heading inside a page; this is the page itself.
+ * The distinction matters twice over. Visually it gives every screen one
+ * consistent, app-style title treatment with an optional eyebrow and a slot for
+ * a contextual action. Structurally it means every route owns exactly one `h1`
+ * — before this, Home had an `h1` buried in the hero while the directory, chats,
+ * orders and help screens had no `h1` at all, so a screen-reader user got a
+ * heading-less page and the outline started at `h2`.
+ *
+ * `meta` is the compact supporting line (counts, "demo customer", etc.) that
+ * apps put under a title instead of another paragraph.
+ */
+export function PageHeader({
+  eyebrow,
+  title,
+  subtitle,
+  meta,
+  action,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  meta?: ReactNode;
+  action?: ReactNode;
+}) {
+  return (
+    <header className="page-header">
+      <div className="page-header__lead">
+        {eyebrow && <p className="page-header__eyebrow">{eyebrow}</p>}
+        <h1 className="page-header__title">{title}</h1>
+        {subtitle && <p className="page-header__subtitle">{subtitle}</p>}
+        {meta && <div className="page-header__meta">{meta}</div>}
+      </div>
+      {action && <div className="page-header__action">{action}</div>}
+    </header>
+  );
+}
+
 /** Skeleton rows for simulated loading states (Phase 2: real API latency). */
 export function SkeletonList({ rows = 3 }: { rows?: number }) {
   return (

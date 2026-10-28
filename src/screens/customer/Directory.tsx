@@ -8,7 +8,7 @@ import { activePromotions } from '../../store/selectors';
 import type { CategoryId, FulfilmentMethod } from '../../types';
 import { PromotionBanner } from '../../components/PromotionBanner';
 import { ShopCard } from '../../components/ShopCard';
-import { EmptyState, InfoBanner, ListingDisclosure, SectionHeader, SkeletonList } from '../../components/ui';
+import { EmptyState, InfoBanner, ListingDisclosure, PageHeader, SkeletonList } from '../../components/ui';
 
 type FulfilmentFilter = 'all' | FulfilmentMethod;
 
@@ -72,9 +72,17 @@ export function DirectoryScreen({
 
   return (
     <div className="page">
-      <SectionHeader
+      <PageHeader
+        eyebrow="Customer · Discovery"
         title="Shop directory"
         subtitle="Angelo Mall’s shops, transcribed from the mall’s own store directory. Every listing is a real tenant; none of them is a Mall Go partner and no ordering, payment or delivery is connected."
+        meta={
+          <>
+            <span>{state.shops.length} tenants listed</span>
+            <span aria-hidden>·</span>
+            <span>Mall directory only</span>
+          </>
+        }
       />
 
       <div className="discovery-strip">

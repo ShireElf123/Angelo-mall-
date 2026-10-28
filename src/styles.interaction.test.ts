@@ -217,7 +217,10 @@ describe('native-app shell', () => {
 
   it('presses a shop card into the page instead of only tinting it', () => {
     const card = blocks('.shop-card');
-    expect(card).toContain('border-radius: 20px');
+    // Radii are tokenised; the card must land on the 20px step, and the token
+    // must still be that step. Asserting both is stricter than the old literal.
+    expect(card).toContain('border-radius: var(--radius-xl)');
+    expect(token('--radius-xl')).toBe('20px');
     expect(card).toContain('transform var(--dur-fast)');
     const active = blocks('.shop-card:active');
     expect(active).toContain('transform: scale(');
