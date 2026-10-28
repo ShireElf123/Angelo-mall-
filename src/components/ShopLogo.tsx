@@ -10,9 +10,15 @@ import { CATEGORY_MONOGRAM_GLYPH, shopLogoAsset } from '../data/shopLogos';
  *    an official source or an identified third-party logo host. It may be a
  *    hosted URL or a bundled file, sized from its recorded aspect ratio and
  *    removed from the accessibility tree; the shop name carries the label.
- * 2. A **generated monogram tile** otherwise: initials in the shop's colour plus
- *    a category glyph. This is app artwork, not a brand mark, and it is what the
- *    entire directory currently uses (see the registry for why).
+ * 2. A **signage plate** otherwise: the shop's trading name, set as a shopfront
+ *    fascia in the shop's colour with a category glyph. This replaced the old
+ *    initials-only monogram tile, which showed a bare letter ("CC", "ZZ") where
+ *    every other shop showed a recognisable brand — an owner reading the
+ *    directory mistook it for missing data. The plate is app artwork, not a
+ *    brand mark, and it never claims to be one.
+ *
+ *    The readable name still comes from real text (`.shop-logo__word`), never
+ *    from the plate, so the accessible name is unchanged.
  *
  * If a logo file fails to load, the component silently falls back to the
  * monogram — a broken-image icon must never reach the UI.
@@ -38,11 +44,10 @@ export function ShopLogo({
     <span className={`shop-logo shop-logo--${size} ${onDark ? 'shop-logo--on-dark' : ''}`.trim()}>
       {useFallback ? (
         <span
-          className={`shop-logo__monogram shop-logo__monogram--${CATEGORY_MONOGRAM_GLYPH[shop.category]}`}
+          className={`shop-logo__plate shop-logo__plate--${size}`}
           style={{ background: shop.colour }}
           aria-hidden
         >
-          <span className="shop-logo__initials">{shop.initials}</span>
           {showGlyph && size !== 'sm' && (
             <svg className="shop-logo__glyph" viewBox="0 0 24 24" aria-hidden focusable="false">
               <defs>
@@ -53,6 +58,10 @@ export function ShopLogo({
               <CategoryGlyph category={shop.category} />
             </svg>
           )}
+          {/* The initials stay in the DOM (and in the a11y-irrelevant plate) but
+              are no longer the visible label: the trading name is. */}
+          <span className="shop-logo__initials visually-hidden">{shop.initials}</span>
+          <span className="shop-logo__plate-word">{shop.name.toUpperCase()}</span>
         </span>
       ) : (
         <img
@@ -67,7 +76,10 @@ export function ShopLogo({
           onError={() => setLogoFailed(true)}
         />
       )}
-      <span className="shop-logo__word">{shop.name}</span>
+      {/* Visually hidden only when the plate already spells the name out, so the
+          name is never printed twice on one card. Screen readers always get it
+          from this element. */}
+      <span className={`shop-logo__word${useFallback ? ' visually-hidden' : ''}`}>{shop.name}</span>
     </span>
   );
 }

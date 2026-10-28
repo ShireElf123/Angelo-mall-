@@ -22,11 +22,19 @@ import { customerUnreadTotal, shopUnreadTotal } from '../store/selectors';
 import type { Role } from '../types';
 import { Modal, useToast } from './ui';
 
-const ROLE_OPTIONS: { id: Role; label: string; icon: ReactNode }[] = [
-  { id: 'customer', label: 'Customer', icon: <User size={16} aria-hidden /> },
-  { id: 'shop', label: 'Shop staff', icon: <Store size={16} aria-hidden /> },
-  { id: 'delivery', label: 'Delivery partner', icon: <Bike size={16} aria-hidden /> },
-  { id: 'admin', label: 'Mall admin', icon: <Building2 size={16} aria-hidden /> },
+/**
+ * `short` is the phone-width label. The switcher used to be one non-wrapping
+ * row, which at 390px left "Delivery partner" cut off and "Mall admin" entirely
+ * off-screen — reachable only by scrolling a strip with no scrollbar. The
+ * walkthrough needs the owner to reach Mall admin, so on a phone the switcher
+ * is a 2×2 grid of short labels instead. Every role stays visibly labelled and
+ * the button's accessible name is always the full label.
+ */
+const ROLE_OPTIONS: { id: Role; label: string; short: string; icon: ReactNode }[] = [
+  { id: 'customer', label: 'Customer', short: 'Customer', icon: <User size={16} aria-hidden /> },
+  { id: 'shop', label: 'Shop staff', short: 'Staff', icon: <Store size={16} aria-hidden /> },
+  { id: 'delivery', label: 'Delivery partner', short: 'Delivery', icon: <Bike size={16} aria-hidden /> },
+  { id: 'admin', label: 'Mall admin', short: 'Admin', icon: <Building2 size={16} aria-hidden /> },
 ];
 
 interface NavItem {
@@ -134,8 +142,14 @@ export function Shell({
 
       <div className="shell-chrome">
         <div className="demo-bar">
+          {/* The notice was previously display:none below 640px, so the one
+              sentence that says this is not live shopping disappeared on the
+              screen most likely to be handed to the owner. A shorter wording
+              now holds its place on a phone instead of vanishing. */}
           <span className="demo-bar__label">
-            <strong>Demo Mode</strong> — sample tenants, prices & orders. Not live shopping.
+            <strong>Demo Mode</strong>
+            <span className="demo-bar__label--full"> — sample tenants, prices &amp; orders. Not live shopping.</span>
+            <span className="demo-bar__label--short"> — sample data, not live shopping.</span>
           </span>
           <div className="demo-bar__actions">
             <div
@@ -150,9 +164,11 @@ export function Shell({
                   className={`role-switcher__btn ${role === option.id ? 'role-switcher__btn--active' : ''}`}
                   onClick={() => switchRole(option.id)}
                   aria-pressed={role === option.id}
+                  aria-label={option.label}
                 >
                   {option.icon}
-                  <span>{option.label}</span>
+                  <span className="role-switcher__label--full" aria-hidden>{option.label}</span>
+                  <span className="role-switcher__label--short" aria-hidden>{option.short}</span>
                 </button>
               ))}
             </div>

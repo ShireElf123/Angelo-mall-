@@ -32,7 +32,13 @@ describe('app shell compaction', () => {
     const phone = mediaBlocks('(max-width: 639px)').join('\n');
     expect(phone, 'no <=639px shell pass').not.toBe('');
     expect(phone).toMatch(/\.demo-bar\s*\{[^}]*flex-wrap: nowrap/s);
-    expect(phone).toMatch(/\.demo-bar__label\s*\{\s*display: none;/);
+    // This used to assert `display: none` on the demo notice. That hid the one
+    // sentence stating the app is not live shopping, on the screen most likely
+    // to be handed to the owner — so the notice now stays and swaps to a short
+    // wording instead. Pinned the same way: it must not be display:none.
+    expect(phone).not.toMatch(/\.demo-bar__label\s*\{[^}]*display: none/s);
+    expect(phone).toMatch(/\.demo-bar__label--full\s*\{\s*display: none;/);
+    expect(phone).toMatch(/\.demo-bar__label--short\s*\{\s*display: inline;/);
     // The icon-only reset must keep an accessible name in the markup, which is
     // asserted in ShellUi.test.tsx; here we only assert the visual hiding.
     expect(phone).toMatch(/\.demo-bar__reset-label\s*\{[^}]*clip: rect\(0 0 0 0\)/s);

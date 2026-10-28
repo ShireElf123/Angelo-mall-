@@ -441,6 +441,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .demo-bar__label { font-size: 0.84rem; }
 .demo-bar__label strong { color: #f6d97b; }
+.demo-bar__label--short { display: none; }
 .demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 
 .role-switcher {
@@ -460,6 +461,24 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   -webkit-overflow-scrolling: touch;
 }
 .role-switcher::-webkit-scrollbar { display: none; }
+.role-switcher__label--short { display: none; }
+/* Below 560px the four role buttons become a 2x2 grid of short labels. The old
+   single scrolling row hid "Mall admin" completely at 390px, which is the one
+   role the walkthrough has to reach. Full labels return as soon as there is
+   room; the button's accessible name is the full label at every width. */
+@media (max-width: 560px) {
+  .role-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    overflow: visible;
+    flex: 1 1 100%;
+    border-radius: var(--radius-sm);
+  }
+  .role-switcher__btn { justify-content: center; padding: 6px 8px; min-height: 32px; }
+  .role-switcher__label--full { display: none; }
+  .role-switcher__label--short { display: inline; }
+}
 .role-switcher__btn {
   display: inline-flex;
   align-items: center;
@@ -2221,7 +2240,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
      would override it and bring back the five-row list. */
   .bar-list li { grid-template-columns: 120px 1fr 28px; }
   .job-card__facts { grid-template-columns: 1fr; }
-  .demo-bar__label { display: none; }
+  /* Keep the demo notice visible; swap to the short wording. */
+  .demo-bar__label--full { display: none; }
+  .demo-bar__label--short { display: inline; }
 }
 
 /* ==========================================================================
@@ -2236,22 +2257,11 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 9px;
   min-width: 0;
   max-width: 100%;
-}
-.shop-logo__monogram {
+  /* Positioning context for the visually-hidden accessible name inside. Without
+     it that 1px box is placed relative to the page and escapes the horizontal
+     shop rail's clipping, which stretched the Home page 825px sideways on a
+     phone and let the whole page slide left. */
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  flex: none;
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(12, 59, 46, 0.16);
 }
 .shop-logo__initials { position: relative; z-index: 1; }
 /* Category glyph sits behind the initials at low opacity: app artwork, not a mark. */
@@ -2293,15 +2303,62 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   line-height: 1.15;
   overflow-wrap: break-word;
 }
+/* ---------------- Signage plate (shops with no brand mark) ----------------
+   Sixteen of the twenty-nine tenants have no sourced brand logo - independents
+   like Cash Crusaders' neighbours, Zillion Hair, Maxi's, the carwash. They used
+   to render as a bare initials tile: a coloured square reading "CC" or "ZZ"
+   beside every shop that showed a real mark. Read cold, that looks like the
+   data is missing, which is exactly how the owner read it when shown the mall's
+   own signage photograph.
+
+   So the label now IS the name, set the way the mall's fascias set it: the
+   trading name in heavy uppercase on a plate in the tenant's own colour, with
+   the category glyph inline. It is app artwork, never a copy of a brand mark,
+   and the plate carries no logo-like claim. Every one of the sixteen colours is
+   dark enough for white ink (lightest #c2410c measures 5.2:1). */
+.shop-logo__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  /* A hairline top light plus a soft drop reads as a mounted sign rather than
+     a flat swatch, without adding a second shadow language. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+.shop-logo__plate-word {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  line-height: 1.15;
+  /* Never split a plate mid-word, but let a long trading name wrap to two
+     lines rather than run off the card (Aviya Photography & Graphics). */
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+/* The glyph is a corner badge on the old monogram; on a plate it sits inline. */
+.shop-logo__plate .shop-logo__glyph {
+  position: static;
+  width: 15px;
+  height: 15px;
+  flex: none;
+  opacity: 0.85;
+}
+.shop-logo__plate--sm .shop-logo__plate-word { font-size: 0.82rem; }
+.shop-logo__plate--lg { min-height: 44px; padding: 8px 14px; gap: 9px; }
+.shop-logo__plate--lg .shop-logo__plate-word { font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem); }
+.shop-logo__plate--lg .shop-logo__glyph { width: 19px; height: 19px; }
+
 .shop-logo--sm .shop-logo__word { font-size: 1rem; }
 .shop-logo--md .shop-logo__word { font-size: 1.05rem; }
 .shop-logo--lg { gap: 12px; }
-.shop-logo--lg .shop-logo__monogram { width: 46px; height: 46px; border-radius: var(--radius-md); font-size: 1rem; }
 .shop-logo--lg .shop-logo__glyph { width: 26px; height: 26px; }
 .shop-logo--lg .shop-logo__image { height: 42px; max-width: min(140px, 45%); }
 .shop-logo--lg .shop-logo__word { font-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.3rem); }
 .shop-logo--on-dark .shop-logo__word { color: #fff; }
-.shop-logo--on-dark .shop-logo__monogram { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); }
 /* Verified logo images that are dark-inked need a light plate on dark surfaces. */
 .shop-logo--on-dark .shop-logo__image { background: rgba(255, 255, 255, 0.92); padding: 3px 6px; }
 
@@ -2846,7 +2903,9 @@ body.chat-expanded {
   }
   /* The full sentence is redundant on a phone — the header's Demo chip plus the
      workspace switcher already communicate demo mode. */
-  .demo-bar__label { display: none; }
+  /* Keep the demo notice visible; swap to the short wording. */
+  .demo-bar__label--full { display: none; }
+  .demo-bar__label--short { display: inline; }
   .demo-bar__actions {
     flex-wrap: nowrap;
     gap: 6px;
