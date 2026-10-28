@@ -111,7 +111,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               id="home-search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search shops — “groceries”, “burgers”, “cable”…"
+              placeholder="Search shops or a need…"
               autoComplete="off"
             />
             <button type="submit" className="btn btn--gold">

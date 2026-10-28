@@ -2036,7 +2036,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .item-editor h4 { display: flex; gap: 7px; align-items: center; font-size: 0.95rem; }
 .item-editor label { font-size: 0.84rem; font-weight: 600; color: var(--ink-2); display: block; }
-.item-editor__row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* minmax(0,1fr), not 1fr: a date input has an intrinsic minimum width, so two
+   1fr tracks could not shrink and pushed the promo form past a 320px screen. */
+.item-editor__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .item-editor__actions { display: flex; justify-content: flex-end; gap: 8px; }
 
 .change-requests { background: #fffaf0; border: 1px solid #e8cf7a; border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 9px; }
@@ -2047,7 +2049,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .status-actions { display: flex; flex-direction: column; gap: 9px; }
 .status-actions__hint { display: flex; gap: 7px; align-items: flex-start; color: var(--ink-2); font-size: 0.9rem; background: var(--forest-50); padding: 10px 12px; border-radius: var(--radius-sm); }
 
-.orders-board { display: grid; gap: 15px; }
+/* Explicit minmax(0,1fr) track: grid items default to min-width:auto, so an
+   order row's content made the bucket wider than a 320px phone. */
+.orders-board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 15px; }
 .orders-bucket { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; box-shadow: var(--shadow); }
 .orders-bucket h2 { font-size: 1rem; margin-bottom: 8px; display: flex; justify-content: space-between; }
 .orders-bucket h2 span { background: var(--forest-50); color: var(--forest-800); border-radius: var(--radius-pill); padding: 1px 10px; font-size: 0.82rem; }
@@ -2176,6 +2180,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 @media (min-width: 900px) {
   .bottom-nav { display: none; }
   .top-nav { display: flex; gap: 2px; }
+  /* The three workspaces render an in-page tab row listing exactly the same
+     destinations as this header nav. Two identical navigation rows stacked on
+     the admin dashboard is the first thing the owner sees, and it reads as
+     unfinished. From 900px the header nav carries navigation alone; below it
+     the tab row stays, because the phone nav is icon-led and the tabs give
+     full labels and larger targets. */
+  .workspace-tabs { display: none; }
   .top-nav .nav-item { flex-direction: row; gap: 7px; font-size: 0.9rem; padding: 9px 13px; border-radius: var(--radius-pill); min-height: 42px; }
   /* Active navigation reads the same in both navs: a forest-100 pill behind the
    icon, forest-900 label, heavier glyph. The desktop nav used a forest-50 wash
@@ -3088,6 +3099,19 @@ body.chat-expanded {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--warning);
+}
+
+/* The order list card on a phone.
+   A 187px status pill ("Awaiting your confirmation") plus the avatar and the
+   Chat button left the text column with zero width: the reference ellipsised
+   to "AM…", the summary wrapped to one word per line and the price was cut off.
+   Below 560px the card stacks - identity on one line, status on the next - and
+   the Chat button gets a full-width row of its own. */
+@media (max-width: 560px) {
+  .order-list-card { flex-wrap: wrap; gap: 8px; }
+  .order-list-card__main { flex: 1 1 100%; flex-wrap: wrap; row-gap: 8px; }
+  .order-list-card__text { flex: 1 1 150px; }
+  .order-list-card .btn--ghost { flex: 1 1 100%; }
 }
 
 @media (max-width: 359px) {
