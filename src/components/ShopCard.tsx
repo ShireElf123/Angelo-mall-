@@ -16,10 +16,15 @@ import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../utils/responsiveImages';
  * shopper scanning a grid filters by kind ("Restaurants") before brand; the
  * name is the confirmation, not the entry point.
  *
- * The action is a quiet, full-width row with a hairline rather than a green
- * pill. That pill was the single element that made 29 different tenants read as
- * 29 copies of one template, and on a card that already has a large primary
- * surface it competed with the artwork for attention.
+ * The action is a filled forest-green pill, not a hairline row. An earlier
+ * pass demoted it to a quiet text row to stop 29 cards reading as one repeated
+ * template, but that traded away the thing the card has to communicate: there
+ * is one obvious thing to do here. The quiet row was legible and still worked
+ * with a keyboard, yet at a glance it read as a label rather than a button —
+ * which is exactly the wrong signal for a customer who is unsure where to tap.
+ * The card is not heavier for it: the pill reuses `.btn--primary`, so the
+ * gradient, elevation, press and focus behaviour are the app's existing button
+ * system, and the metadata around it stays deliberately quieter.
  */
 export function ShopCard({
   shop,
@@ -104,7 +109,11 @@ export function ShopCard({
           )}
         </div>
         <ParticipationPill status={shop.participation} />
-        <button type="button" className="btn btn--quiet btn--block" onClick={() => onOpen(shop.id)}>
+        <button
+          type="button"
+          className="btn btn--primary btn--block shop-card__cta"
+          onClick={() => onOpen(shop.id)}
+        >
           Open shop <ArrowRight size={17} aria-hidden />
         </button>
       </div>

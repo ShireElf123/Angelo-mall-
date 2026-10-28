@@ -180,8 +180,14 @@ describe('Directory — composition', () => {
     const category = card.querySelector('.shop-card__category') as HTMLElement;
     const brand = card.querySelector('.shop-card__brand') as HTMLElement;
     expect(precedes(category, brand), 'category should be read before the wordmark').toBe(true);
-    const cta = card.querySelector('.btn--quiet') as HTMLElement;
-    expect(cta, 'card action is not the quiet row').not.toBeNull();
+    // The action was a quiet hairline row when this test was written; the owner
+    // has reversed that, so it asserts the prominent primary pill instead. The
+    // ordering claim it is really about — category, then identity, then action —
+    // is unchanged.
+    const cta = card.querySelector('.shop-card__cta') as HTMLElement;
+    expect(cta, 'card action is not the primary pill').not.toBeNull();
+    expect(cta.className).toContain('btn--primary');
+    expect(precedes(brand, cta), 'the action should follow the wordmark').toBe(true);
     expect(cta.textContent ?? '').toMatch(/Open shop/i);
   });
 

@@ -46,6 +46,45 @@ describe('ShopCard', () => {
     expect(container.querySelector('.shop-card__media-fallback')?.textContent).toBe(shop.initials);
   });
 
+  it('gives the card a prominent primary action, not a quiet row', () => {
+    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
+    const cta = container.querySelector('.shop-card__cta') as HTMLButtonElement;
+    expect(cta).not.toBeNull();
+    // It is the shared primary button — no bespoke card button system.
+    expect(cta.className).toContain('btn');
+    expect(cta.className).toContain('btn--primary');
+    expect(cta.className).toContain('btn--block');
+    // The old demoted row must be gone from the markup entirely.
+    expect(container.querySelector('.btn--quiet')).toBeNull();
+    // The legacy quiet styling depended on this class; it must not come back.
+    expect(cta.className).not.toContain('btn--quiet');
+  });
+
+  it('says what it does, with a word not just an icon', () => {
+    render(<ShopCard shop={shop} onOpen={() => {}} />);
+    const cta = screen.getByRole('button', { name: 'Open shop' });
+    // The label is the accessible name, so the arrow must stay decorative.
+    expect(cta.textContent).toMatch(/Open shop/);
+    const arrow = cta.querySelector('svg');
+    expect(arrow).not.toBeNull();
+    expect(arrow?.getAttribute('aria-hidden')).toBe('true');
+    // Comfortable touch target, announced by the DOM test above; the CSS
+    // height is pinned in styles.redesign.
+    expect(cta.getAttribute('type')).toBe('button');
+  });
+
+  it('sits last in the card body, after the metadata and disclosures', () => {
+    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
+    const body = container.querySelector('.shop-card__body') as HTMLElement;
+    // Nothing may follow the primary action: a quieter control underneath it
+    // would compete with the one thing the card is for.
+    expect(body.lastElementChild?.classList.contains('shop-card__cta')).toBe(true);
+    const meta = body.querySelector('.shop-card__meta') as HTMLElement;
+    const cta = body.querySelector('.shop-card__cta') as HTMLElement;
+    // jsdom has no layout, so compare document order instead of position.
+    expect(meta.compareDocumentPosition(cta) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it('opens the shop from both the media tile and the primary button', () => {
     const onOpen = vi.fn();
     render(<ShopCard shop={shop} onOpen={onOpen} />);

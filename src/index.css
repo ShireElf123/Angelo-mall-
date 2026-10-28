@@ -200,26 +200,6 @@ input, select, textarea { font: inherit; color: inherit; }
 .btn--sm { min-height: 38px; padding: 7px 14px; font-size: 0.9rem; }
 .btn--lg { min-height: 52px; padding: 13px 22px; font-size: 1.05rem; }
 .btn--block { width: 100%; }
-/* Bundle 3 — the card's action.
-   A filled primary pill on all 29 cards was the element that made a directory
-   of different shops read as one repeated template, and it competed with the
-   artwork for the eye. A hairline row with a travelling arrow still carries a
-   46px target and an obvious affordance, without shouting. */
-.btn--quiet {
-  background: transparent;
-  color: var(--forest-900);
-  border: none;
-  border-top: 1px solid var(--border);
-  border-radius: 0;
-  padding: 13px 2px 2px;
-  justify-content: space-between;
-  font-weight: 700;
-  box-shadow: none;
-}
-.btn--quiet:hover:not(:disabled) { background: transparent; color: var(--forest-700); }
-.btn--quiet svg { transition: transform var(--dur-fast) var(--ease-out); }
-.btn--quiet:hover:not(:disabled) svg { transform: translateX(3px); }
-
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -1338,7 +1318,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
    leaves its button floating ~20px above its neighbour's, so a row of cards
    reads as ragged even though the cards themselves are equal height. */
 .shop-card__body > .btn:last-child { margin-top: auto; }
-.shop-card__body > .btn:last-child { min-height: 46px; }
+/* 48px, not 46: the target on the single most important control on the card. */
+.shop-card__body > .btn:last-child { min-height: 48px; }
 .shop-card__title-row { display: flex; align-items: flex-start; gap: 10px; }
 /* Brand plate: keeps the shop mark visually separate from the category illustration.
    Name and trading status are stacked, not side by side. Measured with Inter 800,
@@ -2440,6 +2421,26 @@ body.chat-expanded {
 
 .btn:active { transform: translateY(1px); }
 .btn--block { border-radius: var(--radius-sm); }
+
+/* The shop card's primary action.
+   Deliberately *not* a new button design: this is `.btn--primary` — the same
+   forest gradient, the same raised shadow, the same press and focus — with the
+   two things `.btn--block` strips for full-width form buttons added back. A
+   card's "Open shop" is the one control a customer is looking for, so it gets
+   the pill shape and the 48px height the rest of the primary system uses. */
+.shop-card__cta {
+  border-radius: var(--radius-pill);
+  min-height: 48px;
+  padding: 12px 20px;
+  gap: 10px;
+  letter-spacing: 0.01em;
+}
+.shop-card__cta svg { transition: transform var(--dur-fast) var(--ease-out); }
+.shop-card__cta:hover:not(:disabled) svg { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .shop-card__cta svg { transition: none; }
+  .shop-card__cta:hover:not(:disabled) svg { transform: none; }
+}
 
 
 /* Focus affordance that reads on both light surfaces and the dark header. */

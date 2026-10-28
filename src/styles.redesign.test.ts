@@ -119,14 +119,38 @@ describe('need tiles', () => {
 });
 
 describe('tenant card', () => {
-  it('demotes the action to a hairline row instead of a filled pill', () => {
-    const quiet = rule('.btn--quiet');
-    expect(quiet).toContain('border-top: 1px solid var(--border)');
-    expect(quiet).toContain('border-radius: 0');
-    expect(quiet).toContain('justify-content: space-between');
-    expect(quiet).toContain('background: transparent');
-    // It must still be a comfortable target.
-    expect(css).toMatch(/\.shop-card__body > \.btn:last-child\s*\{\s*min-height: 46px;/s);
+  it('carries the primary button system, not a bespoke card button', () => {
+    // Re-contracted. This used to assert the opposite — a transparent hairline
+    // row with `border-radius: 0` — because that pass set out to stop 29 cards
+    // reading as one repeated template. The owner has since reversed that
+    // judgement: the card has to show one obvious thing to do. The quiet row
+    // made the action look like a caption, so `.btn--quiet` was removed
+    // outright and the card now styles nothing itself.
+    //
+    // What matters now is that it is the *same* button as everywhere else, so
+    // there is no second button design to drift. The card contributes only the
+    // pill radius and the 48px target that `.btn--block` strips.
+    expect(css).not.toContain('.btn--quiet');
+    const cta = rule('.shop-card__cta');
+    expect(cta).toContain('border-radius: var(--radius-pill)');
+    expect(cta).toContain('min-height: 48px');
+    // The face, elevation and press come from the shared primary rule.
+    expect(rule('.btn--primary')).toContain('linear-gradient');
+    expect(css).toMatch(/\.shop-card__body > \.btn:last-child\s*\{\s*min-height: 48px;/s);
+  });
+
+  it('gives that pill a raised face, a press and a visible focus ring', () => {
+    const primary = rule('.btn--primary');
+    // Deep forest gradient, white label, one-pixel top highlight for depth.
+    expect(primary).toContain('linear-gradient(180deg, var(--forest-700) 0%, var(--forest-900) 100%)');
+    expect(primary).toContain('color: #fff');
+    expect(primary).toMatch(/box-shadow:\s*var\(--elev-1\),\s*inset 0 1px 0 rgba\(255, 255, 255, 0\.2\)/);
+    // Pressing collapses the shadow towards the finger rather than adding one.
+    expect(css).toMatch(/\.btn:active:not\(:disabled\)\s*\{\s*box-shadow: var\(--elev-press\);\s*\}/s);
+    // Keyboard focus is a gold ring on the button itself, not a subtle tint.
+    expect(css).toMatch(/\.btn:focus-visible[^{]*\{[^}]*outline: 3px solid var\(--gold-500\)/s);
+    // The arrow nudge is motion, so it must be opt-outable.
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)[^@]*\.shop-card__cta:hover[^{]*\{\s*transform: none;\s*\}/s);
   });
 
   it('reads category, then identity, then action', () => {
