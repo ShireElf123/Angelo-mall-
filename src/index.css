@@ -217,6 +217,30 @@ input, select, textarea { font: inherit; color: inherit; }
 
 .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
+/* One row that scrolls, instead of three stacked rows of chips eating the
+   screen before the first shop. The row bleeds to the page edge so the last
+   chip is visibly cut off — that cut is the affordance that says "scroll me".
+   Overflow stays inside this box, so the page itself never scrolls sideways. */
+.chip-row--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--space-4);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Room for the focus ring, which would otherwise be clipped by the scroller. */
+  padding: 3px var(--space-4) 3px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.chip-row--scroll::-webkit-scrollbar { display: none; }
+.chip-row--scroll > .chip { flex: none; scroll-snap-align: start; }
+/* A soft fade on the right edge signals more content without a hard border. */
+.chip-row--scroll { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+.chip-row--scroll:has(.chip:last-child) { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -298,7 +322,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 .pill--open { background: var(--success-bg); color: var(--success); }
 .pill--closed { background: #ece7db; color: var(--muted); }
-.pill--participation { background: var(--gold-100); color: #6d5410; align-self: flex-start; }
+.pill--participation {
+  background: var(--surface-warm);
+  color: #5b4711;
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  font-weight: 600;
+}
 .pill--paused { background: var(--danger-bg); color: var(--danger); }
 .pill--demo-scenario { background: #e7f0ff; color: #1d4ed8; }
 .pill--real-listing { background: #eef2f0; color: #3f4f48; }
@@ -383,26 +413,37 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .demo-bar {
   background: var(--forest-950);
   color: #e9f2ec;
-  padding: 8px 14px;
+  padding: 6px 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 6px 14px;
   align-items: center;
   justify-content: space-between;
+  /* The demo notice is a strip, not a header. It must never take a third of a
+     phone screen before the app has begun. */
+  min-height: 0;
 }
 .demo-bar__label { font-size: 0.84rem; }
 .demo-bar__label strong { color: #f6d97b; }
-.demo-bar__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 
 .role-switcher {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   background: rgba(255, 255, 255, 0.1);
-  padding: 4px;
+  padding: 3px;
   border-radius: var(--radius-pill);
+  /* One row, scrolled horizontally, rather than four buttons reflowing into
+     three stacked lines on a phone. */
   overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
   max-width: 100%;
+  min-width: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
+.role-switcher::-webkit-scrollbar { display: none; }
 .role-switcher__btn {
   display: inline-flex;
   align-items: center;
@@ -410,15 +451,19 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   border: none;
   background: transparent;
   color: #cfe3d6;
-  padding: 7px 12px;
+  padding: 6px 11px;
   border-radius: var(--radius-pill);
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  min-height: 36px;
+  min-height: 34px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 .role-switcher__btn--active { background: var(--gold-500); color: var(--forest-950); }
+.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.role-switcher__btn:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 
 .demo-bar__reset {
   display: inline-flex;
@@ -428,12 +473,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: #e9f2ec;
   border-radius: var(--radius-pill);
-  padding: 7px 12px;
+  padding: 6px 11px;
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
-  min-height: 36px;
+  min-height: 34px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
+.demo-bar__reset:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 .demo-bar__reset:hover { background: rgba(255, 255, 255, 0.12); }
 
 .app-header {
@@ -441,7 +489,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 16px;
+  padding: 10px var(--space-4);
   /* Sticky, translucent chrome: content slides under it instead of stopping
      at a solid slab. The tint tracks --bg so the blur reads as the page. */
   position: sticky;
@@ -499,7 +547,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   text-transform: uppercase;
 }
 .brand__text { display: flex; flex-direction: column; min-width: 0; }
-.brand__text strong { color: var(--forest-900); font-size: 1.12rem; letter-spacing: -0.01em; white-space: nowrap; }
+.brand__text strong {
+  color: var(--forest-900);
+  font-size: 1.12rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .brand__text small { color: var(--muted); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .top-nav { display: none; min-width: 0; }
@@ -959,26 +1014,35 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .need-tile strong { font-size: 0.9rem; line-height: 1.25; }
 .need-tile small { color: var(--muted); font-size: 0.75rem; line-height: 1.35; }
 
+/* A quiet supporting strip, not a hero. It keeps the illustration and the
+   scripted-reply disclosure, but sits *below* the search controls so it can no
+   longer push the shop results under the fold. */
 .discovery-strip {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  flex-wrap: nowrap;
+  gap: 11px;
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow);
+  border-radius: var(--radius-md);
+  padding: 9px 11px;
+  margin-bottom: 0;
+  box-shadow: var(--elev-1);
 }
 .discovery-strip__art {
-  width: 132px;
+  width: 96px;
   aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: var(--radius-sm);
   flex: none;
 }
-.discovery-strip p { margin: 0; flex: 1 1 200px; font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
+.discovery-strip p { margin: 0; flex: 1 1 auto; min-width: 0; font-size: 0.84rem; color: var(--ink-2); line-height: 1.45; }
+@media (max-width: 639px) {
+  /* Decorative art on a phone: keep a token of it, give the text the width. */
+  .discovery-strip { padding: 8px 10px; gap: 9px; }
+  .discovery-strip__art { width: 60px; border-radius: var(--radius-xs); }
+  .discovery-strip p { font-size: 0.82rem; }
+}
 
 .journey-strip {
   display: flex;
@@ -1108,11 +1172,21 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   font-size: 0.75rem; font-weight: 700;
   padding: 4px 10px; border-radius: var(--radius-pill);
 }
-.shop-card__body { padding: var(--space-4); display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.shop-card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+/* Identity → description → facts → status → action, with a deliberate gap
+   before the CTA so the button is not read as part of the metadata block. */
+.shop-card__body > .pill--participation { margin-top: 2px; }
 /* The CTA is pinned to the floor of the card. Without this, a one-line tagline
    leaves its button floating ~20px above its neighbour's, so a row of cards
    reads as ragged even though the cards themselves are equal height. */
 .shop-card__body > .btn:last-child { margin-top: auto; }
+.shop-card__body > .btn:last-child { min-height: 46px; }
 .shop-card__title-row { display: flex; align-items: flex-start; gap: 10px; }
 /* Brand plate: keeps the shop mark visually separate from the category illustration.
    Name and trading status are stacked, not side by side. Measured with Inter 800,
@@ -1123,22 +1197,53 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 7px;
-  padding: 9px 11px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: linear-gradient(180deg, #ffffff 0%, #fbf9f5 100%);
+  gap: 6px;
+  /* No border and no gradient plate: the card is already a surface, and a
+     second framed box inside it made the tenant name fight its own container.
+     The column stack is kept — it is what stops long names being clipped. */
+  padding: 0;
+  border: none;
+  background: none;
 }
 .shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
 .shop-card__brand .pill { flex: none; align-self: flex-start; }
 .shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.05rem; margin: 0; }
-.shop-card__category { color: var(--muted); font-size: 0.82rem; margin-top: -4px; }
-.shop-card__tagline { color: var(--ink-2); font-size: 0.9rem; }
-.shop-card__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 0.82rem; }
+.shop-card__category {
+  color: var(--gold-600);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: -2px;
+}
+.shop-card__tagline {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  /* Two lines is enough to describe a shop; a third pushes the facts and the
+     action down and makes a row of cards uneven. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.shop-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.shop-card__meta > span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
 .shop-card__meta span { display: inline-flex; align-items: center; gap: 5px; }
 .shop-card .btn { margin-top: auto; }
 
-.directory-controls { display: flex; flex-direction: column; gap: 12px; }
+.directory-controls { display: flex; flex-direction: column; gap: 10px; }
+/* The search box is the primary control on this screen, so it gets a taller
+   target and a stronger resting border than a generic field. */
+.directory-controls .search-field { min-height: 52px; box-shadow: var(--elev-1); }
+.directory-controls .search-field input { font-size: 1rem; }
+.directory-controls .chip-row--scroll { margin-top: 2px; }
 .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .filter-row__label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink-2); font-size: 0.9rem; }
 .results-count { color: var(--muted); font-size: 0.9rem; }
@@ -1285,10 +1390,10 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   background: #f1f5f3;
   border: 1px solid rgba(12, 59, 46, 0.14);
   border-radius: var(--radius-md);
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 0.84rem;
+  line-height: 1.45;
   color: var(--ink-soft, #3f4f48);
 }
 .listing-disclosure svg { flex: none; margin-top: 2px; color: var(--green-700, #0c3b2e); }
@@ -1847,7 +1952,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   .bottom-nav { display: none; }
   .top-nav { display: flex; gap: 2px; }
   .top-nav .nav-item { flex-direction: row; gap: 7px; font-size: 0.9rem; padding: 9px 13px; border-radius: var(--radius-pill); min-height: 42px; }
-  .top-nav .nav-item--active { background: var(--forest-50); }
+  /* Active navigation reads the same in both navs: a forest-100 pill behind the
+   icon, forest-900 label, heavier glyph. The desktop nav used a forest-50 wash
+   over the whole item while the phone used a pill behind the icon, so the same
+   "you are here" looked like two different systems. The gold marker stays a
+   phone-only cue because the desktop pill already carries the state. */
+.top-nav .nav-item--active { background: var(--forest-50); }
+.top-nav .nav-item--active .nav-item__icon { background: var(--forest-100); border-radius: var(--radius-pill); padding: 3px 10px; }
+.top-nav .nav-item--active svg { stroke-width: 2.4; }
+.top-nav .nav-item__icon { display: inline-flex; transition: background-color var(--dur) var(--ease-out); }
   .page { padding-bottom: 48px; }
   .app-footer { padding-bottom: 30px; }
   .toast-stack { bottom: 18px; }
@@ -2238,9 +2351,6 @@ body.chat-expanded {
   background: var(--gold-500);
   box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
 }
-.top-nav .nav-item--active { background: var(--forest-50); }
-
-
 /* --- Cards and lists ----------------------------------------------------- */
 
 .shop-card__media:active { box-shadow: inset 0 0 0 999px rgba(12, 59, 46, 0.06); }
@@ -2450,4 +2560,55 @@ body.chat-expanded {
 .need-tile:active,
 .category-tile:active {
   transform: scale(0.97);
+}
+
+
+/* ==========================================================================
+   App-shell compaction on phones.
+   Between the demo notice, the brand header and the page title there was ~270px
+   of chrome before a single shop appeared. Nothing is hidden that the user
+   needs: the demo notice loses its sentence (the gold "Demo" chip in the header
+   still says it), the reset control becomes an icon with an accessible name,
+   and the header tightens. All five role controls stay present and tappable.
+   ========================================================================== */
+@media (max-width: 639px) {
+  .demo-bar {
+    padding: 5px var(--space-3);
+    gap: 6px 8px;
+    /* One strip: switcher scrolls, reset sits pinned to the end. */
+    flex-wrap: nowrap;
+  }
+  /* The full sentence is redundant on a phone — the header's Demo chip plus the
+     workspace switcher already communicate demo mode. */
+  .demo-bar__label { display: none; }
+  .demo-bar__actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+  }
+  .role-switcher { flex: 1 1 auto; }
+  .role-switcher__btn { padding: 6px 10px; font-size: 0.8rem; }
+  /* Icon-only, but the accessible name comes from aria-label on the button. */
+  .demo-bar__reset { padding: 6px 9px; min-height: 32px; }
+  .demo-bar__reset-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .app-header { padding: 8px var(--space-3); gap: 10px; }
+  .brand { gap: 9px; min-height: 40px; }
+  .brand__mark { width: 36px; height: 36px; }
+  .brand__mark img { width: 30px; height: 30px; }
+  .brand__text strong { font-size: 1.02rem; }
+  .brand__text small { font-size: 0.72rem; }
+}
+
+/* The demo bar scrolls away once the user starts reading; the header is what
+   stays pinned. Guard against the sticky header covering an anchor target. */
+@media (max-width: 899px) {
+  .shell-chrome { position: static; }
 }

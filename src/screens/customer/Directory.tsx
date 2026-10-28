@@ -73,34 +73,17 @@ export function DirectoryScreen({
   return (
     <div className="page">
       <PageHeader
-        eyebrow="Customer · Discovery"
+        eyebrow="Customer · Discover"
         title="Shop directory"
-        subtitle="Angelo Mall’s shops, transcribed from the mall’s own store directory. Every listing is a real tenant; none of them is a Mall Go partner and no ordering, payment or delivery is connected."
+        subtitle="Every shop listed is a real Angelo Mall tenant. Chat, prices and delivery here are simulated."
         meta={
           <>
-            <span>{state.shops.length} tenants listed</span>
+            <span>{state.shops.length} tenants</span>
             <span aria-hidden>·</span>
             <span>Mall directory only</span>
           </>
         }
       />
-
-      <div className="discovery-strip">
-        <img
-          className="discovery-strip__art"
-          src={imageSrc('discover-shops')}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          aria-hidden
-        />
-        <p>
-          <strong>Find a shop, then ask.</strong> Search by name or need, filter by category — or open any shop and
-          describe what you’re after in the chat. In this demo the shop’s replies are scripted samples.
-        </p>
-      </div>
-
-      <ListingDisclosure />
 
       <div className="directory-controls">
         <div className="search-field">
@@ -112,7 +95,7 @@ export function DirectoryScreen({
             id="directory-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by shop, product or need — e.g. “mince”, “cable”, “burgers”…"
+            placeholder="Search shops or what you need…"
             autoComplete="off"
           />
           {query && (
@@ -122,7 +105,7 @@ export function DirectoryScreen({
           )}
         </div>
 
-        <div className="chip-row" role="group" aria-label="Filter by category">
+        <div className="chip-row chip-row--scroll" role="group" aria-label="Filter by category">
           <button
             type="button"
             className={`chip ${category === 'all' ? 'chip--active' : ''}`}
@@ -173,6 +156,23 @@ export function DirectoryScreen({
           </label>
         </div>
       </div>
+
+      <div className="discovery-strip">
+        <img
+          className="discovery-strip__art"
+          src={imageSrc('discover-shops')}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          aria-hidden
+        />
+        <p>
+          <strong>Find a shop, then ask.</strong> Search by name or need, filter by category — or open any shop and
+          describe what you’re after in the chat. In this demo the shop’s replies are scripted samples.
+        </p>
+      </div>
+
+      <ListingDisclosure />
 
       {directoryPromo && (
         <PromotionBanner

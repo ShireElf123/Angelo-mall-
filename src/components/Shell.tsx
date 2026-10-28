@@ -138,7 +138,11 @@ export function Shell({
             <strong>Demo Mode</strong> — sample tenants, prices & orders. Not live shopping.
           </span>
           <div className="demo-bar__actions">
-            <div className="role-switcher" role="group" aria-label="Demo Mode role switcher (not real sign-in)">
+            <div
+              className="role-switcher role-switcher--compact"
+              role="group"
+              aria-label="Demo Mode role switcher (not real sign-in)"
+            >
               {ROLE_OPTIONS.map((option) => (
                 <button
                   key={option.id}
@@ -152,8 +156,14 @@ export function Shell({
                 </button>
               ))}
             </div>
-            <button type="button" className="demo-bar__reset" onClick={() => setConfirmReset(true)}>
-              <RotateCcw size={15} aria-hidden /> Reset demo
+            <button
+              type="button"
+              className="demo-bar__reset"
+              onClick={() => setConfirmReset(true)}
+              aria-label="Reset demo data"
+            >
+              <RotateCcw size={15} aria-hidden />
+              <span className="demo-bar__reset-label">Reset demo</span>
             </button>
           </div>
         </div>
