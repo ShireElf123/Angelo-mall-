@@ -56,7 +56,6 @@ export function OrdersScreen({ navigate }: { navigate: (route: Route) => void })
   return (
     <div className="page page--narrow">
       <PageHeader
-        eyebrow="Customer · Orders"
         title="Your orders"
         subtitle="Every order stays linked to its shop conversation."
         meta={<span>Demo order history for Thandi M.</span>}

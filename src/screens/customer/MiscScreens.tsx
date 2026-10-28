@@ -137,7 +137,7 @@ export function HelpScreen({ navigate }: { navigate: (route: Route) => void }) {
   return (
     <div className="page page--narrow">
       <PageHeader
-        eyebrow="Customer · Support"
+        eyebrow="Support"
         title="Help & about this demo"
         subtitle="Angelo Mall Go is a front-end prototype: real interface behaviour, sample data from the mall’s own store directory, no live services."
       />

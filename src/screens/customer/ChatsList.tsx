@@ -18,7 +18,7 @@ export function ChatsListScreen({ navigate }: { navigate: (route: Route) => void
   return (
     <div className="page page--narrow">
       <PageHeader
-        eyebrow="Customer · Messages"
+        eyebrow="Messages"
         title="Your chats"
         subtitle="Every order lives inside its conversation — reopen a chat any time to ask about an order."
         meta={<span>Demo customer: Thandi M.</span>}

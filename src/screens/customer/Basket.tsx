@@ -93,7 +93,7 @@ export function BasketScreen({
   };
 
   return (
-    <div className="page page--narrow">
+    <div className="page page--narrow page--basket">
       <button type="button" className="back-btn" onClick={() => navigate({ name: 'chat', conversationId: order.conversationId })}>
         <ArrowLeft size={18} aria-hidden /> Back to chat
       </button>
@@ -289,23 +289,46 @@ export function BasketScreen({
           store / on delivery / secure online payment) would be shown here before you confirm.
         </p>
 
-        <button
-          type="button"
-          className="btn btn--primary btn--lg btn--block"
-          disabled={confirmBlocked || order.status !== 'awaiting-customer'}
-          onClick={() => setConfirmOpen(true)}
-        >
-          Confirm demo order · {formatZAR(totals.total)}
-        </button>
-        {confirmBlocked && order.items.length > 0 && (
-          <p className="form-error" role="note">
-            Confirmation is paused while a change request waits for shop approval.
-          </p>
-        )}
         <button type="button" className="btn btn--ghost btn--block" onClick={() => setCancelOpen(true)}>
           Cancel this basket
         </button>
       </section>
+
+      {/*
+        The basket's one primary action, pinned above the tab bar. It used to
+        sit at the end of the page, below the item list, the pending-request
+        panel, two fulfilment radios and the totals — on a phone that is roughly
+        three screens of scrolling to reach "confirm". The total and the action
+        now travel together at the bottom of the screen, which is where a
+        shopper expects to commit to a basket, and the bar sits directly above
+        the navigation rather than under it.
+      */}
+      <div className="checkout-bar" role="region" aria-label="Confirm your demo order">
+        <div className="checkout-bar__inner">
+          {confirmBlocked && order.items.length > 0 && (
+            <p className="checkout-bar__note" role="note">
+              Confirmation is paused while a change request waits for shop approval.
+            </p>
+          )}
+          <div className="checkout-bar__row">
+            <span className="checkout-bar__total">
+              <small>
+                {totals.itemCount} item{totals.itemCount === 1 ? '' : 's'} ·{' '}
+                {fulfilment === 'delivery' ? 'delivery' : 'collection'}
+              </small>
+              <strong>{formatZAR(totals.total)}</strong>
+            </span>
+            <button
+              type="button"
+              className="btn btn--primary"
+              disabled={confirmBlocked || order.status !== 'awaiting-customer'}
+              onClick={() => setConfirmOpen(true)}
+            >
+              Confirm demo order
+            </button>
+          </div>
+        </div>
+      </div>
 
       {confirmOpen && (
         <Modal title={`Confirm demo order ${order.ref}?`} onClose={() => setConfirmOpen(false)}>

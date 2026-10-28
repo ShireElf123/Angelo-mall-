@@ -1600,8 +1600,12 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 4px;
   overflow-wrap: anywhere;
 }
-.chat-bubble--mine { background: var(--chat-mine); border-top-right-radius: 4px; }
-.chat-bubble--theirs { background: #fff; border-top-left-radius: 4px; }
+/* Both sides get a hairline. On the dotted warm canvas a white bubble and a
+   pale-green bubble had almost the same edge strength, so a long thread read as
+   one column of text rather than two voices. The border does the separating
+   with no extra shadow and no change of palette. */
+.chat-bubble--mine { background: var(--chat-mine); border: 1px solid #bcdcc6; border-top-right-radius: 4px; }
+.chat-bubble--theirs { background: #fff; border: 1px solid var(--border); border-top-left-radius: 4px; }
 .chat-bubble__text { white-space: pre-wrap; font-size: 0.95rem; }
 .chat-bubble__meta {
   align-self: flex-end;
@@ -2621,6 +2625,9 @@ body.chat-expanded {
 .bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-100); }
 .bottom-nav .nav-item--active svg { stroke-width: 2.4; }
 .bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); }
+/* The first and last tabs sit against the screen edge, where a 3px outline with
+   a 2px offset is partly off-screen. Inset the ring on the bar only. */
+.bottom-nav .nav-item:focus-visible { outline-offset: -3px; }
 
 /* --- 3. Cards that respond to a thumb -----------------------------------
    20px radii and a press that collapses the shadow: the card looks pushed
@@ -2939,3 +2946,76 @@ body.chat-expanded {
   .hero__aside { order: 0; min-height: 0; }
   .hero__content { padding: 34px 32px; gap: 14px; }
 }
+
+/* ==========================================================================
+   Phase 2 — mobile app shell and checkout
+   ========================================================================== */
+
+/* ---------------- Pinned basket action ---------------- */
+
+/* Sticky, not fixed. `.shell-main .page` plays a 240ms entry animation with a
+   `transform`, and a transformed ancestor becomes the containing block for
+   `position: fixed` — the bar would have been pinned to the page for two frames
+   and then jumped to the viewport. Sticky is unaffected, and it also means the
+   bar settles into the flow at the end of the page instead of permanently
+   covering the last item, so no padding hack is needed to reach content.
+   z-index 54 keeps it under the tab bar (55). */
+.checkout-bar {
+  position: sticky;
+  bottom: calc(var(--bottom-nav-h) + 8px);
+  z-index: 54;
+  margin-top: -4px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  box-shadow: var(--elev-3);
+}
+.checkout-bar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.checkout-bar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.checkout-bar__total { display: flex; flex-direction: column; min-width: 0; }
+.checkout-bar__total small { color: var(--muted); font-size: 0.75rem; }
+.checkout-bar__total strong {
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--forest-950);
+  font-variant-numeric: tabular-nums;
+}
+.checkout-bar .btn { flex: 0 1 auto; min-width: 0; }
+.checkout-bar__note {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--warning);
+}
+
+@media (max-width: 359px) {
+  /* Two items and a price must not push the button off a 320px screen. */
+  .checkout-bar { padding-left: 9px; padding-right: 9px; }
+  .checkout-bar__row { gap: 8px; }
+  .checkout-bar .btn { padding-left: 14px; padding-right: 14px; }
+  .checkout-bar__total strong { font-size: 1.05rem; }
+}
+
+@media (min-width: 900px) {
+  /* The tab bar is gone from 900px up, so the bar lowers to a comfortable
+     float instead of hanging in the space the bar used to occupy. */
+  .checkout-bar { bottom: 16px; }
+}
+/* ---------------- Shop page: action first ---------------- */
+
+/* The call to action now sits directly under the shop's identity, before the
+   description and the fact grid, so the reason a shopper opened this page is
+   reachable without scrolling. */
+.shop-hero__body > .btn--lg { margin-top: 2px; }
+.shop-hero__body > .shop-hero__hint { margin-bottom: 2px; }

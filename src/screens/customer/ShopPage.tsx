@@ -115,6 +115,18 @@ export function ShopPageScreen({
           </div>
           <p className="shop-hero__tagline">{shop.tagline}</p>
           <ParticipationPill status={shop.participation} />
+          {/* The one action this page exists for sits above the description and
+              the fact grid, so a shopper does not scroll past six tiles of
+              opening hours to reach it. Its disclosure travels with it. */}
+          <button type="button" className="btn btn--primary btn--lg btn--block" onClick={() => void startChat()}>
+            <MessageCircle size={20} aria-hidden />
+            {conversation ? 'Continue the sample chat' : 'Try the sample chat'}
+          </button>
+          <p className="shop-hero__hint">
+            Sample chat only — nothing is sent to {shop.name}. Replies, prices and collection steps are simulated in this
+            browser. <DemoTag>Simulated</DemoTag>
+          </p>
+
           <p>{shop.description}</p>
 
           <dl className="shop-facts">
@@ -175,15 +187,6 @@ export function ShopPageScreen({
               <dd>{shop.fulfilment.includes('collection') ? shop.prepTimeLabel : 'Not offered by this demo shop'}</dd>
             </div>
           </dl>
-
-          <button type="button" className="btn btn--primary btn--lg btn--block" onClick={() => void startChat()}>
-            <MessageCircle size={20} aria-hidden />
-            {conversation ? 'Continue the sample chat' : 'Try the sample chat'}
-          </button>
-          <p className="shop-hero__hint">
-            Sample chat only — nothing is sent to {shop.name}. Replies, prices and collection steps are simulated in this
-            browser. <DemoTag>Simulated</DemoTag>
-          </p>
 
           <div className="shop-source" aria-label="Listing source">
             <p>
