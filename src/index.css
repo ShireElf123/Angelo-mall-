@@ -1517,6 +1517,19 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .chat-header__shop small { color: #bcd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
 .chat-header .shop-avatar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); }
+/* On a phone the header name had room for about half of "The Angelo SUPERSPAR"
+   and fell back to an ellipsis. Which shop you are talking to is the one thing
+   this header must not abbreviate, so on narrow screens the name takes a second
+   line while the (secondary) trading line stays on one. */
+@media (max-width: 430px) {
+  .chat-header__shop strong {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.18;
+  }
+}
 /* A back control this important should not be a bare glyph on a phone. */
 .chat-header > .icon-btn { width: 46px; height: 46px; }
 
@@ -1667,6 +1680,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .order-card-msg__items li { display: flex; justify-content: space-between; gap: 14px; font-size: 0.9rem; padding: 4px 0; border-top: 1px solid var(--border); }
 .order-card-msg__more { color: var(--muted); }
 .order-card-msg__total { display: flex; justify-content: space-between; gap: 12px; background: var(--forest-50); border-radius: var(--radius-xs); padding: 8px 10px; font-size: 0.9rem; }
+/* On a 320-390px card the amount column collapsed to ~45px and "R 254,96"
+   broke across lines as "R 254,9 / 6". Money is read as one token. */
+.order-card-msg__total strong { white-space: nowrap; flex: none; }
 .order-card-msg__note { font-size: 0.75rem; color: var(--muted); }
 
 .basket-bar {
@@ -1740,6 +1756,16 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   background: var(--bg);
 }
 .composer textarea:focus { outline: 3px solid var(--forest-100); border-color: var(--forest-700); }
+/* The placeholder is routinely longer than the field ("Message The Angelo
+   SUPERSPAR…"). It wrapped to a second line that the 48px min-height cut in
+   half, so the field looked broken before the customer typed anything. Keep
+   the placeholder to one line and ellipsise it; the typed value still wraps
+   normally, which is what Shift+Enter relies on. */
+.composer textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .composer__attach { color: var(--forest-800); }
 .composer__send {
   width: 48px; height: 48px;
@@ -1771,8 +1797,12 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 /* ---------------- Basket & orders ---------------- */
 
-.basket-head { display: flex; align-items: center; gap: 13px; }
-.basket-head > div { flex: 1; min-width: 0; }
+.basket-head { display: flex; align-items: center; gap: 10px 13px; flex-wrap: wrap; }
+/* A wide status pill ("Awaiting your confirmation") used to squeeze the title
+   and the shop name into a ~90px column on a phone, so "Basket AMG-1001" broke
+   over three lines and the shop name over six. The text block now claims a
+   usable basis and the pill wraps onto its own line when it cannot fit. */
+.basket-head > div { flex: 1 1 210px; min-width: 0; }
 .basket-head h1 { font-size: 1.45rem; }
 .basket-head p { color: var(--muted); }
 
@@ -3061,6 +3091,15 @@ body.chat-expanded {
 }
 
 @media (max-width: 359px) {
+  /* The two scroll rails bleed to the page edge with a --space-4 gutter. At
+     <=359px the page gutter drops to --space-3, so the bleed stuck out 4px and
+     the document scrolled sideways on a 320px screen. Match the gutter. */
+  .category-grid,
+  .shop-grid--rail {
+    padding-right: var(--space-3);
+    margin-right: calc(-1 * var(--space-3));
+    max-width: calc(100% + var(--space-3));
+  }
   /* Two items and a price must not push the button off a 320px screen. */
   .checkout-bar { padding-left: 9px; padding-right: 9px; }
   .checkout-bar__row { gap: 8px; }
