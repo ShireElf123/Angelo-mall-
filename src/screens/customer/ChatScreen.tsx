@@ -231,7 +231,7 @@ export function ChatScreen({
             <ShopAvatar shop={shop} />
             <span>
               <strong>{shop.name}</strong>
-              <small>{shop.tradingNow ? 'Demo shop · usually replies within the hour' : 'Demo shop · shown closed'}</small>
+              <small>{shop.tradingNow ? 'Open now (demo) · replies are scripted' : 'Closed (demo) · replies are scripted'}</small>
             </span>
           </button>
           <TradingPill tradingNow={shop.tradingNow} />

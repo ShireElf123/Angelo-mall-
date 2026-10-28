@@ -37,8 +37,14 @@
   --success-bg: #e3f1e9;
   --info: #1d4e79;
   --info-bg: #e6eef7;
-  --chat-mine: #d8efdc;
-  --chat-bg: #efe9dd;
+  /* Chat. Outgoing is the brand forest, filled; incoming is white. The old pair
+     (pale green vs white) was too close in weight to read at a glance, and the
+     contrast between "my turn" and "their turn" is the single most important
+     signal in a conversation. Both are still brand colours. */
+  --chat-mine: #10503d;        /* forest-800, 9.1:1 with white text */
+  --chat-mine-edge: #0c3b2e;   /* forest-900, for the hairline */
+  --chat-theirs: #ffffff;
+  --chat-bg: #f2ece1;
   /* Elevation — four honest levels and one for the fixed chrome.
      Restraint is the point: a card never looks like a dialog, and nothing in
      the app floats above --elev-4. */
@@ -293,12 +299,14 @@ input, select, textarea { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--surface);
+  background: var(--surface-tint);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
   padding: 6px 8px 6px 18px;
   color: var(--muted);
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
 }
+.search-field:focus-within { background: var(--surface); }
 .search-field input {
   flex: 1;
   min-width: 0;
@@ -685,7 +693,12 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 14px;
   margin-bottom: var(--space-3);
 }
-.section-header h2 { font-size: 1.35rem; color: var(--forest-950); }
+.section-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+}
 .section-header p { color: var(--muted); font-size: 0.9rem; margin-top: 4px; max-width: 640px; }
 
 /* ---------------- Page title block ----------------
@@ -762,7 +775,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-xl);
   padding: 18px;
   box-shadow: var(--shadow);
 }
@@ -795,21 +808,27 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   flex: none;
 }
 
+/* A dashed border reads as "unfinished placeholder". An empty state is a real
+   screen a customer can land on, so it gets a solid surface, a soft tint and
+   the same radius as every other feature panel. */
 .empty-state {
   text-align: center;
-  padding: 38px 22px;
+  padding: 34px 22px 30px;
   background: var(--surface);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elev-1);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
+.empty-state h3 { font-size: 1.15rem; color: var(--forest-950); }
 .empty-state__icon {
-  width: 62px; height: 62px;
+  width: 60px; height: 60px;
   border-radius: 50%;
   background: var(--forest-50);
+  box-shadow: inset 0 0 0 1px var(--forest-100);
   color: var(--forest-800);
   display: inline-flex;
   align-items: center;
@@ -1340,7 +1359,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
 .shop-card__brand .pill { flex: none; align-self: flex-start; }
-.shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.05rem; margin: 0; }
+.shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.12rem; margin: 0; }
 /* Read first, above the name: a shopper scanning a grid filters by kind
    ("Restaurants") before brand. The wordmark below confirms the choice. */
 .shop-card__category {
@@ -1451,17 +1470,23 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 .conversation-list { display: flex; flex-direction: column; }
 .conversation-list li button {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 13px;
   width: 100%; text-align: left;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 13px 14px;
+  border-radius: var(--radius);
+  padding: 14px;
   cursor: pointer;
-  margin-bottom: 9px;
+  margin-bottom: 10px;
   box-shadow: var(--elev-1);
-  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
+.conversation-list li button:active { transform: scale(0.99); }
+/* The shop name is the thing being scanned; the last message is the preview. */
+.conversation-list__text strong { font-size: 1rem; color: var(--forest-950); }
 .conversation-list li button:hover { border-color: var(--forest-700); }
 .conversation-list__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .conversation-list__text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1490,8 +1515,9 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 11px 12px;
   background: var(--forest-900);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   color: #fff;
   flex: none;
 }
@@ -1504,9 +1530,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 }
 .chat-header__shop--static { cursor: default; }
 .chat-header__shop span { display: flex; flex-direction: column; min-width: 0; }
-.chat-header__shop strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.chat-header__shop small { color: #bcd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; }
-.chat-header .shop-avatar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25); }
+.chat-header__shop strong {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;
+}
+.chat-header__shop small { color: #bcd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
+.chat-header .shop-avatar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); }
+/* A back control this important should not be a bare glyph on a phone. */
+.chat-header > .icon-btn { width: 46px; height: 46px; }
 
 .chat-notice {
   display: flex; gap: 8px; align-items: flex-start;
@@ -1554,13 +1585,16 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  background: var(--chat-bg);
-  background-image: radial-gradient(rgba(12, 59, 46, 0.055) 1px, transparent 1px);
-  background-size: 18px 18px;
-  padding: 16px 12px 10px;
+  /* A warm paper tone with a very low-contrast dot grid: enough texture to give
+     the bubbles something to sit on, quiet enough not to compete with text. */
+  background-color: var(--chat-bg);
+  background-image: radial-gradient(rgba(12, 59, 46, 0.075) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 16px 12px 12px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
+  scroll-behavior: smooth;
 }
 
 .chat-day {
@@ -1586,43 +1620,61 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   text-align: center;
 }
 
-.chat-row { display: flex; margin: 2px 0; }
+/* Turn grouping. `--start` opens a turn (a little air above), `--cont`
+   continues it (tight), and the last bubble of a turn carries the tail corner
+   and the timestamp. */
+.chat-row { display: flex; }
+.chat-row--start { margin-top: 10px; }
+.chat-row--cont { margin-top: 2px; }
 .chat-row--mine { justify-content: flex-end; }
 .chat-row--theirs { justify-content: flex-start; }
 
 .chat-bubble {
-  max-width: min(82%, 460px);
-  padding: 9px 11px 6px;
+  max-width: min(80%, 460px);
+  padding: 8px 12px 7px;
   border-radius: var(--radius-md);
-  box-shadow: 0 1px 1px rgba(12, 59, 46, 0.14);
+  box-shadow: 0 1px 2px rgba(12, 59, 46, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   overflow-wrap: anywhere;
 }
-/* Both sides get a hairline. On the dotted warm canvas a white bubble and a
-   pale-green bubble had almost the same edge strength, so a long thread read as
-   one column of text rather than two voices. The border does the separating
-   with no extra shadow and no change of palette. */
-.chat-bubble--mine { background: var(--chat-mine); border: 1px solid #bcdcc6; border-top-right-radius: 4px; }
-.chat-bubble--theirs { background: #fff; border: 1px solid var(--border); border-top-left-radius: 4px; }
-.chat-bubble__text { white-space: pre-wrap; font-size: 0.95rem; }
+/* Outgoing is filled forest with white text; incoming is white with a hairline.
+   That is a difference in tone, not just in tint, so the two sides of a
+   conversation are separable at a glance on a phone in daylight. */
+.chat-bubble--mine { background: var(--chat-mine); border: 1px solid var(--chat-mine-edge); color: #fff; }
+.chat-bubble--theirs { background: var(--chat-theirs); border: 1px solid var(--border); color: var(--ink); }
+/* The tail: only the final bubble of a turn gets the squared-off near corner,
+   so a stacked reply reads as one message rather than three cards. */
+.chat-row--end.chat-row--mine .chat-bubble { border-bottom-right-radius: 6px; }
+.chat-row--end.chat-row--theirs .chat-bubble { border-bottom-left-radius: 6px; }
+.chat-bubble__text { white-space: pre-wrap; font-size: 0.95rem; line-height: 1.45; }
 .chat-bubble__meta {
   align-self: flex-end;
   display: inline-flex; gap: 4px; align-items: center;
   color: var(--muted); font-size: 0.7rem;
 }
+.chat-bubble--mine .chat-bubble__meta { color: rgba(255, 255, 255, 0.8); }
 .chat-bubble__simulated {
   display: flex; gap: 5px; align-items: flex-start;
   color: var(--gold-600); font-size: 0.75rem; font-weight: 600;
   border-top: 1px dashed var(--border-strong); padding-top: 5px;
 }
+.chat-bubble--mine .chat-bubble__simulated {
+  color: #f6d97b;
+  border-top-color: rgba(255, 255, 255, 0.28);
+}
 .chat-bubble__figure { margin: 0 0 4px; }
 .chat-bubble__figure img { border-radius: var(--radius-sm); display: block; max-height: 260px; width: 100%; object-fit: cover; }
 .chat-bubble__figure figcaption { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+/* Inside the filled outgoing bubble the muted grey would sit at ~2:1. */
+.chat-bubble--mine .chat-bubble__figure figcaption { color: rgba(255, 255, 255, 0.82); }
 
+/* Always white, even inside the dark outgoing bubble: it is a document, and a
+   document should not be printed on the message colour. */
 .order-card-msg {
   background: #fff;
+  color: var(--ink);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 11px;
@@ -1653,9 +1705,10 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 .typing-bar {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  background: #fff;
-  padding: 8px 16px;
-  font-size: 0.84rem; color: var(--muted);
+  background: var(--chat-bg);
+  border-top: 1px solid var(--border);
+  padding: 9px 16px;
+  font-size: 0.84rem; color: var(--ink-2);
   flex: none;
 }
 .typing-bar em { color: var(--gold-600); font-style: normal; font-weight: 600; }
@@ -1677,7 +1730,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .composer {
   background: #fff;
   border-top: 1px solid var(--border);
-  padding: 9px 10px calc(8px + env(safe-area-inset-bottom));
+  padding: 10px 11px calc(9px + env(safe-area-inset-bottom));
   flex: none;
   box-shadow: 0 -1px 0 var(--border), 0 -10px 24px -20px rgba(12, 59, 46, 0.4);
 }
@@ -1719,7 +1772,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   box-shadow: var(--elev-1);
 }
 .composer__send:disabled { background: #c9d4cc; cursor: not-allowed; }
-.composer__hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; padding: 0 6px; }
+.composer__hint {
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+  font-size: 0.72rem; color: var(--muted);
+  margin-top: 7px; padding: 0 4px;
+}
+.composer__hint-demo { font-weight: 600; color: var(--ink-2); }
+/* Keyboard shortcuts are noise on a phone and useful on a laptop. */
+@media (hover: none) { .composer__hint-keys { display: none; } }
 
 .chat-aside { display: none; }
 .chat-aside .panel h2 { font-size: 1rem; }

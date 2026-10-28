@@ -89,11 +89,35 @@ describe('tab bar', () => {
 });
 
 describe('chat thread definition', () => {
-  it('gives both speakers an edge on the dotted canvas', () => {
-    expect(rule('.chat-bubble--mine')).toContain('border: 1px solid #bcdcc6');
+  it('gives both speakers a distinct edge on the dotted canvas', () => {
+    // Re-contracted when outgoing became a filled forest bubble: the original
+    // assertion pinned the pale-green hex, which was an implementation detail of
+    // that particular design. What actually matters is that the two sides are
+    // separable and still come from the brand palette.
+    expect(rule('.chat-bubble--mine')).toContain('border: 1px solid var(--chat-mine-edge)');
     expect(rule('.chat-bubble--theirs')).toContain('border: 1px solid var(--border)');
-    // Same palette: the distinction must not come from a new colour family.
     expect(rule('.chat-bubble--mine')).toContain('var(--chat-mine)');
+    // Outgoing is filled, so its text must be light for contrast.
+    expect(rule('.chat-bubble--mine')).toContain('color: #fff');
+  });
+
+  it('keeps the outgoing bubble readable against white text', () => {
+    // #10503d on #ffffff is ~9:1. A pale bubble would fail this pairing, which
+    // is why the token changed rather than the text colour.
+    expect(css).toMatch(/--chat-mine:\s*#10503d;/);
+  });
+
+  it('squares off only the last bubble of a turn', () => {
+    // Grouping is what makes a multi-line reply read as one turn, not three.
+    expect(rule('.chat-row--end.chat-row--mine .chat-bubble')).toContain('border-bottom-right-radius: 6px');
+    expect(rule('.chat-row--end.chat-row--theirs .chat-bubble')).toContain('border-bottom-left-radius: 6px');
+    // Continuing lines keep the normal radius, so nothing looks cut off.
+    expect(rule('.chat-row--cont')).toContain('margin-top: 2px');
+    expect(rule('.chat-row--start')).toContain('margin-top: 10px');
+  });
+
+  it('hides keyboard shortcuts where there is no keyboard', () => {
+    expect(css).toMatch(/@media \(hover: none\) \{ \.composer__hint-keys \{ display: none; \} \}/);
   });
 
   it('keeps the composer clear of the keyboard and the tab bar', () => {

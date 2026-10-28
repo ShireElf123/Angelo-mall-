@@ -155,16 +155,45 @@ export function ChatThread({
     }
   };
 
+  /**
+   * Group consecutive messages from the same speaker.
+   *
+   * A thread used to render every message as an identical isolated card, each
+   * with its own timestamp. In a conversation where one person sends three
+   * short lines, that reads as three separate announcements rather than one
+   * turn — the exact opposite of how the messaging apps these customers already
+   * use behave. Grouping is presentation only: the message list, order and data
+   * model are untouched.
+   */
+  const groupable = (message: Message | undefined) =>
+    Boolean(message && message.kind !== 'system' && message.kind !== 'order-card');
+
   let lastDay = '';
 
   return (
     <div className="chat-thread">
       <div className="chat-scroll" ref={scrollRef} role="log" aria-label="Conversation messages" aria-live="polite">
         {messages.length === 0 && emptyState}
-        {messages.map((message) => {
+        {messages.map((message, index) => {
           const day = formatDayLabel(message.createdAt);
           const showDay = day !== lastDay;
           lastDay = day;
+
+          const previous = messages[index - 1];
+          const following = messages[index + 1];
+          // A message that cannot be grouped (an order card, a system notice) is
+          // always its own turn — checking only the neighbours let a document
+          // inherit the tail and spacing of the sentence above it.
+          const startsGroup =
+            !groupable(message) ||
+            !groupable(previous) ||
+            previous!.sender !== message.sender ||
+            formatDayLabel(previous!.createdAt) !== day;
+          const endsGroup =
+            !groupable(message) ||
+            !groupable(following) ||
+            following!.sender !== message.sender ||
+            formatDayLabel(following!.createdAt) !== day;
 
           if (message.kind === 'system') {
             return (
@@ -183,7 +212,16 @@ export function ChatThread({
           return (
             <div key={message.id}>
               {showDay && <div className="chat-day">{day}</div>}
-              <div className={`chat-row ${mine ? 'chat-row--mine' : 'chat-row--theirs'}`}>
+              <div
+                className={[
+                  'chat-row',
+                  mine ? 'chat-row--mine' : 'chat-row--theirs',
+                  startsGroup ? 'chat-row--start' : 'chat-row--cont',
+                  endsGroup ? 'chat-row--end' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
                 <div className={`chat-bubble ${mine ? 'chat-bubble--mine' : 'chat-bubble--theirs'}`}>
                   {message.kind === 'order-card' && order ? (
                     <>
@@ -205,10 +243,15 @@ export function ChatThread({
                       {message.text && <p className="chat-bubble__text">{message.text}</p>}
                     </>
                   )}
-                  <span className="chat-bubble__meta">
-                    {formatTime(message.createdAt)}
-                    {mine && <CheckCheck size={14} aria-label="Sent (demo)" />}
-                  </span>
+                  {/* One timestamp per turn: repeating it under every line of a
+                      three-line reply is noise, and the last message is the one
+                      whose time a reader actually wants. */}
+                  {endsGroup && (
+                    <span className="chat-bubble__meta">
+                      {formatTime(message.createdAt)}
+                      {mine && <CheckCheck size={14} aria-label="Sent (demo)" />}
+                    </span>
+                  )}
                   {message.simulated && (
                     <span className="chat-bubble__simulated">
                       <Bot size={13} aria-hidden /> Simulated reply (demo) — no staff member has responded.
@@ -307,7 +350,10 @@ export function ChatThread({
             <SendHorizonal size={20} aria-hidden />
           </button>
         </div>
-        <p className="composer__hint">Enter to send · Shift + Enter for a new line · Demo chat — messages are stored on this device only.</p>
+        <p className="composer__hint">
+          <span className="composer__hint-demo">Demo chat · messages stay on this device.</span>
+          <span className="composer__hint-keys">Enter to send · Shift + Enter for a new line</span>
+        </p>
       </div>
     </div>
   );
