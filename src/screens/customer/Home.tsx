@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { ResponsiveImage } from '../../components/ResponsiveImage';
-import { HOME_HERO_SRC, HOME_HERO_SRCSET } from '../../utils/responsiveImages';
+import { CARD_IMAGE_SIZES, HOME_HERO_SRC, HOME_HERO_SRCSET, webpSrcSetFor } from '../../utils/responsiveImages';
 import {
   ArrowRight,
   Bike,
@@ -39,6 +39,21 @@ const CATEGORY_ICONS: Record<string, string> = {
   finance: '/images/shop-finance.jpg',
 };
 
+/**
+ * Customer Home.
+ *
+ * Composition, not decoration: the screen opens on one art-directed panel
+ * (dark storefront card with the mall photograph), then answers the four
+ * questions a shopper actually has — "where was I?", "what do I need?",
+ * "what is this?", "what can I do?" — in that order. The previous layout put a
+ * full-bleed photo hero, a 2-column list of categories and a second grid of
+ * need shortcuts all above the fold, so three near-identical blocks competed
+ * for the same attention and none of them read as the way in.
+ *
+ * Every block below is built from existing data: the shops, categories,
+ * featured flags, demo-scenario walkthrough and concept artwork already in
+ * `src/data`. Nothing here invents a price, rating, offer or partnership.
+ */
 export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   const { state, service } = useDemoStore();
   const [query, setQuery] = useState('');
@@ -49,6 +64,15 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   const activeOrders = ordersForCustomer(state).filter(
     (o) => isConfirmedOrder(o) && !['delivered', 'completed'].includes(o.status),
   );
+
+  /**
+   * The worked example. SUPERSPAR carries the seeded basket, so it is the
+   * honest "start here" — the same shop the old how-it-works note pointed at.
+   * Falls back to any demo-scenario tenant if the demo data ever changes.
+   */
+  const walkthrough =
+    state.shops.find((shop) => shop.id === 'shop-superspar') ??
+    state.shops.find((shop) => shop.participation === 'demo-scenario');
 
   const searchResults = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -67,28 +91,16 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   };
 
   return (
-    <div className="page">
-      <section className="hero">
-        <ResponsiveImage
-          src={HOME_HERO_SRC}
-          webpSrcSet={HOME_HERO_SRCSET}
-          sizes="100vw"
-          alt=""
-          className="hero__img"
-          width={1408}
-          height={768}
-          fetchPriority="high"
-        />
-        <div className="hero__shade" aria-hidden />
+    <div className="page page--home">
+      <section className="hero" aria-labelledby="home-title">
         <div className="hero__content">
           <span className="hero__kicker">
             <Sparkles size={14} aria-hidden /> Angelo Mall · Nigel · concept demo
           </span>
-          <h1>Chat to mall shops. Order without the catalogue hunt.</h1>
-          <p>
-            This concept shows how a shopper could message a mall shop, ask about sizes, stock and prices, and confirm a
-            priced summary for local delivery or collection. Every shop here is a real Angelo Mall tenant; every reply,
-            price and delivery step is simulated.
+          <h1 id="home-title">Chat to mall shops. Order without the catalogue hunt.</h1>
+          <p className="hero__lede">
+            Every shop here is a real Angelo Mall tenant, but nothing you send reaches them: the chat, prices and
+            delivery steps are simulated in your browser.
           </p>
           <form className="hero__search" onSubmit={submitSearch} role="search">
             <Search size={20} aria-hidden />
@@ -99,7 +111,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               id="home-search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search shops — try “groceries”, “burgers” or “cable”…"
+              placeholder="Search shops — “groceries”, “burgers”, “cable”…"
               autoComplete="off"
             />
             <button type="submit" className="btn btn--gold">
@@ -110,13 +122,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
             <div className="hero__results" aria-live="polite">
               {searchResults.length === 0 ? (
                 <div className="hero__no-match">
-                  <img
-                    src={imageSrc('search-guidance')}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    aria-hidden
-                  />
+                  <img src={imageSrc('search-guidance')} alt="" loading="lazy" decoding="async" aria-hidden />
                   <p>
                     No listed shops match “{query}”. Try a need instead of a product — “cable”, “mince”, “burgers” — or
                     browse the full directory below.
@@ -141,13 +147,29 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
             </div>
           )}
           <div className="hero__actions">
-            <button type="button" className="btn btn--light" onClick={() => navigate({ name: 'shops' })}>
-              Browse all shops
+            <button type="button" className="btn btn--light btn--lg" onClick={() => navigate({ name: 'shops' })}>
+              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
             </button>
             <button type="button" className="btn btn--outline-light" onClick={() => navigate({ name: 'help' })}>
               How chat ordering works
             </button>
           </div>
+        </div>
+        <div className="hero__aside">
+          <ResponsiveImage
+            src={HOME_HERO_SRC}
+            webpSrcSet={HOME_HERO_SRCSET}
+            sizes="(min-width: 780px) 45vw, 100vw"
+            alt=""
+            className="hero__img"
+            width={1408}
+            height={768}
+            fetchPriority="high"
+          />
+          {/* The hero image is generated concept art, not a photograph of the
+              mall — it carries the same label as the tenant artwork so the two
+              can never be confused for real photography. */}
+          <span className="hero__aside-chip">Concept art · not a photo of the mall</span>
         </div>
       </section>
 
@@ -216,94 +238,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         </section>
       )}
 
-      <section aria-label="Shop by category">
-        <SectionHeader
-          title="What do you need today?"
-          subtitle="Real Angelo Mall tenants, grouped the way the mall directory lists them. None is a Mall Go partner; ordering is simulated."
-        />
-        <div className="category-grid">
-          {CATEGORIES.map((category) => {
-            const count = state.shops.filter((s) => s.category === category.id).length;
-            return (
-              <button
-                key={category.id}
-                type="button"
-                className="category-tile"
-                onClick={() => navigate({ name: 'shops', category: category.id })}
-              >
-                <img src={CATEGORY_ICONS[category.id]} alt="" loading="lazy" />
-                <span>
-                  <strong>{category.label}</strong>
-                  <small>
-                    {category.tagline} · {count} listed shop{count === 1 ? '' : 's'}
-                  </small>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section aria-label="Explore by need">
-        <SectionHeader
-          title="Explore by need"
-          subtitle="Five quick ways in. Each one filters the same mall directory — there is no catalogue, and prices only appear if a shop replies in a chat."
-        />
-        <ul className="need-grid">
-          {NEED_SHORTCUTS.map((need) => (
-            <li key={need.category}>
-              <button
-                type="button"
-                className="need-tile"
-                onClick={() => navigate({ name: 'shops', category: need.category })}
-              >
-                <img src={need.art} alt="" loading="lazy" decoding="async" aria-hidden />
-                <span>
-                  <strong>{need.label}</strong>
-                  <small>{need.caption}</small>
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <p className="need-grid__note">
-          Illustrations only — no shop in this demo has product photographs, confirmed stock or offers.
-        </p>
-      </section>
-
-      {promos.length > 0 && (
-        <section aria-label="Promotions">
-          <SectionHeader title="Promotions" subtitle="Restrained demo placements — always labelled, never disguised as search results." />
-          <div className="promo-stack">
-            {promos.map((promotion) => (
-              <PromotionBanner
-                key={promotion.id}
-                promotion={promotion}
-                onOpen={(id) => navigate({ name: 'promotion', promotionId: id })}
-                recordEvent={(id, event) => void service.recordPromotionEvent(id, event)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section aria-label="Featured shops">
-        <SectionHeader
-          title="Featured shops"
-          subtitle="Real tenants, chosen because the mall directory and the business’s own listings agree. Their chats here are scripted samples."
-          action={
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'shops' })}>
-              All shops <ArrowRight size={15} aria-hidden />
-            </button>
-          }
-        />
-        <div className="shop-grid">
-          {featured.map((shop) => (
-            <ShopCard key={shop.id} shop={shop} onOpen={(shopId) => navigate({ name: 'shop', shopId })} />
-          ))}
-        </div>
-      </section>
-
       {conversations.length > 0 && (
         <section aria-label="Recent conversations">
           <SectionHeader
@@ -342,34 +276,178 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         </section>
       )}
 
+      <section aria-label="Shop by category">
+        <SectionHeader
+          title="What do you need today?"
+          subtitle="Nine ways into the same mall directory. Real tenants, grouped the way the mall lists them."
+          action={
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'shops' })}>
+              All {state.shops.length} <ArrowRight size={15} aria-hidden />
+            </button>
+          }
+        />
+        <div className="category-grid">
+          {CATEGORIES.map((category) => {
+            const count = state.shops.filter((s) => s.category === category.id).length;
+            return (
+              <button
+                key={category.id}
+                type="button"
+                className="category-tile"
+                onClick={() => navigate({ name: 'shops', category: category.id })}
+              >
+                <img src={CATEGORY_ICONS[category.id]} alt="" loading="lazy" />
+                <span>
+                  <strong>{category.label}</strong>
+                  <small>
+                    {count} shop{count === 1 ? '' : 's'}
+                  </small>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {walkthrough && (
+        <section className="spotlight" aria-label="Start with a walkthrough">
+          <div className="spotlight__media">
+            <ResponsiveImage
+              src={walkthrough.conceptImage ?? walkthrough.coverImage}
+              webpSrcSet={webpSrcSetFor(walkthrough.conceptImage ?? walkthrough.coverImage)}
+              sizes={CARD_IMAGE_SIZES}
+              alt=""
+              width={1280}
+              height={720}
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="spotlight__chip">Concept art</span>
+          </div>
+          <div className="spotlight__body">
+            <p className="spotlight__kicker">Start here</p>
+            <h2 className="spotlight__title">See one chat become a basket</h2>
+            <p className="spotlight__copy">
+              A sample grocery basket is already waiting in {walkthrough.name}&rsquo;s chat. Open it to watch a
+              conversation turn into a priced summary, then a simulated delivery or collection. The replies are
+              scripted, and the prices are demo prices.
+            </p>
+            <div className="spotlight__actions">
+              <button
+                type="button"
+                className="btn btn--primary"
+                onClick={() => navigate({ name: 'shop', shopId: walkthrough.id })}
+              >
+                Open the walkthrough <ArrowRight size={17} aria-hidden />
+              </button>
+              <DemoTag>Simulated · demo prices</DemoTag>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section aria-label="Explore by need">
+        <SectionHeader
+          title="Explore by need"
+          subtitle="Five quick ways in. Each one filters the same mall directory — there is no catalogue, and prices only appear if a shop replies in a chat."
+        />
+        <ul className="need-grid">
+          {NEED_SHORTCUTS.map((need) => (
+            <li key={need.category}>
+              <button
+                type="button"
+                className="need-tile"
+                onClick={() => navigate({ name: 'shops', category: need.category })}
+              >
+                <img src={need.art} alt="" loading="lazy" decoding="async" aria-hidden />
+                <span>
+                  <strong>{need.label}</strong>
+                  <small>{need.caption}</small>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p className="need-grid__note">
+          Illustrations only — no shop in this demo has product photographs, confirmed stock or offers.
+        </p>
+      </section>
+
+      <section aria-label="Featured shops">
+        <SectionHeader
+          title="Featured shops"
+          subtitle="Real tenants, chosen because the mall directory and the business’s own listings agree. Their chats here are scripted samples."
+          action={
+            <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'shops' })}>
+              All shops <ArrowRight size={15} aria-hidden />
+            </button>
+          }
+        />
+        <div className="shop-grid shop-grid--rail">
+          {featured.map((shop) => (
+            <ShopCard key={shop.id} shop={shop} onOpen={(shopId) => navigate({ name: 'shop', shopId })} />
+          ))}
+        </div>
+      </section>
+
+      {promos.length > 0 && (
+        <section aria-label="Promotions">
+          <SectionHeader
+            title="Promotions"
+            subtitle="Restrained demo placements — always labelled, never disguised as search results."
+          />
+          <div className="promo-stack">
+            {promos.map((promotion) => (
+              <PromotionBanner
+                key={promotion.id}
+                promotion={promotion}
+                onOpen={(id) => navigate({ name: 'promotion', promotionId: id })}
+                recordEvent={(id, event) => void service.recordPromotionEvent(id, event)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="how-it-works" aria-label="How it works">
-        <SectionHeader title="How chat-based ordering works" subtitle="Conversations first. Structured orders second. No giant catalogues." />
+        <SectionHeader
+          title="How chat-based ordering works"
+          subtitle="Conversations first. Structured orders second. No giant catalogues."
+        />
         <ol className="steps">
           <li>
             <span className="steps__icon">
               <MessagesSquare size={22} aria-hidden />
             </span>
             <h3>1. Chat to the shop</h3>
-            <p>In a live version you would ask about availability, sizes and prices. Here the replies are scripted samples, clearly labelled.</p>
+            <p>
+              In a live version you would ask about availability, sizes and prices. Here the replies are scripted
+              samples, clearly labelled.
+            </p>
           </li>
           <li>
             <span className="steps__icon">
               <ClipboardList size={22} aria-hidden />
             </span>
             <h3>2. Review the summary</h3>
-            <p>The shop would build a priced summary in the chat. In this demo the summary is sample data with demo prices.</p>
+            <p>
+              The shop would build a priced summary in the chat. In this demo the summary is sample data with demo
+              prices.
+            </p>
           </li>
           <li>
             <span className="steps__icon">
               <Bike size={22} aria-hidden />
             </span>
             <h3>3. Delivery or collection</h3>
-            <p>Follow each step — accepted, prepared, out for delivery — in a simulated timeline. No real courier is involved.</p>
+            <p>
+              Follow each step — accepted, prepared, out for delivery — in a simulated timeline. No real courier is
+              involved.
+            </p>
           </li>
         </ol>
         <p className="how-it-works__note">
-          <ShoppingBag size={16} aria-hidden /> Try the walkthrough: open <strong>The Angelo SUPERSPAR</strong> — a
-          sample basket is already waiting in the chat. <DemoTag>Simulated · demo prices</DemoTag>
+          <ShoppingBag size={16} aria-hidden /> Nothing here is connected to a real shop, courier or payment.
         </p>
       </section>
     </div>

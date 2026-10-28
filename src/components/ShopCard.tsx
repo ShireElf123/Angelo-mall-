@@ -7,6 +7,20 @@ import { ShopLogo } from './ShopLogo';
 import { ResponsiveImage } from './ResponsiveImage';
 import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../utils/responsiveImages';
 
+/**
+ * Tenant card.
+ *
+ * The card is read in one pass, top to bottom: artwork → category → name →
+ * trading state → what the shop is → the demo facts → the disclosure → action.
+ * The category now sits *above* the wordmark as a small gold label, because a
+ * shopper scanning a grid filters by kind ("Restaurants") before brand; the
+ * name is the confirmation, not the entry point.
+ *
+ * The action is a quiet, full-width row with a hairline rather than a green
+ * pill. That pill was the single element that made 29 different tenants read as
+ * 29 copies of one template, and on a card that already has a large primary
+ * surface it competed with the artwork for attention.
+ */
 export function ShopCard({
   shop,
   sponsored = false,
@@ -41,23 +55,23 @@ export function ShopCard({
         <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>
           {shop.initials}
         </span>
-        {/* Same disclosure as the shop page: AI concept art, never a shopfront photo. */}
-        {shop.conceptImage && <span className="shop-card__concept-chip">Concept art</span>}
         {shop.featured && (
           <span className="featured-ribbon">
             <Star size={13} aria-hidden /> Featured
           </span>
         )}
+        {/* Same disclosure as the shop page: AI concept art, never a shopfront photo. */}
+        {shop.conceptImage && <span className="shop-card__concept-chip">Concept art</span>}
       </button>
       <div className="shop-card__body">
         {sponsored && <SponsoredTag />}
+        <p className="shop-card__category">{categoryLabel(shop.category)}</p>
         <div className="shop-card__brand">
           <h3 className="shop-card__titles">
             <ShopLogo shop={shop} size="sm" />
           </h3>
           <TradingPill tradingNow={shop.tradingNow} />
         </div>
-        <p className="shop-card__category">{categoryLabel(shop.category)}</p>
         <p className="shop-card__tagline">{shop.tagline}</p>
         <div className="shop-card__meta">
           {shop.participation === 'demo-scenario' ? (
@@ -90,7 +104,7 @@ export function ShopCard({
           )}
         </div>
         <ParticipationPill status={shop.participation} />
-        <button type="button" className="btn btn--primary btn--block" onClick={() => onOpen(shop.id)}>
+        <button type="button" className="btn btn--quiet btn--block" onClick={() => onOpen(shop.id)}>
           Open shop <ArrowRight size={17} aria-hidden />
         </button>
       </div>

@@ -8,10 +8,22 @@ import { activePromotions } from '../../store/selectors';
 import type { CategoryId, FulfilmentMethod } from '../../types';
 import { PromotionBanner } from '../../components/PromotionBanner';
 import { ShopCard } from '../../components/ShopCard';
-import { EmptyState, InfoBanner, ListingDisclosure, PageHeader, SkeletonList } from '../../components/ui';
+import { EmptyState, InfoBanner, ListingDisclosure, PageHeader, SectionHeader, SkeletonList } from '../../components/ui';
 
 type FulfilmentFilter = 'all' | FulfilmentMethod;
 
+/**
+ * Shop directory.
+ *
+ * One "discovery card" holds the page title, the search field and the filters,
+ * so the whole act of *finding* a shop reads as a single object at the top of
+ * the screen. Previously the title, the field, two chip rows and a filter row
+ * were four separate blocks with the page's own spacing between them, which is
+ * why the directory still looked like the document it started as.
+ *
+ * The reading order is deliberate and pinned by a test: search → guidance →
+ * disclosure → results.
+ */
 export function DirectoryScreen({
   navigate,
   initialQuery = '',
@@ -69,92 +81,106 @@ export function DirectoryScreen({
     setFulfilment('all');
     setOpenOnly(false);
   };
+  const filtered = Boolean(query.trim()) || category !== 'all' || fulfilment !== 'all' || openOnly;
 
   return (
-    <div className="page">
-      <PageHeader
-        eyebrow="Customer · Discover"
-        title="Shop directory"
-        subtitle="Every shop listed is a real Angelo Mall tenant. Chat, prices and delivery here are simulated."
-        meta={
-          <>
-            <span>{state.shops.length} tenants</span>
-            <span aria-hidden>·</span>
-            <span>Mall directory only</span>
-          </>
-        }
-      />
+    <div className="page page--directory">
+      <div className="directory-head">
+        <PageHeader
+          eyebrow="Discover"
+          title="Shop directory"
+          subtitle="Every shop listed is a real Angelo Mall tenant. Chat, prices and delivery here are simulated."
+          meta={
+            <>
+              <span>{state.shops.length} tenants</span>
+              <span aria-hidden>·</span>
+              <span>Mall directory only</span>
+            </>
+          }
+        />
 
-      <div className="directory-controls">
-        <div className="search-field">
-          <Search size={19} aria-hidden />
-          <label className="visually-hidden" htmlFor="directory-search">
-            Search shops
-          </label>
-          <input
-            id="directory-search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search shops or what you need…"
-            autoComplete="off"
-          />
-          {query && (
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => setQuery('')}>
-              Clear
-            </button>
-          )}
-        </div>
+        <div className="directory-controls">
+          <div className="search-field">
+            <Search size={19} aria-hidden />
+            <label className="visually-hidden" htmlFor="directory-search">
+              Search shops
+            </label>
+            <input
+              id="directory-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search shops or what you need…"
+              autoComplete="off"
+            />
+            {query && (
+              <button type="button" className="btn btn--ghost btn--sm" onClick={() => setQuery('')}>
+                Clear
+              </button>
+            )}
+          </div>
 
-        <div className="chip-row chip-row--scroll" role="group" aria-label="Filter by category">
-          <button
-            type="button"
-            className={`chip ${category === 'all' ? 'chip--active' : ''}`}
-            onClick={() => setCategory('all')}
-            aria-pressed={category === 'all'}
-          >
-            All categories
-          </button>
-          {CATEGORIES.map((c) => (
+          <div className="chip-row chip-row--scroll" role="group" aria-label="Filter by category">
             <button
-              key={c.id}
               type="button"
-              className={`chip ${category === c.id ? 'chip--active' : ''}`}
-              onClick={() => setCategory(c.id)}
-              aria-pressed={category === c.id}
+              className={`chip ${category === 'all' ? 'chip--active' : ''}`}
+              onClick={() => setCategory('all')}
+              aria-pressed={category === 'all'}
             >
-              {c.label}
+              All categories
             </button>
-          ))}
-        </div>
-
-        <div className="filter-row">
-          <span className="filter-row__label">
-            <SlidersHorizontal size={15} aria-hidden /> Fulfilment
-          </span>
-          <div className="chip-row" role="group" aria-label="Filter by fulfilment">
-            {(
-              [
-                ['all', 'Any'],
-                ['delivery', 'Delivery'],
-                ['collection', 'Collection'],
-              ] as [FulfilmentFilter, string][]
-            ).map(([value, label]) => (
+            {CATEGORIES.map((c) => (
               <button
-                key={value}
+                key={c.id}
                 type="button"
-                className={`chip ${fulfilment === value ? 'chip--active' : ''}`}
-                onClick={() => setFulfilment(value)}
-                aria-pressed={fulfilment === value}
+                className={`chip ${category === c.id ? 'chip--active' : ''}`}
+                onClick={() => setCategory(c.id)}
+                aria-pressed={category === c.id}
               >
-                {label}
+                {c.label}
               </button>
             ))}
           </div>
-          <label className="switch">
-            <input type="checkbox" checked={openOnly} onChange={(e) => setOpenOnly(e.target.checked)} />
-            <span>Open now (demo)</span>
-          </label>
+
+          <div className="filter-row">
+            <span className="filter-row__label">
+              <SlidersHorizontal size={15} aria-hidden /> Fulfilment
+            </span>
+            <div className="chip-row" role="group" aria-label="Filter by fulfilment">
+              {(
+                [
+                  ['all', 'Any'],
+                  ['delivery', 'Delivery'],
+                  ['collection', 'Collection'],
+                ] as [FulfilmentFilter, string][]
+              ).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={`chip ${fulfilment === value ? 'chip--active' : ''}`}
+                  onClick={() => setFulfilment(value)}
+                  aria-pressed={fulfilment === value}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <label className="switch">
+              <input type="checkbox" checked={openOnly} onChange={(e) => setOpenOnly(e.target.checked)} />
+              <span>Open now (demo)</span>
+            </label>
+          </div>
         </div>
+      </div>
+
+      <div className="results-bar">
+        <p className="results-count" aria-live="polite">
+          {loading ? 'Loading demo directory…' : `${results.length} shop${results.length === 1 ? '' : 's'} found`}
+        </p>
+        {filtered && !loading && (
+          <button type="button" className="btn btn--ghost btn--sm" onClick={clearFilters}>
+            Reset
+          </button>
+        )}
       </div>
 
       <div className="discovery-strip">
@@ -174,18 +200,6 @@ export function DirectoryScreen({
 
       <ListingDisclosure />
 
-      {directoryPromo && (
-        <PromotionBanner
-          promotion={directoryPromo}
-          onOpen={(id) => navigate({ name: 'promotion', promotionId: id })}
-          recordEvent={(id, event) => void service.recordPromotionEvent(id, event)}
-        />
-      )}
-
-      <p className="results-count" aria-live="polite">
-        {loading ? 'Loading demo directory…' : `${results.length} shop${results.length === 1 ? '' : 's'} found`}
-      </p>
-
       {loading ? (
         <SkeletonList rows={3} />
       ) : results.length === 0 ? (
@@ -196,7 +210,7 @@ export function DirectoryScreen({
           description="Try a different word — or clear the filters. Remember: in Mall Go you don't need an exact product match; open a likely shop and ask in the chat."
         >
           <button type="button" className="btn btn--primary" onClick={clearFilters}>
-            Clear search & filters
+            Clear search &amp; filters
           </button>
         </EmptyState>
       ) : (
@@ -210,6 +224,17 @@ export function DirectoryScreen({
             />
           ))}
         </div>
+      )}
+
+      {directoryPromo && (
+        <section aria-label="Promotions">
+          <SectionHeader title="Promotions" subtitle="Labelled demo placements, shown after the listings." />
+          <PromotionBanner
+            promotion={directoryPromo}
+            onOpen={(id) => navigate({ name: 'promotion', promotionId: id })}
+            recordEvent={(id, event) => void service.recordPromotionEvent(id, event)}
+          />
+        </section>
       )}
 
       <InfoBanner illustration={imageSrc('journey-navigation')}>

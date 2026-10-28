@@ -83,6 +83,15 @@ html {
   scroll-padding-top: 84px;
 }
 
+:root {
+  /* Bundle 3: a display face for page names and the Home hero only. System
+     serifs cost nothing to download and give the customer screens an editorial
+     voice that a second weight of Inter cannot: the mall's premium cue is the
+     contrast between a serif headline and a sans body, not more rounded boxes.
+     Everything below h1 stays Inter, so UI text is unchanged. */
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -185,6 +194,25 @@ input, select, textarea { font: inherit; color: inherit; }
 .btn--sm { min-height: 38px; padding: 7px 14px; font-size: 0.9rem; }
 .btn--lg { min-height: 52px; padding: 13px 22px; font-size: 1.05rem; }
 .btn--block { width: 100%; }
+/* Bundle 3 — the card's action.
+   A filled primary pill on all 29 cards was the element that made a directory
+   of different shops read as one repeated template, and it competed with the
+   artwork for the eye. A hairline row with a travelling arrow still carries a
+   46px target and an obvious affordance, without shouting. */
+.btn--quiet {
+  background: transparent;
+  color: var(--forest-900);
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 13px 2px 2px;
+  justify-content: space-between;
+  font-weight: 700;
+  box-shadow: none;
+}
+.btn--quiet:hover:not(:disabled) { background: transparent; color: var(--forest-700); }
+.btn--quiet svg { transition: transform var(--dur-fast) var(--ease-out); }
+.btn--quiet:hover:not(:disabled) svg { transform: translateX(3px); }
 
 .icon-btn {
   display: inline-flex;
@@ -695,6 +723,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   line-height: 1.14;
   letter-spacing: -0.022em;
   font-weight: 800;
+  font-family: var(--font-display);
   color: var(--forest-950);
   text-wrap: balance;
   overflow-wrap: anywhere;
@@ -866,26 +895,55 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 /* ---------------- Hero & home ---------------- */
 
+/* Bundle 3 — the hero is a card, not a photograph with a gradient over it.
+   The old hero painted the mall photograph edge to edge and covered 80% of it
+   with a dark scrim so the copy stayed readable, which meant the artwork was
+   both the loudest element and the least visible one. Now the photograph keeps
+   its own panel and its own crop, and the words sit on solid forest green. */
 .hero {
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--forest-950);
+  color: #fff;
   border-radius: var(--radius-xl);
   overflow: hidden;
   isolation: isolate;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--elev-3);
 }
-.hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-.hero__shade {
-  position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(100deg, rgba(7, 35, 27, 0.92) 20%, rgba(7, 35, 27, 0.72) 58%, rgba(7, 35, 27, 0.35));
+.hero__aside { position: relative; order: -1; min-height: 168px; background: var(--forest-900); }
+.hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__aside-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
-.hero__content { padding: 26px 20px 24px; color: #fff; max-width: 640px; display: flex; flex-direction: column; gap: 13px; }
+.hero__content { padding: 20px 18px 22px; color: #fff; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .hero__kicker {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
   color: #f6d97b;
 }
-.hero h1 { font-size: clamp(1.65rem, 5.2vw, 2.4rem); font-weight: 800; }
-.hero__content > p { color: #d7e8dd; }
+/* The one place the display serif carries a full sentence: a headline is a
+   headline, and the app reads as a shop rather than a dashboard. */
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 22ch;
+}
+.hero__lede { color: #cfe2d7; font-size: 0.95rem; line-height: 1.5; max-width: 46ch; }
 
 .hero__search {
   display: flex;
@@ -895,6 +953,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   border-radius: var(--radius-pill);
   padding: 5px 5px 5px 16px;
   color: var(--muted);
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
+  max-width: 560px;
 }
 .hero__search input { flex: 1; min-width: 0; border: none; background: none; min-height: 42px; font-size: 1rem; }
 .hero__search input:focus { outline: none; }
@@ -928,23 +988,59 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .active-order-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .active-order-card__text small { color: var(--muted); }
 
-.category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+/* Bundle 3 — categories are one scrolling rail on phones. The 2-column list
+   needed five rows to name nine categories and read like a settings menu; a
+   rail shows the same nine in a strip the thumb can flick, and it is the shape
+   every shopping app uses for this job. From 640px up it becomes the grid
+   again, because there the height is free. */
+.category-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 92px;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: 3px var(--space-4) 6px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.category-grid::-webkit-scrollbar { display: none; }
 .category-tile {
-  display: flex; gap: 11px; align-items: center;
+  display: flex; flex-direction: column; gap: 0; align-items: stretch;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 9px;
+  border-radius: var(--radius-md);
+  padding: 0;
+  overflow: hidden;
   cursor: pointer;
   text-align: left;
-  box-shadow: var(--shadow);
-  min-height: 76px;
+  box-shadow: var(--elev-1);
+  scroll-snap-align: start;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
 }
-.category-tile:hover { border-color: var(--forest-700); }
-.category-tile img { width: 56px; height: 56px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
-.category-tile span { display: flex; flex-direction: column; min-width: 0; }
-.category-tile strong { font-size: 0.95rem; }
-.category-tile small { color: var(--muted); font-size: 0.75rem; line-height: 1.35; }
+.category-tile:hover { border-color: var(--forest-700); box-shadow: var(--elev-2); }
+.category-tile img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 0; flex: none; }
+.category-tile span { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 8px 9px 10px; }
+.category-tile strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--forest-950);
+  line-height: 1.3;
+  /* Two lines for "Restaurants & takeaway"; the reserved height keeps the
+     nine tiles on one baseline instead of a ragged strip. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+.category-tile small { color: var(--muted); font-size: 0.68rem; line-height: 1.3; }
 
 .welcome-card {
   display: flex;
@@ -974,7 +1070,16 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   .welcome-card__art { width: 240px; }
 }
 
-.hero__no-match { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 8px; }
+.hero__no-match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: #fff;
+  color: var(--ink);
+  border-radius: var(--radius-md);
+}
 .hero__no-match img { width: 92px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-xs); flex: none; }
 .hero__no-match p { padding: 0; margin: 0; flex: 1 1 180px; font-size: 0.9rem; color: var(--ink-2); }
 
@@ -994,23 +1099,34 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 .need-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0; margin: 0 0 8px; list-style: none; }
 .need-grid__note { color: var(--muted); font-size: 0.75rem; margin: 0; }
+/* Artwork runs edge to edge inside the tile: a 8px white border around a
+   photograph is what made these read as swatches in a form rather than as
+   pictures. The first tile spans the row on phones, which breaks the 2x3 grid
+   into an editorial lead plus a support block. */
+.need-grid > li:first-child { grid-column: 1 / -1; }
+.need-grid > li:first-child .need-tile img { aspect-ratio: 16 / 9; }
 .need-tile {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   width: 100%;
   height: 100%;
-  padding: 8px;
+  padding: 0;
+  overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-1);
   cursor: pointer;
   text-align: left;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
 }
-.need-tile:hover { border-color: var(--forest-700); }
-.need-tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-sm); display: block; }
-.need-tile span { display: flex; flex-direction: column; min-width: 0; }
+.need-tile:hover { border-color: var(--forest-700); box-shadow: var(--elev-2); }
+.need-tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 0; display: block; }
+.need-tile span { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 9px 11px 11px; }
 .need-tile strong { font-size: 0.9rem; line-height: 1.25; }
 .need-tile small { color: var(--muted); font-size: 0.75rem; line-height: 1.35; }
 
@@ -1118,18 +1234,35 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   .flow-step img { aspect-ratio: 3 / 2; }
 }
 
-.how-it-works { background: var(--forest-50); border: 1px solid var(--forest-100); border-radius: var(--radius); padding: 20px 16px; }
-.steps { display: grid; gap: 14px; }
-.steps li { background: var(--surface); border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border); }
+/* Bundle 3 — the explainer closes the page on forest green: the last thing a
+   shopper scrolls past should look like the shop it belongs to, not like the
+   fourth white box in a column of white boxes. */
+.how-it-works {
+  background: var(--forest-950);
+  border: 1px solid var(--forest-900);
+  border-radius: var(--radius-xl);
+  padding: 22px 18px 20px;
+  color: #fff;
+}
+.how-it-works .section-header h2 { color: #fff; }
+.how-it-works .section-header p { color: #b9d3c6; }
+.steps { display: grid; gap: 12px; }
+.steps li {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
 .steps__icon {
-  width: 46px; height: 46px; border-radius: var(--radius-md);
-  background: var(--forest-900); color: #f6d97b;
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--gold-500); color: var(--forest-950);
   display: inline-flex; align-items: center; justify-content: center;
   margin-bottom: 9px;
 }
-.steps h3 { font-size: 1rem; margin-bottom: 5px; }
-.steps p { color: var(--ink-2); font-size: 0.9rem; }
-.how-it-works__note { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: var(--forest-900); font-size: 0.95rem; }
+.steps h3 { font-size: 1rem; margin-bottom: 5px; color: #fff; }
+.steps p { color: #c3d8cc; font-size: 0.9rem; }
+.how-it-works__note { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: #e7f0ea; font-size: 0.9rem; }
 
 /* ---------------- Shop cards & directory ---------------- */
 
@@ -1176,7 +1309,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   flex: 1;
 }
 /* Identity → description → facts → status → action, with a deliberate gap
@@ -1208,13 +1341,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
 .shop-card__brand .pill { flex: none; align-self: flex-start; }
 .shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.05rem; margin: 0; }
+/* Read first, above the name: a shopper scanning a grid filters by kind
+   ("Restaurants") before brand. The wordmark below confirms the choice. */
 .shop-card__category {
   color: var(--gold-600);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-top: -2px;
+  margin: 0;
 }
 .shop-card__tagline {
   color: var(--ink-2);
@@ -1257,7 +1392,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 /* ---------------- Shop page ---------------- */
 
-.shop-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.shop-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--elev-2); }
 .shop-hero__media { position: relative; aspect-ratio: 16 / 9; height: auto; background: var(--forest-100); }
 .shop-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .shop-hero__caption {
@@ -1290,7 +1425,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 /* 12rem basis: at 360px the name block and the ~142px status pill cannot share
    a row, so the pill drops underneath and the name keeps the full width. */
 .shop-hero__title > div { flex: 1 1 12rem; min-width: 0; }
-.shop-hero__title h1 { font-size: 1.5rem; }
+.shop-hero__title h1 { font-size: 1.5rem; font-family: var(--font-display); line-height: 1.14; }
 .shop-hero__title p { color: var(--muted); }
 .shop-hero__tagline { font-size: 1.05rem; color: var(--forest-900); font-weight: 600; }
 .shop-hero__hint { color: var(--muted); font-size: 0.9rem; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
@@ -1320,11 +1455,12 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   width: 100%; text-align: left;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 13px;
+  border-radius: var(--radius-md);
+  padding: 13px 14px;
   cursor: pointer;
   margin-bottom: 9px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
 .conversation-list li button:hover { border-color: var(--forest-700); }
 .conversation-list__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
@@ -1938,11 +2074,25 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 @media (min-width: 640px) {
   .shop-grid { grid-template-columns: repeat(2, 1fr); }
-  .category-grid { grid-template-columns: repeat(3, 1fr); }
+  /* The phone rail becomes a grid once there is width for one. Every rail
+     property has to be undone here, or the strip would keep overflowing inside
+     a container that no longer expects it. */
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow: visible;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    scroll-snap-type: none;
+  }
   .need-grid { grid-template-columns: repeat(3, 1fr); }
+  /* The lead tile spans only while the grid is two-up. */
+  .need-grid > li:first-child { grid-column: auto; }
+  .need-grid > li:first-child .need-tile img { aspect-ratio: 4 / 3; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .shop-facts { grid-template-columns: repeat(2, 1fr); }
-  .hero__content { padding: 34px 30px 30px; }
   .basket-items li { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
   .basket-items__main { flex: 1; min-width: 220px; }
   .basket-items__actions { width: 100%; }
@@ -1981,7 +2131,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 @media (max-width: 420px) {
   .brand__text small { display: none; }
-  .category-grid { grid-template-columns: 1fr 1fr; }
+  /* The category rail is the small-screen treatment; a 2-column grid here
+     would override it and bring back the five-row list. */
   .bar-list li { grid-template-columns: 120px 1fr 28px; }
   .job-card__facts { grid-template-columns: 1fr; }
   .demo-bar__label { display: none; }
@@ -2544,6 +2695,12 @@ body.chat-expanded {
   .shop-card__body { padding: var(--space-3); }
   .search-field { padding-left: var(--space-3); }
   .results-count { font-size: 0.84rem; }
+  /* Bundle 3: the hero card has to fit a 320px screen without a lateral
+     scroll, so the photograph band and the copy padding give up space. */
+  .hero__content { padding: 18px 14px 20px; gap: 10px; }
+  .hero__aside { min-height: 148px; }
+  .need-grid { gap: 8px; }
+  .category-grid { grid-auto-columns: 82px; }
 }
 
 /* ==========================================================================
@@ -2611,4 +2768,174 @@ body.chat-expanded {
    stays pinned. Guard against the sticky header covering an anchor target. */
 @media (max-width: 899px) {
   .shell-chrome { position: static; }
+}
+
+/* ==========================================================================
+   Bundle 3 — customer experience composition
+   --------------------------------------------------------------------------
+   New structural blocks only. Everything here is a component the customer
+   journey needed and the earlier bundles never had: one discovery card that
+   owns the directory's search, a curated walkthrough panel on Home, and a
+   horizontal tenant rail for the featured row on phones.
+
+   Deliberately absent: gradients used as decoration, glass/blur panels, and
+   any effect that costs paint on a mid-range Android. Contrast, imagery,
+   type and rhythm do the work instead.
+   ========================================================================== */
+
+/* ---------------- Directory: one discovery card ---------------- */
+
+/* Title, search and filters share a single surface with a gold top edge, so
+   "find a shop" reads as one object instead of four stacked blocks each with
+   the page's 22px gap between them. */
+.directory-head {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold-500);
+  border-radius: var(--radius-xl);
+  padding: 15px 13px 14px;
+  box-shadow: var(--elev-2);
+}
+.directory-head .page-header__title { font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); }
+.directory-head .directory-controls { gap: 9px; }
+/* The rail bleeds to the page edge, but the discovery card is already inset by
+   its own padding: keeping the negative margin would push the last chip past
+   the card's border by ~3px. The row still scrolls and still fades. */
+.directory-head .chip-row--scroll { margin-right: 0; max-width: 100%; }
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: -8px;
+}
+.results-bar .results-count { margin: 0; font-weight: 600; color: var(--ink-2); }
+
+@media (min-width: 640px) {
+  .directory-head { padding: 20px 20px 18px; gap: 18px; }
+}
+
+/* ---------------- Home: curated walkthrough ---------------- */
+
+/* Backed entirely by existing demo data: the SUPERSPAR tenant already carries
+   the seeded sample basket, and the copy is the same claim the old
+   how-it-works note made. The "Concept art" and "Simulated · demo prices"
+   markers travel with it — the panel may look like a promotion, so it must
+   state what it is. */
+.spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elev-2);
+}
+.spotlight__media { position: relative; aspect-ratio: 16 / 9; background: var(--forest-100); }
+.spotlight__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.spotlight__chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.spotlight__body { padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.spotlight__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gold-600);
+}
+.spotlight__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--forest-950);
+  text-wrap: balance;
+}
+.spotlight__copy { color: var(--ink-2); font-size: 0.9rem; line-height: 1.5; text-wrap: pretty; }
+.spotlight__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 4px; }
+
+@media (min-width: 720px) {
+  .spotlight { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); align-items: stretch; }
+  .spotlight__media { aspect-ratio: auto; min-height: 250px; }
+  .spotlight__body { padding: 22px 24px; justify-content: center; }
+}
+
+/* ---------------- Home: featured tenant rail ---------------- */
+
+/* Five featured tenants are a flick, not a scroll: the row scrolls sideways on
+   phones and becomes the normal two/three-up grid once there is room. */
+.shop-grid--rail {
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: min(78%, 320px);
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 3px var(--space-4) 8px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.shop-grid--rail::-webkit-scrollbar { display: none; }
+.shop-grid--rail > .shop-card { scroll-snap-align: start; }
+
+@media (min-width: 640px) {
+  .shop-grid--rail {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    overflow: visible;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+}
+@media (min-width: 900px) {
+  .shop-grid--rail { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------------- Tenant card: touch feedback ---------------- */
+
+/* Only where a pointer can hover: on touch this would stick after a tap. */
+@media (hover: hover) {
+  .shop-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elev-3);
+    border-color: var(--border-strong);
+  }
+  .shop-card:hover .shop-card__media img { transform: scale(1.03); }
+}
+
+/* ---------------- Hero: desktop composition ---------------- */
+
+/* Placed last on purpose: the shared 640px block earlier in the sheet also
+   touches `.hero__content`, and a media query does not win by being narrower —
+   it wins by coming later. */
+@media (min-width: 640px) and (max-width: 779px) {
+  /* Still one column, but no longer a phone: give the words more room. */
+  .hero__content { padding: 26px 24px; }
+}
+@media (min-width: 780px) {
+  .hero { grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); }
+  .hero__aside { order: 0; min-height: 0; }
+  .hero__content { padding: 34px 32px; gap: 14px; }
 }
