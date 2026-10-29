@@ -85,7 +85,7 @@ export function ShopLogo({
 }
 
 /** Original, geometric category glyphs (24×24, stroke-based). */
-function CategoryGlyph({ category }: { category: Shop['category'] }) {
+export function CategoryGlyph({ category }: { category: Shop['category'] }) {
   switch (CATEGORY_MONOGRAM_GLYPH[category]) {
     case 'basket':
       return (

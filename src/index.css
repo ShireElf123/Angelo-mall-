@@ -974,6 +974,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
   max-width: 560px;
 }
+.hero__search-field { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
 .hero__search input { flex: 1; min-width: 0; border: none; background: none; min-height: 42px; font-size: 1rem; }
 .hero__search input:focus { outline: none; }
 
@@ -3202,3 +3203,307 @@ body.chat-expanded {
    reachable without scrolling. */
 .shop-hero__body > .btn--lg { margin-top: 2px; }
 .shop-hero__body > .shop-hero__hint { margin-bottom: 2px; }
+
+/* ==========================================================================
+   Home: shop launcher
+   --------------------------------------------------------------------------
+   The first thing a customer should be able to do is tap a shop. Before this,
+   Home opened on a hero that filled the entire phone viewport — mall artwork,
+   a four-line explanation, a search field and two competing buttons — so no
+   shop was visible on the first screen at all, and the only route to one was
+   "Browse all 29 shops", a directory the shopper then had to filter again.
+
+   The launcher sits directly under a shorter hero: square tiles, each a brand
+   mark (or a category glyph on the tenant's own colour), the trading name, and
+   what tapping it does. Three columns on a phone, four from 560px, eight across
+   on a wide screen so the set reads as one row, like an app.
+   ========================================================================== */
+
+.shop-launcher {
+  padding: 0;
+  margin: 0;
+}
+
+.shop-launcher__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.shop-launcher__head h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+}
+
+.shop-launcher__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.shop-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--elev-1);
+  color: var(--ink);
+  text-align: center;
+  cursor: pointer;
+  /* Brief, physical press feedback; no bounce, no long easing. */
+  transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-tile:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--elev-2);
+}
+
+.shop-tile:active {
+  transform: translateY(1px);
+  box-shadow: var(--elev-1);
+}
+
+.shop-tile:focus-visible {
+  outline: 2px solid var(--forest-700);
+  outline-offset: 2px;
+}
+
+/* The mark well: one square, one radius, one inset, for every tenant — logo or
+   glyph. Holding the aspect ratio here is what keeps the grid aligned when a
+   logo is 1:1 and its neighbour is 3.2:1. */
+.shop-tile__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: 14%;
+  border-radius: var(--radius-sm);
+  background: var(--surface-warm);
+  overflow: hidden;
+}
+
+.shop-tile__logo {
+  max-width: 100%;
+  max-height: 100%;
+  /* contain, never cover: a wordmark must not be cropped into nonsense. */
+  object-fit: contain;
+}
+
+.shop-tile__glyph {
+  width: 58%;
+  max-width: 46px;
+  height: auto;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.95;
+}
+
+/* The name is the label, so it gets real presence and two lines of room rather
+   than being shrunk to fit one. "The Angelo SUPERSPAR" and "Golden Buffalo
+   Spur" both wrap here. */
+.shop-tile__name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  overflow-wrap: break-word;
+  /* Keep tiles in a row the same height however the name wraps. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+}
+
+.shop-tile__meta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+/* Chat is the promise of this screen, so the shops that support it say so in
+   the brand green; the ones that do not stay visibly quieter. */
+.shop-tile__meta--chat {
+  color: var(--forest-700);
+}
+
+.shop-launcher__all {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+@media (min-width: 560px) {
+  .shop-launcher__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .shop-tile__name {
+    font-size: 0.92rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .shop-launcher__grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+/* Larger marks on a wide screen are wasteful in an eight-column row; the well
+   keeps a square ratio but the tile stays compact. */
+@media (min-width: 900px) {
+  .shop-tile__mark {
+    padding: 18%;
+  }
+}
+
+/* ==========================================================================
+   Home hero — reduced dominance on a phone
+   --------------------------------------------------------------------------
+   The hero is the brand moment, not the product. At 390px its artwork alone was
+   168px of the first viewport and its copy ran to four lines, so the whole first
+   screen was introduction and the shop launcher sat below the fold.
+
+   On a narrow screen the artwork becomes a slim banner (a third shorter), the
+   headline tightens, and the search field gets its own full-width row with the
+   button beneath it — which also stops the placeholder being clipped behind the
+   button, as it was at 390px ("Search shops or a n…"). Above 560px the hero
+   returns to its original proportions, unchanged.
+   ========================================================================== */
+@media (max-width: 559px) {
+  .hero__aside {
+    min-height: 92px;
+    max-height: 104px;
+  }
+  .hero__content {
+    padding: 14px 14px 16px;
+    gap: 9px;
+  }
+  .hero h1 {
+    font-size: clamp(1.42rem, 1.1rem + 2vw, 1.75rem);
+    line-height: 1.1;
+    max-width: 22ch;
+  }
+  .hero__lede {
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  /* Search: the field gets its own row and the button sits full width beneath
+     it. Wrapping the *pill* itself was the wrong move — a 999px radius on a
+     two-row box turns into a white blob and the icon detaches from the input.
+     As a column the box takes a normal card radius, and the field keeps its own
+     pill, so it reads as a search field with a button under it. */
+  .hero__search {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    max-width: none;
+  }
+  .hero__search-field {
+    padding: 0 8px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-warm);
+    min-height: 46px;
+  }
+  .hero__search input {
+    min-height: 44px;
+  }
+  .hero__search .btn {
+    min-height: 46px;
+  }
+}
+
+/* The launcher heading reads as a small app section label with an instruction
+   beside it, so "tap a shop to start chatting" is visible rather than assumed. */
+.shop-launcher__hint {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 379px) {
+  /* Three columns still fit at 320px, but the name needs the extra room. */
+  .shop-launcher__grid {
+    gap: 8px;
+  }
+  .shop-tile {
+    padding: 6px 4px 8px;
+  }
+  .shop-tile__name {
+    /* 0.75rem, folding into the existing step: 0.73rem sat 0.16px from 0.72rem
+       and the type-scale contract forbids steps that close together. */
+    font-size: 0.75rem;
+    line-height: 1.25;
+    /* Three lines at 320px: "Golden Buffalo Spur" needs them, and truncating a
+       tenant's name to "Golden Buffalo…" is exactly the kind of unreadable
+       label this redesign is meant to remove. Every tile in the row keeps the
+       same height, so the grid stays aligned. */
+    -webkit-line-clamp: 3;
+    min-height: 3.75em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Demo bar on the narrowest phones
+   --------------------------------------------------------------------------
+   At 320px the role switcher was left 97px wide for a 2x2 grid, so each button
+   had 44px and "Customer" (needs ~62px) spilled over its neighbour — "Customer"
+   and "Staff" rendered as one run of text, and so did "Delivery"/"Admin". The
+   switcher now takes a full-width row of its own below the notice, which gives
+   each button ~123px and keeps the four roles legible and separately tappable.
+   -------------------------------------------------------------------------- */
+@media (max-width: 419px) {
+  /* The <=639px block sets `flex-wrap: nowrap` on the bar to keep the notice
+     and controls on one strip. At 320px that left the switcher 97px wide for a
+     2x2 grid of 44px buttons, so "Customer" overflowed into "Staff". The bar is
+     allowed to wrap again here, and the switcher takes its own full-width row. */
+  .demo-bar {
+    flex-wrap: wrap;
+  }
+  .demo-bar__actions {
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+  .role-switcher {
+    flex: 1 1 auto;
+  }
+  .role-switcher__btn {
+    /* Ellipsis rather than overflow, so a longer label can never run into the
+       button beside it. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    justify-content: center;
+  }
+  /* The concept-art chip is a disclosure, so it stays — just quieter, so it
+     stops taking two lines of the hero banner. */
+  .hero__aside-chip {
+    font-size: 0.62rem;
+    left: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+  }
+}

@@ -25,6 +25,7 @@ import { formatRelative } from '../../utils/format';
 import { isConfirmedOrder } from '../../utils/orderWorkflow';
 import { PromotionBanner } from '../../components/PromotionBanner';
 import { ShopCard } from '../../components/ShopCard';
+import { ShopTile } from '../../components/ShopTile';
 import { DemoTag, SectionHeader, ShopAvatar, StatusPill } from '../../components/ui';
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -42,18 +43,54 @@ const CATEGORY_ICONS: Record<string, string> = {
 /**
  * Customer Home.
  *
- * Composition, not decoration: the screen opens on one art-directed panel
- * (dark storefront card with the mall photograph), then answers the four
- * questions a shopper actually has — "where was I?", "what do I need?",
- * "what is this?", "what can I do?" — in that order. The previous layout put a
- * full-bleed photo hero, a 2-column list of categories and a second grid of
- * need shortcuts all above the fold, so three near-identical blocks competed
- * for the same attention and none of them read as the way in.
+ * One journey: open the app, see shops, tap a shop, start talking.
  *
- * Every block below is built from existing data: the shops, categories,
- * featured flags, demo-scenario walkthrough and concept artwork already in
- * `src/data`. Nothing here invents a price, rating, offer or partnership.
+ * The screen therefore opens on a deliberately short hero — the brand, one
+ * sentence on what this is, and search — and then goes straight to the shop
+ * launcher. Everything else (where you left off, categories, the walkthrough,
+ * promotions, how it works) is kept, in full, *below* that, because none of it
+ * is the first thing a customer wants to do.
+ *
+ * That ordering is the redesign. The previous version opened with a hero that
+ * filled a whole phone screen — artwork, a four-line explanation, search and two
+ * competing calls to action — so a shop was not reachable without first going
+ * through the full directory. Measured at 390px the old page was 5,771px tall
+ * and its first shop appeared well past the first viewport.
+ *
+ * Shop taps route by what the tenant can actually do (see `SHOP_LAUNCHER`):
+ * the four seeded demo tenants open their conversation directly through the
+ * existing `service.openConversation`, and every other tenant opens its
+ * information screen, which states that no ordering is connected. No shop is
+ * given a chat it does not have.
+ *
+ * Every block is built from existing data: the shops, categories, featured
+ * flags, demo-scenario walkthrough and concept artwork already in `src/data`.
+ * Nothing here invents a price, rating, offer or partnership.
  */
+
+/**
+ * The shops offered in the launcher, in the order they are shown.
+ *
+ * The first four are the tenants that carry a seeded demo conversation, so they
+ * are the ones where "tap a shop → start chatting" actually works end to end.
+ * SUPERSPAR carries the seeded basket. The remaining four are the tenants the
+ * mall's own data already marks `featured`, plus two more that are listed with a
+ * shop number in the Angelo Mall directory (TOPS at SPAR, shop 12; Mica, shop 5).
+ *
+ * This is a documented ordering, not a popularity ranking: nothing here is
+ * derived from ratings, visit counts or sales, because the demo has none.
+ */
+const SHOP_LAUNCHER = [
+  'shop-superspar',
+  'shop-kfc',
+  'shop-clicks',
+  'shop-mtn',
+  'shop-tops',
+  'shop-pep',
+  'shop-mica',
+  'shop-golden-buffalo-spur',
+] as const;
+
 export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   const { state, service } = useDemoStore();
   const [query, setQuery] = useState('');
@@ -90,30 +127,67 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
     navigate({ name: 'shops', q: query.trim() || undefined });
   };
 
+  /**
+   * The shops in the launcher, resolved by id so an admin-hidden tenant simply
+   * drops out rather than leaving a hole in the grid.
+   */
+  const launcher = SHOP_LAUNCHER.map((id) => state.shops.find((shop) => shop.id === id)).filter(
+    (shop): shop is NonNullable<typeof shop> => Boolean(shop),
+  );
+
+  /**
+   * Only `demo-scenario` tenants carry a seeded conversation, so they are the
+   * only ones that can open a chat. Everything else opens its information page.
+   * This is the one place the distinction is made, and both `supportsChat` and
+   * the resulting route read from it — the tile can never promise a chat the
+   * shop does not have.
+   */
+  const supportsChat = (shopId: string) =>
+    state.shops.find((shop) => shop.id === shopId)?.participation === 'demo-scenario';
+
+  /**
+   * Tap a shop: straight into the conversation, reusing the same store call the
+   * shop page uses, so no second notion of "current conversation" is created.
+   * Listing-only tenants go to their information screen instead.
+   */
+  const openShop = async (shopId: string) => {
+    if (!supportsChat(shopId)) {
+      navigate({ name: 'shop', shopId });
+      return;
+    }
+    const conversationId = await service.openConversation(shopId);
+    navigate({ name: 'chat', conversationId });
+  };
+
   return (
     <div className="page page--home">
       <section className="hero" aria-labelledby="home-title">
         <div className="hero__content">
           <span className="hero__kicker">
-            <Sparkles size={14} aria-hidden /> Angelo Mall · Nigel · concept demo
+            <Sparkles size={14} aria-hidden /> Angelo Mall · Nigel · demo
           </span>
           <h1 id="home-title">Chat to mall shops. Order without the catalogue hunt.</h1>
-          <p className="hero__lede">
-            Every shop here is a real Angelo Mall tenant, but nothing you send reaches them: the chat, prices and
-            delivery steps are simulated in your browser.
-          </p>
+          {/* Kept short on purpose: one honest sentence, not a paragraph. The
+              full explanation lives on the shop and chat screens, where it is
+              relevant, and in Help. */}
+          <p className="hero__lede">Real mall tenants. Chats and prices here are simulated.</p>
           <form className="hero__search" onSubmit={submitSearch} role="search">
-            <Search size={20} aria-hidden />
-            <label className="visually-hidden" htmlFor="home-search">
-              Search shops or things you need
-            </label>
-            <input
-              id="home-search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search shops or a need…"
-              autoComplete="off"
-            />
+            {/* The icon and input share a field so the icon can never drift away
+                from the text when the form wraps, which is what happened when
+                the pill was allowed to wrap at 390px. */}
+            <span className="hero__search-field">
+              <Search size={20} aria-hidden />
+              <label className="visually-hidden" htmlFor="home-search">
+                Search shops or things you need
+              </label>
+              <input
+                id="home-search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search shops or a need…"
+                autoComplete="off"
+              />
+            </span>
             <button type="submit" className="btn btn--gold">
               Search
             </button>
@@ -146,14 +220,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               )}
             </div>
           )}
-          <div className="hero__actions">
-            <button type="button" className="btn btn--light btn--lg" onClick={() => navigate({ name: 'shops' })}>
-              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
-            </button>
-            <button type="button" className="btn btn--outline-light" onClick={() => navigate({ name: 'help' })}>
-              How chat ordering works
-            </button>
-          </div>
         </div>
         <div className="hero__aside">
           <ResponsiveImage
@@ -172,6 +238,33 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           <span className="hero__aside-chip">Concept art · not a photo of the mall</span>
         </div>
       </section>
+
+      {/* The shop launcher comes first, directly under the hero: open the app,
+          see shops, tap one. It is the main action on this screen. */}
+      {launcher.length > 0 && (
+        <section className="shop-launcher" aria-labelledby="launcher-title">
+          <div className="shop-launcher__head">
+            <h2 id="launcher-title">Shops</h2>
+            <p className="shop-launcher__hint">Tap a shop to start chatting</p>
+          </div>
+          <ul className="shop-launcher__grid">
+            {launcher.map((shop) => (
+              <li key={shop.id}>
+                <ShopTile
+                  shop={shop}
+                  supportsChat={supportsChat(shop.id)}
+                  onOpen={(picked) => void openShop(picked.id)}
+                />
+              </li>
+            ))}
+          </ul>
+          <div className="shop-launcher__all">
+            <button type="button" className="btn btn--primary btn--lg" onClick={() => navigate({ name: 'shops' })}>
+              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
+            </button>
+          </div>
+        </section>
+      )}
 
       {conversations.length === 0 && activeOrders.length === 0 && (
         <section className="welcome-card" aria-label="New here?">
