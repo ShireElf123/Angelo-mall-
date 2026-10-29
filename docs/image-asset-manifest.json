@@ -1,0 +1,1813 @@
+{
+  "$schema": "./image-asset-manifest.schema.json",
+  "project": "Angelo Mall Go",
+  "phase": 5,
+  "updated": "2026-10-27",
+  "notes": [
+    "Every image referenced by the app is listed here. src/data/imageAssets.ts projects this file into typed lookups and src/data/imageAssets.test.ts enforces one-to-one parity, so a new file cannot be added unnoticed.",
+    "Generated assets are original app artwork created for this project; they are never presented as a tenant's logo, shopfront or interior.",
+    "No official retailer logo is bundled: see docs/shop-asset-plan.md for the verification blocker."
+  ],
+  "assets": [
+    {
+      "id": "app-mark-master",
+      "file": "/images/app-icon-master.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Master app mark (source for the PNG icons) \u2014 retained on purpose, not rendered by the app.",
+      "screens": [],
+      "approved": true,
+      "review": "approved-but-unused",
+      "notes": "Kept as the documented generation master for app-icon-192/512. The PWA manifest previously listed it as a \"screenshot\", which mislabelled a square logo; that entry was removed in the batch 6 audit.",
+      "dimensions": "1024x1024",
+      "sizeKb": 78,
+      "usage": "source-master"
+    },
+    {
+      "id": "app-icon-512",
+      "file": "/images/app-icon-512.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "PWA icon, 512\u00d7512.",
+      "screens": [
+        "manifest"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "512x512",
+      "sizeKb": 170
+    },
+    {
+      "id": "app-icon-192",
+      "file": "/images/app-icon-192.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "PWA icon and apple-touch-icon, 192\u00d7192.",
+      "screens": [
+        "manifest",
+        "ios-home-screen"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "192x192",
+      "sizeKb": 21
+    },
+    {
+      "id": "app-icon-maskable-512",
+      "file": "/images/app-icon-maskable-512.png",
+      "kind": "generated",
+      "batch": 1,
+      "derivedFrom": "app-mark-master",
+      "purpose": "Maskable PWA icon with the 80% safe zone.",
+      "screens": [
+        "manifest"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "512x512",
+      "sizeKb": 117
+    },
+    {
+      "id": "promo-groceries",
+      "file": "/images/promo-illustration-groceries.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Illustrative banner art for the placeholder sponsored slot and the home promotion stack.",
+      "screens": [
+        "home",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Illustration only \u2014 carries no tenant offer, product price or brand mark.",
+      "dimensions": "1672x941",
+      "sizeKb": 133
+    },
+    {
+      "id": "promo-takeaway",
+      "file": "/images/promo-illustration-takeaway.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Illustrative banner art for the second placeholder promotion.",
+      "screens": [
+        "home",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 152
+    },
+    {
+      "id": "promo-services",
+      "file": "/images/promo-illustration-services.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Reserve illustration for a services/delivery themed placeholder promotion.",
+      "screens": [
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved-but-unused",
+      "notes": "Verified in the batch 6 audit: no seed promotion, screen or test references this file. Retained as a spare banner illustration; nothing on screen needs a third promotion image.",
+      "dimensions": "1672x941",
+      "sizeKb": 85
+    },
+    {
+      "id": "help-chat",
+      "file": "/images/help-illustration-chat.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 1 of the chat-ordering concept on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 57
+    },
+    {
+      "id": "help-summary",
+      "file": "/images/help-illustration-summary.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 2 (order summary review) on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 74
+    },
+    {
+      "id": "help-delivery",
+      "file": "/images/help-illustration-delivery.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Explains step 3 (delivery or collection) on the Help screen.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1536x1024",
+      "sizeKb": 122
+    },
+    {
+      "id": "state-empty-directory",
+      "file": "/images/illustration-empty-directory.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Empty state when a directory search returns no shops.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 97
+    },
+    {
+      "id": "state-offline",
+      "file": "/images/illustration-offline.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Offline state artwork.",
+      "screens": [
+        "shell-offline"
+      ],
+      "approved": true,
+      "review": "approved-but-unused",
+      "notes": "Audited in batch 6: tried as a 34px thumbnail in the offline alert bar, where the detail became unreadable noise, so the bar keeps its icon and text only. Retained for a future full offline screen; no other screen needs it today.",
+      "usage": "reserve",
+      "dimensions": "1672x941",
+      "sizeKb": 51
+    },
+    {
+      "id": "concept-map",
+      "file": "/images/illustration-concept-map.jpg",
+      "kind": "generated",
+      "batch": 1,
+      "purpose": "Directory banner explaining the chat-first concept across the mall.",
+      "screens": [
+        "directory",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 91
+    },
+    {
+      "id": "hero-mall",
+      "file": "/images/hero-mall.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Home hero background.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Carried over from an earlier phase; audited and kept (no signage, no logos).",
+      "dimensions": "1408x768",
+      "sizeKb": 334
+    },
+    {
+      "id": "category-groceries",
+      "file": "/images/shop-grocery.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Groceries category cover for supermarket/liquor/convenience tenants.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 277
+    },
+    {
+      "id": "category-food",
+      "file": "/images/shop-food.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Food category cover for restaurants and takeaways.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 229
+    },
+    {
+      "id": "category-fashion",
+      "file": "/images/shop-fashion.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Fashion category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 266
+    },
+    {
+      "id": "category-electronics",
+      "file": "/images/shop-electronics.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Electronics category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Replaced in Phase 1 after third-party branding appeared in the earlier image.",
+      "dimensions": "1672x941",
+      "sizeKb": 232
+    },
+    {
+      "id": "category-pharmacy",
+      "file": "/images/shop-pharmacy.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Pharmacy/health category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 227
+    },
+    {
+      "id": "category-homeware",
+      "file": "/images/shop-homeware.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Home/hardware category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1408x768",
+      "sizeKb": 245
+    },
+    {
+      "id": "category-beauty",
+      "file": "/images/shop-beauty.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Hair and beauty category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 237
+    },
+    {
+      "id": "category-services",
+      "file": "/images/shop-services.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Services category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1672x941",
+      "sizeKb": 224
+    },
+    {
+      "id": "category-finance",
+      "file": "/images/shop-finance.jpg",
+      "kind": "generated-previous-phase",
+      "batch": 0,
+      "purpose": "Banking/finance category cover.",
+      "screens": [
+        "home",
+        "directory",
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Added in Phase 4 with the banking category.",
+      "dimensions": "1672x941",
+      "sizeKb": 209
+    },
+    {
+      "id": "state-empty-basket",
+      "file": "/images/state-empty-basket.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Basket screen: the basket or order could not be found.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 31
+    },
+    {
+      "id": "state-empty-chats",
+      "file": "/images/state-empty-chats.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Chats list empty state (no conversations yet).",
+      "screens": [
+        "chats"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 50
+    },
+    {
+      "id": "state-empty-orders",
+      "file": "/images/state-empty-orders.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Orders list empty state (nothing confirmed yet).",
+      "screens": [
+        "orders"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 36
+    },
+    {
+      "id": "state-empty-thread",
+      "file": "/images/state-empty-thread.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "A conversation with no messages yet (chat composer prompt).",
+      "screens": [
+        "chat"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 45
+    },
+    {
+      "id": "state-empty-delivery",
+      "file": "/images/state-empty-delivery.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Delivery board with no open jobs.",
+      "screens": [
+        "delivery"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 52
+    },
+    {
+      "id": "og-social-card",
+      "file": "/images/og-social-card.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "1200x630 social preview card (Open Graph / Twitter) with an empty text zone.",
+      "screens": [
+        "social-card"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1200x630",
+      "sizeKb": 63
+    },
+    {
+      "id": "concept-four-views",
+      "file": "/images/concept-four-views.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Help: the four demo workspaces shown as abstract role panels.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 44
+    },
+    {
+      "id": "concept-tenant-onboarding",
+      "file": "/images/concept-tenant-onboarding.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Admin shops banner: what tenant onboarding requires (checklist + ID card).",
+      "screens": [
+        "admin-shops"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 54
+    },
+    {
+      "id": "concept-privacy",
+      "file": "/images/concept-privacy.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Help: privacy and simulated-data explanation.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 26
+    },
+    {
+      "id": "state-not-found",
+      "file": "/images/state-not-found.jpg",
+      "kind": "generated",
+      "batch": 2,
+      "purpose": "Unknown order or promotion (dead end of the dotted path).",
+      "screens": [
+        "orders",
+        "promotion-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "notes": "Reviewed: no lettering, no logos, no watermark; resized to 1280x720 (social card cropped to 1200x630) and recompressed.",
+      "dimensions": "1280x720",
+      "sizeKb": 49
+    },
+    {
+      "id": "discover-shops",
+      "file": "/images/discover-shops.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "One shopper with a phone in front of stylised mall shopfronts \u2014 finding a shop and starting a chat.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 67,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-food",
+      "file": "/images/category-food.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Food & dining need shortcut: caf\u00e9 table with takeaway box, burger and cup.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 55,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-fashion",
+      "file": "/images/category-fashion.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Fashion & accessories need shortcut: shirt, sneaker, sunglasses, bag, scarf.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 86,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-electronics",
+      "file": "/images/category-electronics.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Electronics & mobile need shortcut: blank-screen phone, earbuds, cable, power bank.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 49,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-beauty",
+      "file": "/images/category-beauty.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Beauty & personal care need shortcut: pump bottle, serum, cream tube, compact mirror.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 58,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "need-home-hardware",
+      "file": "/images/category-home-hardware.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Home & hardware need shortcut: paint tin, brush, hammer and potted plant.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "900x675 (4:3)",
+      "sizeKb": 72,
+      "usage": "tile",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-navigation",
+      "file": "/images/journey-navigation.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Isometric mall concourse with a blank signpost \u2014 browsing different shop categories.",
+      "screens": [
+        "directory"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 86,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-basket",
+      "file": "/images/journey-basket.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Three-step basket journey: chat, paper summary, bag. No prices or totals shown.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 57,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "journey-delivery",
+      "file": "/images/journey-delivery.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Simulated delivery route: shop awning, scooter with plain box, house doorway.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 68,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "intro-mall-go",
+      "file": "/images/intro-mall-go.jpg",
+      "kind": "generated",
+      "batch": 3,
+      "purpose": "Welcoming mall archway \u2014 first-time visitor introduction, used with the install panel.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 81,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, logos, prices, people-as-staff or watermark. Cropped and recompressed from a 1536x1024/1774x887 original."
+    },
+    {
+      "id": "welcome-mall",
+      "file": "/images/welcome-mall.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Friendly adult and child entering a warmly lit mall archway \u2014 first-run welcome for new visitors.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 69,
+      "usage": "strip",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "search-guidance",
+      "file": "/images/search-guidance.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Blank search field with magnifier in front of three simple awnings \u2014 guidance when a home search finds no shops.",
+      "screens": [
+        "home"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 32,
+      "usage": "inline",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "shop-staff-inbox",
+      "file": "/images/shop-staff-inbox.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Shop counter with tablet showing blank chat bubbles, apron and kraft bag \u2014 the shop-staff inbox before any customer writes.",
+      "screens": [
+        "retailer-inbox"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 52,
+      "usage": "empty-state",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "shop-detail",
+      "file": "/images/shop-detail.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Generic empty shopfront with blank signboard \u2014 illustrates that a listing is a directory entry, not this shop's own shopfront.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 71,
+      "usage": "inline",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "contact-shop",
+      "file": "/images/contact-shop.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Shopper writing a short list beside a phone with a blank message field \u2014 preparing a question for a shop.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x563 (16:9)",
+      "sizeKb": 73,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-pending",
+      "file": "/images/order-pending.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Taped kraft parcel beside a plain clock face \u2014 a simulated order waiting for the next update.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 40,
+      "usage": "status",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-complete",
+      "file": "/images/order-complete.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Parcel on a doormat before a green door with a small gold tick \u2014 the end of the simulated journey, not proof of delivery.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 68,
+      "usage": "status",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "help-troubleshooting",
+      "file": "/images/help-troubleshooting.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Blank help card with a question bubble and a refresh arrow \u2014 resetting the demo and finding guidance.",
+      "screens": [
+        "help"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "720x900 (4:5)",
+      "sizeKb": 29,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "admin-reporting",
+      "file": "/images/admin-reporting.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Clipboard of blank bar shapes, plain cards and a magnifier \u2014 illustrative activity reporting, containing no real figures.",
+      "screens": [
+        "admin-reports"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1000x667 (3:2)",
+      "sizeKb": 42,
+      "usage": "banner",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-summary-building",
+      "file": "/images/order-summary-building.jpg",
+      "kind": "generated",
+      "batch": 4,
+      "purpose": "Overhead clipboard with empty ruled rows, pencil and kraft bag \u2014 the shop building an order summary.",
+      "screens": [
+        "retailer-order-panel"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "700x700 (1:1)",
+      "sizeKb": 31,
+      "usage": "panel",
+      "notes": "Reviewed: no lettering, brand marks, prices, OS dialogs or watermark; cropped from the generated original to the display aspect and recompressed."
+    },
+    {
+      "id": "order-cancelled",
+      "file": "/images/order-cancelled.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Empty open kraft box set aside with a blank notice card \u2014 a cancelled demo order.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 62,
+      "usage": "status",
+      "gapAddressed": "Cancelled orders used to show the delivery route; this separates 'stopped' from 'in flight'.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "order-collection",
+      "file": "/images/order-collection.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Shop collection counter with a tied parcel, bell and a dotted gold path \u2014 collecting in store, no courier.",
+      "screens": [
+        "order-detail"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 62,
+      "usage": "status",
+      "gapAddressed": "Collection orders previously borrowed the delivery scooter route; this shows an in-store hand-over.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "state-basket-confirmed",
+      "file": "/images/state-basket-confirmed.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Phone with a blank confirmed card beside a ribboned kraft bag \u2014 a basket that already became an order.",
+      "screens": [
+        "basket"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 66,
+      "usage": "empty-state",
+      "gapAddressed": "The 'already confirmed' basket dead end had an icon only.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-all-caught-up",
+      "file": "/images/shop-all-caught-up.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Tidy end-of-shift counter with tied boxes and a mug under a gold arc \u2014 nothing waiting on the shop.",
+      "screens": [
+        "retailer-today"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 66,
+      "usage": "empty-state",
+      "gapAddressed": "The shop's 'What needs attention' all-clear was a single text line.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-orders-empty",
+      "file": "/images/shop-orders-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Wall order rail with empty brass clips and one blank kraft tag \u2014 no orders yet for this shop.",
+      "screens": [
+        "retailer-orders"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 74,
+      "usage": "empty-state",
+      "gapAddressed": "Three empty order buckets previously said 'Nothing here right now' with no explanation.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "shop-thread-empty",
+      "file": "/images/shop-thread-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Brass counter bell with a blank folded note \u2014 waiting for the customer's first message.",
+      "screens": [
+        "retailer-chat"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 45,
+      "usage": "empty-state",
+      "gapAddressed": "The shop-side empty conversation was icon only; the customer-side art is a different perspective.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "delivery-mine-empty",
+      "file": "/images/delivery-mine-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Parked forest green delivery scooter with an empty insulated box \u2014 no accepted jobs.",
+      "screens": [
+        "delivery-mine"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 73,
+      "usage": "empty-state",
+      "gapAddressed": "The 'My jobs' tab had no artwork; the available-jobs board art is a different state.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "delivery-done-empty",
+      "file": "/images/delivery-done-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "End-of-shift bench with a folded high-vis vest, blank pay card, mug and plant \u2014 no completed jobs yet.",
+      "screens": [
+        "delivery-done"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 103,
+      "usage": "empty-state",
+      "gapAddressed": "Nothing covered the completed/earnings history state.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "admin-promotions-empty",
+      "file": "/images/admin-promotions-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Plain pin-board with three blank pinned cards \u2014 no promotions created yet.",
+      "screens": [
+        "admin-promotions"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 85,
+      "usage": "empty-state",
+      "gapAddressed": "The promotions tab had no empty state at all, only an empty list.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "admin-deliveries-empty",
+      "file": "/images/admin-deliveries-empty.jpg",
+      "kind": "generated",
+      "batch": 5,
+      "purpose": "Empty courier backpack with a blank route card on a bench \u2014 no delivery jobs in the marketplace.",
+      "screens": [
+        "admin-deliveries"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 69,
+      "usage": "empty-state",
+      "gapAddressed": "Dispatch oversight showed a bare text line.",
+      "notes": "Reviewed: word-free, brand-free, no prices, no OS chrome, no watermark; cropped from a 1536x1024 original to 16:9 and recompressed."
+    },
+    {
+      "id": "tenant-kfc",
+      "file": "/images/tenants/kfc.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Kraft takeaway box of fried chicken with folded paper and a plain cup on a cream counter \u2014 the KFC listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 130,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-golden-buffalo-spur",
+      "file": "/images/tenants/golden-buffalo-spur.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Cast-iron grill, sirloin and a wooden board in a warm steakhouse booth \u2014 the Golden Buffalo Spur listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 141,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-cash-crusaders",
+      "file": "/images/tenants/cash-crusaders.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Pre-owned guitar, film camera, drill and blender with blank cardboard tags \u2014 the Cash Crusaders listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 155,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-mica",
+      "file": "/images/tenants/mica.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Stacked paint tins, brush, rope coil and an open toolbox on a store shelf \u2014 the Mica listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 220,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-crazy-plastics",
+      "file": "/images/tenants/crazy-plastics.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "A tall stack of plastic crates, basins and buckets \u2014 the Crazy Plastics Express listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 210,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-zillion-hair",
+      "file": "/images/tenants/zillion-hair.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Headless wig blocks, braiding-hair bundles and combs on a salon shelf \u2014 the Zillion Hair listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 112,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-ruiter-makelaars",
+      "file": "/images/tenants/ruiter-makelaars.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "House keys, a plain wooden house model, a blank clipboard and a magnifier on a desk \u2014 the Ruiter Makelaars listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 135,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-flesh-fashions",
+      "file": "/images/tenants/flesh-fashions.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "A clothing rail with a plain jacket and folded denim \u2014 the Flesh Fashions listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 200,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-clicks",
+      "file": "/images/tenants/clicks.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "Amber bottles with blank labels, plasters and a sanitiser pump on a pharmacy counter \u2014 the Clicks listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 172,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-neutell-horowitz",
+      "file": "/images/tenants/neutell-horowitz.jpg",
+      "kind": "generated",
+      "batch": 10,
+      "purpose": "A trial frame, lens cases and an abstract ring chart on an optometrist's desk \u2014 the Neutell & Horowitz listing's concept illustration.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 136,
+      "usage": "shop-concept",
+      "gapAddressed": "All 29 listings shared nine category covers, so every shop-page hero looked alike.",
+      "notes": "AI-generated concept imagery for this tenant: a generated photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. The shop's real brand identity is deliberately withheld: logo-free, brand-free, no legible signage, prices, menu text or packaging text; the shop name stays HTML text and the hero is labelled \"Concept art\". Replaces the batch 7 still-life at the same path.",
+      "revision": {
+        "replacesBatch": 7,
+        "replacedOn": "2026-10-27",
+        "reason": "Batch 7 was a flat still-life object illustration with no retail interior; it did not show the shop. Batch 10 replaces it with a researched interior scene at the same path.",
+        "previousFileInGitHistory": "2adfb8687db9faa867b7965c5defb8bc4163bb6c"
+      }
+    },
+    {
+      "id": "tenant-vodacom",
+      "file": "/images/tenants/vodacom.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Mobile-store interior: blank-screen handsets in wall cradles, a glass SIM and accessory counter, warm spotlights \u2014 Vodacom listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 134,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene used a green and oak palette borrowed from another fit-out, not the documented Vodacom red identity, and showed no service counter.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-nedbank",
+      "file": "/images/tenants/nedbank.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Bank-branch interior: warm timber teller counters with glass screens, queue posts, a plant, soft daylight \u2014 Nedbank listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 148,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a glass-screened teller line with queue posts - the branch format Nedbank has been removing - instead of the self-service, open-counter, advisory layout it now rolls out.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-tops",
+      "file": "/images/tenants/tops.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Liquor-store aisle: timber wine racks with blank-labelled bottles, kraft cartons, deep green wall \u2014 Tops at Spar listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 217,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a boutique timber wine cellar. TOPS at SPAR is a value bottle store: gondola wine shelving, glass-door fridges, crate stacks and a till bulkhead.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-superspar",
+      "file": "/images/tenants/superspar.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Fresh-produce aisle: tiered timber crates of tomatoes, peppers, greens and citrus under cool mist \u2014 The Angelo SUPERSPAR listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 197,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a produce-only close-up. A SUPERSPAR is a full supermarket, so the aisle of groceries running to the checkouts is the honest subject.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-biltong-den",
+      "file": "/images/tenants/biltong-den.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Biltong counter: cured strips on stainless hooks, spice jars, wooden cutting block, dark green tiles \u2014 Biltong Den listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 218,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Biltong Den: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-maxis",
+      "file": "/images/tenants/maxis.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Convenience-store counter: sweet jars, bread rack, glowing cold-drink fridge, turn-away packaging \u2014 Maxi's listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 156,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene depicted a convenience counter with a drinks fridge and bakery shelf. Maxi's is a sit-down family restaurant (breakfast, burgers, grills, shakes), so the format was wrong.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-aviya",
+      "file": "/images/tenants/aviya.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Studio interior: seamless paper backdrop, two softboxes, camera on tripod, blank prints and colour swatches \u2014 Aviya listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 139,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a photography studio only. The business is photography AND graphics/printing, so the print and design side was missing.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-nigel-cellular",
+      "file": "/images/tenants/nigel-cellular.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Repair bench close-up: opened handset, precision tools, screen protectors, desk lamp \u2014 Nigel Cellular listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 177,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was an extreme close-up of an opened handset on a bench - craft detail, but it showed no shop and no service counter.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-mtn",
+      "file": "/images/tenants/mtn.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Telecoms store interior: handset display wall, earbud and SIM trays, bright ceiling strip lighting \u2014 MTN listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 106,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 8,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 8 scene was a white handset wall with no visible counter, service desk or MTN yellow; it read as any brand-neutral phone store.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-just-u-2",
+      "file": "/images/tenants/just-u-2.jpg",
+      "kind": "generated",
+      "batch": 8,
+      "purpose": "Jewellery shop interior: lit glass cases with plain gold rings and chains on velvet, loupe and cloth, brass and green \u2014 Just-u-2 listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 149,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 11-20 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Just-u-2 Jewellers: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-postnet",
+      "file": "/images/tenants/postnet.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Chrome-and-glass print counter: kraft courier cartons, bubble wrap, a copier, a wall of blank poster frames and a grey pigeonhole mailbox bank \u2014 PostNet listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 115,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for PostNet: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-pep",
+      "file": "/images/tenants/pep.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Value-clothing floor: folded plain tees and jeans on a low island, densely hung children's rails, a wire basket, bright blue banding \u2014 PEP listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 232,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for PEP: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-scooters",
+      "file": "/images/tenants/scooters.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Pizza takeaway counter: a floured marble prep bench, dough, a wooden peel, plain kraft boxes and a glowing oven, with three bar stools \u2014 Scooters Pizza listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 108,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 9,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 9 scene put the oven and prep line in the foreground. The customer counter, menu band and seating are what a customer actually sees, so the kitchen dominated the hero.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-ocean-basket",
+      "file": "/images/tenants/ocean-basket.jpg",
+      "kind": "generated",
+      "batch": 11,
+      "purpose": "Seafood dining room: dark timber tables with white crockery, blue banquette seating, a tiled service counter and amber pendants \u2014 Ocean Basket listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 222,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for this tenant: a researched photographic-style retail interior, not a photograph of this branch, not a logo and not an official brand asset. Brand identity is withheld on purpose: every menu board, lightbox, price strip, carton and poster is blank, so the scene cannot be read as the chain's real shopfront, its logo or an endorsement. The shop name stays HTML text and the hero is labelled \"Concept art\".",
+      "revision": {
+        "replacesBatch": 9,
+        "replacedOn": "2026-10-27",
+        "reason": "The batch 9 scene was the generic blue-and-white seafood cliche. Documented Ocean Basket design uses mixed painted fisherman's chairs, striped bench seating, blue tile, mosaic and stencilled fish, wave and anchor graphics.",
+        "previousFileInGitHistory": "9706b694ad5a1e1e690dd09396a06d0d16968092"
+      }
+    },
+    {
+      "id": "tenant-angel-kiss",
+      "file": "/images/tenants/angel-kiss.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Small ladies' boutique: two chrome rails of dresses, a headless mannequin in cream, a brass mirror, blush fitting curtain \u2014 Angel Kiss Boutique listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 185,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Angel Kiss Boutique: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-crazy-store",
+      "file": "/images/tenants/crazy-store.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Discount variety aisle: stacked plastic tubs, party balloons, wrapping-paper bin, cheap glassware and a trolley under bright fluorescents \u2014 The Crazy Store listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 233,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for The Crazy Store: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-fnb",
+      "file": "/images/tenants/fnb.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Modern bank branch: a self-service kiosk zone with a light-oak bench, oak teller counters behind glass, an oak-slat feature wall and a glass private room \u2014 FNB listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 140,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for FNB: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-best-buy",
+      "file": "/images/tenants/best-buy.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Modest family appliance-and-houseware store: white shelving of kettles, fans, cookware, bedding and two small televisions, with a plain pay counter \u2014 Best Buy listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 146,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Best Buy: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    },
+    {
+      "id": "tenant-carwash",
+      "file": "/images/tenants/carwash.jpg",
+      "kind": "generated",
+      "batch": 9,
+      "purpose": "Open wash bay: tiled floor and channel drain, a soaped car, a wall hose and coloured buckets, shade-cloth roof and the centre's parking beyond \u2014 Carwash @ Angelo Mall listing hero.",
+      "screens": [
+        "shop-page"
+      ],
+      "approved": true,
+      "review": "approved",
+      "dimensions": "1280x720 (16:9)",
+      "sizeKb": 229,
+      "usage": "shop-concept",
+      "gapAddressed": "Tenants 21-29 still opened their shop page with a shared category cover.",
+      "notes": "AI-generated concept imagery for Carwash @ Angelo Mall: a generated photographic-style interior, not a photograph of this branch, not a logo and not an official brand asset. Logo-free, brand-free, no legible signage or prices; the shop name stays HTML text and the hero is labelled \"Concept art\"."
+    }
+  ],
+  "logos": {
+    "directory": "/images/logos/",
+    "bundled": 0,
+    "status": "none-verified",
+    "blocker": "Phase 5 could not retrieve official logo files: this environment's outbound network is restricted to GitHub, npm and PyPI, so brand sites and official media kits were unreachable. No unverified third-party image was substituted.",
+    "registry": "src/data/shopLogos.ts",
+    "addingAnAsset": [
+      "Download from the brand's own site, official media kit, or the tenant (with written permission).",
+      "Save as public/images/logos/<shop-id>.<svg|png>, transparent, SVG preferred, PNG <= 24 kB.",
+      "Add an entry to SHOP_LOGO_ASSETS with aspectRatio, sourceUrl, retrievedOn and verified: true.",
+      "Add a row here and run npm test."
+    ]
+  },
+  "plannedBatches": [
+    {
+      "batch": 2,
+      "status": "complete",
+      "reason": "All 10 planned assets were generated in the next turn, reviewed, optimised, integrated and documented.",
+      "resume": "Run this batch in a later turn, review, optimise, then add manifest entries and wire the empty states.",
+      "planned": [
+        {
+          "id": "state-empty-orders",
+          "purpose": "Orders list empty state (timeline + blank receipt).",
+          "screens": [
+            "orders"
+          ]
+        },
+        {
+          "id": "state-empty-chats",
+          "purpose": "Chats list empty state (two blank bubbles under an awning).",
+          "screens": [
+            "chats"
+          ]
+        },
+        {
+          "id": "state-empty-basket",
+          "purpose": "Basket empty state (empty paper bag).",
+          "screens": [
+            "basket"
+          ]
+        },
+        {
+          "id": "state-empty-thread",
+          "purpose": "New conversation with no messages yet.",
+          "screens": [
+            "chat"
+          ]
+        },
+        {
+          "id": "state-empty-delivery",
+          "purpose": "Delivery job board with no available jobs.",
+          "screens": [
+            "delivery"
+          ]
+        },
+        {
+          "id": "og-social-card",
+          "purpose": "1200x630 social preview card for share links.",
+          "screens": [
+            "social-card"
+          ]
+        },
+        {
+          "id": "concept-four-views",
+          "purpose": "Help screen section explaining the four demo workspaces.",
+          "screens": [
+            "help"
+          ]
+        },
+        {
+          "id": "concept-tenant-onboarding",
+          "purpose": "Admin explainer: what onboarding a tenant would require.",
+          "screens": [
+            "admin-shops"
+          ]
+        },
+        {
+          "id": "concept-privacy",
+          "purpose": "Help screen privacy/roles explanation.",
+          "screens": [
+            "help"
+          ]
+        },
+        {
+          "id": "state-not-found",
+          "purpose": "Route not found / unknown promotion empty state.",
+          "screens": [
+            "not-found"
+          ]
+        }
+      ],
+      "remaining": []
+    }
+  ],
+    "responsiveDerivatives": {
+      "generatedOn": "2026-10-27",
+      "encoder": "ImageMagick 6.9.11, libwebp 1.2.4 (-strip, quality 74/76/78)",
+      "why": "Tenant concept images and the Home hero shipped as full-size JPEGs (1280x720, ~170 kB each) to cards that paint at roughly 340 CSS px, which is why the featured cards felt slow. These are delivery derivatives only: the original JPEGs are untouched and remain the <img> fallback.",
+      "convention": "/images/tenants/{slug}-{width}.webp, widths 480/960/1280, derived from /images/tenants/{slug}.jpg",
+      "sizesAttribute": "cards: (min-width: 1024px) 360px, (min-width: 640px) 46vw, 92vw",
+      "files": [
+        "/images/tenants/angel-kiss-1280.webp",
+        "/images/tenants/angel-kiss-480.webp",
+        "/images/tenants/angel-kiss-960.webp",
+        "/images/tenants/aviya-1280.webp",
+        "/images/tenants/aviya-480.webp",
+        "/images/tenants/aviya-960.webp",
+        "/images/tenants/best-buy-1280.webp",
+        "/images/tenants/best-buy-480.webp",
+        "/images/tenants/best-buy-960.webp",
+        "/images/tenants/biltong-den-1280.webp",
+        "/images/tenants/biltong-den-480.webp",
+        "/images/tenants/biltong-den-960.webp",
+        "/images/tenants/carwash-1280.webp",
+        "/images/tenants/carwash-480.webp",
+        "/images/tenants/carwash-960.webp",
+        "/images/tenants/cash-crusaders-1280.webp",
+        "/images/tenants/cash-crusaders-480.webp",
+        "/images/tenants/cash-crusaders-960.webp",
+        "/images/tenants/clicks-1280.webp",
+        "/images/tenants/clicks-480.webp",
+        "/images/tenants/clicks-960.webp",
+        "/images/tenants/crazy-plastics-1280.webp",
+        "/images/tenants/crazy-plastics-480.webp",
+        "/images/tenants/crazy-plastics-960.webp",
+        "/images/tenants/crazy-store-1280.webp",
+        "/images/tenants/crazy-store-480.webp",
+        "/images/tenants/crazy-store-960.webp",
+        "/images/tenants/flesh-fashions-1280.webp",
+        "/images/tenants/flesh-fashions-480.webp",
+        "/images/tenants/flesh-fashions-960.webp",
+        "/images/tenants/fnb-1280.webp",
+        "/images/tenants/fnb-480.webp",
+        "/images/tenants/fnb-960.webp",
+        "/images/tenants/golden-buffalo-spur-1280.webp",
+        "/images/tenants/golden-buffalo-spur-480.webp",
+        "/images/tenants/golden-buffalo-spur-960.webp",
+        "/images/tenants/just-u-2-1280.webp",
+        "/images/tenants/just-u-2-480.webp",
+        "/images/tenants/just-u-2-960.webp",
+        "/images/tenants/kfc-1280.webp",
+        "/images/tenants/kfc-480.webp",
+        "/images/tenants/kfc-960.webp",
+        "/images/tenants/maxis-1280.webp",
+        "/images/tenants/maxis-480.webp",
+        "/images/tenants/maxis-960.webp",
+        "/images/tenants/mica-1280.webp",
+        "/images/tenants/mica-480.webp",
+        "/images/tenants/mica-960.webp",
+        "/images/tenants/mtn-1280.webp",
+        "/images/tenants/mtn-480.webp",
+        "/images/tenants/mtn-960.webp",
+        "/images/tenants/nedbank-1280.webp",
+        "/images/tenants/nedbank-480.webp",
+        "/images/tenants/nedbank-960.webp",
+        "/images/tenants/neutell-horowitz-1280.webp",
+        "/images/tenants/neutell-horowitz-480.webp",
+        "/images/tenants/neutell-horowitz-960.webp",
+        "/images/tenants/nigel-cellular-1280.webp",
+        "/images/tenants/nigel-cellular-480.webp",
+        "/images/tenants/nigel-cellular-960.webp",
+        "/images/tenants/ocean-basket-1280.webp",
+        "/images/tenants/ocean-basket-480.webp",
+        "/images/tenants/ocean-basket-960.webp",
+        "/images/tenants/pep-1280.webp",
+        "/images/tenants/pep-480.webp",
+        "/images/tenants/pep-960.webp",
+        "/images/tenants/postnet-1280.webp",
+        "/images/tenants/postnet-480.webp",
+        "/images/tenants/postnet-960.webp",
+        "/images/tenants/ruiter-makelaars-1280.webp",
+        "/images/tenants/ruiter-makelaars-480.webp",
+        "/images/tenants/ruiter-makelaars-960.webp",
+        "/images/tenants/scooters-1280.webp",
+        "/images/tenants/scooters-480.webp",
+        "/images/tenants/scooters-960.webp",
+        "/images/tenants/superspar-1280.webp",
+        "/images/tenants/superspar-480.webp",
+        "/images/tenants/superspar-960.webp",
+        "/images/tenants/tops-1280.webp",
+        "/images/tenants/tops-480.webp",
+        "/images/tenants/tops-960.webp",
+        "/images/tenants/vodacom-1280.webp",
+        "/images/tenants/vodacom-480.webp",
+        "/images/tenants/vodacom-960.webp",
+        "/images/tenants/zillion-hair-1280.webp",
+        "/images/tenants/zillion-hair-480.webp",
+        "/images/tenants/zillion-hair-960.webp",
+        "/images/hero-mall-800.webp",
+        "/images/hero-mall-1408.webp"
+      ]
+    }
+}

@@ -1,0 +1,3509 @@
+/* ==========================================================================
+   Angelo Mall Go — Phase 1 design system
+   Deep forest green + restrained warm gold on warm off-white. Mobile first.
+   ========================================================================== */
+
+:root {
+  --forest-950: #07231b;
+  --forest-900: #0c3b2e;
+  --forest-800: #10503d;
+  --forest-700: #14654d;
+  --forest-100: #dcebe3;
+  --forest-50: #eef5f0;
+  --gold-600: #7f6212; /* darkened for AA text contrast (was #a8841c, 3.5:1) */
+  --gold-500: #c9a227;
+  --gold-100: #f6ecd2;
+  /* Page vs card was #faf7f2 vs #ffffff: 1.07:1, i.e. a white card on an
+     almost-white page. No shadow can sell depth against that, which is why
+     earlier elevation work read as invisible. The page now sits a clear
+     step below the card (1.16:1) and carries more of the contrast so the
+     shadows only have to do the edge. */
+  --bg: #f4eee2;
+  --surface: #ffffff;
+  --surface-warm: #efe8d9;
+  --ink: #1e2a24;
+  --ink-2: #43524a;
+  --muted: #5a6961; /* darkened for AA text contrast (was #6d7c73, 3.8:1 on warm panels) */
+  /* 1.35:1 -> 1.64:1 against white: the card edge is now a real line, not a
+     suggestion. --border-strong reaches 2.1:1 for focusable edges. */
+  --border: #d5c9ae;
+  --border-strong: #c2b193;
+  /* Radius and type scales are declared once, further down ("tokens"). */
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3d7;
+  --success: #14654d;
+  --success-bg: #e3f1e9;
+  --info: #1d4e79;
+  --info-bg: #e6eef7;
+  /* Chat. Outgoing is the brand forest, filled; incoming is white. The old pair
+     (pale green vs white) was too close in weight to read at a glance, and the
+     contrast between "my turn" and "their turn" is the single most important
+     signal in a conversation. Both are still brand colours. */
+  --chat-mine: #10503d;        /* forest-800, 9.1:1 with white text */
+  --chat-mine-edge: #0c3b2e;   /* forest-900, for the hairline */
+  --chat-theirs: #ffffff;
+  --chat-bg: #f2ece1;
+  /* Elevation — four honest levels and one for the fixed chrome.
+     Restraint is the point: a card never looks like a dialog, and nothing in
+     the app floats above --elev-4. */
+  /* Tight, dark contact shadow + a wider soft one. The old values spread their
+     ink over 24-44px at 12-18% alpha behind a -12px/-16px negative spread, so
+     almost nothing landed where the card meets the page. If a shadow cannot be
+     seen on a phone in daylight it is decoration, not elevation. */
+  --elev-1: 0 1px 2px rgba(12, 59, 46, 0.1), 0 1px 1px rgba(12, 59, 46, 0.06);
+  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.12), 0 4px 10px -2px rgba(12, 59, 46, 0.14);
+  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.14), 0 10px 24px -6px rgba(12, 59, 46, 0.22);
+  --elev-4: 0 8px 20px -6px rgba(7, 35, 27, 0.3), 0 28px 60px -20px rgba(7, 35, 27, 0.42);
+  --elev-nav: 0 -8px 24px -10px rgba(12, 59, 46, 0.3);
+  /* The shadow a control collapses to while it is being pressed. */
+  --elev-press: 0 1px 1px rgba(12, 59, 46, 0.1);
+  /* Tonal alternatives to shadows where a hairline reads more precisely. */
+  --surface-raised: #ffffff;
+  --surface-sunken: var(--surface-warm);
+  --surface-tint: #f6f2ea;
+  /* Motion: one fast step for feedback, one for arrivals. */
+  --dur-fast: 110ms;
+  --dur: 180ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Kept as aliases so the existing 21 call sites keep their intent. */
+  --shadow: var(--elev-2);
+  --shadow-lg: var(--elev-3);
+  /* The space the fixed bottom bar occupies, used for page padding and for
+     lifting floating controls clear of it. This MUST include the safe-area
+     inset: the bar's real height is nav-item (54) + padding (4 + 6) + inset,
+     which on a notched phone is ~98px. A flat 68px left the last ~30px of
+     every page sitting behind the bar. The second declaration wins only where
+     env() is supported; older engines keep the flat 68px. */
+  --bottom-nav-h: 68px;
+  --bottom-nav-h: calc(66px + env(safe-area-inset-bottom, 0px));
+}
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Stops in-page anchors and focus() from landing underneath the fixed bar. */
+  scroll-padding-bottom: var(--bottom-nav-h);
+  scroll-padding-top: 84px;
+}
+
+:root {
+  /* Bundle 3: a display face for page names and the Home hero only. System
+     serifs cost nothing to download and give the customer screens an editorial
+     voice that a second weight of Inter cannot: the mall's premium cue is the
+     contrast between a serif headline and a sans body, not more rounded boxes.
+     Everything below h1 stays Inter, so UI text is unchanged. */
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4 { line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; }
+button { font: inherit; }
+/* Native apps never flash a grey tap highlight or wait 300ms for a double-tap
+   zoom; on a phone this is the difference between "web page" and "app". */
+button,
+a,
+label,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+input, select, textarea { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--gold-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px; top: -60px;
+  z-index: 200;
+  background: var(--forest-900);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 0 0 10px 10px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---------------- Buttons, chips, forms ---------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  /* Two speeds: colour for hover, transform for the press. */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+.btn:active:not(:disabled) { transform: translateY(0) scale(0.97); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn--primary {
+  /* Deeper stops (1.78:1) so the face reads as a curved, raised key rather
+     than a flat filled rectangle. */
+  background: linear-gradient(180deg, var(--forest-700) 0%, var(--forest-900) 100%);
+  color: #fff;
+  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--forest-800) 0%, var(--forest-950) 100%);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn--gold { background: var(--gold-500); color: var(--forest-950); }
+.btn--gold:hover:not(:disabled) { background: #d9b13b; }
+.btn--ghost { background: transparent; color: var(--forest-800); border-color: var(--border-strong); }
+.btn--ghost:hover:not(:disabled) { background: var(--forest-50); }
+.btn--danger { background: var(--danger); color: #fff; }
+.btn--danger-ghost { background: transparent; color: var(--danger); border-color: transparent; }
+.btn--danger-ghost:hover:not(:disabled) { background: var(--danger-bg); }
+.btn--light { background: #fff; color: var(--forest-900); }
+.btn--outline-light { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.7); }
+.btn--outline-light:hover { background: rgba(255, 255, 255, 0.12); }
+.btn--sm { min-height: 38px; padding: 7px 14px; font-size: 0.9rem; }
+.btn--lg { min-height: 52px; padding: 13px 22px; font-size: 1.05rem; }
+.btn--block { width: 100%; }
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px is the Android touch-target floor. */
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  flex: none;
+}
+.icon-btn:hover { background: var(--forest-50); }
+.icon-btn--sm { width: 36px; height: 36px; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--forest-800);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 4px;
+  margin-bottom: 10px;
+}
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* One row that scrolls, instead of three stacked rows of chips eating the
+   screen before the first shop. The row bleeds to the page edge so the last
+   chip is visibly cut off — that cut is the affordance that says "scroll me".
+   Overflow stays inside this box, so the page itself never scrolls sideways. */
+.chip-row--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--space-4);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Room for the focus ring, which would otherwise be clipped by the scroller. */
+  padding: 3px var(--space-4) 3px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.chip-row--scroll::-webkit-scrollbar { display: none; }
+.chip-row--scroll > .chip { flex: none; scroll-snap-align: start; }
+/* A soft fade on the right edge signals more content without a hard border. */
+.chip-row--scroll { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+.chip-row--scroll:has(.chip:last-child) { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--elev-1);
+}
+.chip:hover { background: var(--forest-50); }
+.chip--active { background: var(--forest-900); color: #fff; border-color: var(--forest-900); }
+.chip--button { max-width: 100%; }
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-tint);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  padding: 6px 8px 6px 18px;
+  color: var(--muted);
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+.search-field:focus-within { background: var(--surface); }
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  min-height: 40px;
+  font-size: 1rem;
+}
+.search-field input:focus { outline: none; }
+.search-field:focus-within { border-color: var(--forest-700); box-shadow: 0 0 0 3px var(--forest-100); }
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.switch input { width: 20px; height: 20px; accent-color: var(--forest-800); }
+
+label input[type='text'], label input:not([type]), label textarea, label select,
+.item-editor input, .promo-form input, .promo-form select, .promo-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  min-height: 44px;
+}
+
+.form-error { color: var(--danger); font-size: 0.9rem; font-weight: 500; margin-top: 6px; display: block; }
+
+/* ---------------- Pills & tags ---------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pill-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.pill--open { background: var(--success-bg); color: var(--success); }
+.pill--closed { background: #ece7db; color: var(--muted); }
+.pill--participation {
+  background: var(--surface-warm);
+  color: #5b4711;
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  font-weight: 600;
+}
+.pill--paused { background: var(--danger-bg); color: var(--danger); }
+.pill--demo-scenario { background: #e7f0ff; color: #1d4ed8; }
+.pill--real-listing { background: #eef2f0; color: #3f4f48; }
+.pill--status { text-transform: none; }
+.pill--success { background: var(--success-bg); color: var(--success); }
+.pill--warning { background: var(--warning-bg); color: var(--warning); }
+.pill--info { background: var(--info-bg); color: var(--info); }
+.pill--danger { background: var(--danger-bg); color: var(--danger); }
+.pill--job-available { background: var(--warning-bg); color: var(--warning); }
+.pill--job-accepted, .pill--job-collected, .pill--job-out-for-delivery { background: var(--info-bg); color: var(--info); }
+.pill--job-delivered { background: var(--success-bg); color: var(--success); }
+.pill--job-failed { background: var(--danger-bg); color: var(--danger); }
+
+.demo-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  border: 1px dashed var(--border-strong);
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.sponsored-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: #2b2118;
+  color: #f6d97b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.unread-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px; height: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.unread-badge--gold { background: var(--gold-500); color: var(--forest-950); }
+
+.shop-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-weight: 800;
+  flex: none;
+  letter-spacing: 0.02em;
+}
+.shop-avatar--sm { width: 38px; height: 38px; font-size: 0.84rem; border-radius: var(--radius-sm); }
+.shop-avatar--md { width: 48px; height: 48px; font-size: 1rem; }
+.shop-avatar--lg { width: 62px; height: 62px; font-size: 1.25rem; border-radius: var(--radius-xl); }
+
+.customer-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--gold-100);
+  color: #6d5410;
+  font-weight: 800;
+  flex: none;
+}
+
+/* ---------------- Shell ---------------- */
+
+.shell { min-height: 100dvh; display: flex; flex-direction: column; }
+
+.demo-bar {
+  background: var(--forest-950);
+  color: #e9f2ec;
+  padding: 6px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  justify-content: space-between;
+  /* The demo notice is a strip, not a header. It must never take a third of a
+     phone screen before the app has begun. */
+  min-height: 0;
+}
+.demo-bar__label { font-size: 0.84rem; }
+.demo-bar__label strong { color: #f6d97b; }
+.demo-bar__label--short { display: none; }
+.demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+
+.role-switcher {
+  display: flex;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  /* One row, scrolled horizontally, rather than four buttons reflowing into
+     three stacked lines on a phone. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  min-width: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.role-switcher::-webkit-scrollbar { display: none; }
+.role-switcher__label--short { display: none; }
+/* Below 560px the four role buttons become a 2x2 grid of short labels. The old
+   single scrolling row hid "Mall admin" completely at 390px, which is the one
+   role the walkthrough has to reach. Full labels return as soon as there is
+   room; the button's accessible name is the full label at every width. */
+@media (max-width: 560px) {
+  .role-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    overflow: visible;
+    flex: 1 1 100%;
+    border-radius: var(--radius-sm);
+  }
+  .role-switcher__btn { justify-content: center; padding: 6px 8px; min-height: 32px; }
+  .role-switcher__label--full { display: none; }
+  .role-switcher__label--short { display: inline; }
+}
+.role-switcher__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: #cfe3d6;
+  padding: 6px 11px;
+  border-radius: var(--radius-pill);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 34px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.role-switcher__btn--active { background: var(--gold-500); color: var(--forest-950); }
+.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.role-switcher__btn:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+
+.demo-bar__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #e9f2ec;
+  border-radius: var(--radius-pill);
+  padding: 6px 11px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 34px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.demo-bar__reset:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+.demo-bar__reset:hover { background: rgba(255, 255, 255, 0.12); }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px var(--space-4);
+  /* Sticky, translucent chrome: content slides under it instead of stopping
+     at a solid slab. The tint tracks --bg so the blur reads as the page. */
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(244, 238, 226, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(12, 59, 46, 0.06), 0 12px 28px -26px rgba(12, 59, 46, 0.6);
+  /* Safety net: on a narrow laptop the brand and five nav items must never
+     force a horizontal scrollbar — the nav drops to a second row instead. */
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+/* `.shell-chrome` deliberately does not stick — only `.app-header` does,
+   so the demo banner scrolls away instead of owning the viewport. See the
+   Phase 13 section at the end of this file. */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 2px;
+  min-width: 0;
+  min-height: 44px;
+}
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--forest-900);
+  box-shadow: 0 1px 2px rgba(12, 59, 46, 0.18), 0 6px 16px -8px rgba(12, 59, 46, 0.5);
+  flex: none;
+}
+.brand__mark img { display: block; width: 34px; height: 34px; border-radius: var(--radius-sm); }
+.brand__chip {
+  align-self: flex-start;
+  margin-left: 2px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-100);
+  color: #6d5410;
+  border: 1px solid rgba(168, 132, 28, 0.35);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.brand__text { display: flex; flex-direction: column; min-width: 0; }
+.brand__text strong {
+  color: var(--forest-900);
+  font-size: 1.12rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand__text small { color: var(--muted); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.top-nav { display: none; min-width: 0; }
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+  min-width: 58px;
+  min-height: 54px;
+  justify-content: center;
+  position: relative;
+}
+.nav-item__icon { position: relative; display: inline-flex; }
+.nav-badge {
+  position: absolute;
+  top: -7px; right: -12px;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-500);
+  color: var(--forest-950);
+  font-size: 0.66rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-item--active { color: var(--forest-900); }
+
+.bottom-nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 55;
+  min-height: 64px;
+  display: flex;
+  justify-content: space-around;
+  /* Frosted, not opaque: page content keeps sliding under the bar instead of
+     stopping dead at a white slab. This is the strongest "app, not website"
+     cue available without new components. */
+  background: rgba(255, 255, 255, 0.84);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 4px 4px calc(6px + env(safe-area-inset-bottom));
+  box-shadow: var(--elev-nav);
+}
+
+.offline-banner {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--warning-bg);
+  color: var(--warning);
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.shell-main { flex: 1; width: 100%; }
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  background: var(--forest-950);
+  color: #bcd2c4;
+  padding: 26px 18px calc(30px + var(--bottom-nav-h));
+  font-size: 0.9rem;
+}
+.app-footer strong { color: #fff; }
+.app-footer p { max-width: 880px; margin: 0 auto 8px; }
+.app-footer__small { font-size: 0.8rem; color: #8fb09d; }
+
+/* ---------------- Page & panels ---------------- */
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px var(--space-4) calc(32px + var(--bottom-nav-h));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.page--narrow { max-width: 760px; }
+.page--wide { max-width: 1240px; }
+.page--chat { max-width: 1180px; display: grid; gap: 16px; }
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: var(--space-3);
+}
+.section-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+}
+.section-header p { color: var(--muted); font-size: 0.9rem; margin-top: 4px; max-width: 640px; }
+
+/* ---------------- Page title block ----------------
+   One per screen, and the only <h1> in it. `SectionHeader` above stays the
+   heading for a *section within* a page; this is the page itself, so the two
+   are deliberately different sizes and weights rather than the same block
+   recycled at two levels. */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+.page-header__lead {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  /* Long titles must wrap, never push a contextual action off-screen. */
+  flex: 1 1 320px;
+}
+.page-header__eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  /* 4.97:1 on --bg: the gold is dark enough for 11.5px text, unlike --gold-500. */
+  color: var(--gold-600);
+}
+.page-header__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.3rem + 0.9vw, 1.9rem);
+  line-height: 1.14;
+  letter-spacing: -0.022em;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--forest-950);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.page-header__subtitle {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.page-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.page-header__action {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 639px) {
+  .page-header__title { font-size: 1.45rem; }
+  .page-header__subtitle { font-size: 0.9rem; }
+  .page-header__action { width: 100%; }
+  .page-header__action > * { flex: 1 1 auto; }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.panel h2 { font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.panel--warning { border-color: #e8cf7a; background: #fffaf0; }
+.panel__lede { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.panel__empty { color: var(--muted); padding: 10px 0; }
+
+.info-banner {
+  display: flex;
+  gap: 10px;
+  background: var(--forest-50);
+  border: 1px solid var(--forest-100);
+  color: var(--forest-900);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  align-items: flex-start;
+}
+.info-banner svg { flex: none; margin-top: 2px; }
+.info-banner--illustrated { align-items: flex-start; flex-wrap: wrap; }
+.info-banner--illustrated > div { flex: 1 1 260px; }
+.info-banner__art {
+  order: 3;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+
+/* A dashed border reads as "unfinished placeholder". An empty state is a real
+   screen a customer can land on, so it gets a solid surface, a soft tint and
+   the same radius as every other feature panel. */
+.empty-state {
+  text-align: center;
+  padding: 34px 22px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elev-1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.empty-state h3 { font-size: 1.15rem; color: var(--forest-950); }
+.empty-state__icon {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: var(--forest-50);
+  box-shadow: inset 0 0 0 1px var(--forest-100);
+  color: var(--forest-800);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-state p { color: var(--muted); max-width: 460px; }
+.empty-state__art {
+  width: min(100%, 360px);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 2px;
+}
+/* Inside the chat panel the empty state is narrow: keep the art modest. */
+.chat-thread .empty-state__art { width: min(100%, 280px); }
+@media (max-width: 420px) {
+  .empty-state__art { width: 100%; }
+}
+
+.group-title { font-size: 1.05rem; margin: 18px 0 10px; color: var(--forest-950); }
+
+.action-stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* ---------------- Toast & modal ---------------- */
+
+.toast-stack {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--bottom-nav-h) + 14px);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(92vw, 460px);
+}
+.toast {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: var(--forest-950);
+  color: #eef7f0;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  box-shadow: var(--elev-4);
+  animation: toast-rise var(--dur) var(--ease-out);
+}
+.toast svg { flex: none; margin-top: 1px; color: #7fd6a4; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 35, 27, 0.55);
+  z-index: 110;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.modal {
+  background: var(--surface);
+  width: 100%;
+  max-width: 520px;
+  border-radius: 20px 20px 0 0;
+  padding: 8px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height: 88dvh;
+  overflow-y: auto;
+  box-shadow: var(--elev-4);
+  animation: sheet-rise var(--dur) var(--ease-out);
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
+.modal-head h2 { font-size: 1.15rem; }
+.modal-body { display: flex; flex-direction: column; gap: 12px; padding-bottom: 6px; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+
+@media (min-width: 640px) {
+  .modal-backdrop { align-items: center; padding: 20px; }
+  .modal { border-radius: var(--radius-xl); }
+}
+
+/* ---------------- Hero & home ---------------- */
+
+/* Bundle 3 — the hero is a card, not a photograph with a gradient over it.
+   The old hero painted the mall photograph edge to edge and covered 80% of it
+   with a dark scrim so the copy stayed readable, which meant the artwork was
+   both the loudest element and the least visible one. Now the photograph keeps
+   its own panel and its own crop, and the words sit on solid forest green. */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--forest-950);
+  color: #fff;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: var(--elev-3);
+}
+.hero__aside { position: relative; order: -1; min-height: 168px; background: var(--forest-900); }
+.hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__aside-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.hero__content { padding: 20px 18px 22px; color: #fff; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.hero__kicker {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #f6d97b;
+}
+/* The one place the display serif carries a full sentence: a headline is a
+   headline, and the app reads as a shop rather than a dashboard. */
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 22ch;
+}
+.hero__lede { color: #cfe2d7; font-size: 0.95rem; line-height: 1.5; max-width: 46ch; }
+
+.hero__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 5px 5px 5px 16px;
+  color: var(--muted);
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
+  max-width: 560px;
+}
+.hero__search-field { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
+.hero__search input { flex: 1; min-width: 0; border: none; background: none; min-height: 42px; font-size: 1rem; }
+.hero__search input:focus { outline: none; }
+
+.hero__results { background: rgba(255, 255, 255, 0.97); color: var(--ink); border-radius: var(--radius-md); padding: 8px; }
+.hero__results p { padding: 8px; font-size: 0.9rem; color: var(--ink-2); }
+.hero__results li button {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; text-align: left;
+  background: none; border: none; cursor: pointer;
+  padding: 9px; border-radius: var(--radius-sm);
+}
+.hero__results li button:hover { background: var(--forest-50); }
+.hero__results li span { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hero__results small { color: var(--muted); }
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.active-order-strip { display: flex; flex-direction: column; gap: 9px; }
+.active-order-card {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--gold-500);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.active-order-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.active-order-card__text small { color: var(--muted); }
+
+/* Bundle 3 — categories are one scrolling rail on phones. The 2-column list
+   needed five rows to name nine categories and read like a settings menu; a
+   rail shows the same nine in a strip the thumb can flick, and it is the shape
+   every shopping app uses for this job. From 640px up it becomes the grid
+   again, because there the height is free. */
+.category-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 92px;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: 3px var(--space-4) 6px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.category-grid::-webkit-scrollbar { display: none; }
+.category-tile {
+  display: flex; flex-direction: column; gap: 0; align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--elev-1);
+  scroll-snap-align: start;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.category-tile:hover { border-color: var(--forest-700); box-shadow: var(--elev-2); }
+.category-tile img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 0; flex: none; }
+.category-tile span { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 8px 9px 10px; }
+.category-tile strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--forest-950);
+  line-height: 1.3;
+  /* Two lines for "Restaurants & takeaway"; the reserved height keeps the
+     nine tiles on one baseline instead of a ragged strip. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+.category-tile small { color: var(--muted); font-size: 0.68rem; line-height: 1.3; }
+
+.welcome-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.welcome-card__art {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+.welcome-card__body { flex: 1 1 220px; min-width: 0; }
+.welcome-card__body h2 { font-size: 1.05rem; margin: 0 0 6px; }
+.welcome-card__body p { margin: 0 0 10px; font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
+@media (min-width: 620px) {
+  .welcome-card { padding: 14px 16px; }
+  .welcome-card__art { width: 240px; }
+}
+
+.hero__no-match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: #fff;
+  color: var(--ink);
+  border-radius: var(--radius-md);
+}
+.hero__no-match img { width: 92px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-xs); flex: none; }
+.hero__no-match p { padding: 0; margin: 0; flex: 1 1 180px; font-size: 0.9rem; color: var(--ink-2); }
+
+.shop-source__art { margin: 10px 0 0; }
+.shop-source__art img {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.shop-source__art figcaption { font-size: 0.75rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+.panel__art--banner { aspect-ratio: 16 / 9; }
+.panel__art--square { max-width: 260px; aspect-ratio: 1 / 1; margin-inline: auto; }
+
+.need-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0; margin: 0 0 8px; list-style: none; }
+.need-grid__note { color: var(--muted); font-size: 0.75rem; margin: 0; }
+/* Artwork runs edge to edge inside the tile: a 8px white border around a
+   photograph is what made these read as swatches in a form rather than as
+   pictures. The first tile spans the row on phones, which breaks the 2x3 grid
+   into an editorial lead plus a support block. */
+.need-grid > li:first-child { grid-column: 1 / -1; }
+.need-grid > li:first-child .need-tile img { aspect-ratio: 16 / 9; }
+.need-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-1);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.need-tile:hover { border-color: var(--forest-700); box-shadow: var(--elev-2); }
+.need-tile img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 0; display: block; }
+.need-tile span { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 9px 11px 11px; }
+.need-tile strong { font-size: 0.9rem; line-height: 1.25; }
+.need-tile small { color: var(--muted); font-size: 0.75rem; line-height: 1.35; }
+
+/* A quiet supporting strip, not a hero. It keeps the illustration and the
+   scripted-reply disclosure, but sits *below* the search controls so it can no
+   longer push the shop results under the fold. */
+.discovery-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 11px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 9px 11px;
+  margin-bottom: 0;
+  box-shadow: var(--elev-1);
+}
+.discovery-strip__art {
+  width: 96px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+.discovery-strip p { margin: 0; flex: 1 1 auto; min-width: 0; font-size: 0.84rem; color: var(--ink-2); line-height: 1.45; }
+@media (max-width: 639px) {
+  /* Decorative art on a phone: keep a token of it, give the text the width. */
+  .discovery-strip { padding: 8px 10px; gap: 9px; }
+  .discovery-strip__art { width: 60px; border-radius: var(--radius-xs); }
+  .discovery-strip p { font-size: 0.82rem; }
+}
+
+.journey-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  background: var(--surface-2, var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.journey-strip--tight { margin-top: 12px; margin-bottom: 4px; }
+.journey-strip__art {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+@media (min-width: 380px) {
+  .journey-strip__art { width: 200px; }
+}
+.journey-strip figcaption { flex: 1 1 200px; font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+.panel__art--landscape { aspect-ratio: 3 / 2; }
+
+.shop-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+.promo-stack { display: flex; flex-direction: column; gap: 14px; }
+
+.promo-banner {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 190px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: var(--shadow);
+  background: var(--forest-900);
+}
+.promo-banner > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.promo-banner__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(95deg, rgba(7, 35, 27, 0.92), rgba(7, 35, 27, 0.62) 58%, rgba(7, 35, 27, 0.2)); }
+/* Illustration banners carry their own pale background; keep text legible. */
+.promo-banner--illustration > img { object-position: center; }
+.promo-banner__content { padding: 18px; color: #fff; max-width: 560px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.promo-banner__content h3 { font-size: 1.25rem; }
+.promo-banner__content p { color: #d7e8dd; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.promo-banner__kicker { display: inline-flex; gap: 6px; align-items: center; font-size: 0.75rem; font-weight: 700; color: #f6d97b; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.flow-steps { display: grid; gap: 14px; margin-top: 4px; }
+.flow-step {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.flow-step img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.flow-step strong { display: block; font-size: 0.98rem; margin-bottom: 4px; }
+.flow-step p { color: var(--ink-2); font-size: 0.9rem; }
+@media (min-width: 620px) {
+  .flow-step { grid-template-columns: 190px 1fr; align-items: center; gap: 16px; }
+  .flow-step img { aspect-ratio: 3 / 2; }
+}
+
+/* Bundle 3 — the explainer closes the page on forest green: the last thing a
+   shopper scrolls past should look like the shop it belongs to, not like the
+   fourth white box in a column of white boxes. */
+.how-it-works {
+  background: var(--forest-950);
+  border: 1px solid var(--forest-900);
+  border-radius: var(--radius-xl);
+  padding: 22px 18px 20px;
+  color: #fff;
+}
+.how-it-works .section-header h2 { color: #fff; }
+.how-it-works .section-header p { color: #b9d3c6; }
+.steps { display: grid; gap: 12px; }
+.steps li {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.steps__icon {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--gold-500); color: var(--forest-950);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 9px;
+}
+.steps h3 { font-size: 1rem; margin-bottom: 5px; color: #fff; }
+.steps p { color: #c3d8cc; font-size: 0.9rem; }
+.how-it-works__note { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: #e7f0ea; font-size: 0.9rem; }
+
+/* ---------------- Shop cards & directory ---------------- */
+
+.shop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elev-2);
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.shop-card__media {
+  position: relative;
+  border: none; padding: 0; cursor: pointer;
+  /* Every tenant hero is 1280x720. A fixed 150px window cropped 10% off the
+     top and bottom of the counters and seating the art was composed around,
+     so the frame now follows the image's own ratio. */
+  aspect-ratio: 16 / 9;
+  min-height: 148px;
+  background: var(--forest-100);
+  overflow: hidden;
+  display: block; width: 100%;
+}
+.shop-card__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 0.25s ease; }
+.shop-card__media-fallback {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 2.4rem; font-weight: 800;
+}
+.featured-ribbon {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  display: inline-flex; gap: 5px; align-items: center;
+  background: var(--gold-500); color: var(--forest-950);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+}
+.shop-card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+/* Identity → description → facts → status → action, with a deliberate gap
+   before the CTA so the button is not read as part of the metadata block. */
+.shop-card__body > .pill--participation { margin-top: 2px; }
+/* The CTA is pinned to the floor of the card. Without this, a one-line tagline
+   leaves its button floating ~20px above its neighbour's, so a row of cards
+   reads as ragged even though the cards themselves are equal height. */
+.shop-card__body > .btn:last-child { margin-top: auto; }
+/* 48px, not 46: the target on the single most important control on the card. */
+.shop-card__body > .btn:last-child { min-height: 48px; }
+.shop-card__title-row { display: flex; align-items: flex-start; gap: 10px; }
+/* Brand plate: keeps the shop mark visually separate from the category illustration.
+   Name and trading status are stacked, not side by side. Measured with Inter 800,
+   the status pill is ~142px wide; sharing one row left the name 0-30px on a
+   3-column card, which clipped long names (SUPERSPAR, Ocean Basket, Cash
+   Crusaders) inside a plate that hides its overflow. */
+.shop-card__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  /* No border and no gradient plate: the card is already a surface, and a
+     second framed box inside it made the tenant name fight its own container.
+     The column stack is kept — it is what stops long names being clipped. */
+  padding: 0;
+  border: none;
+  background: none;
+}
+.shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
+.shop-card__brand .pill { flex: none; align-self: flex-start; }
+.shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.12rem; margin: 0; }
+/* Read first, above the name: a shopper scanning a grid filters by kind
+   ("Restaurants") before brand. The wordmark below confirms the choice. */
+.shop-card__category {
+  color: var(--gold-600);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.shop-card__tagline {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  /* Two lines is enough to describe a shop; a third pushes the facts and the
+     action down and makes a row of cards uneven. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.shop-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.shop-card__meta > span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
+.shop-card__meta span { display: inline-flex; align-items: center; gap: 5px; }
+.shop-card .btn { margin-top: auto; }
+
+.directory-controls { display: flex; flex-direction: column; gap: 10px; }
+/* The search box is the primary control on this screen, so it gets a taller
+   target and a stronger resting border than a generic field. */
+.directory-controls .search-field { min-height: 52px; box-shadow: var(--elev-1); }
+.directory-controls .search-field input { font-size: 1rem; }
+.directory-controls .chip-row--scroll { margin-top: 2px; }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.filter-row__label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink-2); font-size: 0.9rem; }
+.results-count { color: var(--muted); font-size: 0.9rem; }
+
+.skeleton-list { display: flex; flex-direction: column; gap: 12px; }
+.skeleton-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.skeleton-line { height: 14px; border-radius: var(--radius-xs); background: linear-gradient(90deg, #eee7d8, #f7f2e7, #eee7d8); background-size: 200% 100%; animation: skeleton 1.2s infinite; width: 80%; }
+.skeleton-line--wide { width: 55%; height: 20px; }
+.skeleton-line--short { width: 40%; }
+@keyframes skeleton { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* ---------------- Shop page ---------------- */
+
+.shop-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--elev-2); }
+.shop-hero__media { position: relative; aspect-ratio: 16 / 9; height: auto; background: var(--forest-100); }
+.shop-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.shop-hero__caption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 9px 18px;
+  background: var(--surface-warm);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.shop-hero__caption-chip {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-100);
+  color: var(--forest-800);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.shop-hero__body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.shop-hero__title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 13px; }
+/* 12rem basis: at 360px the name block and the ~142px status pill cannot share
+   a row, so the pill drops underneath and the name keeps the full width. */
+.shop-hero__title > div { flex: 1 1 12rem; min-width: 0; }
+.shop-hero__title h1 { font-size: 1.5rem; font-family: var(--font-display); line-height: 1.14; }
+.shop-hero__title p { color: var(--muted); }
+.shop-hero__tagline { font-size: 1.05rem; color: var(--forest-900); font-weight: 600; }
+.shop-hero__hint { color: var(--muted); font-size: 0.9rem; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+
+.shop-facts { display: grid; gap: 10px; }
+.shop-facts div { background: var(--surface-warm); border-radius: var(--radius-sm); padding: 11px 13px; }
+.shop-facts dt { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.shop-facts dd { margin: 3px 0 0; font-weight: 500; }
+
+.ask-chips { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+.mini-order-list li button {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left;
+  background: none; border: none; border-top: 1px solid var(--border);
+  padding: 12px 2px; cursor: pointer;
+}
+.mini-order-list li:first-child button { border-top: none; }
+.mini-order-list span { display: flex; flex-direction: column; }
+.mini-order-list small { color: var(--muted); }
+
+/* ---------------- Conversation lists ---------------- */
+
+.conversation-list { display: flex; flex-direction: column; }
+.conversation-list li button {
+  display: flex; align-items: center; gap: 13px;
+  width: 100%; text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-shadow: var(--elev-1);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.conversation-list li button:active { transform: scale(0.99); }
+/* The shop name is the thing being scanned; the last message is the preview. */
+.conversation-list__text strong { font-size: 1rem; color: var(--forest-950); }
+.conversation-list li button:hover { border-color: var(--forest-700); }
+.conversation-list__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.conversation-list__text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conversation-list__text small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conversation-list__basket { color: var(--forest-800) !important; font-weight: 600; display: inline-flex; gap: 4px; align-items: center; }
+.conversation-list__action { color: var(--warning) !important; font-weight: 700; }
+.conversation-list__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
+.conversation-list__meta small { color: var(--muted); font-size: 0.75rem; }
+
+/* ---------------- Chat ---------------- */
+
+
+.chat-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  height: min(760px, calc(100dvh - 235px));
+  min-height: 480px;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  background: var(--forest-900);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  flex: none;
+}
+.chat-header .icon-btn { color: #fff; }
+.chat-header .icon-btn:hover { background: rgba(255, 255, 255, 0.14); }
+.chat-header__shop {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 11px;
+  background: none; border: none; color: #fff; cursor: pointer; text-align: left; padding: 2px;
+}
+.chat-header__shop--static { cursor: default; }
+.chat-header__shop span { display: flex; flex-direction: column; min-width: 0; }
+.chat-header__shop strong {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;
+}
+.chat-header__shop small { color: #bcd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
+.chat-header .shop-avatar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); }
+/* On a phone the header name had room for about half of "The Angelo SUPERSPAR"
+   and fell back to an ellipsis. Which shop you are talking to is the one thing
+   this header must not abbreviate, so on narrow screens the name takes a second
+   line while the (secondary) trading line stays on one. */
+@media (max-width: 430px) {
+  .chat-header__shop strong {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.18;
+  }
+}
+/* A back control this important should not be a bare glyph on a phone. */
+.chat-header > .icon-btn { width: 46px; height: 46px; }
+
+.chat-notice {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: var(--warning-bg); color: var(--warning);
+  font-size: 0.84rem; font-weight: 500;
+  padding: 10px 14px;
+  flex: none;
+}
+.chat-notice svg { flex: none; margin-top: 1px; }
+.chat-notice--info { background: #eaf2fb; color: #1e3a5f; }
+
+/* Phase 4: real-tenant disclosure blocks */
+.listing-disclosure {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #f1f5f3;
+  border: 1px solid rgba(12, 59, 46, 0.14);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--ink-soft, #3f4f48);
+}
+.listing-disclosure svg { flex: none; margin-top: 2px; color: var(--green-700, #0c3b2e); }
+.shop-facts dd a { color: var(--green-700, #0c3b2e); font-weight: 600; }
+.shop-facts__note { display: block; font-size: 0.75rem; color: var(--ink-soft, #5f6f68); margin-top: 2px; }
+.shop-source {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: #f7f9f8;
+  border: 1px dashed rgba(12, 59, 46, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-soft, #3f4f48);
+}
+.shop-source p + p { margin-top: 6px; }
+.shop-source strong { color: var(--ink, #16281f); }
+
+.chat-thread { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+
+.chat-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* A warm paper tone with a very low-contrast dot grid: enough texture to give
+     the bubbles something to sit on, quiet enough not to compete with text. */
+  background-color: var(--chat-bg);
+  background-image: radial-gradient(rgba(12, 59, 46, 0.075) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 16px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scroll-behavior: smooth;
+}
+
+.chat-day {
+  align-self: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  margin: 10px auto 8px;
+  width: fit-content;
+}
+
+.chat-system { display: flex; justify-content: center; margin: 4px 0; }
+.chat-system span {
+  background: #fdf3c9;
+  border: 1px solid #eadf9f;
+  color: #5d5312;
+  font-size: 0.8rem;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  max-width: 88%;
+  text-align: center;
+}
+
+/* Turn grouping. `--start` opens a turn (a little air above), `--cont`
+   continues it (tight), and the last bubble of a turn carries the tail corner
+   and the timestamp. */
+.chat-row { display: flex; }
+.chat-row--start { margin-top: 10px; }
+.chat-row--cont { margin-top: 2px; }
+.chat-row--mine { justify-content: flex-end; }
+.chat-row--theirs { justify-content: flex-start; }
+
+.chat-bubble {
+  max-width: min(80%, 460px);
+  padding: 8px 12px 7px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2px rgba(12, 59, 46, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-wrap: anywhere;
+}
+/* Outgoing is filled forest with white text; incoming is white with a hairline.
+   That is a difference in tone, not just in tint, so the two sides of a
+   conversation are separable at a glance on a phone in daylight. */
+.chat-bubble--mine { background: var(--chat-mine); border: 1px solid var(--chat-mine-edge); color: #fff; }
+.chat-bubble--theirs { background: var(--chat-theirs); border: 1px solid var(--border); color: var(--ink); }
+/* The tail: only the final bubble of a turn gets the squared-off near corner,
+   so a stacked reply reads as one message rather than three cards. */
+.chat-row--end.chat-row--mine .chat-bubble { border-bottom-right-radius: 6px; }
+.chat-row--end.chat-row--theirs .chat-bubble { border-bottom-left-radius: 6px; }
+.chat-bubble__text { white-space: pre-wrap; font-size: 0.95rem; line-height: 1.45; }
+.chat-bubble__meta {
+  align-self: flex-end;
+  display: inline-flex; gap: 4px; align-items: center;
+  color: var(--muted); font-size: 0.7rem;
+}
+.chat-bubble--mine .chat-bubble__meta { color: rgba(255, 255, 255, 0.8); }
+.chat-bubble__simulated {
+  display: flex; gap: 5px; align-items: flex-start;
+  color: var(--gold-600); font-size: 0.75rem; font-weight: 600;
+  border-top: 1px dashed var(--border-strong); padding-top: 5px;
+}
+.chat-bubble--mine .chat-bubble__simulated {
+  color: #f6d97b;
+  border-top-color: rgba(255, 255, 255, 0.28);
+}
+.chat-bubble__figure { margin: 0 0 4px; }
+.chat-bubble__figure img { border-radius: var(--radius-sm); display: block; max-height: 260px; width: 100%; object-fit: cover; }
+.chat-bubble__figure figcaption { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+/* Inside the filled outgoing bubble the muted grey would sit at ~2:1. */
+.chat-bubble--mine .chat-bubble__figure figcaption { color: rgba(255, 255, 255, 0.82); }
+
+/* Always white, even inside the dark outgoing bubble: it is a document, and a
+   document should not be printed on the message colour. */
+.order-card-msg {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 11px;
+  min-width: min(270px, 68vw);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.order-card-msg__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; color: var(--forest-900); }
+.order-card-msg__head span { display: inline-flex; gap: 6px; align-items: center; }
+.order-card-msg__items li { display: flex; justify-content: space-between; gap: 14px; font-size: 0.9rem; padding: 4px 0; border-top: 1px solid var(--border); }
+.order-card-msg__more { color: var(--muted); }
+.order-card-msg__total { display: flex; justify-content: space-between; gap: 12px; background: var(--forest-50); border-radius: var(--radius-xs); padding: 8px 10px; font-size: 0.9rem; }
+/* On a 320-390px card the amount column collapsed to ~45px and "R 254,96"
+   broke across lines as "R 254,9 / 6". Money is read as one token. */
+.order-card-msg__total strong { white-space: nowrap; flex: none; }
+.order-card-msg__note { font-size: 0.75rem; color: var(--muted); }
+
+.basket-bar {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%;
+  background: var(--gold-500);
+  color: var(--forest-950);
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  flex: none;
+}
+.basket-bar span { display: flex; flex-direction: column; }
+.basket-bar small { font-weight: 500; }
+.basket-bar--muted { background: var(--surface-warm); color: var(--ink-2); cursor: default; }
+
+.typing-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--chat-bg);
+  border-top: 1px solid var(--border);
+  padding: 9px 16px;
+  font-size: 0.84rem; color: var(--ink-2);
+  flex: none;
+}
+.typing-bar em { color: var(--gold-600); font-style: normal; font-weight: 600; }
+.typing-dots { display: inline-flex; gap: 3px; }
+.typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--forest-700); animation: typing 1s infinite; }
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.quick-replies {
+  display: flex; gap: 7px;
+  overflow-x: auto;
+  padding: 9px 12px 2px;
+  background: #fff;
+  flex: none;
+}
+.quick-replies .chip { flex: none; max-width: 300px; overflow: hidden; text-overflow: ellipsis; }
+
+.composer {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 10px 11px calc(9px + env(safe-area-inset-bottom));
+  flex: none;
+  box-shadow: 0 -1px 0 var(--border), 0 -10px 24px -20px rgba(12, 59, 46, 0.4);
+}
+.composer__preview {
+  display: flex; align-items: center; gap: 11px;
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  margin-bottom: 9px;
+}
+.composer__preview img { width: 52px; height: 52px; object-fit: cover; border-radius: var(--radius-xs); }
+.composer__preview div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.composer__preview strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; }
+.composer__preview small { color: var(--muted); }
+.composer__error { color: var(--danger); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
+.composer__row { display: flex; align-items: flex-end; gap: 7px; }
+.composer textarea {
+  flex: 1; min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 11px 16px;
+  resize: none;
+  max-height: 120px;
+  min-height: 48px;
+  background: var(--bg);
+}
+.composer textarea:focus { outline: 3px solid var(--forest-100); border-color: var(--forest-700); }
+/* The placeholder is routinely longer than the field ("Message The Angelo
+   SUPERSPAR…"). It wrapped to a second line that the 48px min-height cut in
+   half, so the field looked broken before the customer typed anything. Keep
+   the placeholder to one line and ellipsise it; the typed value still wraps
+   normally, which is what Shift+Enter relies on. */
+.composer textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.composer__attach { color: var(--forest-800); }
+.composer__send {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--forest-800);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex: none;
+  box-shadow: var(--elev-1);
+}
+.composer__send:disabled { background: #c9d4cc; cursor: not-allowed; }
+.composer__hint {
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+  font-size: 0.72rem; color: var(--muted);
+  margin-top: 7px; padding: 0 4px;
+}
+.composer__hint-demo { font-weight: 600; color: var(--ink-2); }
+/* Keyboard shortcuts are noise on a phone and useful on a laptop. */
+@media (hover: none) { .composer__hint-keys { display: none; } }
+
+.chat-aside { display: none; }
+.chat-aside .panel h2 { font-size: 1rem; }
+
+.tick-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 12px; }
+.tick-list li { padding-left: 20px; position: relative; color: var(--ink-2); font-size: 0.9rem; }
+.tick-list li::before { content: '✓'; position: absolute; left: 0; color: var(--forest-700); font-weight: 800; }
+
+/* ---------------- Basket & orders ---------------- */
+
+.basket-head { display: flex; align-items: center; gap: 10px 13px; flex-wrap: wrap; }
+/* A wide status pill ("Awaiting your confirmation") used to squeeze the title
+   and the shop name into a ~90px column on a phone, so "Basket AMG-1001" broke
+   over three lines and the shop name over six. The text block now claims a
+   usable basis and the pill wraps onto its own line when it cannot fit. */
+.basket-head > div { flex: 1 1 210px; min-width: 0; }
+.basket-head h1 { font-size: 1.45rem; }
+.basket-head p { color: var(--muted); }
+
+.basket-items li { border-top: 1px solid var(--border); padding: 14px 0; display: flex; flex-direction: column; gap: 9px; }
+.basket-items li:first-child { border-top: none; padding-top: 2px; }
+.basket-items__main { display: flex; flex-direction: column; gap: 2px; }
+.basket-items__main small { color: var(--muted); }
+.basket-items__controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.basket-items__actions { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.qty-stepper {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-pill); padding: 3px;
+  background: #fff;
+}
+.qty-stepper button {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; background: var(--forest-50); color: var(--forest-900);
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.qty-stepper button:disabled { opacity: 0.4; cursor: not-allowed; }
+.qty-stepper span { min-width: 30px; text-align: center; font-weight: 700; }
+
+.change-pending {
+  display: inline-block;
+  background: var(--warning-bg); color: var(--warning);
+  font-size: 0.8rem; font-weight: 600;
+  border-radius: var(--radius-xs); padding: 5px 9px;
+  margin-top: 5px; align-self: flex-start;
+}
+
+.request-list li { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid var(--border); }
+.request-list li:first-child { border-top: none; }
+
+.fulfilment-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.fulfilment-option {
+  display: flex; gap: 12px; align-items: flex-start;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  color: var(--forest-900);
+}
+.fulfilment-option input { width: 20px; height: 20px; accent-color: var(--forest-800); margin-top: 2px; flex: none; }
+.fulfilment-option span { display: flex; flex-direction: column; gap: 2px; color: var(--ink); }
+.fulfilment-option small { color: var(--muted); font-weight: 400; }
+.fulfilment-option--active { border-color: var(--forest-800); background: var(--forest-50); }
+
+.order-totals { display: flex; flex-direction: column; gap: 5px; margin-top: 12px; }
+.order-totals div { display: flex; justify-content: space-between; gap: 14px; }
+.order-totals dt { color: var(--ink-2); }
+.order-totals dd { margin: 0; font-weight: 600; }
+.order-totals__grand { border-top: 2px solid var(--forest-900); padding-top: 9px; margin-top: 5px; font-size: 1.05rem; }
+.order-totals__grand dt, .order-totals__grand dd { font-weight: 800; color: var(--forest-950); }
+.order-totals--standalone { background: var(--surface-warm); border-radius: var(--radius-sm); padding: 13px 15px; }
+
+.order-items ul li { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-top: 1px solid var(--border); }
+.order-items ul li:first-child { border-top: none; }
+.order-items__desc { display: flex; gap: 9px; min-width: 0; }
+.order-items__desc > span:last-child { display: flex; flex-direction: column; }
+.order-items__qty { font-weight: 800; color: var(--forest-800); flex: none; }
+.order-items__note { color: var(--muted); }
+.order-items__prices { text-align: right; display: flex; flex-direction: column; flex: none; }
+.order-items__prices small { color: var(--muted); }
+.order-items__vat-note { font-size: 0.8rem; color: var(--muted); margin-top: 9px; }
+.order-items--compact { font-size: 0.9rem; }
+
+.fulfilment-label { display: inline-flex; gap: 7px; align-items: center; font-weight: 600; color: var(--forest-900); margin-top: 12px; }
+
+.order-list { display: flex; flex-direction: column; gap: 9px; }
+.order-list-card {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px; box-shadow: var(--shadow);
+}
+.order-list-card__main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; background: none; border: none; cursor: pointer; text-align: left; padding: 4px; }
+.order-list-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.order-list-card__text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.order-list-card__text small { color: var(--muted); }
+
+/* ---------------- Timeline ---------------- */
+
+.timeline-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.timeline-head h3 { font-size: 1.05rem; }
+.timeline { display: flex; flex-direction: column; }
+.timeline__step { display: flex; gap: 12px; position: relative; padding: 0 0 18px; }
+.timeline__step:last-child { padding-bottom: 2px; }
+.timeline__step::before {
+  content: '';
+  position: absolute;
+  left: 10px; top: 24px; bottom: 0;
+  width: 2px;
+  background: var(--border-strong);
+}
+.timeline__step:last-child::before { display: none; }
+.timeline__step--done::before { background: var(--forest-700); }
+.timeline__dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; flex: none; z-index: 1;
+}
+.timeline__step--done .timeline__dot { background: var(--forest-700); border-color: var(--forest-700); }
+.timeline__step--current .timeline__dot { border-color: var(--gold-500); background: var(--gold-500); box-shadow: 0 0 0 5px var(--gold-100); }
+.timeline__label { display: flex; flex-direction: column; font-weight: 600; }
+.timeline__label small { color: var(--muted); font-weight: 500; }
+.timeline__step--upcoming .timeline__label { color: var(--muted); font-weight: 500; }
+.timeline-note { font-size: 0.82rem; color: var(--muted); margin-top: 12px; }
+
+.demo-next-step {
+  margin-top: 14px;
+  background: var(--gold-100);
+  border: 1px solid #e4cf8d;
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  font-size: 0.9rem;
+  color: #5c4a10;
+}
+
+/* ---------------- Promo detail & help ---------------- */
+
+.promo-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.promo-detail > img { width: 100%; height: 210px; object-fit: cover; display: block; }
+.promo-detail__body { padding: 18px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.promo-detail__body h1 { font-size: 1.4rem; }
+.promo-detail__dates { display: flex; gap: 7px; align-items: center; color: var(--muted); font-size: 0.9rem; flex-wrap: wrap; }
+.promo-detail__shop { display: flex; gap: 11px; align-items: center; background: var(--surface-warm); border-radius: var(--radius-sm); padding: 11px; width: 100%; }
+.promo-detail__shop div { display: flex; flex-direction: column; }
+.promo-detail__shop small { color: var(--muted); }
+.promo-detail__stats { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--ink-2); font-size: 0.9rem; }
+.promo-detail__stats span { display: inline-flex; gap: 5px; align-items: center; }
+.promo-detail .action-stack { width: 100%; }
+
+.numbered-list { counter-reset: item; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.numbered-list li { counter-increment: item; padding-left: 38px; position: relative; color: var(--ink-2); }
+.numbered-list li::before {
+  content: counter(item);
+  position: absolute; left: 0; top: -2px;
+  width: 27px; height: 27px; border-radius: 50%;
+  background: var(--forest-900); color: #f6d97b;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.84rem;
+}
+.role-explain { display: flex; flex-direction: column; gap: 12px; }
+.panel__art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  display: block;
+}
+.panel__art--narrow { max-width: 420px; margin-inline: auto; }
+/* 4:5 source art (e.g. help-troubleshooting): show it at its own ratio rather
+   than cropping it into a 16:9 box that cuts the subject off. */
+.panel__art--portrait {
+  max-width: 300px;
+  aspect-ratio: 4 / 5;
+  margin-inline: auto;
+}
+.role-explain li { display: flex; gap: 11px; align-items: flex-start; color: var(--ink-2); }
+.role-explain svg { color: var(--forest-800); flex: none; margin-top: 2px; }
+
+/* ---------------- Workspaces (shared) ---------------- */
+
+.workspace-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; justify-content: space-between; }
+.workspace-head h1 { font-size: 1.55rem; color: var(--forest-950); margin-top: 4px; }
+.workspace-head p { color: var(--muted); max-width: 620px; margin-top: 5px; }
+.workspace-kicker { display: inline-flex; gap: 6px; align-items: center; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gold-600); }
+
+.shop-switcher { display: flex; flex-direction: column; gap: 5px; font-size: 0.82rem; font-weight: 700; color: var(--ink-2); }
+.shop-switcher select {
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong); background: #fff; min-height: 44px; font-weight: 600;
+}
+
+.workspace-tabs { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; }
+.workspace-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: var(--radius-pill);
+  padding: 9px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 42px;
+}
+.workspace-tab--active { background: var(--forest-900); color: #fff; border-color: var(--forest-900); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; margin-bottom: 16px; }
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px;
+  display: flex; flex-direction: column; gap: 2px;
+  box-shadow: var(--shadow);
+}
+.stat-card span { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.stat-card strong { font-size: 1.55rem; color: var(--forest-950); }
+.stat-card small { color: var(--muted); font-size: 0.8rem; }
+.stat-card--alert { border-color: #e8cf7a; background: #fffaf0; }
+
+/* ---------------- Retailer ---------------- */
+
+.retailer-chat { display: grid; gap: 16px; }
+
+.order-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); align-self: start; }
+.order-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.order-panel__head h3 { display: flex; gap: 8px; align-items: center; font-size: 1.05rem; }
+.order-panel__card { display: flex; flex-direction: column; gap: 13px; margin-top: 12px; }
+.order-panel__title { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+.panel-items li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--border); align-items: flex-start; }
+.panel-items li:first-child { border-top: none; }
+.panel-items__desc { display: flex; flex-direction: column; min-width: 0; }
+.panel-items__desc small { color: var(--muted); }
+.panel-items__side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.panel-items__btns { display: inline-flex; }
+
+.item-editor {
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  width: 100%;
+}
+.item-editor h4 { display: flex; gap: 7px; align-items: center; font-size: 0.95rem; }
+.item-editor label { font-size: 0.84rem; font-weight: 600; color: var(--ink-2); display: block; }
+/* minmax(0,1fr), not 1fr: a date input has an intrinsic minimum width, so two
+   1fr tracks could not shrink and pushed the promo form past a 320px screen. */
+.item-editor__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.item-editor__actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.change-requests { background: #fffaf0; border: 1px solid #e8cf7a; border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 9px; }
+.change-requests h4 { display: flex; gap: 7px; align-items: center; color: var(--warning); font-size: 0.95rem; }
+.change-requests__row { display: flex; flex-direction: column; gap: 8px; background: #fff; border-radius: var(--radius-sm); padding: 10px; border: 1px solid var(--border); }
+.change-requests__btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.status-actions { display: flex; flex-direction: column; gap: 9px; }
+.status-actions__hint { display: flex; gap: 7px; align-items: flex-start; color: var(--ink-2); font-size: 0.9rem; background: var(--forest-50); padding: 10px 12px; border-radius: var(--radius-sm); }
+
+/* Explicit minmax(0,1fr) track: grid items default to min-width:auto, so an
+   order row's content made the bucket wider than a 320px phone. */
+.orders-board { display: grid; grid-template-columns: minmax(0, 1fr); gap: 15px; }
+.orders-bucket { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; box-shadow: var(--shadow); }
+.orders-bucket h2 { font-size: 1rem; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.orders-bucket h2 span { background: var(--forest-50); color: var(--forest-800); border-radius: var(--radius-pill); padding: 1px 10px; font-size: 0.82rem; }
+.orders-bucket li button {
+  display: flex; justify-content: space-between; align-items: center; gap: 11px;
+  width: 100%; text-align: left;
+  background: none; border: none; border-top: 1px solid var(--border);
+  padding: 11px 2px; cursor: pointer;
+}
+.orders-bucket li:first-child button { border-top: none; }
+.orders-bucket li span:first-child { display: flex; flex-direction: column; min-width: 0; }
+.orders-bucket small { color: var(--muted); }
+
+.attention-list li button {
+  display: flex; gap: 9px; align-items: center;
+  width: 100%; text-align: left;
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.attention-list li button:hover { border-color: var(--forest-700); }
+
+/* ---------------- Delivery ---------------- */
+
+.driver-strip {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--forest-900); color: #fff;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.driver-strip div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.driver-strip small { color: #bcd2c4; }
+
+.job-list { display: flex; flex-direction: column; gap: 14px; }
+.job-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+.job-card__head { display: flex; align-items: center; gap: 11px; }
+.job-card__titles { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.job-card__titles small { color: var(--muted); display: inline-flex; gap: 4px; align-items: center; }
+.job-card__facts { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.job-card__facts div { background: var(--surface-warm); border-radius: var(--radius-sm); padding: 9px 11px; }
+.job-card__facts dt { display: flex; gap: 5px; align-items: center; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.job-card__facts dd { margin: 3px 0 0; font-weight: 500; font-size: 0.9rem; }
+.job-card__facts dd small { color: var(--muted); font-weight: 400; }
+.job-card__meta { color: var(--muted); font-size: 0.84rem; }
+
+/* ---------------- Admin ---------------- */
+
+.money-table { display: flex; flex-direction: column; }
+.money-table div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid var(--border); align-items: baseline; }
+.money-table div:first-child { border-top: none; }
+.money-table dt { font-weight: 600; display: flex; flex-direction: column; }
+.money-table dt small { color: var(--muted); font-weight: 400; font-size: 0.82rem; }
+.money-table dd { margin: 0; font-weight: 700; white-space: nowrap; }
+.money-table__net { background: var(--forest-50); border-radius: var(--radius-sm); padding: 13px 12px !important; }
+.money-table__net dd { color: var(--forest-900); font-size: 1.15rem; }
+
+.commission-slider { display: flex; flex-direction: column; gap: 7px; font-weight: 600; color: var(--ink-2); margin-top: 12px; }
+.commission-slider input { accent-color: var(--forest-800); min-height: 32px; }
+
+.admin-shop-list, .admin-promo-list, .admin-job-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-shop-row, .admin-promo-row, .admin-job-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px; box-shadow: var(--shadow);
+}
+.admin-shop-row__main { flex: 1; min-width: 180px; display: flex; flex-direction: column; }
+.admin-shop-row__main small, .admin-job-row small { color: var(--muted); }
+.admin-shop-row__field { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+.admin-shop-row__field select { padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: #fff; min-height: 40px; }
+
+.admin-promo-row > img { width: 74px; height: 56px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
+.admin-promo-row__main { flex: 1; min-width: 210px; display: flex; flex-direction: column; gap: 3px; align-items: flex-start; }
+.admin-promo-row__main small { color: var(--muted); }
+.admin-promo-row__stats { display: inline-flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+
+.admin-job-row > div { flex: 1; min-width: 200px; display: flex; flex-direction: column; }
+
+.promo-form { margin-top: 16px; display: flex; flex-direction: column; gap: 11px; }
+.promo-form label { font-size: 0.9rem; font-weight: 600; color: var(--ink-2); }
+
+.bar-list { display: flex; flex-direction: column; gap: 9px; }
+.bar-list li { display: grid; grid-template-columns: 170px 1fr 34px; align-items: center; gap: 11px; }
+.bar-list__label { font-size: 0.9rem; color: var(--ink-2); }
+.bar-list__track { background: var(--surface-warm); border-radius: var(--radius-pill); height: 14px; overflow: hidden; display: block; }
+.bar-list__fill { display: block; height: 100%; background: var(--forest-700); border-radius: var(--radius-pill); min-width: 6px; }
+
+.report-shop-list li { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-top: 1px solid var(--border); }
+.report-shop-list li:first-child { border-top: none; }
+.report-shop-list__name { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.report-shop-list__name small { color: var(--muted); }
+
+.reports { display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------------- Responsive upgrades ---------------- */
+
+@media (min-width: 640px) {
+  .shop-grid { grid-template-columns: repeat(2, 1fr); }
+  /* The phone rail becomes a grid once there is width for one. Every rail
+     property has to be undone here, or the strip would keep overflowing inside
+     a container that no longer expects it. */
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow: visible;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+  .need-grid { grid-template-columns: repeat(3, 1fr); }
+  /* The lead tile spans only while the grid is two-up. */
+  .need-grid > li:first-child { grid-column: auto; }
+  .need-grid > li:first-child .need-tile img { aspect-ratio: 4 / 3; }
+  .steps { grid-template-columns: repeat(3, 1fr); }
+  .shop-facts { grid-template-columns: repeat(2, 1fr); }
+  .basket-items li { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+  .basket-items__main { flex: 1; min-width: 220px; }
+  .basket-items__actions { width: 100%; }
+}
+
+@media (min-width: 900px) {
+  .bottom-nav { display: none; }
+  .top-nav { display: flex; gap: 2px; }
+  /* The three workspaces render an in-page tab row listing exactly the same
+     destinations as this header nav. Two identical navigation rows stacked on
+     the admin dashboard is the first thing the owner sees, and it reads as
+     unfinished. From 900px the header nav carries navigation alone; below it
+     the tab row stays, because the phone nav is icon-led and the tabs give
+     full labels and larger targets. */
+  .workspace-tabs { display: none; }
+  .top-nav .nav-item { flex-direction: row; gap: 7px; font-size: 0.9rem; padding: 9px 13px; border-radius: var(--radius-pill); min-height: 42px; }
+  /* Active navigation reads the same in both navs: a forest-100 pill behind the
+   icon, forest-900 label, heavier glyph. The desktop nav used a forest-50 wash
+   over the whole item while the phone used a pill behind the icon, so the same
+   "you are here" looked like two different systems. The gold marker stays a
+   phone-only cue because the desktop pill already carries the state. */
+.top-nav .nav-item--active { background: var(--forest-50); }
+.top-nav .nav-item--active .nav-item__icon { background: var(--forest-100); border-radius: var(--radius-pill); padding: 3px 10px; }
+.top-nav .nav-item--active svg { stroke-width: 2.4; }
+.top-nav .nav-item__icon { display: inline-flex; transition: background-color var(--dur) var(--ease-out); }
+  .page { padding-bottom: 48px; }
+  .app-footer { padding-bottom: 30px; }
+  .toast-stack { bottom: 18px; }
+  .shop-grid { grid-template-columns: repeat(3, 1fr); }
+  .category-grid { grid-template-columns: repeat(4, 1fr); }
+  .need-grid { grid-template-columns: repeat(5, 1fr); }
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  .orders-board { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .page--chat { grid-template-columns: minmax(0, 1fr) 310px; align-items: start; }
+  .chat-aside { display: block; position: sticky; top: 150px; }
+  .chat-frame { height: min(780px, calc(100dvh - 190px)); }
+}
+
+@media (min-width: 1024px) {
+  .retailer-chat { grid-template-columns: minmax(0, 1fr) 400px; align-items: start; }
+  .retailer-chat .chat-frame { height: min(780px, calc(100dvh - 240px)); }
+}
+
+@media (max-width: 420px) {
+  .brand__text small { display: none; }
+  /* The category rail is the small-screen treatment; a 2-column grid here
+     would override it and bring back the five-row list. */
+  .bar-list li { grid-template-columns: 120px 1fr 28px; }
+  .job-card__facts { grid-template-columns: 1fr; }
+  /* Keep the demo notice visible; swap to the short wording. */
+  .demo-bar__label--full { display: none; }
+  .demo-bar__label--short { display: inline; }
+}
+
+/* ==========================================================================
+   Phase 2 — shop wordmarks, consistent media framing, expandable chat
+   ========================================================================== */
+
+/* ---------------- Shop identity / wordmark ---------------- */
+
+.shop-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+  /* Positioning context for the visually-hidden accessible name inside. Without
+     it that 1px box is placed relative to the page and escapes the horizontal
+     shop rail's clipping, which stretched the Home page 825px sideways on a
+     phone and let the whole page slide left. */
+  position: relative;
+}
+.shop-logo__initials { position: relative; z-index: 1; }
+/* Category glyph sits behind the initials at low opacity: app artwork, not a mark. */
+.shop-logo__glyph {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.shop-logo__image {
+  display: block;
+  height: 34px;
+  width: auto;
+  /* Bounded, not fixed: the widest hosted marks are 3.2:1, which is 108px at
+     34px tall. Capping at 45% of the lock-up keeps the name at least half the
+     row on any card width and still lets `contain` preserve the proportions. */
+  max-width: min(108px, 45%);
+  object-fit: contain;
+  object-position: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  border-radius: var(--radius-xs);
+}
+.shop-logo__word {
+  flex: 1 1 auto;
+  /* A flex child defaults to min-width:auto, which refuses to shrink below the
+     longest word and pushes the text out of the card. 0 + break-word wraps only
+     when a word genuinely cannot fit, instead of splitting mid-word always. */
+  min-width: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+}
+/* ---------------- Signage plate (shops with no brand mark) ----------------
+   Sixteen of the twenty-nine tenants have no sourced brand logo - independents
+   like Cash Crusaders' neighbours, Zillion Hair, Maxi's, the carwash. They used
+   to render as a bare initials tile: a coloured square reading "CC" or "ZZ"
+   beside every shop that showed a real mark. Read cold, that looks like the
+   data is missing, which is exactly how the owner read it when shown the mall's
+   own signage photograph.
+
+   So the label now IS the name, set the way the mall's fascias set it: the
+   trading name in heavy uppercase on a plate in the tenant's own colour, with
+   the category glyph inline. It is app artwork, never a copy of a brand mark,
+   and the plate carries no logo-like claim. Every one of the sixteen colours is
+   dark enough for white ink (lightest #c2410c measures 5.2:1). */
+.shop-logo__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  /* A hairline top light plus a soft drop reads as a mounted sign rather than
+     a flat swatch, without adding a second shadow language. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+.shop-logo__plate-word {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  line-height: 1.15;
+  /* Never split a plate mid-word, but let a long trading name wrap to two
+     lines rather than run off the card (Aviya Photography & Graphics). */
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+/* The glyph is a corner badge on the old monogram; on a plate it sits inline. */
+.shop-logo__plate .shop-logo__glyph {
+  position: static;
+  width: 15px;
+  height: 15px;
+  flex: none;
+  opacity: 0.85;
+}
+.shop-logo__plate--sm .shop-logo__plate-word { font-size: 0.82rem; }
+.shop-logo__plate--lg { min-height: 44px; padding: 8px 14px; gap: 9px; }
+.shop-logo__plate--lg .shop-logo__plate-word { font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem); }
+.shop-logo__plate--lg .shop-logo__glyph { width: 19px; height: 19px; }
+
+.shop-logo--sm .shop-logo__word { font-size: 1rem; }
+.shop-logo--md .shop-logo__word { font-size: 1.05rem; }
+.shop-logo--lg { gap: 12px; }
+.shop-logo--lg .shop-logo__glyph { width: 26px; height: 26px; }
+.shop-logo--lg .shop-logo__image { height: 42px; max-width: min(140px, 45%); }
+.shop-logo--lg .shop-logo__word { font-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.3rem); }
+.shop-logo--on-dark .shop-logo__word { color: #fff; }
+/* Verified logo images that are dark-inked need a light plate on dark surfaces. */
+.shop-logo--on-dark .shop-logo__image { background: rgba(255, 255, 255, 0.92); padding: 3px 6px; }
+
+.shop-card__brand h3 { font-size: inherit; }
+.shop-card__title-row > .pill { margin-top: 4px; }
+
+/* ---------------- Consistent media framing ---------------- */
+
+@supports not (aspect-ratio: 4 / 3) {
+  .shop-card__media { height: 172px; }
+}
+.shop-card__concept-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+.shop-card__media:hover img { transform: scale(1.03); }
+/* (wordmark wrapping is handled once, in .shop-logo__word) */
+
+/* The hero used to be a fixed clamp(170px, 32vw, 250px) tall, so at 1440px it
+   was 758x250 (3.03:1) and `cover` threw away ~41% of a 16:9 concept scene.
+   It now shares the art's 16:9 frame, so the scene is shown whole. */
+.shop-hero__media img { object-position: center; }
+
+/* ---------------- Chat header expand control ---------------- */
+
+.chat-header__expand {
+  width: auto;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0 11px;
+  gap: 7px;
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+}
+.chat-header__expand:hover { background: rgba(255, 255, 255, 0.14); }
+.chat-header__expand-label { display: none; font-size: 0.82rem; font-weight: 700; }
+.chat-header__expand[aria-expanded='true'] { background: rgba(255, 255, 255, 0.16); }
+
+/* Keep the compact header breathing on small phones: the pill's open/closed
+   state is also written in the header subtitle. */
+@media (max-width: 559px) {
+  .chat-header > .pill { display: none; }
+}
+
+/* ---------------- Expanded (full-screen) chat ---------------- */
+
+.chat-expanded,
+html.chat-expanded,
+body.chat-expanded {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.page--chat--expanded::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(7, 35, 27, 0.55);
+}
+
+.page--chat--expanded .chat-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  width: 100%;
+  max-width: none;
+  /* --chat-overlay-height is set from window.visualViewport so the composer
+     stays above the on-screen keyboard; 100dvh is the fallback. */
+  height: var(--chat-overlay-height, 100dvh);
+  min-height: var(--chat-overlay-height, 100dvh);
+  max-height: var(--chat-overlay-height, 100dvh);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.page--chat--expanded .chat-header {
+  padding-top: calc(10px + env(safe-area-inset-top));
+}
+.page--chat--expanded .composer {
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}
+.page--chat--expanded .chat-scroll { padding: 18px 12px 12px; }
+.page--chat--expanded .chat-aside { display: none; }
+
+/* Touch/keyboard: keep the composer visible and usable inside the overlay. */
+.page--chat--expanded .composer textarea { max-height: 6.5rem; }
+
+@media (min-width: 640px) {
+  .page--chat--expanded .chat-scroll { padding: 22px 24px 16px; }
+}
+
+@media (min-width: 900px) {
+  .chat-header__expand-label { display: inline; }
+  .page--chat--expanded .chat-frame {
+    inset: auto;
+    top: 18px;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1080px, calc(100vw - 48px));
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .page--chat--expanded .chat-header { padding-top: 10px; }
+  .page--chat--expanded .composer { padding-bottom: 10px; }
+  .page--chat--expanded .chat-scroll { padding: 24px clamp(20px, 5vw, 56px) 18px; }
+}
+
+/* ==========================================================================
+   Phase 5 — visual consistency layer
+   Small, additive rules only: tokens first, then touch-target and density
+   refinements for small Android screens. Nothing here changes layout logic.
+   ========================================================================== */
+
+:root {
+  /* One radius scale, six steps. Before this the sheet carried sixteen
+     distinct values (6/7/8/9/10/11/12/13/14/16/18/20/22 plus pills), which is
+     why supposedly matching surfaces did not quite match. Near-duplicates were
+     folded to the nearest step; every move is <=2px on a small element. */
+  --radius-xs: 8px;      /* thumbnails, tight fields, focus rings */
+  --radius-sm: 10px;     /* inputs, inner cards, list rows */
+  --radius-md: 12px;     /* menus, small panels */
+  --radius: 16px;        /* cards, panels, dialogs */
+  --radius-xl: 20px;     /* feature cards, hero surfaces */
+  --radius-pill: 999px;  /* buttons, chips, pills */
+  --ring: 0 0 0 3px rgba(201, 162, 39, 0.45);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 22px;
+}
+
+/* Cards, panels and inputs share one radius + shadow rhythm. */
+.panel,
+.shop-card,
+.empty-state,
+.how-it-works,
+.promo-banner {
+  border-radius: var(--radius);
+}
+
+.btn:active { transform: translateY(1px); }
+.btn--block { border-radius: var(--radius-sm); }
+
+/* The shop card's primary action.
+   Deliberately *not* a new button design: this is `.btn--primary` — the same
+   forest gradient, the same raised shadow, the same press and focus — with the
+   two things `.btn--block` strips for full-width form buttons added back. A
+   card's "Open shop" is the one control a customer is looking for, so it gets
+   the pill shape and the 48px height the rest of the primary system uses. */
+.shop-card__cta {
+  border-radius: var(--radius-pill);
+  min-height: 48px;
+  padding: 12px 20px;
+  gap: 10px;
+  letter-spacing: 0.01em;
+}
+.shop-card__cta svg { transition: transform var(--dur-fast) var(--ease-out); }
+.shop-card__cta:hover:not(:disabled) svg { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .shop-card__cta svg { transition: none; }
+  .shop-card__cta:hover:not(:disabled) svg { transform: none; }
+}
+
+
+/* Focus affordance that reads on both light surfaces and the dark header. */
+.btn:focus-visible,
+.chip:focus-visible,
+.shop-card__media:focus-visible {
+  outline: 3px solid var(--gold-500);
+  outline-offset: 2px;
+  box-shadow: var(--ring);
+}
+
+/* Section headers get a consistent rhythm. */
+
+/* Small phones: 44px minimum touch targets, tighter type, no cramped headers. */
+@media (max-width: 420px) {
+  .btn { min-height: 44px; }
+  .btn--sm { min-height: 38px; }
+  .chip { min-height: 44px; display: inline-flex; align-items: center; }
+  .icon-btn { min-width: 40px; min-height: 40px; }
+  .brand__text strong { font-size: 1rem; }
+  .brand__chip { display: none; }
+  .shop-card__body { padding: var(--space-3); }
+  .shop-card__brand { padding: 8px 10px; }
+  .promo-banner { min-height: 172px; }
+  .promo-banner__content { padding: 15px; }
+  .promo-banner__content h3 { font-size: 1.12rem; }
+  .flow-step { padding: 10px; }
+  .section-header h1,
+  .section-header h2 { font-size: 1.3rem; }
+  .empty-state { padding: 26px 16px; }
+}
+
+/* Motion: the new artwork must not animate for users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .shop-card__media img,
+  .btn {
+    transition: none !important;
+  }
+  .shop-card__media:hover img { transform: none; }
+}
+
+/* ==========================================================================
+   Phase 12 — elevation, tactile feedback, native-app feel
+   --------------------------------------------------------------------------
+   Every interactive surface answers a press inside --dur-fast, and hover is
+   gated to devices that actually hover, so a tap on Android can never leave a
+   stuck hover state. Pressing a control collapses its shadow rather than adding
+   one: the surface moves towards the finger, which is what a native button does.
+   Only `transform`, `box-shadow`, `background-color` and `border-color` animate,
+   so a press never triggers layout.
+   ========================================================================== */
+
+.btn,
+.chip,
+.icon-btn,
+.nav-item,
+.back-btn,
+.composer__send,
+.brand,
+.shop-card,
+.conversation-list li button,
+.hero__results li button,
+.category-tile,
+.need-tile {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+/* --- Primary controls ---------------------------------------------------- */
+
+/* Filled buttons carry a one-pixel top highlight: the lip of a physical key. */
+.btn--gold,
+.btn--danger {
+  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.btn--ghost,
+.btn--light,
+.btn--outline-light,
+.btn--danger-ghost,
+.btn--block.btn--ghost { box-shadow: none; }
+.btn:active:not(:disabled) { box-shadow: var(--elev-press); }
+.btn:disabled { box-shadow: none; transform: none; }
+.btn[aria-disabled='true'] { box-shadow: none; transform: none; }
+.btn[aria-busy='true'] { cursor: progress; }
+
+/* --- Icon buttons, chips, back ------------------------------------------ */
+
+/* 44px, not 42: the Android touch-target floor, and room around the glyph. */
+.icon-btn:active:not(:disabled) { transform: scale(0.92); background: var(--forest-100); }
+
+.chip:active { transform: scale(0.97); box-shadow: var(--elev-press); }
+.chip--active { box-shadow: var(--elev-1); }
+
+.back-btn { min-height: 44px; }
+.back-btn:active { transform: translateX(-2px); }
+
+/* --- Navigation ---------------------------------------------------------- */
+
+/* "Promotions" is 63.9px at 11.5px/600; five labels plus padding overflowed a
+   320-375px phone. Items now share the row equally and the label ellipsises
+   rather than pushing the nav wider than the screen. */
+.bottom-nav .nav-item { flex: 1 1 0; min-width: 0; padding-left: 2px; padding-right: 2px; }
+.bottom-nav .nav-item > span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav-item:active { transform: scale(0.94); }
+/* Selected tab: a short gold marker instead of a heavier font, so switching
+   tabs never reflows the label. */
+.bottom-nav .nav-item--active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-500);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
+}
+/* --- Cards and lists ----------------------------------------------------- */
+
+.shop-card__media:active { box-shadow: inset 0 0 0 999px rgba(12, 59, 46, 0.06); }
+
+.conversation-list li button:active,
+.hero__results li button:active,
+.category-tile:active,
+.need-tile:active {
+  background: var(--forest-100);
+  transform: scale(0.995);
+}
+
+/* --- Chat composer ------------------------------------------------------- */
+
+.composer__send:active:not(:disabled) { transform: scale(0.92); box-shadow: var(--elev-press); }
+.composer__send:disabled { box-shadow: none; }
+
+
+/* --- Dialogs and toasts -------------------------------------------------- */
+
+
+@keyframes sheet-rise {
+  from { transform: translateY(16px); opacity: 0.7; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-rise {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* --- Hover only where hovering is real ---------------------------------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .shop-card:hover {
+    box-shadow: var(--elev-3);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+  .shop-card:focus-within { border-color: var(--forest-700); }
+  .btn:hover:not(:disabled) { box-shadow: var(--elev-2); }
+  .btn--ghost:hover:not(:disabled),
+  .btn--light:hover:not(:disabled) { box-shadow: var(--elev-1); }
+  .conversation-list li button:hover { transform: translateY(-1px); box-shadow: var(--elev-2); }
+  .category-tile:hover,
+  .need-tile:hover { transform: translateY(-2px); box-shadow: var(--elev-3); }
+}
+
+/* Touch screens: no lingering zoom/hover after a tap. */
+@media (hover: none) {
+  .shop-card:hover { transform: none; box-shadow: var(--elev-2); }
+  .shop-card__media:hover img { transform: none; }
+  .conversation-list li button:hover { transform: none; }
+}
+
+/* Reduced motion keeps the feedback (colour/shadow) and drops the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:active:not(:disabled),
+  .chip:active,
+  .icon-btn:active:not(:disabled),
+  .nav-item:active,
+  .back-btn:active,
+  .composer__send:active:not(:disabled),
+  .shop-card__media:active,
+  .conversation-list li button:active,
+  .hero__results li button:active { transform: none; }
+  .shop-card:hover,
+  .category-tile:hover,
+  .need-tile:hover,
+  .conversation-list li button:hover { transform: none; }
+}
+
+/* 900-1080px is the tight band where the brand, five nav labels and the role
+   switcher share one header row. Tighten the nav itself rather than hiding
+   navigation: measured, this saves ~55px and keeps every label intact. */
+@media (min-width: 900px) and (max-width: 1080px) {
+  .top-nav .nav-item { padding: 9px 10px; font-size: 0.84rem; gap: 6px; }
+}
+
+/* ==========================================================================
+   Phase 13 — Native-app shell
+   Phase 12 tokenised the shadows but kept the website layout: a flat white bar
+   at the bottom, a static header, cards that only moved on desktop hover. This
+   section changes the things a person actually perceives — what is pinned,
+   what the tab bar is made of, how a card responds to a thumb — while the
+   palette, radii language and every route stay exactly as they were.
+   ========================================================================== */
+
+/* --- 1. Only the app header is pinned ------------------------------------
+   The demo banner used to share `.shell-chrome`'s sticky box, so a phone gave
+   ~110px of every scroll to a notice nobody needs twice. It now scrolls away
+   and the header alone stays, blurred, over the content. */
+/* Stated once, here, rather than overridden below: the wrapper never sticks. */
+.shell-chrome { position: static; }
+
+/* `.app-header` is declared once, in the shell section above. */
+
+/* --- 2. A real tab bar ---------------------------------------------------
+   Frosted rather than opaque: content keeps sliding under it instead of
+   stopping dead at a white slab, which is the single strongest "this is an
+   app" cue available without new components. */
+/* `.bottom-nav` is declared once, in the shell section above. */
+
+/* Older browsers get the solid surface rather than a washed-out 82% white. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bottom-nav { background: var(--surface); }
+  .app-header { background: var(--bg); }
+}
+
+/* The selected tab keeps its gold marker and adds a soft forest pill behind
+   the icon, plus a heavier glyph weight. The pill is padding on EVERY item, so
+   only the background changes — switching tabs cannot shift the label. */
+.bottom-nav .nav-item__icon {
+  padding: 3px 14px;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--dur) var(--ease-out);
+}
+.bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-100); }
+.bottom-nav .nav-item--active svg { stroke-width: 2.4; }
+.bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); }
+/* The first and last tabs sit against the screen edge, where a 3px outline with
+   a 2px offset is partly off-screen. Inset the ring on the bar only. */
+.bottom-nav .nav-item:focus-visible { outline-offset: -3px; }
+
+/* --- 3. Cards that respond to a thumb -----------------------------------
+   20px radii and a press that collapses the shadow: the card looks pushed
+   into the page rather than merely tinted. */
+.shop-card:active {
+  transform: scale(0.985);
+  box-shadow: var(--elev-1);
+}
+.shop-card .btn--block { min-height: 50px; }
+
+/* --- 4. Primary action reads as a raised key ----------------------------
+   A one-step vertical gradient plus the existing top highlight; the flat
+   single-colour fill is what made it look like a web link with a border. */
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--forest-700) 0%, var(--forest-800) 100%);
+    box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+  .bottom-nav .nav-item:hover:not(.nav-item--active) { color: var(--forest-800); }
+}
+
+/* --- 5. Route changes arrive, they do not blink -------------------------
+   Each screen mounts fresh, so a short rise-and-fade plays on every
+   navigation. No fill-mode: a lingering `transform` would turn `.page` into a
+   containing block for the fixed toast/modal layers. */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.shell-main .page { animation: page-in 240ms var(--ease-out); }
+
+/* --- 6. Motion preferences, restated for the new rules ------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .shell-main .page { animation: none; transform: none; }
+  .shop-card:active { transform: none; }
+  .bottom-nav .nav-item__icon { transition: none; }
+  .role-switcher__btn:active,
+  .demo-bar__reset:active,
+  .hero__results li button:active,
+  .conversation-list li button:active,
+  .need-tile:active,
+  .category-tile:active { transform: none; }
+}
+
+/* --- Responsive images (Phase 14) ---------------------------------------
+   `<picture>` is used only to offer a WebP source, never to add a box, so it
+   must not participate in layout: the media images are absolutely positioned
+   (`inset: 0`) inside their frame and a wrapper would collapse that. */
+.shop-card__media picture,
+.shop-hero__media picture,
+.hero picture { display: contents; }
+
+
+/* ==========================================================================
+   Narrow-phone hardening (320-359px).
+   The smallest Android screens in circulation. Nothing here changes desktop
+   or normal phone layouts; it only stops the tightest widths from clipping.
+   ========================================================================== */
+@media (max-width: 359px) {
+  .page { padding-left: var(--space-3); padding-right: var(--space-3); }
+  .page-header__title { font-size: 1.3rem; }
+  .page-header__subtitle { font-size: 0.84rem; }
+  .brand__text small { display: none; }
+  .brand__text strong { font-size: 0.95rem; }
+  .brand__mark img { width: 30px; height: 30px; }
+  .app-header { gap: 10px; padding: 10px var(--space-3); }
+  .nav-item { min-width: 0; font-size: 0.7rem; padding: 6px 2px; }
+  .bottom-nav .nav-item > span:last-child { font-size: 0.7rem; }
+  .chip { padding: 0 var(--space-3); font-size: 0.8rem; }
+  .btn { padding: 10px 14px; }
+  .shop-card__body { padding: var(--space-3); }
+  .search-field { padding-left: var(--space-3); }
+  .results-count { font-size: 0.84rem; }
+  /* Bundle 3: the hero card has to fit a 320px screen without a lateral
+     scroll, so the photograph band and the copy padding give up space. */
+  .hero__content { padding: 18px 14px 20px; gap: 10px; }
+  .hero__aside { min-height: 148px; }
+  .need-grid { gap: 8px; }
+  .category-grid { grid-auto-columns: 82px; }
+}
+
+/* ==========================================================================
+   Press feedback parity.
+   Every interactive surface in the app answers a touch the same way: a small
+   inward scale or a 1px settle, never a colour-only change. `.btn`, `.chip`,
+   `.icon-btn`, `.nav-item` and `.shop-card` already did this; these are the
+   controls that were missing it, so a tap never feels ignored.
+   ========================================================================== */
+.role-switcher__btn:active,
+.demo-bar__reset:active,
+.hero__results li button:active,
+.conversation-list li button:active,
+.need-tile:active,
+.category-tile:active {
+  transform: scale(0.97);
+}
+
+
+/* ==========================================================================
+   App-shell compaction on phones.
+   Between the demo notice, the brand header and the page title there was ~270px
+   of chrome before a single shop appeared. Nothing is hidden that the user
+   needs: the demo notice loses its sentence (the gold "Demo" chip in the header
+   still says it), the reset control becomes an icon with an accessible name,
+   and the header tightens. All five role controls stay present and tappable.
+   ========================================================================== */
+@media (max-width: 639px) {
+  .demo-bar {
+    padding: 5px var(--space-3);
+    gap: 6px 8px;
+    /* One strip: switcher scrolls, reset sits pinned to the end. */
+    flex-wrap: nowrap;
+  }
+  /* The full sentence is redundant on a phone — the header's Demo chip plus the
+     workspace switcher already communicate demo mode. */
+  /* Keep the demo notice visible; swap to the short wording. */
+  .demo-bar__label--full { display: none; }
+  .demo-bar__label--short { display: inline; }
+  .demo-bar__actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+  }
+  .role-switcher { flex: 1 1 auto; }
+  .role-switcher__btn { padding: 6px 10px; font-size: 0.8rem; }
+  /* Icon-only, but the accessible name comes from aria-label on the button. */
+  .demo-bar__reset { padding: 6px 9px; min-height: 32px; }
+  .demo-bar__reset-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .app-header { padding: 8px var(--space-3); gap: 10px; }
+  .brand { gap: 9px; min-height: 40px; }
+  .brand__mark { width: 36px; height: 36px; }
+  .brand__mark img { width: 30px; height: 30px; }
+  .brand__text strong { font-size: 1.02rem; }
+  .brand__text small { font-size: 0.72rem; }
+}
+
+/* The demo bar scrolls away once the user starts reading; the header is what
+   stays pinned. Guard against the sticky header covering an anchor target. */
+@media (max-width: 899px) {
+  .shell-chrome { position: static; }
+}
+
+/* ==========================================================================
+   Bundle 3 — customer experience composition
+   --------------------------------------------------------------------------
+   New structural blocks only. Everything here is a component the customer
+   journey needed and the earlier bundles never had: one discovery card that
+   owns the directory's search, a curated walkthrough panel on Home, and a
+   horizontal tenant rail for the featured row on phones.
+
+   Deliberately absent: gradients used as decoration, glass/blur panels, and
+   any effect that costs paint on a mid-range Android. Contrast, imagery,
+   type and rhythm do the work instead.
+   ========================================================================== */
+
+/* ---------------- Directory: one discovery card ---------------- */
+
+/* Title, search and filters share a single surface with a gold top edge, so
+   "find a shop" reads as one object instead of four stacked blocks each with
+   the page's 22px gap between them. */
+.directory-head {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold-500);
+  border-radius: var(--radius-xl);
+  padding: 15px 13px 14px;
+  box-shadow: var(--elev-2);
+}
+.directory-head .page-header__title { font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); }
+.directory-head .directory-controls { gap: 9px; }
+/* The rail bleeds to the page edge, but the discovery card is already inset by
+   its own padding: keeping the negative margin would push the last chip past
+   the card's border by ~3px. The row still scrolls and still fades. */
+.directory-head .chip-row--scroll { margin-right: 0; max-width: 100%; }
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: -8px;
+}
+.results-bar .results-count { margin: 0; font-weight: 600; color: var(--ink-2); }
+
+@media (min-width: 640px) {
+  .directory-head { padding: 20px 20px 18px; gap: 18px; }
+}
+
+/* ---------------- Home: curated walkthrough ---------------- */
+
+/* Backed entirely by existing demo data: the SUPERSPAR tenant already carries
+   the seeded sample basket, and the copy is the same claim the old
+   how-it-works note made. The "Concept art" and "Simulated · demo prices"
+   markers travel with it — the panel may look like a promotion, so it must
+   state what it is. */
+.spotlight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elev-2);
+}
+.spotlight__media { position: relative; aspect-ratio: 16 / 9; background: var(--forest-100); }
+.spotlight__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.spotlight__chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.spotlight__body { padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.spotlight__kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gold-600);
+}
+.spotlight__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--forest-950);
+  text-wrap: balance;
+}
+.spotlight__copy { color: var(--ink-2); font-size: 0.9rem; line-height: 1.5; text-wrap: pretty; }
+.spotlight__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 4px; }
+
+@media (min-width: 720px) {
+  .spotlight { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); align-items: stretch; }
+  .spotlight__media { aspect-ratio: auto; min-height: 250px; }
+  .spotlight__body { padding: 22px 24px; justify-content: center; }
+}
+
+/* ---------------- Home: featured tenant rail ---------------- */
+
+/* Five featured tenants are a flick, not a scroll: the row scrolls sideways on
+   phones and becomes the normal two/three-up grid once there is room. */
+.shop-grid--rail {
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: min(78%, 320px);
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 3px var(--space-4) 8px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.shop-grid--rail::-webkit-scrollbar { display: none; }
+.shop-grid--rail > .shop-card { scroll-snap-align: start; }
+
+@media (min-width: 640px) {
+  .shop-grid--rail {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    overflow: visible;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+}
+@media (min-width: 900px) {
+  .shop-grid--rail { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------------- Tenant card: touch feedback ---------------- */
+
+/* Only where a pointer can hover: on touch this would stick after a tap. */
+@media (hover: hover) {
+  .shop-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elev-3);
+    border-color: var(--border-strong);
+  }
+  .shop-card:hover .shop-card__media img { transform: scale(1.03); }
+}
+
+/* ---------------- Hero: desktop composition ---------------- */
+
+/* Placed last on purpose: the shared 640px block earlier in the sheet also
+   touches `.hero__content`, and a media query does not win by being narrower —
+   it wins by coming later. */
+@media (min-width: 640px) and (max-width: 779px) {
+  /* Still one column, but no longer a phone: give the words more room. */
+  .hero__content { padding: 26px 24px; }
+}
+@media (min-width: 780px) {
+  .hero { grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); }
+  .hero__aside { order: 0; min-height: 0; }
+  .hero__content { padding: 34px 32px; gap: 14px; }
+}
+
+/* ==========================================================================
+   Phase 2 — mobile app shell and checkout
+   ========================================================================== */
+
+/* ---------------- Pinned basket action ---------------- */
+
+/* Sticky, not fixed. `.shell-main .page` plays a 240ms entry animation with a
+   `transform`, and a transformed ancestor becomes the containing block for
+   `position: fixed` — the bar would have been pinned to the page for two frames
+   and then jumped to the viewport. Sticky is unaffected, and it also means the
+   bar settles into the flow at the end of the page instead of permanently
+   covering the last item, so no padding hack is needed to reach content.
+   z-index 54 keeps it under the tab bar (55). */
+.checkout-bar {
+  position: sticky;
+  bottom: calc(var(--bottom-nav-h) + 8px);
+  z-index: 54;
+  margin-top: -4px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  box-shadow: var(--elev-3);
+}
+.checkout-bar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.checkout-bar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.checkout-bar__total { display: flex; flex-direction: column; min-width: 0; }
+.checkout-bar__total small { color: var(--muted); font-size: 0.75rem; }
+.checkout-bar__total strong {
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--forest-950);
+  font-variant-numeric: tabular-nums;
+}
+.checkout-bar .btn { flex: 0 1 auto; min-width: 0; }
+.checkout-bar__note {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--warning);
+}
+
+/* The order list card on a phone.
+   A 187px status pill ("Awaiting your confirmation") plus the avatar and the
+   Chat button left the text column with zero width: the reference ellipsised
+   to "AM…", the summary wrapped to one word per line and the price was cut off.
+   Below 560px the card stacks - identity on one line, status on the next - and
+   the Chat button gets a full-width row of its own. */
+@media (max-width: 560px) {
+  .order-list-card { flex-wrap: wrap; gap: 8px; }
+  .order-list-card__main { flex: 1 1 100%; flex-wrap: wrap; row-gap: 8px; }
+  .order-list-card__text { flex: 1 1 150px; }
+  .order-list-card .btn--ghost { flex: 1 1 100%; }
+}
+
+@media (max-width: 359px) {
+  /* The two scroll rails bleed to the page edge with a --space-4 gutter. At
+     <=359px the page gutter drops to --space-3, so the bleed stuck out 4px and
+     the document scrolled sideways on a 320px screen. Match the gutter. */
+  .category-grid,
+  .shop-grid--rail {
+    padding-right: var(--space-3);
+    margin-right: calc(-1 * var(--space-3));
+    max-width: calc(100% + var(--space-3));
+  }
+  /* Two items and a price must not push the button off a 320px screen. */
+  .checkout-bar { padding-left: 9px; padding-right: 9px; }
+  .checkout-bar__row { gap: 8px; }
+  .checkout-bar .btn { padding-left: 14px; padding-right: 14px; }
+  .checkout-bar__total strong { font-size: 1.05rem; }
+}
+
+@media (min-width: 900px) {
+  /* The tab bar is gone from 900px up, so the bar lowers to a comfortable
+     float instead of hanging in the space the bar used to occupy. */
+  .checkout-bar { bottom: 16px; }
+}
+/* ---------------- Shop page: action first ---------------- */
+
+/* The call to action now sits directly under the shop's identity, before the
+   description and the fact grid, so the reason a shopper opened this page is
+   reachable without scrolling. */
+.shop-hero__body > .btn--lg { margin-top: 2px; }
+.shop-hero__body > .shop-hero__hint { margin-bottom: 2px; }
+
+/* ==========================================================================
+   Home: shop launcher
+   --------------------------------------------------------------------------
+   The first thing a customer should be able to do is tap a shop. Before this,
+   Home opened on a hero that filled the entire phone viewport — mall artwork,
+   a four-line explanation, a search field and two competing buttons — so no
+   shop was visible on the first screen at all, and the only route to one was
+   "Browse all 29 shops", a directory the shopper then had to filter again.
+
+   The launcher sits directly under a shorter hero: square tiles, each a brand
+   mark (or a category glyph on the tenant's own colour), the trading name, and
+   what tapping it does. Three columns on a phone, four from 560px, eight across
+   on a wide screen so the set reads as one row, like an app.
+   ========================================================================== */
+
+.shop-launcher {
+  padding: 0;
+  margin: 0;
+}
+
+.shop-launcher__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.shop-launcher__head h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+}
+
+.shop-launcher__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.shop-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--elev-1);
+  color: var(--ink);
+  text-align: center;
+  cursor: pointer;
+  /* Brief, physical press feedback; no bounce, no long easing. */
+  transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-tile:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--elev-2);
+}
+
+.shop-tile:active {
+  transform: translateY(1px);
+  box-shadow: var(--elev-1);
+}
+
+.shop-tile:focus-visible {
+  outline: 2px solid var(--forest-700);
+  outline-offset: 2px;
+}
+
+/* The mark well: one square, one radius, one inset, for every tenant — logo or
+   glyph. Holding the aspect ratio here is what keeps the grid aligned when a
+   logo is 1:1 and its neighbour is 3.2:1. */
+.shop-tile__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: 14%;
+  border-radius: var(--radius-sm);
+  background: var(--surface-warm);
+  overflow: hidden;
+}
+
+.shop-tile__logo {
+  max-width: 100%;
+  max-height: 100%;
+  /* contain, never cover: a wordmark must not be cropped into nonsense. */
+  object-fit: contain;
+}
+
+.shop-tile__glyph {
+  width: 58%;
+  max-width: 46px;
+  height: auto;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.95;
+}
+
+/* The name is the label, so it gets real presence and two lines of room rather
+   than being shrunk to fit one. "The Angelo SUPERSPAR" and "Golden Buffalo
+   Spur" both wrap here. */
+.shop-tile__name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  overflow-wrap: break-word;
+  /* Keep tiles in a row the same height however the name wraps. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.5em;
+}
+
+.shop-tile__meta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+/* Chat is the promise of this screen, so the shops that support it say so in
+   the brand green; the ones that do not stay visibly quieter. */
+.shop-tile__meta--chat {
+  color: var(--forest-700);
+}
+
+.shop-launcher__all {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+@media (min-width: 560px) {
+  .shop-launcher__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .shop-tile__name {
+    font-size: 0.92rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .shop-launcher__grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+/* Larger marks on a wide screen are wasteful in an eight-column row; the well
+   keeps a square ratio but the tile stays compact. */
+@media (min-width: 900px) {
+  .shop-tile__mark {
+    padding: 18%;
+  }
+}
+
+/* ==========================================================================
+   Home hero — reduced dominance on a phone
+   --------------------------------------------------------------------------
+   The hero is the brand moment, not the product. At 390px its artwork alone was
+   168px of the first viewport and its copy ran to four lines, so the whole first
+   screen was introduction and the shop launcher sat below the fold.
+
+   On a narrow screen the artwork becomes a slim banner (a third shorter), the
+   headline tightens, and the search field gets its own full-width row with the
+   button beneath it — which also stops the placeholder being clipped behind the
+   button, as it was at 390px ("Search shops or a n…"). Above 560px the hero
+   returns to its original proportions, unchanged.
+   ========================================================================== */
+@media (max-width: 559px) {
+  .hero__aside {
+    min-height: 92px;
+    max-height: 104px;
+  }
+  .hero__content {
+    padding: 14px 14px 16px;
+    gap: 9px;
+  }
+  .hero h1 {
+    font-size: clamp(1.42rem, 1.1rem + 2vw, 1.75rem);
+    line-height: 1.1;
+    max-width: 22ch;
+  }
+  .hero__lede {
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  /* Search: the field gets its own row and the button sits full width beneath
+     it. Wrapping the *pill* itself was the wrong move — a 999px radius on a
+     two-row box turns into a white blob and the icon detaches from the input.
+     As a column the box takes a normal card radius, and the field keeps its own
+     pill, so it reads as a search field with a button under it. */
+  .hero__search {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    max-width: none;
+  }
+  .hero__search-field {
+    padding: 0 8px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-warm);
+    min-height: 46px;
+  }
+  .hero__search input {
+    min-height: 44px;
+  }
+  .hero__search .btn {
+    min-height: 46px;
+  }
+}
+
+/* The launcher heading reads as a small app section label with an instruction
+   beside it, so "tap a shop to start chatting" is visible rather than assumed. */
+.shop-launcher__hint {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 379px) {
+  /* Three columns still fit at 320px, but the name needs the extra room. */
+  .shop-launcher__grid {
+    gap: 8px;
+  }
+  .shop-tile {
+    padding: 6px 4px 8px;
+  }
+  .shop-tile__name {
+    /* 0.75rem, folding into the existing step: 0.73rem sat 0.16px from 0.72rem
+       and the type-scale contract forbids steps that close together. */
+    font-size: 0.75rem;
+    line-height: 1.25;
+    /* Three lines at 320px: "Golden Buffalo Spur" needs them, and truncating a
+       tenant's name to "Golden Buffalo…" is exactly the kind of unreadable
+       label this redesign is meant to remove. Every tile in the row keeps the
+       same height, so the grid stays aligned. */
+    -webkit-line-clamp: 3;
+    min-height: 3.75em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Demo bar on the narrowest phones
+   --------------------------------------------------------------------------
+   At 320px the role switcher was left 97px wide for a 2x2 grid, so each button
+   had 44px and "Customer" (needs ~62px) spilled over its neighbour — "Customer"
+   and "Staff" rendered as one run of text, and so did "Delivery"/"Admin". The
+   switcher now takes a full-width row of its own below the notice, which gives
+   each button ~123px and keeps the four roles legible and separately tappable.
+   -------------------------------------------------------------------------- */
+@media (max-width: 419px) {
+  /* The <=639px block sets `flex-wrap: nowrap` on the bar to keep the notice
+     and controls on one strip. At 320px that left the switcher 97px wide for a
+     2x2 grid of 44px buttons, so "Customer" overflowed into "Staff". The bar is
+     allowed to wrap again here, and the switcher takes its own full-width row. */
+  .demo-bar {
+    flex-wrap: wrap;
+  }
+  .demo-bar__actions {
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+  .role-switcher {
+    flex: 1 1 auto;
+  }
+  .role-switcher__btn {
+    /* Ellipsis rather than overflow, so a longer label can never run into the
+       button beside it. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    justify-content: center;
+  }
+  /* The concept-art chip is a disclosure, so it stays — just quieter, so it
+     stops taking two lines of the hero banner. */
+  .hero__aside-chip {
+    font-size: 0.62rem;
+    left: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+  }
+}
