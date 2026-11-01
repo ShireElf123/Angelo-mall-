@@ -26,6 +26,28 @@ const SCROLL_LOCK_CLASS = 'chat-expanded';
  */
 const BACKGROUND_SELECTORS = '.shell-chrome, .app-footer, .bottom-nav';
 
+/**
+ * The reply shown in a listing-only tenant's thread.
+ *
+ * Sixteen of the twenty-nine tenants are listed from the mall directory with no
+ * scripted journey and no Mall Go connection. The generic staff-voice replies
+ * below ("We can arrange local delivery", "I'll include that when I prepare
+ * your order summary") read as though someone at the counter were answering and
+ * building an order — which is precisely the impression this demo must never
+ * give. So for those tenants the thread answers in the app's own voice, says
+ * plainly that chat is not enabled, and never speaks for the shop.
+ *
+ * The thread itself still opens: removing the interaction would be taking a
+ * working feature away, and seeing the state handled is part of the demo.
+ */
+function listingOnlyReply(shopName: string): string {
+  return (
+    `This is an automated demo message — ${shopName} is not connected to Mall Go yet, ` +
+    'so nothing you type here reaches the shop. Only the sample shops (SUPERSPAR, KFC, ' +
+    'Clicks and MTN) have a chat journey in this demo.'
+  );
+}
+
 /** Clearly-labelled simulated staff replies (no real employee is connected). */
 function simulatedReply(customerText: string): string {
   const text = customerText.toLowerCase();
@@ -42,6 +64,22 @@ function simulatedReply(customerText: string): string {
     return 'Pleasure! Shout if you’d like me to add anything else to your summary.';
   }
   return 'Thanks for your message — noted! I’ll include that when I prepare your order summary. Anything else you need?';
+}
+
+/**
+ * The one place the reply text is chosen, exported so the honesty rule can be
+ * asserted directly rather than by driving the 1.7s reply timer.
+ */
+export function demoReplyFor({
+  chatEnabled,
+  shopName,
+  text,
+}: {
+  chatEnabled: boolean;
+  shopName: string;
+  text: string;
+}): string {
+  return chatEnabled ? simulatedReply(text) : listingOnlyReply(shopName);
 }
 
 export function ChatScreen({
@@ -67,6 +105,8 @@ export function ChatScreen({
   const shop = conversation ? getShop(state, conversation.shopId) : undefined;
   const messages = messagesForConversation(state, conversationId);
   const basket = openBasketForConversation(state, conversationId);
+  /** Only `demo-scenario` tenants carry a scripted journey. See listingOnlyReply. */
+  const chatEnabled = shop?.participation === 'demo-scenario';
 
   useEffect(() => {
     void service.markRead(conversationId, 'customer');
@@ -197,7 +237,8 @@ export function ChatScreen({
       void service.sendMessage({
         conversationId,
         sender: 'shop',
-        text: simulatedReply(message.text),
+        // Listing-only tenants get the app's own voice, not the shop's.
+        text: demoReplyFor({ chatEnabled, shopName: shop.name, text: message.text }),
         simulated: true,
       });
     }, 1700);
@@ -268,6 +309,15 @@ export function ChatScreen({
             </span>
           </div>
         )}
+        {shop.participation === 'real-listing' && (
+          <div className="chat-notice" role="note">
+            <TriangleAlert size={16} aria-hidden />
+            <span>
+              Chat is not enabled for {shop.name} yet. This thread is a demo only: replies are automated sample text
+              from the app, not the shop, and nothing you send reaches them.
+            </span>
+          </div>
+        )}
         {shop.participation === 'paused' && (
           <div className="chat-notice" role="note">
             <TriangleAlert size={16} aria-hidden />
@@ -288,13 +338,17 @@ export function ChatScreen({
                 : { name: 'order', orderId },
             );
           }}
-          composerPlaceholder={`Message ${shop.name}…`}
+          composerPlaceholder={chatEnabled ? `Message ${shop.name}…` : 'Type a demo message…'}
           emptyState={
             <EmptyState
               illustration={imageSrc('state-empty-thread')}
               icon={<MessageCircleDashed size={24} aria-hidden />}
-              title="Say hello"
-              description="Ask about stock, sizes, prices — or send your whole list. Staff will build a priced summary with you."
+              title={chatEnabled ? 'Say hello' : 'Chat not enabled yet'}
+              description={
+                chatEnabled
+                  ? 'Ask about stock, sizes, prices — or send your whole list. Staff will build a priced summary with you.'
+                  : `${shop.name} is listed from the mall directory but has no Mall Go connection. You can try a message to see how the demo behaves — the reply is automated, and nothing reaches the shop.`
+              }
             />
           }
           basketBar={

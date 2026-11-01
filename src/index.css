@@ -3507,3 +3507,61 @@ body.chat-expanded {
     max-width: calc(100% - 16px);
   }
 }
+
+/* ==========================================================================
+   Shop / admin workspaces on a phone
+   --------------------------------------------------------------------------
+   Phase 4 review of the shop side. Nothing here changes what the workspace
+   does; it changes how much of it a presenter can see at once.
+
+   At 390px the header, the shop switcher, the "not security" notice, the tab
+   row, the search field and the filter chips stacked up to fill the whole first
+   viewport, so not one customer conversation was visible — the same problem the
+   customer home screen had. The three tab labels also overflowed their row, so
+   "Today" was cut off at the right edge.
+
+   The page rhythm tightens and the tabs shrink to fit; every label, notice and
+   control is kept exactly as it was.
+   ========================================================================== */
+@media (max-width: 639px) {
+  .page--wide {
+    gap: 14px;
+  }
+  .workspace-head {
+    gap: 10px;
+  }
+  .workspace-head h1 {
+    font-size: 1.3rem;
+    margin-top: 2px;
+  }
+  /* The one-line explanation is worth keeping, but it does not need three
+     lines of a phone screen in front of the conversations. */
+  .workspace-head p {
+    font-size: 0.9rem;
+    margin-top: 3px;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Three tabs must fit one row where they can. At 390px they now do. */
+  .workspace-tabs {
+    gap: 6px;
+  }
+  .workspace-tab {
+    padding: 8px 11px;
+    gap: 5px;
+    font-size: 0.86rem;
+    min-height: 44px;
+  }
+}
+
+/* At 320px even the tightened labels do not fit one row (Inbox 128 + Orders 233
+   + Today 356 against a 320px screen), so "Today" was clipped to "Toda". The row
+   wraps to a second line instead — every label stays fully readable, and nothing
+   is hidden behind a sideways scroll. */
+@media (max-width: 359px) {
+  .workspace-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}

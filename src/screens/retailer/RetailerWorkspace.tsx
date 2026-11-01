@@ -253,7 +253,7 @@ export function RetailerWorkspace({
                 id="inbox-search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by customer, message or order ref (e.g. AMG-1001)…"
+                placeholder="Search customers or orders…"
                 autoComplete="off"
               />
             </div>

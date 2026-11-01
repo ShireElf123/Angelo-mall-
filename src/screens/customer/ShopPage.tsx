@@ -118,14 +118,42 @@ export function ShopPageScreen({
           {/* The one action this page exists for sits above the description and
               the fact grid, so a shopper does not scroll past six tiles of
               opening hours to reach it. Its disclosure travels with it. */}
-          <button type="button" className="btn btn--primary btn--lg btn--block" onClick={() => void startChat()}>
-            <MessageCircle size={20} aria-hidden />
-            {conversation ? 'Continue the sample chat' : 'Try the sample chat'}
-          </button>
-          <p className="shop-hero__hint">
-            Sample chat only — nothing is sent to {shop.name}. Replies, prices and collection steps are simulated in this
-            browser. <DemoTag>Simulated</DemoTag>
-          </p>
+          {(() => {
+            // Four tenants carry a scripted journey; the rest are directory
+            // listings. Leading a listing with "Try the sample chat" implied the
+            // shop was reachable, so the action and its wording follow what the
+            // tenant actually supports.
+            const chatEnabled = shop.participation === 'demo-scenario';
+            return (
+              <>
+                <button
+                  type="button"
+                  className={`btn btn--lg btn--block ${chatEnabled ? 'btn--primary' : 'btn--ghost'}`}
+                  onClick={() => void startChat()}
+                >
+                  <MessageCircle size={20} aria-hidden />
+                  {chatEnabled
+                    ? conversation
+                      ? 'Continue the sample chat'
+                      : 'Try the sample chat'
+                    : 'Chat not enabled yet — see a demo message'}
+                </button>
+                <p className="shop-hero__hint">
+                  {chatEnabled ? (
+                    <>
+                      Sample chat only — nothing is sent to {shop.name}. Replies, prices and collection steps are
+                      simulated in this browser. <DemoTag>Simulated</DemoTag>
+                    </>
+                  ) : (
+                    <>
+                      {shop.name} is listed from the mall directory but has no Mall Go connection. The demo message
+                      thread is automated sample text, not the shop. <DemoTag>Not connected</DemoTag>
+                    </>
+                  )}
+                </p>
+              </>
+            );
+          })()}
 
           <p>{shop.description}</p>
 
