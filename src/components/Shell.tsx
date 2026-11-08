@@ -3,6 +3,7 @@ import {
   BarChart3,
   Bike,
   Building2,
+  ChevronDown,
   ClipboardList,
   HelpCircle,
   Home,
@@ -12,6 +13,7 @@ import {
   MessagesSquare,
   PackageCheck,
   RotateCcw,
+  SlidersHorizontal,
   Store,
   User,
   WifiOff,
@@ -37,6 +39,17 @@ const ROLE_OPTIONS: { id: Role; label: string; short: string; icon: ReactNode }[
   { id: 'admin', label: 'Mall admin', short: 'Admin', icon: <Building2 size={16} aria-hidden /> },
 ];
 
+/**
+ * True on a wide screen, where the role switcher has always been visible and
+ * there is no reason to hide it behind a disclosure. Guarded because jsdom has
+ * no `matchMedia`; the panel then renders open, which is also what every test
+ * that reaches for a role button expects.
+ */
+const roleDrawerOpensByDefault =
+  typeof window === 'undefined' || typeof window.matchMedia !== 'function'
+    ? true
+    : window.matchMedia('(min-width: 900px)').matches;
+
 interface NavItem {
   label: string;
   icon: ReactNode;
@@ -59,6 +72,8 @@ export function Shell({
   const [confirmReset, setConfirmReset] = useState(false);
   const [online, setOnline] = useState(() => navigator.onLine);
   const role = roleForRoute(route);
+  /** Named on the collapsed drawer, so the current role is never a mystery. */
+  const currentRoleLabel = ROLE_OPTIONS.find((option) => option.id === role)?.short ?? 'Role';
 
   useEffect(() => {
     const up = () => setOnline(true);
@@ -149,39 +164,60 @@ export function Shell({
           <span className="demo-bar__label">
             <strong>Demo Mode</strong>
             <span className="demo-bar__label--full"> — sample tenants, prices &amp; orders. Not live shopping.</span>
-            <span className="demo-bar__label--short"> — sample data, not live shopping.</span>
+            <span className="demo-bar__label--short"> · sample data only</span>
           </span>
-          <div className="demo-bar__actions">
-            <div
-              className="role-switcher role-switcher--compact"
-              role="group"
-              aria-label="Demo Mode role switcher (not real sign-in)"
-            >
-              {ROLE_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  className={`role-switcher__btn ${role === option.id ? 'role-switcher__btn--active' : ''}`}
-                  onClick={() => switchRole(option.id)}
-                  aria-pressed={role === option.id}
-                  aria-label={option.label}
-                >
-                  {option.icon}
-                  <span className="role-switcher__label--full" aria-hidden>{option.label}</span>
-                  <span className="role-switcher__label--short" aria-hidden>{option.short}</span>
-                </button>
-              ))}
+          {/*
+            The four role buttons used to sit permanently open in the bar. On a
+            phone that turned the strip into a 2x2 grid of buttons wider than the
+            app header — 110px of chrome before the app had begun, which is the
+            one thing that made this read as a web page with a control panel
+            bolted on rather than an app.
+
+            They now live in a native `<details>` disclosure: the notice stays
+            permanently visible (it never truncates), and "Role" is one tap away
+            with the current role named on the control itself. `<details>` gives
+            keyboard operation, `aria-expanded` and the expanded/collapsed
+            announcement for free. On a wide screen it opens by default, so the
+            desktop walkthrough is unchanged.
+          */}
+          <details className="demo-drawer" open={roleDrawerOpensByDefault}>
+            <summary className="demo-drawer__summary">
+              <SlidersHorizontal size={15} aria-hidden />
+              <span className="demo-drawer__current">{currentRoleLabel}</span>
+              <ChevronDown size={14} aria-hidden className="demo-drawer__chevron" />
+            </summary>
+            <div className="demo-bar__actions">
+              <div
+                className="role-switcher role-switcher--compact"
+                role="group"
+                aria-label="Demo Mode role switcher (not real sign-in)"
+              >
+                {ROLE_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`role-switcher__btn ${role === option.id ? 'role-switcher__btn--active' : ''}`}
+                    onClick={() => switchRole(option.id)}
+                    aria-pressed={role === option.id}
+                    aria-label={option.label}
+                  >
+                    {option.icon}
+                    <span className="role-switcher__label--full" aria-hidden>{option.label}</span>
+                    <span className="role-switcher__label--short" aria-hidden>{option.short}</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="demo-bar__reset"
+                onClick={() => setConfirmReset(true)}
+                aria-label="Reset demo data"
+              >
+                <RotateCcw size={15} aria-hidden />
+                <span className="demo-bar__reset-label">Reset demo</span>
+              </button>
             </div>
-            <button
-              type="button"
-              className="demo-bar__reset"
-              onClick={() => setConfirmReset(true)}
-              aria-label="Reset demo data"
-            >
-              <RotateCcw size={15} aria-hidden />
-              <span className="demo-bar__reset-label">Reset demo</span>
-            </button>
-          </div>
+          </details>
         </div>
       </div>
 

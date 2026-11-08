@@ -97,7 +97,8 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
 
   const featured = state.shops.filter((s) => s.featured);
   const promos = activePromotions(state, 'home-banner');
-  const conversations = conversationsForCustomer(state).slice(0, 3);
+  const allConversations = conversationsForCustomer(state);
+  const conversations = allConversations.slice(0, 3);
   const activeOrders = ordersForCustomer(state).filter(
     (o) => isConfirmedOrder(o) && !['delivered', 'completed'].includes(o.status),
   );
@@ -265,6 +266,35 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </div>
         </section>
       )}
+
+      {/*
+        Two-up stat cards, the way the reference dashboard opens under its
+        title. Both numbers are read from the demo store — chat threads and
+        confirmed orders that already exist — so nothing is invented and the
+        cards stay true if the demo data changes.
+      */}
+      <section className="home-stat-grid" aria-label="Your demo activity">
+        <button type="button" className="home-stat" onClick={() => navigate({ name: 'chats' })}>
+          <span className="home-stat__text">
+            <span className="home-stat__label">Chats</span>
+            <span className="home-stat__value">{allConversations.length}</span>
+            <span className="home-stat__note">sample threads</span>
+          </span>
+          <span className="home-stat__icon" aria-hidden>
+            <MessagesSquare size={17} />
+          </span>
+        </button>
+        <button type="button" className="home-stat" onClick={() => navigate({ name: 'orders' })}>
+          <span className="home-stat__text">
+            <span className="home-stat__label">Active orders</span>
+            <span className="home-stat__value">{activeOrders.length}</span>
+            <span className="home-stat__note">demo orders</span>
+          </span>
+          <span className="home-stat__icon" aria-hidden>
+            <ClipboardList size={17} />
+          </span>
+        </button>
+      </section>
 
       {conversations.length === 0 && activeOrders.length === 0 && (
         <section className="welcome-card" aria-label="New here?">
