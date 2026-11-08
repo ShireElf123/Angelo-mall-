@@ -169,6 +169,27 @@ describe('touch targets and focus', () => {
     expect(minHeight('.chip')).toBeGreaterThanOrEqual(44);
   });
 
+  it('keeps the small button at 44px, including inside the phone media passes', () => {
+    expect(minHeight('.btn--sm')).toBeGreaterThanOrEqual(44);
+    // The 420px phone pass used to restate `.btn--sm` as 38px, silently undoing
+    // the base rule on the one screen where a thumb is all there is — the order
+    // card's "Chat" button measured 306x38.
+    expect(css).not.toMatch(/\.btn--sm\s*\{\s*min-height:\s*3[0-9]px/);
+    // A range slider is dragged with a thumb as well, so it gets the same floor.
+    expect(minHeight('.commission-slider input')).toBeGreaterThanOrEqual(44);
+  });
+
+  it('stacks the home search field under 360px rather than clipping the placeholder', () => {
+    const tiny = [
+      ...css.matchAll(/@media \(max-width: 359px\)\s*\{([\s\S]*?)\n\}/g),
+    ]
+      .map((match) => match[1])
+      .join('\n');
+    expect(tiny, 'no <=359px pass').not.toBe('');
+    expect(tiny).toMatch(/\.hero__search\s*\{[^}]*flex-wrap: wrap/s);
+    expect(tiny).toMatch(/\.hero__search \.btn\s*\{[^}]*flex: 1 1 100%/s);
+  });
+
   it('never removes the keyboard focus ring, including on dark chrome', () => {
     expect(blocks(':focus-visible')).toContain('outline: 3px solid var(--gold-500)');
     expect(blocks(':focus-visible')).toContain('outline-offset');
