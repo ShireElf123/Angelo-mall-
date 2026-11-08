@@ -15,7 +15,9 @@ import App from '../../App';
  * announces exactly one top-level heading, and it carries the screen's name.
  */
 const ROUTES: [hash: string, expectedHeading: RegExp][] = [
-  ['#/', /Chat to mall shops/i],
+  // Home's title is the greeting, as the reference app opens. The screen's
+  // product line is the lede directly beneath it.
+  ['#/', /Hello, Thandi/i],
   ['#/shops', /Shop directory/i],
   ['#/chats', /Your chats/i],
   ['#/orders', /Your orders/i],

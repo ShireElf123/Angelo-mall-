@@ -44,13 +44,23 @@ describe('phone shell', () => {
     expect(rule('.hero')).toBe('');
     expect(rule('.hero__aside')).toBe('');
     const phone = media('(max-width: 899px)');
-    expect(phone).toMatch(/\.app-header\s*\{[^}]*var\(--forest-900\)/s);
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*rgba\(255, 255, 255/s);
   });
 
-  it('gives the app header the brand green rather than a light bar', () => {
+  it('gives the app header a white bar with a hairline, not a green band', () => {
+    // The dark green bar was the biggest remaining difference from the
+    // reference, which is white to the top edge. It is also the reason the
+    // screen said "website masthead" before it said "app". The green is still
+    // the brand's, but it lives in type, icons and the tab pill.
     const phone = media('(max-width: 899px)');
-    expect(phone).toMatch(/\.app-header\s*\{[^}]*var\(--forest-900\)/s);
-    expect(phone).toMatch(/\.brand__text strong\s*\{\s*color: #fff;/s);
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*border-bottom: 1px solid var\(--border\)/s);
+    expect(phone).not.toMatch(/\.app-header\s*\{[^}]*var\(--forest-900\)/s);
+  });
+
+  it('keeps the demo strip light, so a phone does not open on two dark slabs', () => {
+    expect(rule('.demo-bar')).toContain('background: var(--surface)');
+    expect(rule('.demo-bar')).toContain('border-bottom: 1px solid var(--border)');
+    expect(rule('.demo-bar')).not.toContain('var(--forest-950)');
   });
 
   it('keeps the demo notice on one line beside the role disclosure', () => {
@@ -80,11 +90,15 @@ describe('activity cards', () => {
 });
 
 describe('smallest phones', () => {
-  it('uses two shop columns on a phone so names and labels stay whole', () => {
-    // Two-up everywhere on a phone, like the reference's "Home View". Three
-    // columns at 390px broke "SUPERSPAR" mid-word and truncated "Sample chat".
+  it('uses two shop columns on a phone, and one at 320px', () => {
+    // Two-up like the reference's "Home View". Three columns at 390px broke
+    // "SUPERSPAR" mid-word and truncated "Sample chat"; at 320px even two
+    // columns left the name as "The Angelo…", so the smallest phones get one
+    // full-width row per shop rather than a cut label.
     expect(rule('.shop-launcher__grid')).toContain('repeat(2, minmax(0, 1fr))');
-    expect(media('(max-width: 379px)')).toMatch(/\.shop-launcher__grid\s*\{[^}]*repeat\(2, minmax\(0, 1fr\)\)/s);
+    expect(media('(max-width: 379px)')).toMatch(
+      /\.shop-launcher__grid\s*\{[^}]*grid-template-columns: minmax\(0, 1fr\)/s,
+    );
   });
 
   it('stacks a section header rather than wrapping its title and link', () => {
@@ -93,10 +107,54 @@ describe('smallest phones', () => {
   });
 });
 
+describe('reference parity — flat white surfaces', () => {
+  /**
+   * The owner compared the app against the reference and asked why it did not
+   * look like it. The answer was warm cream page + brown hairline + a shadowed
+   * card on every surface: the reference is a white page, white cards and one
+   * green accent. These pin that decision so it cannot drift back.
+   */
+  it('paints the page a cool off-white and cards pure white', () => {
+    const page = css.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(page).toMatch(/--bg:\s*#f2f5f2/);
+    expect(page).toMatch(/--surface:\s*#ffffff/);
+    // The warm cream and its brown border were the whole mismatch.
+    expect(page).not.toMatch(/--bg:\s*#f4eee2/);
+    expect(page).not.toMatch(/--border:\s*#d5c9ae/);
+  });
+
+  it('draws the shop tile as a flat row: a 44px mark beside the name', () => {
+    const tile = rule('.shop-tile');
+    expect(tile).toContain('grid-template-columns: 44px minmax(0, 1fr)');
+    expect(tile).toContain('box-shadow: none');
+    expect(rule('.shop-tile__mark')).toContain('width: 44px');
+    // The fallback mark is a tint of the tenant colour with the glyph in the
+    // colour itself — set inline by ShopTile — so the glyph must follow the
+    // text colour rather than being hard-coded white.
+    expect(rule('.shop-tile__glyph')).toContain('stroke: currentColor');
+  });
+
+  it('marks the two activity cards with a ring, not a filled tint', () => {
+    const card = rule('.home-stat');
+    expect(card).toContain('background: var(--surface)');
+    expect(card).toContain('border: 1px solid var(--border)');
+    expect(rule('.home-stat__icon')).toContain('border: 1.5px solid var(--forest-700)');
+    expect(rule('.home-stat__icon')).toContain('background: transparent');
+  });
+
+  it('offers a quiet "See more" on the launcher rather than only a large button', () => {
+    expect(rule('.shop-launcher__more')).toContain('background: none');
+    expect(rule('.shop-launcher__more')).toContain('color: var(--forest-700)');
+    // It is still a real target.
+    expect(rule('.shop-launcher__more')).toContain('min-height: 44px');
+  });
+});
+
 describe('motion', () => {
   it('covers the new controls in the reduced-motion switch', () => {
     const reduced = css.split('@media (prefers-reduced-motion: reduce)').pop() ?? '';
     expect(reduced).toContain('.home-stat:active');
     expect(reduced).toContain('.demo-drawer__summary:active');
+    expect(reduced).toContain('.shop-launcher__more:active');
   });
 });

@@ -106,10 +106,16 @@ describe('tactile states', () => {
   });
 
   it('marks the selected tab without reflowing its label', () => {
-    const marker = blocks('.bottom-nav .nav-item--active::before');
-    expect(marker).toContain('content:');
-    // A marker is used instead of a size change.
-    expect(marker).not.toContain('font-size');
+    // The selected tab is marked once, by the mint pill behind its icon. The
+    // gold bar that used to sit above the pill was a second mark for the same
+    // state; the reference marks an active tab once, so it is gone. What must
+    // not come back is a *sizing* change — that is what reflows the label.
+    const pill = blocks('.bottom-nav .nav-item--active .nav-item__icon');
+    expect(pill).toMatch(/background: var\(--forest-100\)/);
+    expect(pill).not.toContain('padding');
+    expect(blocks('.bottom-nav .nav-item--active::before')).toBe('');
+    const icon = blocks('.bottom-nav .nav-item__icon');
+    expect(icon).not.toContain('font-size');
   });
 
   it('removes depth from disabled controls so they read as inert', () => {

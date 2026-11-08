@@ -33,11 +33,15 @@ const mediaBlocks = (query: string): string[] =>
   );
 
 describe('display type', () => {
-  it('declares one display face for the customer headlines', () => {
+  it('keeps the serif for page titles, and takes it off the Home greeting', () => {
     expect(css).toMatch(/--font-display:\s*[^;]*serif/);
-    expect(rule('.home-hello__title')).toContain('font-family: var(--font-display)');
     expect(rule('.page-header__title')).toContain('font-family: var(--font-display)');
     expect(rule('.spotlight__title')).toContain('font-family: var(--font-display)');
+    // Home's greeting is the reference's "Hello, Anna": a compact sans heading,
+    // not a serif masthead. Asserting the absence is deliberate — the serif
+    // drifting back onto the greeting is exactly what the reference comparison
+    // asked us to remove, and it would go unnoticed in review.
+    expect(rule('.home-hello__title')).not.toContain('font-family: var(--font-display)');
   });
 
   it('keeps the body copy in the UI face', () => {
@@ -55,7 +59,12 @@ describe('home header block', () => {
    */
   it('opens on a greeting block instead of a hero card', () => {
     expect(rule('.home-hello')).not.toBe('');
-    expect(rule('.home-hello__greeting')).toContain('text-transform: uppercase');
+    // The gold uppercase eyebrow that used to sit above the headline is gone
+    // with it; the demo disclosure is now a small gold chip inside the title,
+    // so the greeting reads as a person being greeted, not as a campaign.
+    expect(rule('.home-hello__greeting')).toBe('');
+    expect(rule('.home-hello__tag')).toContain('text-transform: uppercase');
+    expect(rule('.home-hello__tag')).toContain('color: var(--gold-600)');
     // The poster is gone, and with it every rule that painted it. A leftover
     // `.hero` rule would be a ghost the next editor has to reason about.
     expect(rule('.hero')).toBe('');
@@ -183,8 +192,13 @@ describe('directory discovery card', () => {
   it('groups title, search and filters on one surface', () => {
     const head = rule('.directory-head');
     expect(head).toContain('background: var(--surface)');
-    expect(head).toMatch(/border-top: 3px solid var\(--gold-500\)/);
-    expect(head).toContain('box-shadow');
+    expect(head).toContain('border: 1px solid var(--border)');
+    // The 3px gold top edge and the deep shadow made this the only "feature"
+    // panel in the app; the reference draws every panel the same white card, so
+    // the edge is gone. What must stay is that the title, search and filters
+    // are grouped on ONE surface rather than three stacked blocks.
+    expect(head).not.toContain('border-top: 3px solid');
+    expect(head).toContain('box-shadow: none');
     // The search keeps its taller target inside the card.
     expect(css).toMatch(/\.directory-controls \.search-field\s*\{[^}]*min-height: 52px/s);
   });

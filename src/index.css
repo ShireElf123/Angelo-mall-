@@ -18,16 +18,28 @@
      earlier elevation work read as invisible. The page now sits a clear
      step below the card (1.16:1) and carries more of the contrast so the
      shadows only have to do the edge. */
-  --bg: #f4eee2;
+  /* The page is a cool, barely-green off-white, and a card is white. The warm
+     cream of the earlier passes was the loudest thing the app did: it tinted
+     every screenshot apricot and fought the forest green it was meant to sit
+     under. The reference design the owner pointed at uses exactly this pairing
+     — near-white page, white cards, green as the only accent — so the tint is
+     gone and the green does the talking. Cards still sit a clear step above
+     the page (1.11:1 against #ffffff) without a shadow. */
+  --bg: #f2f5f2;
   --surface: #ffffff;
-  --surface-warm: #efe8d9;
-  --ink: #1e2a24;
-  --ink-2: #43524a;
-  --muted: #5a6961; /* darkened for AA text contrast (was #6d7c73, 3.8:1 on warm panels) */
-  /* 1.35:1 -> 1.64:1 against white: the card edge is now a real line, not a
-     suggestion. --border-strong reaches 2.1:1 for focusable edges. */
-  --border: #d5c9ae;
-  --border-strong: #c2b193;
+  --surface-warm: #eef3ef;
+  /* The soft mint used for the two-up activity cards and status pills — the
+     reference's "Active" chips and its dashboard tiles. */
+  --sage-50: #e8f1e9;
+  --sage-100: #d9e9dd;
+  --ink: #17251e;
+  --ink-2: #3f4f47;
+  --muted: #5e6d65; /* AA on white and on --sage-50: 5.6:1 */
+  /* Hairlines, not brown fences. The old #d5c9ae was a 1.6:1 warm line that
+     drew a rectangle around every card; the reference has no visible card
+     borders at all, so these are now barely darker than the page. */
+  --border: #e2e8e2;
+  --border-strong: #cfd8d0;
   /* Radius and type scales are declared once, further down ("tokens"). */
   --danger: #b3261e;
   --danger-bg: #fdecea;
@@ -44,7 +56,7 @@
   --chat-mine: #10503d;        /* forest-800, 9.1:1 with white text */
   --chat-mine-edge: #0c3b2e;   /* forest-900, for the hairline */
   --chat-theirs: #ffffff;
-  --chat-bg: #f2ece1;
+  --chat-bg: #eef3ef;
   /* Elevation — four honest levels and one for the fixed chrome.
      Restraint is the point: a card never looks like a dialog, and nothing in
      the app floats above --elev-4. */
@@ -59,13 +71,13 @@
   --elev-2: 0 1px 2px rgba(12, 59, 46, 0.06), 0 2px 6px -2px rgba(12, 59, 46, 0.08);
   --elev-3: 0 2px 4px rgba(12, 59, 46, 0.08), 0 8px 18px -8px rgba(12, 59, 46, 0.14);
   --elev-4: 0 8px 20px -6px rgba(7, 35, 27, 0.3), 0 28px 60px -20px rgba(7, 35, 27, 0.42);
-  --elev-nav: 0 -8px 24px -10px rgba(12, 59, 46, 0.3);
+  --elev-nav: 0 -6px 20px -16px rgba(12, 59, 46, 0.22);
   /* The shadow a control collapses to while it is being pressed. */
   --elev-press: 0 1px 1px rgba(12, 59, 46, 0.1);
   /* Tonal alternatives to shadows where a hairline reads more precisely. */
   --surface-raised: #ffffff;
   --surface-sunken: var(--surface-warm);
-  --surface-tint: #f6f2ea;
+  --surface-tint: #f4f8f4;
   /* Motion: one fast step for feedback, one for arrivals. */
   --dur-fast: 110ms;
   --dur: 180ms;
@@ -430,8 +442,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .shell { min-height: 100dvh; display: flex; flex-direction: column; }
 
 .demo-bar {
-  background: var(--forest-950);
-  color: #e9f2ec;
+  /* The notice used to be a near-black band above a dark green header, so a
+     phone opened on two slabs of chrome before the app had said anything.
+     The reference design has no such band, and the disclosure does not need
+     one: it is now the same white as the header, separated by a hairline, with
+     the words themselves carrying the emphasis. Nothing is hidden — the full
+     sentence is still here on a wide screen and the short wording on a phone. */
+  background: var(--surface);
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--border);
   padding: 6px 12px;
   display: flex;
   flex-wrap: wrap;
@@ -443,14 +462,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   min-height: 0;
 }
 .demo-bar__label { font-size: 0.84rem; }
-.demo-bar__label strong { color: #f6d97b; }
+.demo-bar__label strong { color: var(--forest-900); }
 .demo-bar__label--short { display: none; }
 .demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 
 .role-switcher {
   display: flex;
   gap: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-warm);
   padding: 3px;
   border-radius: var(--radius-pill);
   /* One row, scrolled horizontally, rather than four buttons reflowing into
@@ -488,7 +507,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 6px;
   border: none;
   background: transparent;
-  color: #cfe3d6;
+  color: var(--ink-2);
   padding: 6px 11px;
   border-radius: var(--radius-pill);
   font-size: 0.84rem;
@@ -499,8 +518,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   flex: none;
   transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.role-switcher__btn--active { background: var(--gold-500); color: var(--forest-950); }
-.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.role-switcher__btn--active { background: var(--forest-900); color: #fff; }
+.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(12, 59, 46, 0.08); color: var(--forest-900); }
 .role-switcher__btn:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 
 .demo-bar__reset {
@@ -508,8 +527,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: #e9f2ec;
+  border: 1px solid var(--border-strong);
+  color: var(--ink-2);
   border-radius: var(--radius-pill);
   padding: 6px 11px;
   font-size: 0.84rem;
@@ -520,7 +539,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
 .demo-bar__reset:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
-.demo-bar__reset:hover { background: rgba(255, 255, 255, 0.12); }
+.demo-bar__reset:hover { background: var(--forest-50); color: var(--forest-900); }
 
 .app-header {
   display: flex;
@@ -533,11 +552,15 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   position: sticky;
   top: 0;
   z-index: 60;
-  background: rgba(244, 238, 226, 0.82);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  backdrop-filter: saturate(180%) blur(16px);
+  /* White glass, like the reference's app bar: the only thing that separates
+     the header from the page is a hairline. There is no coloured band, no
+     gradient and no drop shadow, so the screen opens on content rather than
+     on chrome. */
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 0 rgba(12, 59, 46, 0.06), 0 12px 28px -26px rgba(12, 59, 46, 0.6);
+  box-shadow: none;
   /* Safety net: on a narrow laptop the brand and five nav items must never
      force a horizontal scrollbar — the nav drops to a second row instead. */
   flex-wrap: wrap;
@@ -563,37 +586,37 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
   background: var(--forest-900);
-  box-shadow: 0 1px 2px rgba(12, 59, 46, 0.18), 0 6px 16px -8px rgba(12, 59, 46, 0.5);
+  box-shadow: none;
   flex: none;
 }
-.brand__mark img { display: block; width: 34px; height: 34px; border-radius: var(--radius-sm); }
+.brand__mark img { display: block; width: 28px; height: 28px; border-radius: var(--radius-xs); }
 .brand__chip {
   align-self: flex-start;
   margin-left: 2px;
-  padding: 2px 7px;
+  padding: 1px 6px;
   border-radius: var(--radius-pill);
   background: var(--gold-100);
   color: #6d5410;
-  border: 1px solid rgba(168, 132, 28, 0.35);
-  font-size: 0.62rem;
+  border: 1px solid rgba(168, 132, 28, 0.28);
+  font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .brand__text { display: flex; flex-direction: column; min-width: 0; }
 .brand__text strong {
-  color: var(--forest-900);
-  font-size: 1.12rem;
+  color: var(--forest-950);
+  font-size: 1rem;
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.brand__text small { color: var(--muted); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand__text small { color: var(--muted); font-size: 0.72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .top-nav { display: none; min-width: 0; }
 
@@ -641,11 +664,11 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   /* Frosted, not opaque: page content keeps sliding under the bar instead of
      stopping dead at a white slab. This is the strongest "app, not website"
      cue available without new components. */
-  background: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.94);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   border-top: 1px solid var(--border);
-  padding: 4px 4px calc(6px + env(safe-area-inset-bottom));
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
   box-shadow: var(--elev-nav);
 }
 
@@ -665,14 +688,18 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 .app-footer {
   border-top: 1px solid var(--border);
-  background: var(--forest-950);
-  color: #bcd2c4;
-  padding: 26px 18px calc(30px + var(--bottom-nav-h));
-  font-size: 0.9rem;
+  /* A quiet panel, not a dark slab above the tab bar. The disclosure is the
+     same length and the same weight; it just stops looking like a page footer
+     from a website, which was the last dark band on the customer screens. */
+  background: var(--surface-warm);
+  color: var(--ink-2);
+  padding: 22px 18px calc(26px + var(--bottom-nav-h));
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
-.app-footer strong { color: #fff; }
+.app-footer strong { color: var(--forest-900); }
 .app-footer p { max-width: 880px; margin: 0 auto 8px; }
-.app-footer__small { font-size: 0.8rem; color: #8fb09d; }
+.app-footer__small { font-size: 0.78rem; color: var(--muted); }
 
 /* ---------------- Page & panels ---------------- */
 
@@ -936,29 +963,44 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 6px;
   padding: 2px 2px 0;
 }
-.home-hello__greeting {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gold-600);
-}
 .home-hello__title {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.1rem);
-  font-weight: 800;
-  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* The UI face, not the serif. A serif display headline was the app's
+     editorial voice, but against the reference it was the single biggest
+     mismatch: that app states its line in a compact sans and gets out of the
+     way. The words are unchanged — only the voice. */
+  font-family: inherit;
+  font-size: clamp(1.4rem, 1.18rem + 1vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--forest-950);
   text-wrap: balance;
 }
+/* The one piece of gold left in the header block: a hairline chip that keeps
+   the demo disclosure on the greeting without turning it into an eyebrow. */
+.home-hello__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--gold-100);
+  background: #fdf8e9;
+  color: var(--gold-600);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 .home-hello__lede {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   line-height: 1.45;
-  color: var(--ink-2);
+  color: var(--muted);
   max-width: 52ch;
 }
 .home-hello .hero__search { margin-top: 4px; }
@@ -1716,14 +1758,21 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .basket-bar {
   display: flex; align-items: center; gap: 11px;
   width: 100%;
-  background: var(--gold-500);
-  color: var(--forest-950);
-  border: none;
+  /* Gold is the accent, not a banner. A filled gold strip was the loudest
+     thing on the chat screen and the only large colour field that was not
+     green; the same call to action now reads as a gold-tinted panel with a
+     gold edge, which keeps the accent and stops it shouting. Text stays
+     --gold-600 for contrast (4.97:1 on white). */
+  background: #fdf8e9;
+  color: var(--gold-600);
+  border-top: 1px solid var(--gold-100);
+  border-bottom: 1px solid var(--gold-100);
   padding: 12px 16px;
   cursor: pointer;
   text-align: left;
   flex: none;
 }
+.basket-bar:hover { background: var(--gold-100); }
 .basket-bar span { display: flex; flex-direction: column; }
 .basket-bar small { font-weight: 500; }
 .basket-bar--muted { background: var(--surface-warm); color: var(--ink-2); cursor: default; }
@@ -2660,20 +2709,10 @@ body.chat-expanded {
   white-space: nowrap;
 }
 .nav-item:active { transform: scale(0.94); }
-/* Selected tab: a short gold marker instead of a heavier font, so switching
-   tabs never reflows the label. */
-.bottom-nav .nav-item--active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 22px;
-  height: 3px;
-  border-radius: var(--radius-pill);
-  background: var(--gold-500);
-  box-shadow: 0 0 10px rgba(201, 162, 39, 0.45);
-}
+/* Selected tab: the soft mint pill behind the icon plus the forest label. The
+   3px gold marker that used to sit above it was a second, floating mark doing
+   the same job — the reference marks its active tab once. */
+
 /* --- Cards and lists ----------------------------------------------------- */
 
 .shop-card__media:active { box-shadow: inset 0 0 0 999px rgba(12, 59, 46, 0.06); }
@@ -2860,7 +2899,7 @@ body.chat-expanded {
   .page-header__subtitle { font-size: 0.84rem; }
   .brand__text small { display: none; }
   .brand__text strong { font-size: 0.95rem; }
-  .brand__mark img { width: 30px; height: 30px; }
+  .brand__mark img { width: 26px; height: 26px; }
   .app-header { gap: 10px; padding: 10px var(--space-3); }
   .nav-item { min-width: 0; font-size: 0.7rem; padding: 6px 2px; }
   .bottom-nav .nav-item > span:last-child { font-size: 0.7rem; }
@@ -2930,10 +2969,10 @@ body.chat-expanded {
 
   .app-header { padding: 8px var(--space-3); gap: 10px; }
   .brand { gap: 9px; min-height: 40px; }
-  .brand__mark { width: 36px; height: 36px; }
-  .brand__mark img { width: 30px; height: 30px; }
-  .brand__text strong { font-size: 1.02rem; }
-  .brand__text small { font-size: 0.72rem; }
+  .brand__mark { width: 32px; height: 32px; border-radius: var(--radius-sm); }
+  .brand__mark img { width: 26px; height: 26px; }
+  .brand__text strong { font-size: 0.98rem; }
+  .brand__text small { font-size: 0.7rem; }
 }
 
 /* The demo bar scrolls away once the user starts reading; the header is what
@@ -2965,13 +3004,15 @@ body.chat-expanded {
   flex-direction: column;
   gap: 15px;
   background: var(--surface);
+  /* A plain white card. The gold top edge and the 20px radius made this the
+     one "feature" surface on the screen; the reference has no such surface —
+     every panel is the same white, separated by a hairline. */
   border: 1px solid var(--border);
-  border-top: 3px solid var(--gold-500);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   padding: 15px 13px 14px;
-  box-shadow: var(--elev-2);
+  box-shadow: none;
 }
-.directory-head .page-header__title { font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); }
+.directory-head .page-header__title { font-size: clamp(1.45rem, 1.25rem + 0.7vw, 1.75rem); }
 .directory-head .directory-controls { gap: 9px; }
 /* The rail bleeds to the page edge, but the discovery card is already inset by
    its own padding: keeping the negative margin would push the last chip past
@@ -3241,33 +3282,43 @@ body.chat-expanded {
 }
 
 .shop-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
+  display: grid;
+  /* Mark, then the name with its status beneath it — one compact row per shop,
+     the way the reference stacks its "Home View" cards. A column of mark, name,
+     pill made each card ~150px tall and left a third of it empty; this is the
+     same three pieces in the space two lines need. */
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  row-gap: 2px;
+  align-items: center;
   width: 100%;
   min-height: 44px;
-  padding: 8px 6px 10px;
+  padding: 12px;
+  /* A white tile on a pale page, the way the reference draws its "Home View"
+     grid: white fill, hairline-or-nothing edge, a mark, a name. The heavy
+     brown border and the drop shadow are gone, so the logo is the loudest
+     thing in the tile instead of the box around it. */
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface);
-  box-shadow: var(--elev-1);
+  box-shadow: none;
   color: var(--ink);
-  text-align: center;
+  text-align: left;
   cursor: pointer;
   /* Brief, physical press feedback; no bounce, no long easing. */
   transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
 }
 
 .shop-tile:hover {
-  border-color: var(--forest-700);
-  box-shadow: var(--elev-2);
+  border-color: var(--border-strong);
+  box-shadow: none;
 }
 
 .shop-tile:active {
   transform: translateY(1px);
-  box-shadow: var(--elev-1);
+  box-shadow: none;
 }
 
 .shop-tile:focus-visible {
@@ -3282,16 +3333,18 @@ body.chat-expanded {
   display: flex;
   align-items: center;
   justify-content: center;
+  grid-row: 1 / span 2;
   aspect-ratio: 1 / 1;
-  /* Two-up makes the column wide, and a full-width square mark would make each
-     tile 170px of logo. A 104px square keeps the mark large and the row
-     compact, and every tile stays the same height. */
-  width: 88px;
-  height: 88px;
+  /* A small mark in the corner of the card, not the card's subject. 44px is
+     the same footprint as the reference's card icons; the tenant's name below
+     is the label, and the mark is there to recognise a shop at a glance. */
+  width: 44px;
+  height: 44px;
   align-self: center;
-  padding: 11%;
-  border-radius: var(--radius-md);
+  padding: 7px;
+  border-radius: var(--radius-sm);
   background: var(--surface-warm);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 
@@ -3303,12 +3356,14 @@ body.chat-expanded {
 }
 
 .shop-tile__glyph {
-  width: 58%;
-  max-width: 46px;
+  width: 68%;
+  max-width: 30px;
   height: auto;
   fill: none;
-  stroke: #fff;
-  stroke-width: 1.6;
+  /* currentColor: the mark's inline colour when this is the tinted fallback,
+     white when it sits on a solid tenant block. */
+  stroke: currentColor;
+  stroke-width: 1.7;
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0.95;
@@ -3318,21 +3373,25 @@ body.chat-expanded {
    than being shrunk to fit one. "The Angelo SUPERSPAR" and "Golden Buffalo
    Spur" both wrap here. */
 .shop-tile__name {
-  font-size: 0.86rem;
-  font-weight: 700;
-  line-height: 1.25;
+  grid-column: 2;
+  align-self: end;
+  /* Two lines, left-aligned, no reserved height: the row heights come from the
+     content, and the pill sits under the name. */
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--ink);
   overflow-wrap: break-word;
-  /* Keep tiles in a row the same height however the name wraps. */
+  /* Keep the name whole, and let a long one wrap to two lines. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.5em;
+  min-height: 0;
 }
 
 .shop-tile__meta {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--muted);
@@ -3350,47 +3409,47 @@ body.chat-expanded {
   margin-top: 12px;
 }
 
+/* Two-up is the launcher's shape at every width a thumb is used, because that
+   is the reference's "Home View". A tablet gets a little more gap, not more
+   columns: four across a 768px screen left each card too narrow for a tenant
+   name. */
 @media (min-width: 560px) {
   .shop-launcher__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-  }
-  /* Four columns on a tablet make each cell ~230px wide; a mark that filled it
-     would turn the launcher into four giant squares. The well keeps its square
-     ratio but stops growing at 132px, so the row still reads as tiles. */
-  .shop-tile__mark {
-    width: 100%;
-    max-width: 132px;
-    height: auto;
-    aspect-ratio: 1 / 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
   .shop-tile__name {
-    font-size: 0.92rem;
+    font-size: 0.86rem;
   }
 }
 
+/* Four across once there is a desk's worth of width, with the same compact
+   row inside each card. Eight was a wall of near-identical slivers. */
 @media (min-width: 900px) {
   .shop-launcher__grid {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
   }
 }
 
-/* Larger marks on a wide screen are wasteful in an eight-column row; the well
-   keeps a square ratio but the tile stays compact. */
-@media (min-width: 900px) {
-  .shop-tile__mark {
-    padding: 18%;
-  }
+/* Section title on the left, a quiet text link on the right — the reference's
+   "See more ›" rhythm. No pill, no border: it is a link, not a second button. */
+.shop-launcher__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 0 2px;
+  background: none;
+  border: none;
+  color: var(--forest-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
 }
-
-/* The launcher heading reads as a small app section label with an instruction
-   beside it, so "tap a shop to start chatting" is visible rather than assumed. */
-.shop-launcher__hint {
-  font-size: 0.82rem;
-  color: var(--muted);
-  text-align: right;
-}
+.shop-launcher__more:hover { color: var(--forest-900); }
+.shop-launcher__more:active { transform: translateY(1px); }
 
 @media (max-width: 379px) {
   /* Three columns still fit at 320px, but the name needs the extra room. */
@@ -3398,8 +3457,11 @@ body.chat-expanded {
     gap: 8px;
   }
   .shop-tile {
-    padding: 6px 4px 8px;
+    padding: 10px;
+    column-gap: 8px;
+    grid-template-columns: 38px minmax(0, 1fr);
   }
+  .shop-tile__mark { width: 38px; height: 38px; padding: 6px; }
   .shop-tile__name {
     /* 0.75rem, folding into the existing step: 0.73rem sat 0.16px from 0.72rem
        and the type-scale contract forbids steps that close together. */
@@ -3407,10 +3469,9 @@ body.chat-expanded {
     line-height: 1.25;
     /* Three lines at 320px: "Golden Buffalo Spur" needs them, and truncating a
        tenant's name to "Golden Buffalo…" is exactly the kind of unreadable
-       label this redesign is meant to remove. Every tile in the row keeps the
-       same height, so the grid stays aligned. */
+       label this redesign is meant to remove. */
     -webkit-line-clamp: 3;
-    min-height: 3.75em;
+    min-height: 0;
   }
 }
 
@@ -3550,10 +3611,10 @@ body.chat-expanded {
   min-height: 34px;
   padding: 5px 12px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  background: rgba(255, 255, 255, 0.1);
-  color: #e9f2ec;
-  font-size: 0.84rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--forest-900);
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -3561,7 +3622,7 @@ body.chat-expanded {
   transition: background-color var(--dur-fast) var(--ease-out);
 }
 .demo-drawer__summary::-webkit-details-marker { display: none; }
-.demo-drawer__summary:hover { background: rgba(255, 255, 255, 0.18); }
+.demo-drawer__summary:hover { background: var(--forest-50); }
 .demo-drawer__summary:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 .demo-drawer__summary:active { transform: translateY(1px); }
 .demo-drawer__chevron { transition: transform var(--dur-fast) var(--ease-out); flex: none; }
@@ -3615,30 +3676,29 @@ body.chat-expanded {
 /* ---- 2. Chrome: one green bar at the top on every screen under 900px ---- */
 
 @media (max-width: 899px) {
-  /* A cool, pale canvas instead of the warm cream. White cards now sit a real
-     step above the page (1.16:1 -> 1.24:1) without needing heavier shadows. */
-  body { background: var(--forest-50); }
+  /* One canvas everywhere: a cool, faintly green near-white. The dark green bar
+     that used to sit here read as a website's masthead, not as an app bar; the
+     reference app is white to the top edge, with its brand green reserved for
+     type, icons and the two dashboard cards. */
+  body { background: var(--bg); }
 
   .app-header {
-    background: linear-gradient(180deg, var(--forest-900) 0%, var(--forest-950) 100%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18), 0 14px 30px -26px rgba(7, 35, 27, 0.85);
-  }
-  /* The bar is one surface with the demo strip above it, so the mark drops its
-     plate and the type goes white. */
-  .brand__mark {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom: 1px solid var(--border);
     box-shadow: none;
   }
-  .brand__text strong { color: #fff; }
-  .brand__text small { color: #b9d2c3; }
+  .brand__mark {
+    background: var(--forest-900);
+    box-shadow: none;
+  }
+  .brand__text strong { color: var(--forest-950); }
+  .brand__text small { color: var(--muted); }
   .brand__chip {
-    background: var(--gold-500);
-    border-color: transparent;
-    color: var(--forest-950);
+    background: var(--gold-100);
+    border-color: rgba(168, 132, 28, 0.28);
+    color: #6d5410;
   }
 
-  /* The page no longer needs a warm tint behind the cards. */
   .app-footer { border-top: none; }
 }
 
@@ -3671,9 +3731,9 @@ body.chat-expanded {
     gap: 28px;
     align-items: center;
   }
-  .home-hello__title { font-size: 2.35rem; }
+  .home-hello__title { font-size: 2rem; }
   .home-hello .hero__search { max-width: 520px; }
-  .home-stat { min-height: 104px; }
+  .home-stat { min-height: 96px; }
 }
 
 /* On a tablet two cards across the full 768px leave each one three-quarters
@@ -3693,33 +3753,36 @@ body.chat-expanded {
 .home-stat {
   display: flex;
   flex-direction: row;
-  box-shadow: none;
   align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
-  min-height: 84px;
-  padding: 12px 13px;
+  min-height: 78px;
+  padding: 12px 12px 12px 14px;
+  /* The reference's dashboard pair, drawn the way it draws them: a white card,
+     a hairline edge, no shadow, and a thin green ring for the icon. The mint
+     fill this had for one pass made the pair read as buttons; the ring is what
+     makes them read as readings, which is what they are. */
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--ink);
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--elev-1);
-  transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
+  box-shadow: none;
+  transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
-.home-stat:hover { border-color: var(--border-strong); box-shadow: var(--elev-2); }
-.home-stat:active { transform: translateY(1px); box-shadow: var(--elev-1); }
+.home-stat:hover { background: var(--surface); border-color: var(--border-strong); box-shadow: none; }
+.home-stat:active { transform: translateY(1px); box-shadow: none; background: var(--sage-50); }
 
 .home-stat__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .home-stat__label {
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 500;
   color: var(--muted);
 }
 .home-stat__value {
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -3729,12 +3792,16 @@ body.chat-expanded {
 .home-stat__icon {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   flex: none;
   border-radius: var(--radius-pill);
-  background: var(--forest-50);
-  color: var(--forest-800);
+  /* The reference's signature mark: an unfilled circle with a 1.5px green
+     ring. Reused here — and on the shop tiles' status — rather than inventing
+     a second kind of badge. */
+  border: 1.5px solid var(--forest-700);
+  background: transparent;
+  color: var(--forest-700);
 }
 
 /* ---- 5. Cards: quieter edges, more air, app-sized radii ---- */
@@ -3746,12 +3813,13 @@ body.chat-expanded {
 .shop-launcher__head { flex-wrap: wrap; row-gap: 2px; }
 
 .shop-tile {
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 12px 10px 11px;
   gap: 7px;
-  /* Flattened: one hairline and the page tint, no floating card. */
-  box-shadow: none;
-  border-color: var(--border-strong);
+  /* Flat: white on the pale page, a hairline only if a browser cannot paint the
+     soft shadow. No border, so the tile is a mark and a name, not a rectangle. */
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.04), 0 8px 18px -16px rgba(18, 36, 29, 0.35);
+  border-color: transparent;
   /* Fill the grid cell, so every tile in a row is the same height and the
      status pills share one baseline whether the name is one line or three. */
   height: 100%;
@@ -3760,27 +3828,24 @@ body.chat-expanded {
   border-radius: var(--radius-md);
 }
 .shop-tile__name {
-  font-size: 0.84rem;
-  /* Three lines at 390px: "Golden Buffalo Spur" and "The Angelo SUPERSPAR"
-     both need them at this tile width, and a truncated tenant name is the one
-     label this grid must not shorten. Every tile keeps the same height. */
-  -webkit-line-clamp: 3;
-  /* No reserved min-height: a clamp box centres its text inside whatever height
-     it is given, so reserving two or three lines put "KFC" lower than "The
-     Angelo SUPERSPAR" beside it. The tiles are already equal height (they are
-     grid cells) and the status pill is pinned to the floor below, so names
-     top-align and pills line up without inventing a text box height. */
+  font-size: 0.8rem;
+  /* Two lines at 390px holds every tenant name in the launcher; "The Angelo
+     SUPERSPAR" is the longest and needs both. A truncated tenant name is the
+     one label this grid must not shorten. */
+  -webkit-line-clamp: 2;
   min-height: 0;
-  text-align: center;
+  text-align: left;
 }
 /* "Sample chat" becomes a small forest pill — the same visual language as the
    "Open now (demo)" status pill elsewhere, and legible at arm's length. */
 .shop-tile__meta {
-  align-self: center;
-  /* Pin the pill to the bottom of the tile so a one-line name and a two-line
-     name still put their pills on the same baseline. */
-  margin-top: auto;
-  padding: 2px 8px;
+  grid-column: 2;
+  align-self: start;
+  justify-self: start;
+  /* No auto margin any more: the pill follows the name in the second row, so a
+     one-line and a two-line name both read from the top. */
+  margin-top: 0;
+  padding: 1px 7px;
   border-radius: var(--radius-pill);
   font-size: 0.68rem;
   line-height: 1.5;
@@ -3790,11 +3855,11 @@ body.chat-expanded {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: var(--surface-warm);
-  color: var(--muted);
+  background: var(--sage-50);
+  color: var(--forest-800);
 }
 .shop-tile__meta--chat {
-  background: var(--forest-50);
+  background: var(--sage-50);
   color: var(--forest-800);
 }
 
@@ -3809,24 +3874,38 @@ body.chat-expanded {
 }
 .section-header .btn--sm.btn--ghost:hover:not(:disabled) { background: transparent; color: var(--forest-900); }
 
+/* The two-up activity cards at 320px: the pair is ~150px wide each, so the
+   label is kept on one line and the icon gives up 4px to make room. */
+@media (max-width: 379px) {
+  .home-stat { padding: 11px 10px 11px 12px; gap: 6px; }
+  .home-stat__label { font-size: 0.72rem; white-space: nowrap; }
+  .home-stat__value { font-size: 1.2rem; }
+  .home-stat__icon { width: 26px; height: 26px; }
+}
+
 /* ---- 5b. The smallest phones (320-379px) ---- */
 @media (max-width: 379px) {
-  /* Two columns, not three. Three tiles in 320px leave ~86px each, which broke
-     "SUPERSPAR" across two lines and clipped the status pill to "Sample…" — a
-     real tenant's name cut in half and a label that no longer says whether the
-     shop can be chatted to. Two wider tiles keep the whole name and the whole
-     label, which is the point of a tile. */
+  /* One shop per row at 320px. Two-up leaves ~120px for the name and "The
+     Angelo SUPERSPAR" came out as "The Angelo…" with the status pill clipped
+     to "Sample…" — a tenant's name cut in half and a label that no longer says
+     anything. A full-width row keeps both whole, which is the one thing this
+     grid must not trade away for density. */
   .shop-launcher__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
+  .shop-tile {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding: 10px 12px;
+  }
+  .shop-tile__mark { width: 40px; height: 40px; padding: 6px; }
   .shop-tile__name {
     font-size: 0.82rem;
     -webkit-line-clamp: 2;
     min-height: 0;
   }
   .shop-tile__meta {
-    padding: 2px 8px;
+    padding: 1px 7px;
     font-size: 0.68rem;
   }
 }
@@ -3846,8 +3925,7 @@ body.chat-expanded {
 
 /* At 320px the section title and its hint no longer fit on one line together. */
 @media (max-width: 359px) {
-  .shop-launcher__head { flex-direction: column; align-items: flex-start; }
-  .shop-launcher__hint { text-align: left; }
+  .shop-launcher__head { flex-direction: column; align-items: flex-start; gap: 0; }
 }
 
 /* ---- 5c. Chat header: the disclosure line is readable, not clipped ------- */
@@ -3884,7 +3962,7 @@ body.chat-expanded {
 
 /* ---- 5e. Tablet: the greeting block breathes --------------------------- */
 @media (min-width: 560px) and (max-width: 899px) {
-  .home-hello__title { font-size: 2rem; }
+  .home-hello__title { font-size: 1.9rem; }
   .hero__search { max-width: none; }
 }
 
@@ -3920,6 +3998,7 @@ body.chat-expanded {
   .shell-main .page { animation: none; transform: none; }
   .home-stat:active,
   .category-tile:active,
+  .shop-launcher__more:active,
   .demo-drawer__summary:active { transform: none; }
   .demo-drawer__chevron { transition: none; }
 }

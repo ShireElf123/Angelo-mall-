@@ -182,14 +182,22 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
       */}
       <div className="home-top">
       <section className="home-hello" aria-labelledby="home-title">
-        <p className="home-hello__greeting">
-          <Sparkles size={14} aria-hidden /> Hello, {DEMO_CUSTOMER.name.split(' ')[0]} · demo
-        </p>
+        {/*
+          The name is the page title, exactly as the reference opens: "Hello,
+          Anna" at heading weight, with one quiet line beneath it. The product's
+          own words moved down one level, into that line, because a greeting is
+          what a dashboard says first — and the heading still names the screen
+          for a screen-reader user rather than leaving it untitled.
+        */}
         <h1 id="home-title" className="home-hello__title">
-          Chat to mall shops.
+          Hello, {DEMO_CUSTOMER.name.split(' ')[0]}
+          <span className="home-hello__tag">
+            <Sparkles size={11} aria-hidden /> demo
+          </span>
         </h1>
         <p className="home-hello__lede">
-          Order without the catalogue hunt. Real mall tenants — chats and prices here are simulated.
+          Chat to mall shops — order without the catalogue hunt. Real mall tenants; every chat and price here is
+          simulated.
         </p>
         <form className="hero__search" onSubmit={submitSearch} role="search">
           <span className="hero__search-field">
@@ -205,7 +213,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               autoComplete="off"
             />
           </span>
-          <button type="submit" className="btn btn--gold">
+          <button type="submit" className="btn btn--primary">
             Search
           </button>
         </form>
@@ -276,7 +284,13 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         <section className="shop-launcher" aria-labelledby="launcher-title">
           <div className="shop-launcher__head">
             <h2 id="launcher-title">Shops</h2>
-            <p className="shop-launcher__hint">Tap a shop to start chatting</p>
+            {/* A quiet "See more" on the section title, the way the reference
+                ends every section — not a second large button competing with
+                the tiles. The prominent "Browse all" control stays at the foot
+                of the section, where the tiles run out. */}
+            <button type="button" className="shop-launcher__more" onClick={() => navigate({ name: 'shops' })}>
+              See more <ArrowRight size={14} aria-hidden />
+            </button>
           </div>
           <ul className="shop-launcher__grid">
             {launcher.map((shop) => (

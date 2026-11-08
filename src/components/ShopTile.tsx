@@ -47,7 +47,23 @@ export function ShopTile({
         supportsChat ? `Open the sample chat with ${shop.name}` : `${shop.name} — shop information`
       }
     >
-      <span className="shop-tile__mark" style={showLogo ? undefined : { background: shop.colour }}>
+      <span
+        className="shop-tile__mark"
+        /* The fallback is a tint of the tenant's own colour with the glyph in
+           the full colour, not a solid block of it. A wall of saturated squares
+           was the heaviest thing on the first screen; a tinted icon reads like
+           an app icon on a white card, which is what the reference grid does,
+           and it still tells the shops apart at a glance. */
+        style={
+          showLogo
+            ? undefined
+            : {
+                background: `${shop.colour}14`,
+                borderColor: `${shop.colour}33`,
+                color: shop.colour,
+              }
+        }
+      >
         {showLogo ? (
           <img
             className="shop-tile__logo"

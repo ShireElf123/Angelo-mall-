@@ -41,10 +41,14 @@ describe('Home — composition', () => {
   it('opens on a greeting that keeps one page title and one way in', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const headings = container.querySelectorAll('h1');
+    // Exactly one page title, and it is the greeting — the reference opens on
+    // "Hello, Anna", and a dashboard heading that names the screen is still a
+    // title. The product line moved into the lede beneath it.
     expect(headings).toHaveLength(1);
-    expect(headings[0].textContent ?? '').toMatch(/Chat to mall shops/i);
-    // The greeting says who this is for, the way an app's dashboard does.
-    expect(container.querySelector('.home-hello__greeting')?.textContent).toMatch(/hello, thandi/i);
+    expect(headings[0].textContent ?? '').toMatch(/Hello, Thandi/i);
+    expect(container.querySelector('.home-hello__lede')?.textContent).toMatch(/chat to mall shops/i);
+    // The demo disclosure travels with the greeting rather than an eyebrow.
+    expect(container.querySelector('.home-hello__tag')?.textContent).toMatch(/demo/i);
 
     // Exactly one prominent entry into the directory.
     const browse = screen.getByRole('button', { name: /Browse all \d+ shops/i });
