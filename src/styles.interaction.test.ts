@@ -54,7 +54,12 @@ describe('elevation scale', () => {
     expect(blocks('.modal')).toContain('var(--elev-4)');
     expect(blocks('.toast')).toContain('var(--elev-4)');
     expect(blocks('.shop-card')).toContain('var(--elev-2)');
-    expect(blocks('.bottom-nav')).toContain('var(--elev-nav)');
+    // The tab bar stopped casting depth when the shell moved to the reference's
+    // flat white bar: it is separated by a hairline, not by a shadow. The token
+    // still exists (the dialogs above use the scale) and must not be re-used as
+    // an excuse to float the bar again.
+    expect(blocks('.bottom-nav')).toContain('box-shadow: none');
+    expect(token('--elev-nav')).not.toBe('');
   });
 });
 
@@ -106,16 +111,14 @@ describe('tactile states', () => {
   });
 
   it('marks the selected tab without reflowing its label', () => {
-    // The selected tab is marked once, by the mint pill behind its icon. The
-    // gold bar that used to sit above the pill was a second mark for the same
-    // state; the reference marks an active tab once, so it is gone. What must
-    // not come back is a *sizing* change — that is what reflows the label.
-    const pill = blocks('.bottom-nav .nav-item--active .nav-item__icon');
-    expect(pill).toMatch(/background: var\(--forest-100\)/);
-    expect(pill).not.toContain('padding');
-    expect(blocks('.bottom-nav .nav-item--active::before')).toBe('');
+    // The reference marks its active tab with the brand colour and a heavier
+    // glyph — one mark, no pill and no floating bar. Padding is identical on
+    // every item, because a padding change is what reflows a label.
     const icon = blocks('.bottom-nav .nav-item__icon');
+    expect(icon).toContain('padding: 0 14px');
     expect(icon).not.toContain('font-size');
+    expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).toContain('background: transparent');
+    expect(blocks('.bottom-nav .nav-item--active::before')).toBe('');
   });
 
   it('removes depth from disabled controls so they read as inert', () => {
@@ -194,31 +197,34 @@ describe('touch targets and focus', () => {
 describe('native-app shell', () => {
   it('pins the app header only, not the demo banner around it', () => {
     expect(blocks('.app-header')).toContain('position: sticky');
-    expect(blocks('.app-header')).toContain('backdrop-filter');
+    // Solid brand green, like the reference's bar. It no longer needs a blur:
+    // there is nothing translucent left in the header to blur.
+    expect(blocks('.app-header')).toContain('background: var(--app-bar)');
     // The banner's wrapper must not be sticky again, or a phone loses ~110px.
     expect(blocks('.shell-chrome')).toContain('position: static');
     expect(blocks('.shell-chrome')).not.toContain('position: sticky');
   });
 
-  it('builds the tab bar out of frosted glass with a solid fallback', () => {
+  it('sets the tab bar flat on the sheet with a hairline', () => {
     const nav = blocks('.bottom-nav');
-    expect(nav).toContain('backdrop-filter');
+    // The frosted slab and the upward shadow were the last web-chrome cues;
+    // the reference's bar is solid white above a single hairline.
+    expect(nav).toContain('background: var(--surface)');
+    expect(nav).toContain('box-shadow: none');
+    expect(nav).not.toContain('backdrop-filter');
     expect(nav).toContain('min-height: 64px');
-    // Depth still comes from the Phase 12 scale, not a new ad-hoc shadow.
-    expect(nav).toContain('var(--elev-nav)');
-    // Browsers without backdrop-filter must get an opaque surface, never 82% white.
+    // The opaque fallback must still exist for browsers without blur support,
+    // so no engine can end up with a washed-out bar.
     expect(css).toContain('@supports not ((backdrop-filter: blur(1px))');
   });
 
-  it('marks the selected tab with a pill that cannot shift the label', () => {
-    // Padding lives on every icon wrapper; only the background changes.
-    expect(blocks('.bottom-nav .nav-item__icon')).toContain('padding: 3px 14px');
-    // forest-100, not forest-50: the pill has to survive a bright phone screen.
+  it('marks the selected tab with colour and weight, not a pill', () => {
+    expect(blocks('.bottom-nav .nav-item__icon')).toContain('padding: 0 14px');
     const pill = blocks('.bottom-nav .nav-item--active .nav-item__icon');
-    expect(pill).toMatch(/background: var\(--forest-100\)/);
-    expect(css).toContain('.bottom-nav .nav-item--active svg { stroke-width: 2.4; }');
-    // Padding is not introduced by the active rule, which is what would reflow.
-    expect(blocks('.bottom-nav .nav-item--active .nav-item__icon')).not.toContain('padding');
+    expect(pill).toContain('background: transparent');
+    expect(css).toContain('.bottom-nav .nav-item--active svg { stroke-width: 2.3; }');
+    // The active rule must not introduce padding, which is what would reflow.
+    expect(pill).not.toContain('padding');
   });
 
   it('presses a shop card into the page instead of only tinting it', () => {

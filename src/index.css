@@ -25,21 +25,28 @@
      — near-white page, white cards, green as the only accent — so the tint is
      gone and the green does the talking. Cards still sit a clear step above
      the page (1.11:1 against #ffffff) without a shadow. */
-  --bg: #f2f5f2;
+  /* Sampled from the reference: its content sheet is a neutral cool grey
+     (#f3f5f7) and its cards are pure white — nothing is green-tinted except
+     the things that are green on purpose. */
+  --bg: #f3f5f7;
   --surface: #ffffff;
-  --surface-warm: #eef3ef;
-  /* The soft mint used for the two-up activity cards and status pills — the
-     reference's "Active" chips and its dashboard tiles. */
-  --sage-50: #e8f1e9;
-  --sage-100: #d9e9dd;
-  --ink: #17251e;
-  --ink-2: #3f4f47;
-  --muted: #5e6d65; /* AA on white and on --sage-50: 5.6:1 */
-  /* Hairlines, not brown fences. The old #d5c9ae was a 1.6:1 warm line that
-     drew a rectangle around every card; the reference has no visible card
-     borders at all, so these are now barely darker than the page. */
-  --border: #e2e8e2;
-  --border-strong: #cfd8d0;
+  --surface-warm: #eef2ef;
+  /* The soft mint the reference uses for its activity bars and its "Active"
+     chips. */
+  --sage-50: #e7f0e8;
+  --sage-100: #d3e4d6;
+  /* The reference's app bar green, sampled (#2d4e36 / #30573b across the bar).
+     It is a mossier, lighter green than our old forest-950; the deep forest is
+     now only for text and icons. */
+  --app-bar: #2b5238;
+  --ink: #14231a;
+  --ink-2: #3d4b44;
+  --muted: #67746d; /* 4.9:1 on --bg, 5.6:1 on white */
+  /* The reference draws no card outlines at all: a white card on the grey
+     sheet is the whole separation. Borders survive only on inputs, where they
+     are a control affordance rather than decoration. */
+  --border: #e6ebe8;
+  --border-strong: #d3dbd6;
   /* Radius and type scales are declared once, further down ("tokens"). */
   --danger: #b3261e;
   --danger-bg: #fdecea;
@@ -105,11 +112,10 @@ html {
 }
 
 :root {
-  /* Bundle 3: a display face for page names and the Home hero only. System
-     serifs cost nothing to download and give the customer screens an editorial
-     voice that a second weight of Inter cannot: the mall's premium cue is the
-     contrast between a serif headline and a sans body, not more rounded boxes.
-     Everything below h1 stays Inter, so UI text is unchanged. */
+  /* Kept as an escape hatch for editorial type, but no longer used on any
+     heading the customer sees: the reference is a single geometric sans from
+     its app bar to its tab labels, and a serif page title was the last thing
+     that still read as a different product. */
   --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
 }
 
@@ -277,8 +283,11 @@ input, select, textarea { font: inherit; color: inherit; }
   min-height: 44px;
   padding: 7px 14px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
+  /* Grey wells on a white card, white pills on the grey sheet: the chip always
+     takes the opposite tone of whatever it sits on, which is how the reference
+     keeps its filters visible without drawing a border round each one. */
+  border: 1px solid transparent;
+  background: var(--surface-warm);
   color: var(--ink-2);
   font-weight: 500;
   font-size: 0.9rem;
@@ -294,14 +303,16 @@ input, select, textarea { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--surface-tint);
-  border: 1px solid var(--border-strong);
+  /* A tinted well with no outline, exactly how the reference draws search and
+     its filter pills: the fill says "input", the hairline is not needed. */
+  background: var(--surface-warm);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
   padding: 6px 8px 6px 18px;
   color: var(--muted);
   transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
 }
-.search-field:focus-within { background: var(--surface); }
+.search-field:focus-within { background: var(--surface); border-color: var(--forest-700); }
 .search-field input {
   flex: 1;
   min-width: 0;
@@ -442,15 +453,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .shell { min-height: 100dvh; display: flex; flex-direction: column; }
 
 .demo-bar {
-  /* The notice used to be a near-black band above a dark green header, so a
-     phone opened on two slabs of chrome before the app had said anything.
-     The reference design has no such band, and the disclosure does not need
-     one: it is now the same white as the header, separated by a hairline, with
-     the words themselves carrying the emphasis. Nothing is hidden — the full
-     sentence is still here on a wide screen and the short wording on a phone. */
-  background: var(--surface);
-  color: var(--ink-2);
-  border-bottom: 1px solid var(--border);
+  /* Part of the same green band as the app bar, so the top of the screen is one
+     colour to the sheet's rounded corners — the reference's silhouette. The
+     disclosure is not hidden and not shrunk: it is white type on the bar, with
+     the role control as a translucent pill beside it. */
+  background: var(--app-bar);
+  color: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   padding: 6px 12px;
   display: flex;
   flex-wrap: wrap;
@@ -462,14 +471,14 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   min-height: 0;
 }
 .demo-bar__label { font-size: 0.84rem; }
-.demo-bar__label strong { color: var(--forest-900); }
+.demo-bar__label strong { color: #fff; }
 .demo-bar__label--short { display: none; }
 .demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
 
 .role-switcher {
   display: flex;
   gap: 3px;
-  background: var(--surface-warm);
+  background: rgba(255, 255, 255, 0.14);
   padding: 3px;
   border-radius: var(--radius-pill);
   /* One row, scrolled horizontally, rather than four buttons reflowing into
@@ -507,7 +516,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   gap: 6px;
   border: none;
   background: transparent;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.9);
   padding: 6px 11px;
   border-radius: var(--radius-pill);
   font-size: 0.84rem;
@@ -518,8 +527,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   flex: none;
   transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.role-switcher__btn--active { background: var(--forest-900); color: #fff; }
-.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(12, 59, 46, 0.08); color: var(--forest-900); }
+.role-switcher__btn--active { background: #fff; color: var(--app-bar); }
+.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(255, 255, 255, 0.16); color: #fff; }
 .role-switcher__btn:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 
 .demo-bar__reset {
@@ -527,8 +536,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1px solid var(--border-strong);
-  color: var(--ink-2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   border-radius: var(--radius-pill);
   padding: 6px 11px;
   font-size: 0.84rem;
@@ -539,27 +548,26 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
 .demo-bar__reset:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
-.demo-bar__reset:hover { background: var(--forest-50); color: var(--forest-900); }
+.demo-bar__reset:hover { background: rgba(255, 255, 255, 0.16); }
 
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px var(--space-4);
+  padding: 8px var(--space-4);
+  min-height: 56px;
   /* Sticky, translucent chrome: content slides under it instead of stopping
      at a solid slab. The tint tracks --bg so the blur reads as the page. */
   position: sticky;
   top: 0;
   z-index: 60;
-  /* White glass, like the reference's app bar: the only thing that separates
-     the header from the page is a hairline. There is no coloured band, no
-     gradient and no drop shadow, so the screen opens on content rather than
-     on chrome. */
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: saturate(180%) blur(18px);
-  backdrop-filter: saturate(180%) blur(18px);
-  border-bottom: 1px solid var(--border);
+  /* The reference's app bar: a solid moss-green band, 56px tall, with the
+     wordmark in white and no rule or shadow of its own. The white content
+     sheet underneath is what closes the bar, with rounded top corners that
+     tuck under it. */
+  background: var(--app-bar);
+  border-bottom: none;
   box-shadow: none;
   /* Safety net: on a narrow laptop the brand and five nav items must never
      force a horizontal scrollbar — the nav drops to a second row instead. */
@@ -586,37 +594,41 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-sm);
-  background: var(--forest-900);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  /* A light plate on the green bar, the way the reference's leaf mark sits on
+     a soft translucent square. */
+  background: rgba(255, 255, 255, 0.16);
   box-shadow: none;
   flex: none;
 }
-.brand__mark img { display: block; width: 28px; height: 28px; border-radius: var(--radius-xs); }
+.brand__mark img { display: block; width: 22px; height: 22px; border-radius: var(--radius-xs); }
 .brand__chip {
-  align-self: flex-start;
+  align-self: center;
   margin-left: 2px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: var(--gold-100);
-  color: #6d5410;
-  border: 1px solid rgba(168, 132, 28, 0.28);
+  /* The reference marks its bar with a translucent white pill; ours has to say
+     "demo" rather than "iOS", so the same pill carries the disclosure. */
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: none;
   font-size: 0.6rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
 }
 .brand__text { display: flex; flex-direction: column; min-width: 0; }
 .brand__text strong {
-  color: var(--forest-950);
-  font-size: 1rem;
-  letter-spacing: -0.01em;
+  color: #fff;
+  font-size: 0.98rem;
+  letter-spacing: -0.005em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.brand__text small { color: var(--muted); font-size: 0.72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand__text small { color: rgba(255, 255, 255, 0.72); font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .top-nav { display: none; min-width: 0; }
 
@@ -664,12 +676,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   /* Frosted, not opaque: page content keeps sliding under the bar instead of
      stopping dead at a white slab. This is the strongest "app, not website"
      cue available without new components. */
-  background: rgba(255, 255, 255, 0.94);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
+  background: var(--surface);
   border-top: 1px solid var(--border);
-  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
-  box-shadow: var(--elev-nav);
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  /* The reference's tab bar is flat white with a hairline. The frosted blur and
+     the upward shadow were the last web-chrome cues in the shell; the blur is
+     kept only as a fallback-free solid, so nothing tints under the bar. */
+  box-shadow: none;
 }
 
 .offline-banner {
@@ -684,7 +697,28 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   font-weight: 500;
 }
 
-.shell-main { flex: 1; width: 100%; }
+.shell-main {
+  flex: 1;
+  width: 100%;
+  /* The reference's signature move: the grey content sheet is a rounded card
+     that lifts ~14px over the green app bar, so the brand colour reads as a
+     shell the app sits inside rather than as a header bolted on top. */
+  position: relative;
+  z-index: 10;
+  /* No negative overlap: the bar stays a clean band and the sheet's rounded top
+     corners reveal the green behind it, which is exactly how the reference's
+     sheet meets its app bar. Overlapping would only push the corners under the
+     sticky header, where they cannot be seen. */
+  margin-top: 0;
+  background: var(--bg);
+  /* The same top-corner treatment as the modal sheet: one shared literal, so
+     the radius audit still sees a single value for "a sheet's top corners". */
+  border-radius: 20px 20px 0 0;
+  /* Keeps the rounded corners from being clipped by the sheet's own children
+     (the category rail deliberately bleeds to the page edge). */
+  overflow: clip;
+  padding-top: 2px;
+}
 
 .app-footer {
   border-top: 1px solid var(--border);
@@ -723,8 +757,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   margin-bottom: var(--space-3);
 }
 .section-header h2 {
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: 1.2rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--forest-950);
 }
@@ -764,9 +798,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   font-size: clamp(1.5rem, 1.3rem + 0.9vw, 1.9rem);
   line-height: 1.14;
   letter-spacing: -0.022em;
-  font-weight: 800;
-  font-family: var(--font-display);
-  color: var(--forest-950);
+  font-weight: 700;
+  /* Sans, like every heading in the reference. The serif display face gave the
+     app its editorial voice, but against this reference it was the last thing
+     that still read as a different product; the brand now carries in the green
+     bar, the type weights and the gold accent. */
+  font-family: inherit;
+  color: var(--ink);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -1013,7 +1051,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: center;
   gap: 6px;
   background: var(--surface);
-  border: 1px solid var(--border-strong);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
   padding: 5px 5px 5px 14px;
   color: var(--muted);
@@ -1495,7 +1533,7 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 /* 12rem basis: at 360px the name block and the ~142px status pill cannot share
    a row, so the pill drops underneath and the name keeps the full width. */
 .shop-hero__title > div { flex: 1 1 12rem; min-width: 0; }
-.shop-hero__title h1 { font-size: 1.5rem; font-family: var(--font-display); line-height: 1.14; }
+.shop-hero__title h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.14; }
 .shop-hero__title p { color: var(--muted); }
 .shop-hero__tagline { font-size: 1.05rem; color: var(--forest-900); font-weight: 600; }
 .shop-hero__hint { color: var(--muted); font-size: 0.9rem; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
@@ -1567,17 +1605,20 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   align-items: center;
   gap: 8px;
   padding: 11px 12px;
-  background: var(--forest-900);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  color: #fff;
+  /* White, with a hairline — the reference's own chat and detail screens are
+     white to the top edge, and the only green is type and the badge. A dark
+     card inside a white sheet was the loudest remaining surface in the app. */
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
   flex: none;
 }
-.chat-header .icon-btn { color: #fff; }
-.chat-header .icon-btn:hover { background: rgba(255, 255, 255, 0.14); }
+.chat-header .icon-btn { color: var(--forest-900); }
+.chat-header .icon-btn:hover { background: var(--surface-warm); }
 .chat-header__shop {
   flex: 1; min-width: 0;
   display: flex; align-items: center; gap: 11px;
-  background: none; border: none; color: #fff; cursor: pointer; text-align: left; padding: 2px;
+  background: none; border: none; color: var(--ink); cursor: pointer; text-align: left; padding: 2px;
 }
 .chat-header__shop--static { cursor: default; }
 .chat-header__shop span { display: flex; flex-direction: column; min-width: 0; }
@@ -1585,8 +1626,8 @@ label input[type='text'], label input:not([type]), label textarea, label select,
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;
 }
-.chat-header__shop small { color: #bcd2c4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
-.chat-header .shop-avatar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); }
+.chat-header__shop small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
+.chat-header .shop-avatar { box-shadow: none; }
 /* On a phone the header name had room for about half of "The Angelo SUPERSPAR"
    and fell back to an ellipsis. Which shop you are talking to is the one thing
    this header must not abbreviate, so on narrow screens the name takes a second
@@ -2270,8 +2311,13 @@ label input[type='text'], label input:not([type]), label textarea, label select,
    over the whole item while the phone used a pill behind the icon, so the same
    "you are here" looked like two different systems. The gold marker stays a
    phone-only cue because the desktop pill already carries the state. */
-.top-nav .nav-item--active { background: var(--forest-50); }
-.top-nav .nav-item--active .nav-item__icon { background: var(--forest-100); border-radius: var(--radius-pill); padding: 3px 10px; }
+/* The desktop nav sits on the same green bar as the phone's, so "you are here"
+   is a translucent white pill with white type — the reference's active pill —
+   rather than a pale-green chip that only exists on a white background. */
+.top-nav .nav-item { color: rgba(255, 255, 255, 0.78); }
+.top-nav .nav-item:hover:not(.nav-item--active) { color: #fff; background: rgba(255, 255, 255, 0.1); }
+.top-nav .nav-item--active { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.top-nav .nav-item--active .nav-item__icon { background: transparent; border-radius: var(--radius-pill); padding: 3px 0; }
 .top-nav .nav-item--active svg { stroke-width: 2.4; }
 .top-nav .nav-item__icon { display: inline-flex; transition: background-color var(--dur) var(--ease-out); }
   .page { padding-bottom: 48px; }
@@ -2821,17 +2867,18 @@ body.chat-expanded {
   .app-header { background: var(--bg); }
 }
 
-/* The selected tab keeps its gold marker and adds a soft forest pill behind
-   the icon, plus a heavier glyph weight. The pill is padding on EVERY item, so
-   only the background changes — switching tabs cannot shift the label. */
+/* The selected tab, the way the reference draws it: brand green on the glyph
+   and the label, a heavier stroke, and nothing else. The forest pill and the
+   gold marker were two more marks for the same state. Padding stays identical
+   on every item, so switching tabs still cannot shift a label. */
 .bottom-nav .nav-item__icon {
-  padding: 3px 14px;
+  padding: 0 14px;
   border-radius: var(--radius-pill);
-  transition: background-color var(--dur) var(--ease-out);
+  transition: color var(--dur) var(--ease-out);
 }
-.bottom-nav .nav-item--active .nav-item__icon { background: var(--forest-100); }
-.bottom-nav .nav-item--active svg { stroke-width: 2.4; }
-.bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); }
+.bottom-nav .nav-item--active .nav-item__icon { background: transparent; color: var(--forest-900); }
+.bottom-nav .nav-item--active svg { stroke-width: 2.3; }
+.bottom-nav .nav-item--active > span:last-child { color: var(--forest-900); font-weight: 700; }
 /* The first and last tabs sit against the screen edge, where a 3px outline with
    a 2px offset is partly off-screen. Inset the ring on the bar only. */
 .bottom-nav .nav-item:focus-visible { outline-offset: -3px; }
@@ -3073,8 +3120,8 @@ body.chat-expanded {
   color: var(--gold-600);
 }
 .spotlight__title {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   line-height: 1.18;
   letter-spacing: -0.015em;
   color: var(--forest-950);
@@ -3262,10 +3309,12 @@ body.chat-expanded {
 }
 
 .shop-launcher__head h2 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--forest-950);
+  /* The reference's "Home View": about 17px, semibold, near-black — a section
+     label, not a page title competing with the greeting above it. */
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
 .shop-launcher__grid {
@@ -3287,19 +3336,23 @@ body.chat-expanded {
      the way the reference stacks its "Home View" cards. A column of mark, name,
      pill made each card ~150px tall and left a third of it empty; this is the
      same three pieces in the space two lines need. */
-  grid-template-columns: 44px minmax(0, 1fr);
+  /* mark | text | badge, the reference's row. The text column takes the slack
+     so the badge always sits on the right edge. */
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
   grid-template-rows: auto auto;
-  column-gap: 10px;
-  row-gap: 2px;
+  column-gap: 8px;
+  row-gap: 1px;
   align-items: center;
   width: 100%;
   min-height: 44px;
-  padding: 12px;
+  padding: 10px 11px;
   /* A white tile on a pale page, the way the reference draws its "Home View"
      grid: white fill, hairline-or-nothing edge, a mark, a name. The heavy
      brown border and the drop shadow are gone, so the logo is the loudest
      thing in the tile instead of the box around it. */
-  border: 1px solid var(--border);
+  /* No outline: a white card on the grey sheet is the whole separation, as in
+     the reference. */
+  border: none;
   border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: none;
@@ -3334,17 +3387,19 @@ body.chat-expanded {
   align-items: center;
   justify-content: center;
   grid-row: 1 / span 2;
+  grid-column: 1;
+  align-self: center;
   aspect-ratio: 1 / 1;
   /* A small mark in the corner of the card, not the card's subject. 44px is
      the same footprint as the reference's card icons; the tenant's name below
      is the label, and the mark is there to recognise a shop at a glance. */
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   align-self: center;
-  padding: 7px;
+  padding: 5px;
   border-radius: var(--radius-sm);
   background: var(--surface-warm);
-  border: 1px solid var(--border);
+  border: none;
   overflow: hidden;
 }
 
@@ -3373,13 +3428,16 @@ body.chat-expanded {
    than being shrunk to fit one. "The Angelo SUPERSPAR" and "Golden Buffalo
    Spur" both wrap here. */
 .shop-tile__name {
-  grid-column: 2;
+  /* Full width of the card beside the mark, so a long tenant name is never cut
+     to "Golden Buffalo…" by the badge; the badge sits on the caption line. */
+  grid-column: 2 / span 2;
+  grid-row: 1;
   align-self: end;
   /* Two lines, left-aligned, no reserved height: the row heights come from the
      content, and the pill sits under the name. */
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--ink);
   overflow-wrap: break-word;
   /* Keep the name whole, and let a long one wrap to two lines. */
@@ -3397,10 +3455,35 @@ body.chat-expanded {
   color: var(--muted);
 }
 
+/* The row badge: solid dark green circle, white glyph — the reference's mark,
+   reused for state rather than decoration. Listing-only tenants get the same
+   shape in a quieter grey so the difference is readable at a glance. */
+.shop-tile__badge {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: center;
+  justify-self: end;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-900);
+  color: #fff;
+  flex: none;
+}
+.shop-tile__badge--info {
+  background: var(--surface-warm);
+  color: var(--muted);
+}
+
 /* Chat is the promise of this screen, so the shops that support it say so in
    the brand green; the ones that do not stay visibly quieter. */
 .shop-tile__meta--chat {
-  color: var(--forest-700);
+  /* Same grey caption as the reference gives every card; the badge on the row
+     above is what distinguishes an open sample chat from an information page,
+     so the caption does not need a second colour to say it again. */
+  color: var(--muted);
 }
 
 .shop-launcher__all {
@@ -3611,9 +3694,9 @@ body.chat-expanded {
   min-height: 34px;
   padding: 5px 12px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--forest-900);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
@@ -3622,7 +3705,7 @@ body.chat-expanded {
   transition: background-color var(--dur-fast) var(--ease-out);
 }
 .demo-drawer__summary::-webkit-details-marker { display: none; }
-.demo-drawer__summary:hover { background: var(--forest-50); }
+.demo-drawer__summary:hover { background: rgba(255, 255, 255, 0.18); }
 .demo-drawer__summary:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
 .demo-drawer__summary:active { transform: translateY(1px); }
 .demo-drawer__chevron { transition: transform var(--dur-fast) var(--ease-out); flex: none; }
@@ -3676,28 +3759,18 @@ body.chat-expanded {
 /* ---- 2. Chrome: one green bar at the top on every screen under 900px ---- */
 
 @media (max-width: 899px) {
-  /* One canvas everywhere: a cool, faintly green near-white. The dark green bar
-     that used to sit here read as a website's masthead, not as an app bar; the
-     reference app is white to the top edge, with its brand green reserved for
-     type, icons and the two dashboard cards. */
-  body { background: var(--bg); }
+  /* One canvas everywhere, and the brand green only on the app bar. */
+  body { background: var(--app-bar); }
 
   .app-header {
-    background: rgba(255, 255, 255, 0.88);
-    border-bottom: 1px solid var(--border);
+    background: var(--app-bar);
+    border-bottom: none;
     box-shadow: none;
   }
-  .brand__mark {
-    background: var(--forest-900);
-    box-shadow: none;
-  }
-  .brand__text strong { color: var(--forest-950); }
-  .brand__text small { color: var(--muted); }
-  .brand__chip {
-    background: var(--gold-100);
-    border-color: rgba(168, 132, 28, 0.28);
-    color: #6d5410;
-  }
+  .brand__mark { background: rgba(255, 255, 255, 0.16); box-shadow: none; }
+  .brand__text strong { color: #fff; }
+  .brand__text small { color: rgba(255, 255, 255, 0.72); }
+  .brand__chip { background: rgba(255, 255, 255, 0.18); color: #fff; border-color: transparent; }
 
   .app-footer { border-top: none; }
 }
@@ -3758,11 +3831,10 @@ body.chat-expanded {
   gap: 10px;
   min-height: 78px;
   padding: 12px 12px 12px 14px;
-  /* The reference's dashboard pair, drawn the way it draws them: a white card,
-     a hairline edge, no shadow, and a thin green ring for the icon. The mint
-     fill this had for one pass made the pair read as buttons; the ring is what
-     makes them read as readings, which is what they are. */
-  border: 1px solid var(--border);
+  /* The reference's dashboard pair: a white card on the grey sheet, no outline
+     and no shadow — the colour step is the edge — with the solid green badge
+     on the right. */
+  border: none;
   border-radius: var(--radius-md);
   background: var(--surface);
   color: var(--ink);
@@ -3772,14 +3844,17 @@ body.chat-expanded {
   transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
-.home-stat:hover { background: var(--surface); border-color: var(--border-strong); box-shadow: none; }
+.home-stat:hover { background: var(--surface); box-shadow: none; }
 .home-stat:active { transform: translateY(1px); box-shadow: none; background: var(--sage-50); }
 
 .home-stat__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .home-stat__label {
+  /* The reference's top cards read label first, then the value: a small grey
+     caption above a bold number, with the badge on the right. */
   font-size: 0.72rem;
   font-weight: 500;
   color: var(--muted);
+  order: 0;
 }
 .home-stat__value {
   font-size: 1.3rem;
@@ -3792,16 +3867,16 @@ body.chat-expanded {
 .home-stat__icon {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   flex: none;
   border-radius: var(--radius-pill);
-  /* The reference's signature mark: an unfilled circle with a 1.5px green
-     ring. Reused here — and on the shop tiles' status — rather than inventing
-     a second kind of badge. */
-  border: 1.5px solid var(--forest-700);
-  background: transparent;
-  color: var(--forest-700);
+  /* The reference's signature mark: a solid dark-green circle with a white
+     glyph inside. It appears on every card in that app, so it is the mark we
+     reuse — on these two cards and on every shop tile. */
+  border: none;
+  background: var(--forest-900);
+  color: #fff;
 }
 
 /* ---- 5. Cards: quieter edges, more air, app-sized radii ---- */
@@ -3842,25 +3917,29 @@ body.chat-expanded {
   grid-column: 2;
   align-self: start;
   justify-self: start;
-  /* No auto margin any more: the pill follows the name in the second row, so a
-     one-line and a two-line name both read from the top. */
+  /* A grey second line under the name, the way the reference labels every card
+     ("Sensors / 3 active"): the state is read as a caption, and the badge on
+     the right is the glanceable version of the same fact. */
   margin-top: 0;
-  padding: 1px 7px;
-  border-radius: var(--radius-pill);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  /* Spans the name's column and the badge's, so "Sample chat" is never cut to
+     "Sample c…" by the badge sitting beside it. */
+  grid-column: 2;
+  grid-row: 2;
   font-size: 0.68rem;
-  line-height: 1.5;
+  line-height: 1.35;
   /* One line always: "Sample chat" wrapped to "Sample / chat" in a 112px tile,
      which made every chat-capable tile taller than its neighbours. */
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: var(--sage-50);
-  color: var(--forest-800);
+  color: var(--muted);
 }
 .shop-tile__meta--chat {
-  background: var(--sage-50);
-  color: var(--forest-800);
+  color: var(--forest-700);
 }
 
 /* Section links read as "See more ›" text, not as a second row of buttons. */
@@ -3880,7 +3959,7 @@ body.chat-expanded {
   .home-stat { padding: 11px 10px 11px 12px; gap: 6px; }
   .home-stat__label { font-size: 0.72rem; white-space: nowrap; }
   .home-stat__value { font-size: 1.2rem; }
-  .home-stat__icon { width: 26px; height: 26px; }
+  .home-stat__icon { width: 24px; height: 24px; }
 }
 
 /* ---- 5b. The smallest phones (320-379px) ---- */
@@ -3895,18 +3974,18 @@ body.chat-expanded {
     gap: 8px;
   }
   .shop-tile {
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: 34px minmax(0, 1fr) 18px;
     padding: 10px 12px;
   }
-  .shop-tile__mark { width: 40px; height: 40px; padding: 6px; }
+  .shop-tile__mark { width: 34px; height: 34px; padding: 5px; }
   .shop-tile__name {
     font-size: 0.82rem;
     -webkit-line-clamp: 2;
     min-height: 0;
   }
   .shop-tile__meta {
-    padding: 1px 7px;
-    font-size: 0.68rem;
+    padding: 0;
+    font-size: 0.7rem;
   }
 }
 

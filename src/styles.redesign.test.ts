@@ -33,15 +33,16 @@ const mediaBlocks = (query: string): string[] =>
   );
 
 describe('display type', () => {
-  it('keeps the serif for page titles, and takes it off the Home greeting', () => {
+  it('sets every customer heading in the UI face, as the reference does', () => {
+    // The serif was the app's editorial voice. The reference is one geometric
+    // sans from its app bar to its tab labels, so the display face is now an
+    // unused escape hatch and no customer heading may reach for it.
     expect(css).toMatch(/--font-display:\s*[^;]*serif/);
-    expect(rule('.page-header__title')).toContain('font-family: var(--font-display)');
-    expect(rule('.spotlight__title')).toContain('font-family: var(--font-display)');
-    // Home's greeting is the reference's "Hello, Anna": a compact sans heading,
-    // not a serif masthead. Asserting the absence is deliberate — the serif
-    // drifting back onto the greeting is exactly what the reference comparison
-    // asked us to remove, and it would go unnoticed in review.
-    expect(rule('.home-hello__title')).not.toContain('font-family: var(--font-display)');
+    for (const selector of ['.page-header__title', '.home-hello__title', '.spotlight__title']) {
+      expect(rule(selector), `${selector} still uses the display face`).not.toContain(
+        'font-family: var(--font-display)',
+      );
+    }
   });
 
   it('keeps the body copy in the UI face', () => {
@@ -77,7 +78,8 @@ describe('home header block', () => {
   it('leaves the search field on the page rather than inside a dark card', () => {
     const search = rule('.hero__search');
     expect(search).toContain('background: var(--surface)');
-    expect(search).toContain('border: 1px solid var(--border-strong)');
+    // A rounded white field with no outline, the way the reference draws search.
+    expect(search).toContain('border: 1px solid transparent');
     // It used to carry a drop shadow because it floated on forest green; on a
     // pale page a shadow makes it look detached, so a border replaced it.
     expect(search).not.toContain('box-shadow: 0 2px 10px');

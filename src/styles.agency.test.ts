@@ -53,11 +53,15 @@ describe('app shell compaction', () => {
   });
 
   it('gives the desktop and phone navigations the same active treatment', () => {
-    // Same forest-100 pill behind the icon in both navs; the old desktop rule
-    // used a different wash, so "you are here" looked like two systems.
-    expect(css).toMatch(/\.bottom-nav \.nav-item--active \.nav-item__icon\s*\{[^}]*background: var\(--forest-100\)/s);
-    expect(css).toMatch(/\.top-nav \.nav-item--active \.nav-item__icon\s*\{[^}]*background: var\(--forest-100\)/s);
+    // Both navs mark "you are here" the same way: brand green on the glyph and
+    // the label, a heavier stroke, and no third kind of chip. The desktop nav
+    // sits on the green bar, so its mark is the translucent white pill the
+    // reference uses there; the phone bar is white, so its mark is the green
+    // text itself.
+    expect(css).toMatch(/\.bottom-nav \.nav-item--active \.nav-item__icon\s*\{[^}]*background: transparent/s);
+    expect(css).toMatch(/\.top-nav \.nav-item--active\s*\{[^}]*background: rgba\(255, 255, 255, 0\.16\)/s);
     expect(css).toMatch(/\.top-nav \.nav-item--active svg\s*\{\s*stroke-width: 2\.4;/);
+    expect(css).toMatch(/\.bottom-nav \.nav-item--active > span:last-child\s*\{[^}]*color: var\(--forest-900\)/s);
   });
 });
 

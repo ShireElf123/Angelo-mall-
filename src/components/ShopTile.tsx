@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Shop } from '../types';
 import { CATEGORY_MONOGRAM_GLYPH, shopLogoAsset } from '../data/shopLogos';
 import { CategoryGlyph } from './ShopLogo';
+import { Check, Info } from 'lucide-react';
 
 /**
  * A shop as a large, tappable app tile.
@@ -91,6 +92,19 @@ export function ShopTile({
           and "Chat" would promise a line that is not open. */}
       <span className={`shop-tile__meta ${supportsChat ? 'shop-tile__meta--chat' : ''}`}>
         {supportsChat ? 'Sample chat' : 'View info'}
+      </span>
+      {/*
+        The reference badges every card in its row with a solid green circle.
+        Ours carries the same two-state fact the caption says — a check for a
+        shop whose sample chat is open, an info mark for one that opens its
+        information page — so the badge is never decorative and never claims a
+        chat the shop does not have.
+      */}
+      <span
+        className={`shop-tile__badge ${supportsChat ? '' : 'shop-tile__badge--info'}`}
+        aria-hidden
+      >
+        {supportsChat ? <Check size={13} strokeWidth={3} /> : <Info size={12} strokeWidth={2.6} />}
       </span>
     </button>
   );

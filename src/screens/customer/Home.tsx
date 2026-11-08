@@ -4,6 +4,7 @@ import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../../utils/responsiveImages';
 import {
   ArrowRight,
   Bike,
+  ChevronRight,
   ClipboardList,
   MessagesSquare,
   Search,
@@ -196,8 +197,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </span>
         </h1>
         <p className="home-hello__lede">
-          Chat to mall shops — order without the catalogue hunt. Real mall tenants; every chat and price here is
-          simulated.
+          Chat to mall shops — real mall tenants, every chat and price simulated.
         </p>
         <form className="hero__search" onSubmit={submitSearch} role="search">
           <span className="hero__search-field">
@@ -289,7 +289,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
                 the tiles. The prominent "Browse all" control stays at the foot
                 of the section, where the tiles run out. */}
             <button type="button" className="shop-launcher__more" onClick={() => navigate({ name: 'shops' })}>
-              See more <ArrowRight size={14} aria-hidden />
+              See more <ChevronRight size={13} aria-hidden strokeWidth={2.5} />
             </button>
           </div>
           <ul className="shop-launcher__grid">

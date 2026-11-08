@@ -27,6 +27,10 @@ const rule = (selector: string): string => {
   return blocks.join('\n');
 };
 
+/** A custom property's value, from the first `:root` block that declares it. */
+const token = (name: string): string =>
+  css.match(new RegExp(`${name}:\\s*([^;]+);`))?.[1].trim() ?? '';
+
 /** Every media block with this exact query, concatenated in source order. */
 const media = (query: string): string =>
   [
@@ -44,22 +48,26 @@ describe('phone shell', () => {
     expect(rule('.hero')).toBe('');
     expect(rule('.hero__aside')).toBe('');
     const phone = media('(max-width: 899px)');
-    expect(phone).toMatch(/\.app-header\s*\{[^}]*rgba\(255, 255, 255/s);
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*background: var\(--app-bar\)/s);
   });
 
-  it('gives the app header a white bar with a hairline, not a green band', () => {
-    // The dark green bar was the biggest remaining difference from the
-    // reference, which is white to the top edge. It is also the reason the
-    // screen said "website masthead" before it said "app". The green is still
-    // the brand's, but it lives in type, icons and the tab pill.
+  it('gives the app header the reference\'s green bar, with white type', () => {
+    // The reference's bar is a solid moss green with a white wordmark, and the
+    // grey content sheet tucks in under it with rounded top corners. That
+    // silhouette — green band, rounded sheet — is the thing that reads as this
+    // app at a glance, so both halves are pinned here together.
     const phone = media('(max-width: 899px)');
-    expect(phone).toMatch(/\.app-header\s*\{[^}]*border-bottom: 1px solid var\(--border\)/s);
-    expect(phone).not.toMatch(/\.app-header\s*\{[^}]*var\(--forest-900\)/s);
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*background: var\(--app-bar\)/s);
+    expect(phone).toMatch(/\.brand__text strong\s*\{\s*color: #fff;/s);
+    expect(token('--app-bar')).toMatch(/^#[0-9a-f]{6}$/);
+    expect(rule('.shell-main')).toContain('border-radius: 20px 20px 0 0');
   });
 
-  it('keeps the demo strip light, so a phone does not open on two dark slabs', () => {
-    expect(rule('.demo-bar')).toContain('background: var(--surface)');
-    expect(rule('.demo-bar')).toContain('border-bottom: 1px solid var(--border)');
+  it('keeps the demo strip on that same green band', () => {
+    // One band, not two: the notice and the app bar share the colour so the top
+    // of the screen is a single surface down to the sheet's corners.
+    expect(rule('.demo-bar')).toContain('background: var(--app-bar)');
+    expect(rule('.demo-bar')).toContain('border-bottom: 1px solid rgba(255, 255, 255, 0.12)');
     expect(rule('.demo-bar')).not.toContain('var(--forest-950)');
   });
 
@@ -107,39 +115,45 @@ describe('smallest phones', () => {
   });
 });
 
-describe('reference parity — flat white surfaces', () => {
+describe('reference parity — the reference\'s own surfaces', () => {
   /**
-   * The owner compared the app against the reference and asked why it did not
-   * look like it. The answer was warm cream page + brown hairline + a shadowed
-   * card on every surface: the reference is a white page, white cards and one
-   * green accent. These pin that decision so it cannot drift back.
+   * The owner compared the app against the reference twice and both times the
+   * gap was surface, not layout: first a warm cream page with brown hairlines,
+   * then a white page whose cards were outlined like form fields. The reference
+   * is a grey sheet (#f3f5f7, sampled from the mock) with outline-free white
+   * cards on it, one solid green badge per row, and a green app bar. These pin
+   * that, because every one of those decisions can be undone by one CSS edit.
    */
-  it('paints the page a cool off-white and cards pure white', () => {
+  it('paints the sheet the reference\'s grey and the cards pure white', () => {
     const page = css.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
-    expect(page).toMatch(/--bg:\s*#f2f5f2/);
+    expect(page).toMatch(/--bg:\s*#f3f5f7/);
     expect(page).toMatch(/--surface:\s*#ffffff/);
-    // The warm cream and its brown border were the whole mismatch.
+    expect(page).toMatch(/--app-bar:\s*#[0-9a-f]{6}/);
+    // Neither of the two rejected palettes may come back.
     expect(page).not.toMatch(/--bg:\s*#f4eee2/);
-    expect(page).not.toMatch(/--border:\s*#d5c9ae/);
+    expect(page).not.toMatch(/--bg:\s*#f2f5f2/);
   });
 
-  it('draws the shop tile as a flat row: a 44px mark beside the name', () => {
+  it('draws the shop tile as an outline-free row with a badge', () => {
     const tile = rule('.shop-tile');
-    expect(tile).toContain('grid-template-columns: 44px minmax(0, 1fr)');
     expect(tile).toContain('box-shadow: none');
-    expect(rule('.shop-tile__mark')).toContain('width: 44px');
+    expect(tile).toContain('border: none');
+    expect(tile).toContain('grid-template-columns: 32px minmax(0, 1fr) 18px');
+    expect(rule('.shop-tile__mark')).toContain('width: 32px');
+    expect(rule('.shop-tile__badge')).toContain('background: var(--forest-900)');
     // The fallback mark is a tint of the tenant colour with the glyph in the
     // colour itself — set inline by ShopTile — so the glyph must follow the
     // text colour rather than being hard-coded white.
     expect(rule('.shop-tile__glyph')).toContain('stroke: currentColor');
   });
 
-  it('marks the two activity cards with a ring, not a filled tint', () => {
+  it('marks the activity cards with the reference\'s solid green badge', () => {
     const card = rule('.home-stat');
     expect(card).toContain('background: var(--surface)');
-    expect(card).toContain('border: 1px solid var(--border)');
-    expect(rule('.home-stat__icon')).toContain('border: 1.5px solid var(--forest-700)');
-    expect(rule('.home-stat__icon')).toContain('background: transparent');
+    // No outline: the white card on the grey sheet is the whole separation.
+    expect(card).toContain('border: none');
+    expect(rule('.home-stat__icon')).toContain('background: var(--forest-900)');
+    expect(rule('.home-stat__icon')).toContain('color: #fff');
   });
 
   it('offers a quiet "See more" on the launcher rather than only a large button', () => {
