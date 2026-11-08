@@ -36,13 +36,15 @@ const media = (query: string): string =>
     .join('\n');
 
 describe('phone shell', () => {
-  it('turns the phone hero into a light card instead of a dark slab', () => {
-    // Two dark blocks stacked (bar + hero) was the "web page" tell. The hero
-    // takes the card surface below 900px and regains the forest plate above it.
+  it('opens on a greeting on the page, with no hero plate at all', () => {
+    // The owner asked for the poster to go after comparing the app with a
+    // reference that opens on a greeting. Two dark blocks stacked (bar + hero)
+    // was the "web page" tell; there is now no second block at all.
+    expect(rule('.home-hello')).not.toBe('');
+    expect(rule('.hero')).toBe('');
+    expect(rule('.hero__aside')).toBe('');
     const phone = media('(max-width: 899px)');
-    expect(phone).not.toBe('');
-    expect(phone).toMatch(/\.hero\s*\{\s*background: var\(--surface\);/s);
-    expect(rule('.hero')).toContain('background: var(--forest-950)');
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*var\(--forest-900\)/s);
   });
 
   it('gives the app header the brand green rather than a light bar', () => {
@@ -78,11 +80,11 @@ describe('activity cards', () => {
 });
 
 describe('smallest phones', () => {
-  it('uses two shop columns at 320-379px so names and labels stay whole', () => {
-    const small = media('(max-width: 379px)');
-    expect(small).toMatch(/\.shop-launcher__grid\s*\{[^}]*repeat\(2, minmax\(0, 1fr\)\)/s);
-    // Three columns left ~86px per tile, which broke "SUPERSPAR" mid-word.
-    expect(rule('.shop-launcher__grid')).toContain('repeat(3, minmax(0, 1fr))');
+  it('uses two shop columns on a phone so names and labels stay whole', () => {
+    // Two-up everywhere on a phone, like the reference's "Home View". Three
+    // columns at 390px broke "SUPERSPAR" mid-word and truncated "Sample chat".
+    expect(rule('.shop-launcher__grid')).toContain('repeat(2, minmax(0, 1fr))');
+    expect(media('(max-width: 379px)')).toMatch(/\.shop-launcher__grid\s*\{[^}]*repeat\(2, minmax\(0, 1fr\)\)/s);
   });
 
   it('stacks a section header rather than wrapping its title and link', () => {

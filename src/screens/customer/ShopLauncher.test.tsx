@@ -143,11 +143,13 @@ describe('the honest disclosures survive the redesign', () => {
     expect(container.textContent).toMatch(/simulated/i);
   });
 
-  it('keeps the concept-art label on the hero art', () => {
+  it('keeps the simulated-chat warning where the greening header used to be', () => {
+    // Home no longer has a hero poster, so the concept-art chip moved off this
+    // screen with the artwork. The disclosure that has to survive here is the
+    // one about the chats and prices, and it now sits in the greeting block.
     const { container } = wrap();
-    const chip = container.querySelector('.hero__aside-chip');
-    expect(chip?.textContent ?? '').toMatch(/concept art/i);
-    expect(chip?.textContent ?? '').toMatch(/not a photo/i);
+    expect(container.querySelector('.home-hello__lede')?.textContent).toMatch(/simulated/i);
+    expect(container.querySelector('.hero__aside-chip')).toBeNull();
   });
 
   it('still puts a returning customer back into their chats and orders', () => {

@@ -52,9 +52,12 @@
      ink over 24-44px at 12-18% alpha behind a -12px/-16px negative spread, so
      almost nothing landed where the card meets the page. If a shadow cannot be
      seen on a phone in daylight it is decoration, not elevation. */
-  --elev-1: 0 1px 2px rgba(12, 59, 46, 0.1), 0 1px 1px rgba(12, 59, 46, 0.06);
-  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.12), 0 4px 10px -2px rgba(12, 59, 46, 0.14);
-  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.14), 0 10px 24px -6px rgba(12, 59, 46, 0.22);
+  /* Flattened: the reference design lets a 1px border and the page tint carry
+     depth, with almost no shadow. Level 1 is now a hint, level 2 is the most a
+     card ever casts, and only dialogs get real distance (level 4). */
+  --elev-1: 0 1px 1px rgba(12, 59, 46, 0.05);
+  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.06), 0 2px 6px -2px rgba(12, 59, 46, 0.08);
+  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.08), 0 8px 18px -8px rgba(12, 59, 46, 0.14);
   --elev-4: 0 8px 20px -6px rgba(7, 35, 27, 0.3), 0 28px 60px -20px rgba(7, 35, 27, 0.42);
   --elev-nav: 0 -8px 24px -10px rgba(12, 59, 46, 0.3);
   /* The shadow a control collapses to while it is being pressed. */
@@ -913,72 +916,77 @@ label input[type='text'], label input:not([type]), label textarea, label select,
 
 /* ---------------- Hero & home ---------------- */
 
-/* Bundle 3 — the hero is a card, not a photograph with a gradient over it.
-   The old hero painted the mall photograph edge to edge and covered 80% of it
-   with a dark scrim so the copy stayed readable, which meant the artwork was
-   both the loudest element and the least visible one. Now the photograph keeps
-   its own panel and its own crop, and the words sit on solid forest green. */
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  background: var(--forest-950);
-  color: #fff;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  isolation: isolate;
-  box-shadow: var(--elev-3);
+/* ---------------- Home greeting (replaces the hero poster) ----------------
+
+   The home screen used to open on a dark green card with the mall photograph,
+   a four-line serif headline, a lede and a search pill — a poster. The owner
+   compared the app with a reference design that opens on a greeting and two
+   cards, and asked for the poster to go.
+
+   So there is no hero on Home any more: no artwork, no dark plate, no scrim to
+   manage. What is left is the part that was doing the work — a name, the
+   product's own line, one honest sentence, and search — set on the page rather
+   than inside a card, the way an app's dashboard header sits. */
+
+.home-top { display: flex; flex-direction: column; gap: 18px; }
+
+.home-hello {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 2px 0;
 }
-.hero__aside { position: relative; order: -1; min-height: 168px; background: var(--forest-900); }
-.hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero__aside-chip {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  z-index: 2;
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  background: rgba(7, 35, 27, 0.78);
-  color: #f4f7f4;
-  font-size: 0.68rem;
+.home-hello__greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--gold-600);
 }
-.hero__content { padding: 20px 18px 22px; color: #fff; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.hero__kicker {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #f6d97b;
-}
-/* The one place the display serif carries a full sentence: a headline is a
-   headline, and the app reads as a shop rather than a dashboard. */
-.hero h1 {
+.home-hello__title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 2.6rem);
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.1rem);
   font-weight: 800;
-  line-height: 1.07;
+  line-height: 1.1;
   letter-spacing: -0.02em;
+  color: var(--forest-950);
   text-wrap: balance;
-  max-width: 22ch;
 }
-.hero__lede { color: #cfe2d7; font-size: 0.95rem; line-height: 1.5; max-width: 46ch; }
+.home-hello__lede {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+.home-hello .hero__search { margin-top: 4px; }
 
+/* The search field is a filled well on the page — the reference puts its search
+   inside the first card; we keep it as the one interactive control in the
+   header block, with a border instead of a shadow so it does not float. */
 .hero__search {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #fff;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
-  padding: 5px 5px 5px 16px;
+  padding: 5px 5px 5px 14px;
   color: var(--muted);
-  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
   max-width: 560px;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.hero__search:focus-within {
+  border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(20, 101, 77, 0.16);
 }
 .hero__search-field { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
 .hero__search input { flex: 1; min-width: 0; border: none; background: none; min-height: 42px; font-size: 1rem; }
 .hero__search input:focus { outline: none; }
 
-.hero__results { background: rgba(255, 255, 255, 0.97); color: var(--ink); border-radius: var(--radius-md); padding: 8px; }
+.hero__results { background: var(--surface); border: 1px solid var(--border); color: var(--ink); border-radius: var(--radius-md); padding: 8px; }
 .hero__results p { padding: 8px; font-size: 0.9rem; color: var(--ink-2); }
 .hero__results li button {
   display: flex; align-items: center; gap: 11px;
@@ -2838,8 +2846,7 @@ body.chat-expanded {
    must not participate in layout: the media images are absolutely positioned
    (`inset: 0`) inside their frame and a wrapper would collapse that. */
 .shop-card__media picture,
-.shop-hero__media picture,
-.hero picture { display: contents; }
+.shop-hero__media picture { display: contents; }
 
 
 /* ==========================================================================
@@ -2862,10 +2869,6 @@ body.chat-expanded {
   .shop-card__body { padding: var(--space-3); }
   .search-field { padding-left: var(--space-3); }
   .results-count { font-size: 0.84rem; }
-  /* Bundle 3: the hero card has to fit a 320px screen without a lateral
-     scroll, so the photograph band and the copy padding give up space. */
-  .hero__content { padding: 18px 14px 20px; gap: 10px; }
-  .hero__aside { min-height: 148px; }
   .need-grid { gap: 8px; }
   .category-grid { grid-auto-columns: 82px; }
 }
@@ -3094,21 +3097,6 @@ body.chat-expanded {
   .shop-card:hover .shop-card__media img { transform: scale(1.03); }
 }
 
-/* ---------------- Hero: desktop composition ---------------- */
-
-/* Placed last on purpose: the shared 640px block earlier in the sheet also
-   touches `.hero__content`, and a media query does not win by being narrower —
-   it wins by coming later. */
-@media (min-width: 640px) and (max-width: 779px) {
-  /* Still one column, but no longer a phone: give the words more room. */
-  .hero__content { padding: 26px 24px; }
-}
-@media (min-width: 780px) {
-  .hero { grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); }
-  .hero__aside { order: 0; min-height: 0; }
-  .hero__content { padding: 34px 32px; gap: 14px; }
-}
-
 /* ==========================================================================
    Phase 2 — mobile app shell and checkout
    ========================================================================== */
@@ -3241,8 +3229,12 @@ body.chat-expanded {
 
 .shop-launcher__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  /* Two-up on a phone, like the reference's "Home View": two shops per row,
+     each with a big mark, the whole name and its status. Three columns at
+     390px left ~112px a tile, which is where names and labels started being
+     truncated. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -3269,7 +3261,7 @@ body.chat-expanded {
 }
 
 .shop-tile:hover {
-  border-color: var(--border-strong);
+  border-color: var(--forest-700);
   box-shadow: var(--elev-2);
 }
 
@@ -3291,9 +3283,14 @@ body.chat-expanded {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  width: 100%;
-  padding: 14%;
-  border-radius: var(--radius-sm);
+  /* Two-up makes the column wide, and a full-width square mark would make each
+     tile 170px of logo. A 104px square keeps the mark large and the row
+     compact, and every tile stays the same height. */
+  width: 88px;
+  height: 88px;
+  align-self: center;
+  padding: 11%;
+  border-radius: var(--radius-md);
   background: var(--surface-warm);
   overflow: hidden;
 }
@@ -3358,6 +3355,15 @@ body.chat-expanded {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
   }
+  /* Four columns on a tablet make each cell ~230px wide; a mark that filled it
+     would turn the launcher into four giant squares. The well keeps its square
+     ratio but stops growing at 132px, so the row still reads as tiles. */
+  .shop-tile__mark {
+    width: 100%;
+    max-width: 132px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
   .shop-tile__name {
     font-size: 0.92rem;
   }
@@ -3375,64 +3381,6 @@ body.chat-expanded {
 @media (min-width: 900px) {
   .shop-tile__mark {
     padding: 18%;
-  }
-}
-
-/* ==========================================================================
-   Home hero — reduced dominance on a phone
-   --------------------------------------------------------------------------
-   The hero is the brand moment, not the product. At 390px its artwork alone was
-   168px of the first viewport and its copy ran to four lines, so the whole first
-   screen was introduction and the shop launcher sat below the fold.
-
-   On a narrow screen the artwork becomes a slim banner (a third shorter), the
-   headline tightens, and the search field gets its own full-width row with the
-   button beneath it — which also stops the placeholder being clipped behind the
-   button, as it was at 390px ("Search shops or a n…"). Above 560px the hero
-   returns to its original proportions, unchanged.
-   ========================================================================== */
-@media (max-width: 559px) {
-  .hero__aside {
-    min-height: 92px;
-    max-height: 104px;
-  }
-  .hero__content {
-    padding: 14px 14px 16px;
-    gap: 9px;
-  }
-  .hero h1 {
-    font-size: clamp(1.42rem, 1.1rem + 2vw, 1.75rem);
-    line-height: 1.1;
-    max-width: 22ch;
-  }
-  .hero__lede {
-    font-size: 0.92rem;
-    line-height: 1.45;
-  }
-  /* Search: the field gets its own row and the button sits full width beneath
-     it. Wrapping the *pill* itself was the wrong move — a 999px radius on a
-     two-row box turns into a white blob and the icon detaches from the input.
-     As a column the box takes a normal card radius, and the field keeps its own
-     pill, so it reads as a search field with a button under it. */
-  .hero__search {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding: 8px;
-    border-radius: var(--radius-md);
-    max-width: none;
-  }
-  .hero__search-field {
-    padding: 0 8px;
-    border-radius: var(--radius-pill);
-    background: var(--surface-warm);
-    min-height: 46px;
-  }
-  .hero__search input {
-    min-height: 44px;
-  }
-  .hero__search .btn {
-    min-height: 46px;
   }
 }
 
@@ -3497,14 +3445,6 @@ body.chat-expanded {
     text-overflow: ellipsis;
     white-space: nowrap;
     justify-content: center;
-  }
-  /* The concept-art chip is a disclosure, so it stays — just quieter, so it
-     stops taking two lines of the hero banner. */
-  .hero__aside-chip {
-    font-size: 0.62rem;
-    left: 8px;
-    bottom: 8px;
-    max-width: calc(100% - 16px);
   }
 }
 
@@ -3702,43 +3642,9 @@ body.chat-expanded {
   .app-footer { border-top: none; }
 }
 
-/* ---- 3. Phone hero: a light card under a dark bar, not a second slab ---- */
-
-@media (max-width: 899px) {
-  .hero {
-    background: var(--surface);
-    color: var(--ink);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--elev-2);
-  }
-  .hero__aside { background: var(--surface-warm); }
-  .hero h1 { color: var(--forest-950); }
-  .hero__kicker { color: var(--gold-600); }
-  .hero__lede { color: var(--ink-2); }
-  /* The search field is a filled well in the card, as on the reference
-     dashboard, instead of a white pill inside a white card. */
-  .hero__search {
-    background: var(--forest-50);
-    box-shadow: none;
-    border: 1px solid var(--border);
-  }
-  .hero__aside-chip { background: rgba(7, 35, 27, 0.82); }
-}
-
-/* On a phone the hero is trimmed to a banner above the shops, not a poster
-   above them. Measured at 390px the untrimmed card ran to 400px and pushed the
-   launcher tiles half under the bottom bar; a 72px banner, a tighter headline,
-   a one-line lede and the search on a single row give the shops the screen. */
+/* The header block's search sits on one row on a phone: the field is the
+   flexible child, so a long placeholder ellipsises inside its own box. */
 @media (max-width: 559px) {
-  .hero__aside { min-height: 72px; max-height: 78px; }
-  .hero__content { padding: 12px 13px 13px; gap: 7px; }
-  .hero__kicker { font-size: 0.7rem; }
-  .hero h1 {
-    font-size: 1.3rem;
-    line-height: 1.12;
-    max-width: none;
-  }
-  .hero__lede { font-size: 0.84rem; line-height: 1.4; }
   /* Search on one row again: the field keeps its pill and the button sits
      inside it. This is safe now because the field is the flexible child, so a
      long placeholder ellipsises inside its own box instead of sliding under the
@@ -3754,9 +3660,26 @@ body.chat-expanded {
   .hero__search-field { padding: 0; background: none; min-height: 0; }
   .hero__search input { min-height: 40px; font-size: 0.95rem; }
   .hero__search .btn { min-height: 40px; padding: 8px 15px; font-size: 0.9rem; }
-  /* The concept-art label is a disclosure, so it stays — but a 72px banner does
-     not need a two-line chip in the corner. */
-  .hero__aside-chip { font-size: 0.58rem; padding: 2px 7px; }
+}
+
+/* A wide screen has room for the greeting and the two cards side by side, so the
+   header block is not a 1,200px-wide strip of mostly empty card. */
+@media (min-width: 900px) {
+  .home-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: 28px;
+    align-items: center;
+  }
+  .home-hello__title { font-size: 2.35rem; }
+  .home-hello .hero__search { max-width: 520px; }
+  .home-stat { min-height: 104px; }
+}
+
+/* On a tablet two cards across the full 768px leave each one three-quarters
+   empty; the pair keeps its size and the row stays left-aligned. */
+@media (max-width: 899px) {
+  .home-stat-grid { max-width: 620px; }
 }
 
 /* ---- 4. Two-up stat cards (the reference's dashboard top row) ---- */
@@ -3770,6 +3693,7 @@ body.chat-expanded {
 .home-stat {
   display: flex;
   flex-direction: row;
+  box-shadow: none;
   align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
@@ -3823,8 +3747,11 @@ body.chat-expanded {
 
 .shop-tile {
   border-radius: var(--radius);
-  padding: 8px 8px 11px;
-  gap: 9px;
+  padding: 12px 10px 11px;
+  gap: 7px;
+  /* Flattened: one hairline and the page tint, no floating card. */
+  box-shadow: none;
+  border-color: var(--border-strong);
   /* Fill the grid cell, so every tile in a row is the same height and the
      status pills share one baseline whether the name is one line or three. */
   height: 100%;
@@ -3955,18 +3882,9 @@ body.chat-expanded {
   }
 }
 
-/* ---- 5e. Tablet: the hero art goes back beside the copy ------------------
-   Between 560px and 899px the hero still stacked, so at 768px a full-width
-   mall photograph sat above four lines of headline and pushed the shop tiles
-   to the fold — the same problem the phone pass solved, one breakpoint up. */
+/* ---- 5e. Tablet: the greeting block breathes --------------------------- */
 @media (min-width: 560px) and (max-width: 899px) {
-  .hero {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    align-items: stretch;
-  }
-  .hero__aside { order: 0; min-height: 0; }
-  .hero__content { padding: 20px 20px 22px; justify-content: center; }
-  .hero h1 { font-size: 2rem; }
+  .home-hello__title { font-size: 2rem; }
   .hero__search { max-width: none; }
 }
 

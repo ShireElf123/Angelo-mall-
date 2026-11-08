@@ -66,22 +66,32 @@ describe('home — activity cards', () => {
 });
 
 describe('home — composition after the app pass', () => {
-  it('still opens on the shops, with one way into the directory', () => {
+  it('reads greeting, then activity cards, then shops', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    const launcher = container.querySelector('.shop-launcher');
+    const hello = container.querySelector('.home-hello');
     const stats = container.querySelector('.home-stat-grid');
-    expect(launcher).not.toBeNull();
+    const launcher = container.querySelector('.shop-launcher');
+    expect(hello).not.toBeNull();
     expect(stats).not.toBeNull();
-    // The launcher is the point of the screen, so it precedes the activity
-    // cards: see the shops, then see where you left off.
-    expect(launcher!.compareDocumentPosition(stats!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(launcher).not.toBeNull();
+
+    // The reference order the owner asked for: who you are, then two numbers,
+    // then the shops. The shops are still the largest thing on the screen and
+    // the only single way into the directory.
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(follows(hello!, stats!), 'activity cards must follow the greeting').toBe(true);
+    expect(follows(stats!, launcher!), 'shops must follow the activity cards').toBe(true);
     expect(screen.getByRole('button', { name: /Browse all \d+ shops/i })).toBeTruthy();
   });
 
   it('keeps the simulated-chat disclosure on the screen', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    expect(container.textContent).toMatch(/Chats and prices here are simulated/i);
-    expect(container.querySelector('.hero__aside-chip')?.textContent).toMatch(/not a photo/i);
+    // Home carries no artwork any more, so the concept-art chip is gone with
+    // it — but the sentence that the chats and prices are simulated stays, and
+    // it is now the greeting block's lede.
+    expect(container.querySelector('.home-hello__lede')?.textContent).toMatch(/simulated/i);
+    expect(container.querySelector('.hero__aside-chip')).toBeNull();
   });
 });
 

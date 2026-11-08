@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { ResponsiveImage } from '../../components/ResponsiveImage';
-import { CARD_IMAGE_SIZES, HOME_HERO_SRC, HOME_HERO_SRCSET, webpSrcSetFor } from '../../utils/responsiveImages';
+import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../../utils/responsiveImages';
 import {
   ArrowRight,
   Bike,
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/seed';
 import { NEED_SHORTCUTS, imageSrc } from '../../data/imageAssets';
+import { DEMO_CUSTOMER } from '../../types';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
 import {
@@ -45,11 +46,16 @@ const CATEGORY_ICONS: Record<string, string> = {
  *
  * One journey: open the app, see shops, tap a shop, start talking.
  *
- * The screen therefore opens on a deliberately short hero — the brand, one
- * sentence on what this is, and search — and then goes straight to the shop
- * launcher. Everything else (where you left off, categories, the walkthrough,
- * promotions, how it works) is kept, in full, *below* that, because none of it
- * is the first thing a customer wants to do.
+ * The screen therefore opens on a greeting — a name, one sentence on what this
+ * is, and search — then two activity cards, then the shop launcher. Everything
+ * else (where you left off, categories, the walkthrough, promotions, how it
+ * works) is kept, in full, *below* that, because none of it is the first thing
+ * a customer wants to do.
+ *
+ * There is no hero banner. The owner compared the app with a reference design
+ * that opens straight on a greeting and two cards, and asked for the poster to
+ * go; the product line survives as the `h1` and the supporting sentence, so the
+ * screen still says what this is before anything else.
  *
  * That ordering is the redesign. The previous version opened with a hero that
  * filled a whole phone screen — artwork, a four-line explanation, search and two
@@ -162,38 +168,48 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
 
   return (
     <div className="page page--home">
-      <section className="hero" aria-labelledby="home-title">
-        <div className="hero__content">
-          <span className="hero__kicker">
-            <Sparkles size={14} aria-hidden /> Angelo Mall · Nigel · demo
+      {/*
+        Greeting header, not a hero poster.
+
+        The reference app opens on "Hello, Anna" and two cards — no banner. The
+        owner asked for that, so the mall photograph, the dark plate and the
+        four-line headline are gone: the first screen is a name, one honest
+        sentence and the search field.
+
+        The `h1` keeps the product's own words ("Chat to mall shops"), because
+        that is what has to land in the first two seconds, and it stays the one
+        heading on the screen so heading navigation still lands here.
+      */}
+      <div className="home-top">
+      <section className="home-hello" aria-labelledby="home-title">
+        <p className="home-hello__greeting">
+          <Sparkles size={14} aria-hidden /> Hello, {DEMO_CUSTOMER.name.split(' ')[0]} · demo
+        </p>
+        <h1 id="home-title" className="home-hello__title">
+          Chat to mall shops.
+        </h1>
+        <p className="home-hello__lede">
+          Order without the catalogue hunt. Real mall tenants — chats and prices here are simulated.
+        </p>
+        <form className="hero__search" onSubmit={submitSearch} role="search">
+          <span className="hero__search-field">
+            <Search size={20} aria-hidden />
+            <label className="visually-hidden" htmlFor="home-search">
+              Search shops or things you need
+            </label>
+            <input
+              id="home-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search shops or a need…"
+              autoComplete="off"
+            />
           </span>
-          <h1 id="home-title">Chat to mall shops. Order without the catalogue hunt.</h1>
-          {/* Kept short on purpose: one honest sentence, not a paragraph. The
-              full explanation lives on the shop and chat screens, where it is
-              relevant, and in Help. */}
-          <p className="hero__lede">Real mall tenants. Chats and prices here are simulated.</p>
-          <form className="hero__search" onSubmit={submitSearch} role="search">
-            {/* The icon and input share a field so the icon can never drift away
-                from the text when the form wraps, which is what happened when
-                the pill was allowed to wrap at 390px. */}
-            <span className="hero__search-field">
-              <Search size={20} aria-hidden />
-              <label className="visually-hidden" htmlFor="home-search">
-                Search shops or things you need
-              </label>
-              <input
-                id="home-search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search shops or a need…"
-                autoComplete="off"
-              />
-            </span>
-            <button type="submit" className="btn btn--gold">
-              Search
-            </button>
-          </form>
-          {query.trim() && (
+          <button type="submit" className="btn btn--gold">
+            Search
+          </button>
+        </form>
+        {query.trim() && (
             <div className="hero__results" aria-live="polite">
               {searchResults.length === 0 ? (
                 <div className="hero__no-match">
@@ -221,51 +237,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               )}
             </div>
           )}
-        </div>
-        <div className="hero__aside">
-          <ResponsiveImage
-            src={HOME_HERO_SRC}
-            webpSrcSet={HOME_HERO_SRCSET}
-            sizes="(min-width: 780px) 45vw, 100vw"
-            alt=""
-            className="hero__img"
-            width={1408}
-            height={768}
-            fetchPriority="high"
-          />
-          {/* The hero image is generated concept art, not a photograph of the
-              mall — it carries the same label as the tenant artwork so the two
-              can never be confused for real photography. */}
-          <span className="hero__aside-chip">Concept art · not a photo of the mall</span>
-        </div>
       </section>
-
-      {/* The shop launcher comes first, directly under the hero: open the app,
-          see shops, tap one. It is the main action on this screen. */}
-      {launcher.length > 0 && (
-        <section className="shop-launcher" aria-labelledby="launcher-title">
-          <div className="shop-launcher__head">
-            <h2 id="launcher-title">Shops</h2>
-            <p className="shop-launcher__hint">Tap a shop to start chatting</p>
-          </div>
-          <ul className="shop-launcher__grid">
-            {launcher.map((shop) => (
-              <li key={shop.id}>
-                <ShopTile
-                  shop={shop}
-                  supportsChat={supportsChat(shop.id)}
-                  onOpen={(picked) => void openShop(picked.id)}
-                />
-              </li>
-            ))}
-          </ul>
-          <div className="shop-launcher__all">
-            <button type="button" className="btn btn--primary btn--lg" onClick={() => navigate({ name: 'shops' })}>
-              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
-            </button>
-          </div>
-        </section>
-      )}
 
       {/*
         Two-up stat cards, the way the reference dashboard opens under its
@@ -295,6 +267,35 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </span>
         </button>
       </section>
+      </div>
+
+      {/* Shops come immediately after the greeting and the two activity cards —
+          open the app, see shops, tap one. It is the main action on this
+          screen, and now it is the first thing after the header block. */}
+      {launcher.length > 0 && (
+        <section className="shop-launcher" aria-labelledby="launcher-title">
+          <div className="shop-launcher__head">
+            <h2 id="launcher-title">Shops</h2>
+            <p className="shop-launcher__hint">Tap a shop to start chatting</p>
+          </div>
+          <ul className="shop-launcher__grid">
+            {launcher.map((shop) => (
+              <li key={shop.id}>
+                <ShopTile
+                  shop={shop}
+                  supportsChat={supportsChat(shop.id)}
+                  onOpen={(picked) => void openShop(picked.id)}
+                />
+              </li>
+            ))}
+          </ul>
+          <div className="shop-launcher__all">
+            <button type="button" className="btn btn--primary btn--lg" onClick={() => navigate({ name: 'shops' })}>
+              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
+            </button>
+          </div>
+        </section>
+      )}
 
       {conversations.length === 0 && activeOrders.length === 0 && (
         <section className="welcome-card" aria-label="New here?">

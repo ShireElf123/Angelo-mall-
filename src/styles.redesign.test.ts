@@ -35,7 +35,7 @@ const mediaBlocks = (query: string): string[] =>
 describe('display type', () => {
   it('declares one display face for the customer headlines', () => {
     expect(css).toMatch(/--font-display:\s*[^;]*serif/);
-    expect(rule('.hero h1')).toContain('font-family: var(--font-display)');
+    expect(rule('.home-hello__title')).toContain('font-family: var(--font-display)');
     expect(rule('.page-header__title')).toContain('font-family: var(--font-display)');
     expect(rule('.spotlight__title')).toContain('font-family: var(--font-display)');
   });
@@ -46,27 +46,37 @@ describe('display type', () => {
   });
 });
 
-describe('home hero', () => {
-  it('is a card with a photograph panel instead of a full-bleed image under a scrim', () => {
-    const hero = rule('.hero');
-    expect(hero).toContain('display: grid');
-    expect(hero).toContain('background: var(--forest-950)');
-    // A scrim over the artwork is how the old hero bought contrast: it dimmed
-    // the picture it was trying to show. The two must not come back together.
-    expect(hero).not.toContain('linear-gradient');
+describe('home header block', () => {
+  /**
+   * The hero poster was removed at the owner's request after comparing the app
+   * with a reference design that opens on a greeting. These pin the replacement
+   * rather than the removed thing: a greeting block on the page, no artwork, no
+   * scrim — and, crucially, no `.hero` card left behind to drift.
+   */
+  it('opens on a greeting block instead of a hero card', () => {
+    expect(rule('.home-hello')).not.toBe('');
+    expect(rule('.home-hello__greeting')).toContain('text-transform: uppercase');
+    // The poster is gone, and with it every rule that painted it. A leftover
+    // `.hero` rule would be a ghost the next editor has to reason about.
+    expect(rule('.hero')).toBe('');
+    expect(rule('.hero__aside')).toBe('');
     expect(rule('.hero__shade')).toBe('');
     expect(css).not.toMatch(/\.hero__shade/);
+    expect(css).not.toMatch(/\.hero__aside/);
   });
 
-  it('stacks the panels on a phone and splits them on a wide screen', () => {
-    expect(rule('.hero__aside')).toContain('order: -1');
-    const wide = mediaBlocks('(min-width: 780px)').join('\n');
-    expect(wide).toMatch(/\.hero\s*\{[^}]*grid-template-columns/s);
-    expect(wide).toMatch(/\.hero__aside\s*\{\s*order: 0;/s);
+  it('leaves the search field on the page rather than inside a dark card', () => {
+    const search = rule('.hero__search');
+    expect(search).toContain('background: var(--surface)');
+    expect(search).toContain('border: 1px solid var(--border-strong)');
+    // It used to carry a drop shadow because it floated on forest green; on a
+    // pale page a shadow makes it look detached, so a border replaced it.
+    expect(search).not.toContain('box-shadow: 0 2px 10px');
+    expect(rule('.hero__search:focus-within')).toContain('box-shadow');
   });
 
   it('uses no glass or blur behind the copy', () => {
-    for (const selector of ['.hero', '.shop-card', '.directory-head', '.spotlight']) {
+    for (const selector of ['.home-hello', '.shop-card', '.directory-head', '.spotlight']) {
       expect(rule(selector), `${selector} uses backdrop-filter`).not.toContain('backdrop-filter');
     }
   });

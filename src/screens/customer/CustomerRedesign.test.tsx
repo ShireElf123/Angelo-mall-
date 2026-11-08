@@ -38,37 +38,33 @@ afterEach(() => {
 });
 
 describe('Home — composition', () => {
-  it('opens on a hero that keeps one page title and one way in', () => {
+  it('opens on a greeting that keeps one page title and one way in', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const headings = container.querySelectorAll('h1');
     expect(headings).toHaveLength(1);
     expect(headings[0].textContent ?? '').toMatch(/Chat to mall shops/i);
-
-    // The artwork sits in its own panel beside/below the copy instead of
-    // underneath it, so the words never depend on a scrim for contrast.
-    const aside = container.querySelector('.hero__aside');
-    expect(aside).not.toBeNull();
-    const art = aside?.querySelector('img');
-    expect(art?.getAttribute('alt')).toBe('');
-    expect(container.querySelector('.hero__shade')).toBeNull();
+    // The greeting says who this is for, the way an app's dashboard does.
+    expect(container.querySelector('.home-hello__greeting')?.textContent).toMatch(/hello, thandi/i);
 
     // Exactly one prominent entry into the directory.
     const browse = screen.getByRole('button', { name: /Browse all \d+ shops/i });
     expect(browse).toBeTruthy();
   });
 
-  it('labels the hero artwork as concept art, never as a photograph', () => {
+  it('carries no hero artwork at all, so nothing needs a concept-art label here', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    // The authored hero image is generated art (manifest kind
-    // "generated-previous-phase"), so it must say so — the one thing it must
-    // never do is imply it is a photo of this mall.
-    const chip = container.querySelector('.hero__aside-chip');
-    expect(chip).not.toBeNull();
-    expect(chip?.textContent ?? '').toMatch(/concept art/i);
-    expect(chip?.textContent ?? '').toMatch(/not a photo/i);
+    // The poster was removed on the owner's instruction. That also removes the
+    // need for the concept-art disclaimer on Home — but the disclosure must not
+    // disappear from the app, so the shop screens still carry it (asserted in
+    // TenantConcept/Phase2Experience). What must never happen is artwork
+    // sneaking back in without its label.
+    expect(container.querySelector('.hero__aside')).toBeNull();
+    expect(container.querySelector('.hero')).toBeNull();
+    const heroImgs = Array.from(container.querySelectorAll('.home-hello img'));
+    expect(heroImgs).toHaveLength(0);
   });
 
-  it('still searches from the hero', () => {
+  it('still searches from the greeting block', () => {
     const navigate = vi.fn();
     const { container } = wrap(<HomeScreen navigate={navigate} />);
     const input = container.querySelector('#home-search') as HTMLInputElement;
