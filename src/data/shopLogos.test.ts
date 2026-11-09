@@ -64,6 +64,16 @@ describe('shop logo registry', () => {
     }
   });
 
+  it('uses the compact verified Clicks emblem only on the launcher while retaining the full directory mark', () => {
+    const clicks = shopLogoAsset('shop-clicks')!;
+    expect(clicks.file).toBe('/images/logos/clicks.png');
+    expect(clicks.tileFile).toBe('/images/logos/clicks-unicorn.png');
+    expect(clicks.tileAspectRatio).toBeCloseTo(36 / 34, 3);
+    expect(PUBLIC_FILES.has(clicks.tileFile!)).toBe(true);
+    expect(clicks.opaqueBackground).toBe(true);
+    expect(clicks.tileOpaqueBackground).not.toBe(true);
+  });
+
   it('records provenance for every configured logo', () => {
     for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
       expect(asset.sourceUrl).toMatch(/^https:\/\//);

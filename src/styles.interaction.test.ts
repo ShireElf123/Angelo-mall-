@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import css from './index.css?raw';
+import css from './cssSource';
 
 /**
  * Interaction-style contract (Phase 12).
@@ -167,6 +167,22 @@ describe('touch targets and focus', () => {
     expect(blocks('.icon-btn')).toContain('width: 44px');
     expect(blocks('.icon-btn')).toContain('height: 44px');
     expect(minHeight('.chip')).toBeGreaterThanOrEqual(44);
+  });
+
+  it('keeps operational controls and compact icon actions at the 44px touch floor', () => {
+    for (const selector of [
+      '.workspace-tab',
+      '.chat-header__expand',
+      '.icon-btn',
+      '.admin-shop-row__field select',
+      '.demo-drawer__summary',
+      '.shop-launcher__more',
+    ]) {
+      expect(minHeight(selector), `${selector} target`).toBeGreaterThanOrEqual(44);
+    }
+    expect(blocks('.icon-btn--sm')).toMatch(/width: 44px; height: 44px/);
+    expect(blocks('.qty-stepper button')).toMatch(/width: 44px; height: 44px/);
+    expect(blocks('.top-nav .nav-item')).toContain('min-height: 44px');
   });
 
   it('keeps the small button at 44px, including inside the phone media passes', () => {

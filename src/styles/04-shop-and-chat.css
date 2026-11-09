@@ -1,0 +1,414 @@
+/* ---------------- Shop page ---------------- */
+
+.shop-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--elev-2); }
+.shop-hero__media { position: relative; aspect-ratio: 16 / 9; height: auto; background: var(--forest-100); }
+.shop-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.shop-hero__caption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 9px 18px;
+  background: var(--surface-warm);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.shop-hero__caption-chip {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-100);
+  color: var(--forest-800);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.shop-hero__body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.shop-hero__title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 13px; }
+/* 12rem basis: at 360px the name block and the ~142px status pill cannot share
+   a row, so the pill drops underneath and the name keeps the full width. */
+.shop-hero__title > div { flex: 1 1 12rem; min-width: 0; }
+.shop-hero__title h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.14; }
+.shop-hero__title p { color: var(--muted); }
+.shop-hero__tagline { font-size: 1.05rem; color: var(--forest-900); font-weight: 600; }
+.shop-hero__hint { color: var(--muted); font-size: 0.9rem; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+
+.shop-facts { display: grid; gap: 10px; }
+.shop-facts div { background: var(--surface-warm); border-radius: var(--radius-sm); padding: 11px 13px; }
+.shop-facts dt { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.shop-facts dd { margin: 3px 0 0; font-weight: 500; }
+
+.ask-chips { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+.mini-order-list li button {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left;
+  background: none; border: none; border-top: 1px solid var(--border);
+  padding: 12px 2px; cursor: pointer;
+}
+.mini-order-list li:first-child button { border-top: none; }
+.mini-order-list span { display: flex; flex-direction: column; }
+.mini-order-list small { color: var(--muted); }
+
+/* ---------------- Conversation lists ---------------- */
+
+.conversation-list { display: flex; flex-direction: column; }
+.conversation-list li button {
+  display: flex; align-items: center; gap: 13px;
+  width: 100%; text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-shadow: var(--elev-1);
+  transition:
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.conversation-list li button:active { transform: scale(0.99); }
+/* The shop name is the thing being scanned; the last message is the preview. */
+.conversation-list__text strong { font-size: 1rem; color: var(--forest-950); }
+.conversation-list li button:hover { border-color: var(--forest-700); }
+.conversation-list__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.conversation-list__text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conversation-list__text small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conversation-list__basket { color: var(--forest-800) !important; font-weight: 600; display: inline-flex; gap: 4px; align-items: center; }
+.conversation-list__action { color: var(--warning) !important; font-weight: 700; }
+.conversation-list__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex: none; }
+.conversation-list__meta small { color: var(--muted); font-size: 0.75rem; }
+
+/* ---------------- Chat ---------------- */
+
+
+.chat-frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  height: min(760px, calc(100dvh - 235px));
+  min-height: 480px;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  /* White, with a hairline — the reference's own chat and detail screens are
+     white to the top edge, and the only green is type and the badge. A dark
+     card inside a white sheet was the loudest remaining surface in the app. */
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  flex: none;
+}
+.chat-header .icon-btn { color: var(--forest-900); }
+.chat-header .icon-btn:hover { background: var(--surface-warm); }
+.chat-header__shop {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 11px;
+  background: none; border: none; color: var(--ink); cursor: pointer; text-align: left; padding: 2px;
+}
+.chat-header__shop--static { cursor: default; }
+.chat-header__shop span { display: flex; flex-direction: column; min-width: 0; }
+.chat-header__shop strong {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;
+}
+.chat-header__shop small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; font-size: 0.78rem; }
+.chat-header .shop-avatar { box-shadow: none; }
+/* On a phone the header name had room for about half of "The Angelo SUPERSPAR"
+   and fell back to an ellipsis. Which shop you are talking to is the one thing
+   this header must not abbreviate, so on narrow screens the name takes a second
+   line while the (secondary) trading line stays on one. */
+@media (max-width: 430px) {
+  .chat-header__shop strong {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.18;
+  }
+}
+/* A back control this important should not be a bare glyph on a phone. */
+.chat-header > .icon-btn { width: 46px; height: 46px; }
+
+.chat-notice {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: var(--warning-bg); color: var(--warning);
+  font-size: 0.84rem; font-weight: 500;
+  padding: 10px 14px;
+  flex: none;
+}
+.chat-notice svg { flex: none; margin-top: 1px; }
+.chat-notice--info { background: #eaf2fb; color: #1e3a5f; }
+
+/* Phase 4: real-tenant disclosure blocks */
+.listing-disclosure {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #f1f5f3;
+  border: 1px solid rgba(12, 59, 46, 0.14);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--ink-soft, #3f4f48);
+}
+.listing-disclosure svg { flex: none; margin-top: 2px; color: var(--green-700, #0c3b2e); }
+.shop-facts dd a { color: var(--green-700, #0c3b2e); font-weight: 600; }
+.shop-facts__note { display: block; font-size: 0.75rem; color: var(--ink-soft, #5f6f68); margin-top: 2px; }
+.shop-source {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: #f7f9f8;
+  border: 1px dashed rgba(12, 59, 46, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-soft, #3f4f48);
+}
+.shop-source p + p { margin-top: 6px; }
+.shop-source strong { color: var(--ink, #16281f); }
+
+.chat-thread { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+
+.chat-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* A warm paper tone with a very low-contrast dot grid: enough texture to give
+     the bubbles something to sit on, quiet enough not to compete with text. */
+  background-color: var(--chat-bg);
+  background-image: radial-gradient(rgba(12, 59, 46, 0.075) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 16px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scroll-behavior: smooth;
+}
+
+.chat-day {
+  align-self: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  margin: 10px auto 8px;
+  width: fit-content;
+}
+
+.chat-system { display: flex; justify-content: center; margin: 4px 0; }
+.chat-system span {
+  background: #fdf3c9;
+  border: 1px solid #eadf9f;
+  color: #5d5312;
+  font-size: 0.8rem;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  max-width: 88%;
+  text-align: center;
+}
+
+/* Turn grouping. `--start` opens a turn (a little air above), `--cont`
+   continues it (tight), and the last bubble of a turn carries the tail corner
+   and the timestamp. */
+.chat-row { display: flex; }
+.chat-row--start { margin-top: 10px; }
+.chat-row--cont { margin-top: 2px; }
+.chat-row--mine { justify-content: flex-end; }
+.chat-row--theirs { justify-content: flex-start; }
+
+.chat-bubble {
+  max-width: min(80%, 460px);
+  padding: 8px 12px 7px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2px rgba(12, 59, 46, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-wrap: anywhere;
+}
+/* Outgoing is filled forest with white text; incoming is white with a hairline.
+   That is a difference in tone, not just in tint, so the two sides of a
+   conversation are separable at a glance on a phone in daylight. */
+.chat-bubble--mine { background: var(--chat-mine); border: 1px solid var(--chat-mine-edge); color: #fff; }
+.chat-bubble--theirs { background: var(--chat-theirs); border: 1px solid var(--border); color: var(--ink); }
+/* The tail: only the final bubble of a turn gets the squared-off near corner,
+   so a stacked reply reads as one message rather than three cards. */
+.chat-row--end.chat-row--mine .chat-bubble { border-bottom-right-radius: 6px; }
+.chat-row--end.chat-row--theirs .chat-bubble { border-bottom-left-radius: 6px; }
+.chat-bubble__text { white-space: pre-wrap; font-size: 0.95rem; line-height: 1.45; }
+.chat-bubble__meta {
+  align-self: flex-end;
+  display: inline-flex; gap: 4px; align-items: center;
+  color: var(--muted); font-size: 0.7rem;
+}
+.chat-bubble--mine .chat-bubble__meta { color: rgba(255, 255, 255, 0.8); }
+.chat-bubble__simulated {
+  display: flex; gap: 5px; align-items: flex-start;
+  color: var(--gold-600); font-size: 0.75rem; font-weight: 600;
+  border-top: 1px dashed var(--border-strong); padding-top: 5px;
+}
+.chat-bubble--mine .chat-bubble__simulated {
+  color: #f6d97b;
+  border-top-color: rgba(255, 255, 255, 0.28);
+}
+.chat-bubble__figure { margin: 0 0 4px; }
+.chat-bubble__figure img { border-radius: var(--radius-sm); display: block; max-height: 260px; width: 100%; object-fit: cover; }
+.chat-bubble__figure figcaption { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+/* Inside the filled outgoing bubble the muted grey would sit at ~2:1. */
+.chat-bubble--mine .chat-bubble__figure figcaption { color: rgba(255, 255, 255, 0.82); }
+
+/* Always white, even inside the dark outgoing bubble: it is a document, and a
+   document should not be printed on the message colour. */
+.order-card-msg {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 11px;
+  min-width: min(270px, 68vw);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.order-card-msg__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; color: var(--forest-900); }
+.order-card-msg__head span { display: inline-flex; gap: 6px; align-items: center; }
+.order-card-msg__items li { display: flex; justify-content: space-between; gap: 14px; font-size: 0.9rem; padding: 4px 0; border-top: 1px solid var(--border); }
+.order-card-msg__more { color: var(--muted); }
+.order-card-msg__total { display: flex; justify-content: space-between; gap: 12px; background: var(--forest-50); border-radius: var(--radius-xs); padding: 8px 10px; font-size: 0.9rem; }
+/* On a 320-390px card the amount column collapsed to ~45px and "R 254,96"
+   broke across lines as "R 254,9 / 6". Money is read as one token. */
+.order-card-msg__total strong { white-space: nowrap; flex: none; }
+.order-card-msg__note { font-size: 0.75rem; color: var(--muted); }
+
+.basket-bar {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%;
+  /* Gold is the accent, not a banner. A filled gold strip was the loudest
+     thing on the chat screen and the only large colour field that was not
+     green; the same call to action now reads as a gold-tinted panel with a
+     gold edge, which keeps the accent and stops it shouting. Text stays
+     --gold-600 for contrast (4.97:1 on white). */
+  background: #fdf8e9;
+  color: var(--gold-600);
+  border-top: 1px solid var(--gold-100);
+  border-bottom: 1px solid var(--gold-100);
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  flex: none;
+}
+.basket-bar:hover { background: var(--gold-100); }
+.basket-bar span { display: flex; flex-direction: column; }
+.basket-bar small { font-weight: 500; }
+.basket-bar--muted { background: var(--surface-warm); color: var(--ink-2); cursor: default; }
+
+.typing-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--chat-bg);
+  border-top: 1px solid var(--border);
+  padding: 9px 16px;
+  font-size: 0.84rem; color: var(--ink-2);
+  flex: none;
+}
+.typing-bar em { color: var(--gold-600); font-style: normal; font-weight: 600; }
+.typing-dots { display: inline-flex; gap: 3px; }
+.typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--forest-700); animation: typing 1s infinite; }
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.quick-replies {
+  display: flex; gap: 7px;
+  overflow-x: auto;
+  padding: 9px 12px 2px;
+  background: #fff;
+  flex: none;
+}
+.quick-replies .chip { flex: none; max-width: 300px; overflow: hidden; text-overflow: ellipsis; }
+
+.composer {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 10px 11px calc(9px + env(safe-area-inset-bottom));
+  flex: none;
+  box-shadow: 0 -1px 0 var(--border), 0 -10px 24px -20px rgba(12, 59, 46, 0.4);
+}
+.composer__preview {
+  display: flex; align-items: center; gap: 11px;
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  margin-bottom: 9px;
+}
+.composer__preview img { width: 52px; height: 52px; object-fit: cover; border-radius: var(--radius-xs); }
+.composer__preview div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.composer__preview strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; }
+.composer__preview small { color: var(--muted); }
+.composer__error { color: var(--danger); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
+.composer__row { display: flex; align-items: flex-end; gap: 7px; }
+.composer textarea {
+  flex: 1; min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 11px 16px;
+  resize: none;
+  max-height: 120px;
+  min-height: 48px;
+  background: var(--bg);
+}
+.composer textarea:focus { outline: 3px solid var(--forest-100); border-color: var(--forest-700); }
+/* The placeholder is routinely longer than the field ("Message The Angelo
+   SUPERSPAR…"). It wrapped to a second line that the 48px min-height cut in
+   half, so the field looked broken before the customer typed anything. Keep
+   the placeholder to one line and ellipsise it; the typed value still wraps
+   normally, which is what Shift+Enter relies on. */
+.composer textarea::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.composer__attach { color: var(--forest-800); }
+.composer__send {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--forest-800);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex: none;
+  box-shadow: var(--elev-1);
+}
+.composer__send:disabled { background: #c9d4cc; cursor: not-allowed; }
+.composer__hint {
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+  font-size: 0.72rem; color: var(--muted);
+  margin-top: 7px; padding: 0 4px;
+}
+.composer__hint-demo { font-weight: 600; color: var(--ink-2); }
+/* Keyboard shortcuts are noise on a phone and useful on a laptop. */
+@media (hover: none) { .composer__hint-keys { display: none; } }
+
+.chat-aside { display: none; }
+.chat-aside .panel h2 { font-size: 1rem; }
+
+.tick-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 12px; }
+.tick-list li { padding-left: 20px; position: relative; color: var(--ink-2); font-size: 0.9rem; }
+.tick-list li::before { content: '✓'; position: absolute; left: 0; color: var(--forest-700); font-weight: 800; }

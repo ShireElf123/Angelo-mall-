@@ -122,6 +122,14 @@ describe('shop launcher', () => {
     }
   });
 
+  it('uses the readable Clicks emblem crop on the launcher card', () => {
+    const { container } = wrap();
+    const clicksTile = tileFor(container, 'Clicks')!;
+    expect(clicksTile.querySelector('img.shop-tile__logo')?.getAttribute('src')).toBe(
+      '/images/logos/clicks-unicorn.png',
+    );
+  });
+
   it('shows a directory row the tenant mark that the old square slot threw away', () => {
     const { container } = wrap();
     // PEP is a 2:1 wordmark. It was swapped for a category glyph by a rule that

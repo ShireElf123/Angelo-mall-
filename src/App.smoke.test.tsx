@@ -1,5 +1,5 @@
 /** @vitest-environment jsdom */
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import App from './App';
 
@@ -36,16 +36,18 @@ describe('all demo routes mount', () => {
   });
 
   for (const [hash, expected] of ROUTES) {
-    it(`renders ${hash}`, () => {
+    it(`renders ${hash}`, async () => {
       window.location.hash = hash;
       const { container, unmount } = render(<App />);
       expect(container.querySelector('main#main')).toBeTruthy();
       expect(screen.getByText('Angelo Mall Go')).toBeTruthy();
-      // The route rendered something beyond the shell.
-      expect((container.querySelector('main#main')?.textContent ?? '').length).toBeGreaterThan(20);
-      if (expected.source !== '.') {
-        expect((container.querySelector('main#main')?.textContent ?? '')).toMatch(expected);
-      }
+      // Route screens are intentionally code-split, so wait for their chunk
+      // rather than mistaking the accessible loading state for a broken route.
+      await waitFor(() => {
+        const text = container.querySelector('main#main')?.textContent ?? '';
+        expect(text.length).toBeGreaterThan(20);
+        if (expected.source !== '.') expect(text).toMatch(expected);
+      });
       unmount();
     });
   }

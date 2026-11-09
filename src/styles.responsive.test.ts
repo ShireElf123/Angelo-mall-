@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import css from './index.css?raw';
+import css from './cssSource';
 
 /**
  * Responsive regression guard. jsdom cannot lay out CSS, so instead of

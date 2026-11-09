@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { createSeedState } from '../data/seed';
 import { shopLogoAsset } from '../data/shopLogos';
 import { ShopLogo } from './ShopLogo';
+import css from '../cssSource';
 
 /**
  * Every shop in the directory must show a readable label.
@@ -84,13 +85,12 @@ describe('shop identity labels', () => {
 });
 
 describe('the visually-hidden accessible name', () => {
-  it('cannot escape the card and stretch the page sideways', async () => {
+  it('cannot escape the card and stretch the page sideways', () => {
     // The accessible name is hidden with .visually-hidden, which is
     // position:absolute. With no positioned ancestor the 1px box was placed
     // against the page instead of the card, so inside the horizontal shop rail
     // it sat far to the right and made the whole Home page scroll 825px
     // sideways on a phone. .shop-logo must establish a containing block.
-    const css = (await import('../index.css?raw')).default as string;
     // The lockup's own rule, not the `flex: 1 1 auto` override further down.
     const start = css.indexOf('.shop-logo {\n  display: inline-flex');
     expect(start).toBeGreaterThan(-1);
@@ -100,10 +100,9 @@ describe('the visually-hidden accessible name', () => {
 });
 
 describe('signage plate styling', () => {
-  it('wraps long trading names instead of clipping them', async () => {
+  it('wraps long trading names instead of clipping them', () => {
     // "AVIYA PHOTOGRAPHY & GRAPHICS" and "CARWASH @ ANGELO MALL" are the longest
     // of the sixteen; a nowrap plate would either clip or overflow the card.
-    const css = (await import('../index.css?raw')).default as string;
     const start = css.indexOf('.shop-logo__plate {');
     expect(start).toBeGreaterThan(-1);
     const block = css.slice(start, css.indexOf('}', start));

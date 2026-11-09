@@ -1,0 +1,656 @@
+/* ---- 1. Demo notice: one slim strip with the roles behind a disclosure ---- */
+
+/* The notice and the disclosure must share one line on a 390px phone, so the
+   strip is tightened rather than allowed to become two rows of chrome. */
+@media (max-width: 899px) {
+  .demo-bar { padding: 5px 10px; gap: 4px 8px; }
+  .demo-bar__label { font-size: 0.75rem; line-height: 1.35; }
+  .demo-drawer__summary { min-height: 44px; padding: 4px 10px; font-size: 0.78rem; }
+}
+
+.demo-drawer {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  flex: none;
+}
+
+.demo-drawer__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  list-style: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.demo-drawer__summary::-webkit-details-marker { display: none; }
+.demo-drawer__summary:hover { background: rgba(255, 255, 255, 0.18); }
+.demo-drawer__summary:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+.demo-drawer__summary:active { transform: translateY(1px); }
+.demo-drawer__chevron { transition: transform var(--dur-fast) var(--ease-out); flex: none; }
+.demo-drawer[open] .demo-drawer__chevron { transform: rotate(180deg); }
+
+/* Open, the panel takes its own full-width row rather than squeezing the
+   notice, which must never wrap into a third line or be clipped. */
+.demo-drawer[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* On a phone the open panel takes its own row, so the notice above it keeps a
+   full-width line instead of being squeezed to a stub beside four buttons. */
+@media (max-width: 899px) {
+  .demo-drawer[open] { flex: 1 1 100%; }
+}
+
+/* A wide screen has room for the switcher inline, exactly as before, so the
+   disclosure is not a second step the presenter has to remember. */
+@media (min-width: 900px) {
+  .demo-drawer__summary { display: none; }
+  .demo-drawer[open] { flex: none; flex-direction: row; }
+  .demo-drawer:not([open]) > .demo-bar__actions { display: flex; }
+}
+
+/* One row of four labelled roles on a phone, not a 2x2 grid. It is the same
+   four buttons with the same accessible names — just app-shaped. */
+@media (max-width: 560px) {
+  .role-switcher {
+    display: flex;
+    flex-wrap: nowrap;
+    border-radius: var(--radius-pill);
+    padding: 3px;
+    flex: 1 1 auto;
+    /* The scrolling container clips its own padding, which squared off the
+       left edge of the white active pill at 360px. Nothing needs to scroll any
+       more — the four labels fit — so the row can show its rounded ends. */
+    overflow: visible;
+  }
+  .role-switcher__btn {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    min-height: 44px;
+    padding: 5px 4px;
+    gap: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* At 320px four labelled 44px buttons do not fit on one row against the reset
+   control: the strip ran wider than its container and "Customer" was clipped by
+   its own neighbour. Under 360px the switcher takes its own row as a 2x2 grid,
+   so every label is whole and every target is still 44px. From 360px up the
+   single row fits. */
+@media (max-width: 359px) {
+  .role-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    flex: 1 1 100%;
+    border-radius: var(--radius-sm);
+    overflow: visible;
+  }
+  .demo-bar__actions { flex-wrap: wrap; row-gap: 6px; }
+  .demo-bar__reset { margin-left: auto; }
+}
+
+/* ---- 2. Chrome: one green bar at the top on every screen under 900px ---- */
+
+@media (max-width: 899px) {
+  /* One canvas everywhere, and the brand green only on the app bar. */
+  body { background: var(--app-bar); }
+
+  .app-header {
+    background: var(--app-bar);
+    border-bottom: none;
+    box-shadow: none;
+  }
+  .brand__mark { background: rgba(255, 255, 255, 0.16); box-shadow: none; }
+  .brand__text strong { color: #fff; }
+  .brand__text small { color: rgba(255, 255, 255, 0.72); }
+  .brand__chip { background: rgba(255, 255, 255, 0.18); color: #fff; border-color: transparent; }
+
+  .app-footer { border-top: none; }
+}
+
+/* The header block's search sits on one row on a phone: the field is the
+   flexible child, so a long placeholder ellipsises inside its own box. */
+@media (max-width: 559px) {
+  /* Search on one row again: the field keeps its pill and the button sits
+     inside it. This is safe now because the field is the flexible child, so a
+     long placeholder ellipsises inside its own box instead of sliding under the
+     button the way it did when the button was a separate pill. */
+  .hero__search {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 5px 5px 12px;
+    border-radius: var(--radius-pill);
+    max-width: none;
+  }
+  .hero__search-field { padding: 0; background: none; min-height: 0; }
+  .hero__search input { min-height: 44px; font-size: 0.95rem; }
+  .hero__search .btn { min-height: 44px; padding: 8px 15px; font-size: 0.9rem; }
+}
+
+/* A wide screen has room for the greeting and the two cards side by side, so the
+   header block is not a 1,200px-wide strip of mostly empty card. */
+@media (min-width: 900px) {
+  .home-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: 28px;
+    align-items: center;
+  }
+  .home-hello__title { font-size: 2rem; }
+  .home-hello .hero__search { max-width: 520px; }
+  .home-stat { min-height: 96px; }
+}
+
+/* On a tablet two cards across the full 768px leave each one three-quarters
+   empty; the pair keeps its size and the row stays left-aligned. */
+@media (max-width: 899px) {
+  .home-stat-grid { max-width: 620px; }
+}
+
+/* ---- 4. Two-up stat cards (the reference's dashboard top row) ---- */
+
+.home-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 72px;
+  padding: 10px 11px 10px 12px;
+  /* The reference's dashboard pair: a white card on the grey sheet, no outline
+     and no shadow — the colour step is the edge — with the solid green badge
+     on the right. */
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.home-stat:hover { background: var(--surface); box-shadow: none; }
+.home-stat:active { transform: translateY(1px); box-shadow: none; background: var(--sage-50); }
+
+.home-stat__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.home-stat__label {
+  /* The reference's top cards read label first, then the value: a small grey
+     caption above a bold number, with the badge on the right. */
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+  order: 0;
+}
+.home-stat__value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--forest-950);
+}
+.home-stat__note { font-size: 0.72rem; color: var(--muted); line-height: 1.3; }
+.home-stat__icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  /* The reference's signature mark: a solid dark-green circle with a white
+     glyph inside. It appears on every card in that app, so it is the mark we
+     reuse — on these two cards and on every shop tile. */
+  border: none;
+  background: var(--forest-900);
+  color: #fff;
+}
+
+/* ---- 5. Cards: quieter edges, more air, app-sized radii ---- */
+
+.page--home { gap: 18px; }
+
+/* At 320px "Shops" and its hint together are wider than the screen; the hint
+   drops to its own line instead of squeezing the section title. */
+.shop-launcher__head { flex-wrap: wrap; row-gap: 2px; }
+
+/* (Card anatomy is defined once, above. This block used to re-declare the
+   tile's padding and shadow for the old row layout; keeping it would have
+   re-introduced the 12px inset that the brand band must not have.) */
+.shop-tile { height: 100%; }
+
+
+/* Section links read as "See more ›" text, not as a second row of buttons —
+   but they are still buttons, and a thumb is 44px wide. The extra height is
+   padding inside the hit area, so nothing about the row moves visually. */
+.section-header .btn--sm.btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  padding: 0 4px;
+  min-height: 44px;
+  color: var(--forest-700);
+  font-weight: 600;
+}
+.section-header .btn--sm.btn--ghost:hover:not(:disabled) { background: transparent; color: var(--forest-900); }
+
+/* The two-up activity cards at 320px: the pair is ~150px wide each, so the
+   label is kept on one line and the icon gives up 4px to make room. */
+@media (max-width: 379px) {
+  .home-stat { padding: 11px 10px 11px 12px; gap: 6px; }
+  .home-stat__label { font-size: 0.72rem; white-space: nowrap; }
+  .home-stat__value { font-size: 1.2rem; }
+  .home-stat__icon { width: 24px; height: 24px; }
+}
+
+/* ---- 5b. The smallest phones (320-379px) ---- */
+@media (max-width: 379px) {
+  /* One shop per row at 320px. Two-up leaves ~120px for the name and "The
+     Angelo SUPERSPAR" came out as "The Angelo…" with the status pill clipped
+     to "Sample…" — a tenant's name cut in half and a label that no longer says
+     anything. A full-width row keeps both whole, which is the one thing this
+     grid must not trade away for density. */
+  .shop-launcher__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .shop-tile__name {
+    font-size: 0.84rem;
+    -webkit-line-clamp: 2;
+    min-height: 0;
+  }
+  .shop-tile__meta {
+    padding: 0;
+    font-size: 0.72rem;
+  }
+}
+
+/* ---- 5b2. Section headers on a phone -----------------------------------
+   A long section title and its "All chats" link ended up side by side at 390px,
+   so both wrapped — "Order / history" and "Pick up where you left / off". The
+   action drops beneath the title instead of fighting it for the same line. */
+@media (max-width: 559px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .section-header .btn--sm { min-height: 44px; }
+}
+
+/* At 320px the section title and its hint no longer fit on one line together. */
+@media (max-width: 359px) {
+  .shop-launcher__head { flex-direction: column; align-items: flex-start; gap: 0; }
+}
+
+/* ---- 5c. Chat header: the disclosure line is readable, not clipped ------- */
+
+@media (max-width: 559px) {
+  /* "Open now (demo) · replies are scripted" was ellipsised to "replie…" once
+     the status pill is hidden on a phone — a cut-off sentence reads as a bug,
+     and this is the sentence that says the replies are not real. Two lines
+     instead of an ellipsis. */
+  .chat-header__shop small {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
+  }
+  .chat-header { padding: 10px; gap: 6px; }
+}
+
+/* ---- 5d. Names in lists wrap instead of disappearing into an ellipsis ---- */
+@media (max-width: 559px) {
+  /* "AMG-1001 · The Angelo SU…" and "The Angelo SUPER…" tell the customer
+     nothing about which shop an order belongs to — and which shop is the one
+     piece of information these rows exist to carry. Two lines instead. */
+  .conversation-list__text strong,
+  .order-list-card__text strong {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ---- 5e. Tablet: the greeting block breathes --------------------------- */
+@media (min-width: 560px) and (max-width: 899px) {
+  .home-hello__title { font-size: 1.9rem; }
+  .hero__search { max-width: none; }
+}
+
+/* ---- 5f. The five-tab bar: no truncated label -------------------------
+   "Promotions" (Mall admin) and "Deliveries" needed 63.9px of label in a 74px
+   cell, so the last letter fell off as "Promoti…". A tenth of a rem buys the
+   whole word back and keeps every tab at the 48px target. */
+@media (max-width: 430px) {
+  .bottom-nav .nav-item > span:last-child { font-size: 0.68rem; }
+  /* "Promotions" is the longest of the five admin labels and was still met by
+     an ellipsis at 390px, so the admin bar only gives the icons a little less
+     room. The label is the thing being read; the glyph is the decoration. */
+  .bottom-nav .nav-item { padding-left: 0; padding-right: 0; }
+  .bottom-nav .nav-item__icon { padding-left: 10px; padding-right: 10px; }
+}
+
+/* At 320px the five labels get 64px each and "Promotions" still lost its last
+   two letters at 0.68rem. One more step down, and no horizontal padding, buys
+   the whole word inside the same 48px-tall tab. */
+@media (max-width: 359px) {
+  /* Measured: "Promotions" needs 64px of text at 0.68rem in a 62px tab, i.e.
+     two pixels short — the last letter became an ellipsis for want of 2px.
+     0.6rem plus a touch of negative tracking fits it whole. */
+  .bottom-nav .nav-item > span:last-child { font-size: 0.6rem; letter-spacing: -0.01em; }
+  .bottom-nav .nav-item__icon { padding-left: 6px; padding-right: 6px; }
+}
+
+/* ---- 5g. The search pill at 320px shows the whole placeholder ---- */
+/* At 320 the pill left 128px for a 15px placeholder and cut it mid-word
+   ("Search shops or a r"). Below 360 the button drops onto its own full-width
+   row — the same shape as the reference's full-width primary bar — so the field
+   reads in full and the button keeps its 44px target. */
+@media (max-width: 359px) {
+  .hero__search {
+    flex-wrap: wrap;
+    padding: 6px;
+    border-radius: var(--radius);
+  }
+  .hero__search-field { flex: 1 1 100%; padding: 0 8px; }
+  .hero__search .btn { flex: 1 1 100%; }
+}
+
+/* ---- 5h. Two shapes, because there are two outcomes ---------------------
+   Eight identical cards with two different destinations made the launcher the
+   one place on Home where a tap could surprise you: four shops start a chat and
+   four open a page, and the only clue was a 12px tick versus a 12px "i". For a
+   customer reading at arm's length that is a coin toss.
+
+   The grid now carries only the chat-capable shops and the directory-only
+   tenants are full-width rows under their own heading, so the shape of the
+   thing says what tapping it does before the caption is read.
+   ------------------------------------------------------------------------ */
+
+.shop-launcher__listed {
+  margin-top: 22px;
+}
+.shop-launcher__listed h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.shop-launcher__listed-note {
+  margin: 2px 0 10px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+.shop-launcher__list {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* A row, not a card: taller than a hairline list item so the target is
+   comfortable, quiet enough that it never competes with the chat grid above. */
+.shop-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.04);
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.shop-row:hover { box-shadow: 0 1px 2px rgba(18, 36, 29, 0.06), 0 10px 20px -18px rgba(18, 36, 29, 0.4); }
+.shop-row:active { transform: translateY(1px); }
+
+/* The row's mark slot: wider than it is tall, because these tenants' marks are
+   wordmarks. A square slot forced PEP, Mica, TOPS and Spur back to a category
+   glyph even though the registry has their logo — half the directory looked
+   unbranded for want of 20 pixels of width. */
+.shop-row__mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 40px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+.shop-row__logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* Opaque files keep their own white background; paint it in rather than
+   letting the tint bleed through the box. */
+.shop-row__logo.is-printed { background: #fff; border-radius: var(--radius-xs); padding: 2px 3px; }
+.shop-row__glyph {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.shop-row__text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+.shop-row__text strong {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.shop-row__text small {
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+/* An "i" in a quiet circle: the same information mark the cards used, kept so
+   the difference reads even to someone who only glances. */
+.shop-row__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  color: var(--muted);
+}
+
+@media (min-width: 900px) {
+  /* Four chat shops, four columns: the grid is one complete row instead of a
+     row plus one orphan, which is what a three-column grid did to four items. */
+  .shop-launcher__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .shop-launcher__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shop-row { min-height: 72px; }
+  .shop-row__mark { width: 64px; height: 46px; }
+  .shop-row__text strong { font-size: 0.9rem; }
+}
+
+/* ---- 5i. Directory cards lead with the brand, not a photograph -----------
+   The top of every card is now a full-bleed brand plate: the tenant's verified
+   logo on a wash of their own colour, or a signage plate with their trade name
+   in caps where no verified mark exists. It replaced a 16:9 interior photo that
+   was reused across a whole category (and, for most tenants, was AI concept art
+   with a chip admitting it) — the loudest part of the card was the least true.
+
+   The mark is sized to an equal visual budget, not to one box: its width cap is
+   moved by the square root of its own aspect ratio, so a 3.2:1 wordmark gets
+   ~65% of the safe area and a 1.08:1 roundel ~38% and binds on height instead.
+   Fitting every logo to one width is what makes a mixed logo wall look messy.
+   ---------------------------------------------------------------------- */
+
+.shop-card__media--brand {
+  /* A brand band, not a photo frame. At the photo's 16:9 the plate was 350x197
+     with a mark rattling around inside it, which read as a logo that was too
+     small for its box — measured, the KFC roundel was 30% of the plate's width
+     and the surrounding 70% was empty tint. 12:5 gives the plate a header's
+     proportions, so the mark fills it the way an app icon fills its tile. */
+  aspect-ratio: 12 / 5;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  /* Generous, even safe area: a logo that nearly touches its frame reads as a
+     crop, not a brand. */
+  padding: 10px 8%;
+  background: var(--plate-tint, var(--surface));
+}
+
+/* The safe area every mark is budgeted inside. */
+.shop-card__mark-wrap {
+  display: grid;
+  place-items: center;
+  width: var(--mark-width, 54%);
+  height: 74%;
+}
+
+/* JPEG marks (the SPAR group files) carry an opaque white background, so they
+   are printed on a white plate rather than dropped onto the tint. */
+.shop-card__mark-wrap--printed {
+  padding: 7px 10px;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.07);
+}
+
+/* White-ink artwork needs a dark bed, or it vanishes: Ocean Basket and PostNet
+   were a white wordmark on a wash of near-white, which read as an empty plate
+   rather than a brand. Solid in the tenant's own colour — the same treatment an
+   app icon gets — and the plate stops looking like an unfinished card. */
+.shop-card__media--brand.is-solid {
+  background: var(--plate-solid, var(--forest-800));
+}
+.shop-card__media--brand.is-solid:hover {
+  background: var(--plate-solid, var(--forest-800));
+  filter: brightness(1.06);
+}
+
+/* Undo the photo framing: the photo filled the frame, a mark never should. */
+.shop-card__media--brand img.shop-card__mark {
+  position: static;
+  inset: auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* A logo that zooms under the finger looks like a mistake — the plate lifts
+   instead, and only a little. */
+.shop-card__media--brand:hover img.shop-card__mark { transform: none; }
+.shop-card__media--brand:active img.shop-card__mark { transform: none; }
+.shop-card__media--brand:hover { background: var(--plate-tint-strong, var(--plate-tint, var(--surface))); }
+
+.shop-card__sign {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 0 7%;
+  text-align: center;
+}
+.shop-card__sign-glyph {
+  width: clamp(30px, 9vw, 44px);
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.75;
+}
+/* The trade name, set as a fascia: caps, tracked, in the tenant's colour. A
+   tenant with no logo file must still be identifiable from the top of its card
+   — an empty plate is the one thing a directory cannot afford. */
+.shop-card__sign-word {
+  /* Big enough to be the plate's subject: a signage plate that whispers is
+     just an empty frame with a caption. */
+  font-size: clamp(0.82rem, 3.1vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* The body no longer repeats the logo beside the name: the plate carries the
+   identity, so the name is type. */
+.shop-card__titles {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+@media (max-width: 559px) {
+  /* Full-width cards on a phone: the band stays shallow so the facts of the
+     card are not pushed below the fold by a logo. */
+  .shop-card__media--brand { aspect-ratio: 16 / 7; padding: 10px 8%; }
+  .shop-card__mark-wrap { height: 72%; }
+}
+
+@media (min-width: 900px) {
+  .shop-card__titles { font-size: 1.08rem; }
+}
+
+/* ---- 6. Reduced motion for the new controls ---- */
+/* This block is the last one in the file, so it restates the app-wide motion
+   switch as well as the two new controls — the contract test reads the final
+   block, and a rule that only exists further up would not be covered. */
+@media (prefers-reduced-motion: reduce) {
+  .shell-main .page { animation: none; transform: none; }
+  .home-stat:active,
+  .category-tile:active,
+  .shop-launcher__more:active,
+  .shop-row:active,
+  .demo-drawer__summary:active { transform: none; }
+  .demo-drawer__chevron { transition: none; }
+}

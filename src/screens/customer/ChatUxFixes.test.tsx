@@ -67,8 +67,9 @@ describe('defect fix: invisible attachment input is not a tab stop', () => {
 });
 
 describe('defect fix: page behind the expanded overlay is hidden from assistive tech', () => {
-  it('marks and then restores the app chrome while expanded', () => {
+  it('marks and then restores the app chrome while expanded', async () => {
     renderAppAtChat();
+    await screen.findByRole('button', { name: 'Expand chat' });
     const chrome = document.querySelector('.shell-chrome') as HTMLElement;
     const footer = document.querySelector('.app-footer') as HTMLElement;
     const bottomNav = document.querySelector('.bottom-nav') as HTMLElement;
@@ -90,8 +91,9 @@ describe('defect fix: page behind the expanded overlay is hidden from assistive 
     }
   });
 
-  it('restores the page chrome if the chat unmounts while expanded', () => {
+  it('restores the page chrome if the chat unmounts while expanded', async () => {
     const { unmount } = renderAppAtChat();
+    await screen.findByRole('button', { name: 'Expand chat' });
     const chrome = document.querySelector('.shell-chrome') as HTMLElement;
     fireEvent.click(screen.getByRole('button', { name: 'Expand chat' }));
     expect(chrome.hasAttribute('inert')).toBe(true);

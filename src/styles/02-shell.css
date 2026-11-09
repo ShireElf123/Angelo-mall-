@@ -1,0 +1,290 @@
+/* ---------------- Shell ---------------- */
+
+.shell { min-height: 100dvh; display: flex; flex-direction: column; }
+
+.demo-bar {
+  /* Part of the same green band as the app bar, so the top of the screen is one
+     colour to the sheet's rounded corners — the reference's silhouette. The
+     disclosure is not hidden and not shrunk: it is white type on the bar, with
+     the role control as a translucent pill beside it. */
+  background: var(--app-bar);
+  color: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  justify-content: space-between;
+  /* The demo notice is a strip, not a header. It must never take a third of a
+     phone screen before the app has begun. */
+  min-height: 0;
+}
+.demo-bar__label { font-size: 0.84rem; }
+.demo-bar__label strong { color: #fff; }
+.demo-bar__label--short { display: none; }
+.demo-bar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+
+.role-switcher {
+  display: flex;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  /* One row, scrolled horizontally, rather than four buttons reflowing into
+     three stacked lines on a phone. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  min-width: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.role-switcher::-webkit-scrollbar { display: none; }
+.role-switcher__label--short { display: none; }
+/* Below 560px the four role buttons become a 2x2 grid of short labels. The old
+   single scrolling row hid "Mall admin" completely at 390px, which is the one
+   role the walkthrough has to reach. Full labels return as soon as there is
+   room; the button's accessible name is the full label at every width. */
+@media (max-width: 560px) {
+  .role-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    overflow: visible;
+    flex: 1 1 100%;
+    border-radius: var(--radius-sm);
+  }
+  .role-switcher__btn { justify-content: center; padding: 6px 8px; min-height: 44px; }
+  .role-switcher__label--full { display: none; }
+  .role-switcher__label--short { display: inline; }
+}
+.role-switcher__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 6px 11px;
+  border-radius: var(--radius-pill);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  /* 40px, not 34: the demo strip is dense, but these four buttons are the only
+     way to reach the other workspaces on a phone and a 34px row is a miss. */
+  min-height: 44px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.role-switcher__btn--active { background: #fff; color: var(--app-bar); }
+.role-switcher__btn:hover:not(.role-switcher__btn--active) { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.role-switcher__btn:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+
+.demo-bar__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  padding: 6px 11px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* 44px at every width, not just on a phone: the desk build is used on a
+     touchscreen laptop and at a kiosk, and the reset is a destructive button. */
+  min-height: 44px;
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.demo-bar__reset:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+.demo-bar__reset:hover { background: rgba(255, 255, 255, 0.16); }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px var(--space-4);
+  min-height: 56px;
+  /* Sticky, translucent chrome: content slides under it instead of stopping
+     at a solid slab. The tint tracks --bg so the blur reads as the page. */
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  /* The reference's app bar: a solid moss-green band, 56px tall, with the
+     wordmark in white and no rule or shadow of its own. The white content
+     sheet underneath is what closes the bar, with rounded top corners that
+     tuck under it. */
+  background: var(--app-bar);
+  border-bottom: none;
+  box-shadow: none;
+  /* Safety net: on a narrow laptop the brand and five nav items must never
+     force a horizontal scrollbar — the nav drops to a second row instead. */
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+/* `.shell-chrome` deliberately does not stick — only `.app-header` does,
+   so the demo banner scrolls away instead of owning the viewport. See the
+   Phase 13 section at the end of this file. */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 2px;
+  min-width: 0;
+  min-height: 44px;
+}
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  /* A light plate on the green bar, the way the reference's leaf mark sits on
+     a soft translucent square. */
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+  flex: none;
+}
+.brand__mark img { display: block; width: 22px; height: 22px; border-radius: var(--radius-xs); }
+.brand__chip {
+  align-self: center;
+  margin-left: 2px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  /* The reference marks its bar with a translucent white pill; ours has to say
+     "demo" rather than "iOS", so the same pill carries the disclosure. */
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: none;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.brand__text { display: flex; flex-direction: column; min-width: 0; }
+.brand__text strong {
+  color: #fff;
+  font-size: 0.98rem;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand__text small { color: rgba(255, 255, 255, 0.72); font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.top-nav { display: none; min-width: 0; }
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+  min-width: 58px;
+  min-height: 54px;
+  justify-content: center;
+  position: relative;
+}
+.nav-item__icon { position: relative; display: inline-flex; }
+.nav-badge {
+  position: absolute;
+  top: -7px; right: -12px;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-500);
+  color: var(--forest-950);
+  font-size: 0.66rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-item--active { color: var(--forest-900); }
+
+.bottom-nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 55;
+  min-height: 64px;
+  display: flex;
+  justify-content: space-around;
+  /* Frosted, not opaque: page content keeps sliding under the bar instead of
+     stopping dead at a white slab. This is the strongest "app, not website"
+     cue available without new components. */
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  /* The reference's tab bar is flat white with a hairline. The frosted blur and
+     the upward shadow were the last web-chrome cues in the shell; the blur is
+     kept only as a fallback-free solid, so nothing tints under the bar. */
+  box-shadow: none;
+}
+
+.offline-banner {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--warning-bg);
+  color: var(--warning);
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.shell-main {
+  flex: 1;
+  width: 100%;
+  /* The reference's signature move: the grey content sheet is a rounded card
+     that lifts ~14px over the green app bar, so the brand colour reads as a
+     shell the app sits inside rather than as a header bolted on top. */
+  position: relative;
+  z-index: 10;
+  /* No negative overlap: the bar stays a clean band and the sheet's rounded top
+     corners reveal the green behind it, which is exactly how the reference's
+     sheet meets its app bar. Overlapping would only push the corners under the
+     sticky header, where they cannot be seen. */
+  margin-top: 0;
+  background: var(--bg);
+  /* The same top-corner treatment as the modal sheet: one shared literal, so
+     the radius audit still sees a single value for "a sheet's top corners". */
+  border-radius: 20px 20px 0 0;
+  /* Keeps the rounded corners from being clipped by the sheet's own children
+     (the category rail deliberately bleeds to the page edge). */
+  overflow: clip;
+  padding-top: 2px;
+}
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  /* A quiet panel, not a dark slab above the tab bar. The disclosure is the
+     same length and the same weight; it just stops looking like a page footer
+     from a website, which was the last dark band on the customer screens. */
+  background: var(--surface-warm);
+  color: var(--ink-2);
+  padding: 22px 18px calc(26px + var(--bottom-nav-h));
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+.app-footer strong { color: var(--forest-900); }
+.app-footer p { max-width: 880px; margin: 0 auto 8px; }
+.app-footer__small { font-size: 0.78rem; color: var(--muted); }

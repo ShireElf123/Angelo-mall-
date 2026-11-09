@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import css from './index.css?raw';
+import css from './cssSource';
 import homeSource from './screens/customer/Home.tsx?raw';
 
 /**
