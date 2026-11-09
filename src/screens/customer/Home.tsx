@@ -47,10 +47,10 @@ const CATEGORY_ICONS: Record<string, string> = {
  *
  * One journey: open the app, see shops, tap a shop, start talking.
  *
- * The screen therefore opens on a greeting and search, then one compact
- * category rail and the shop launcher. Activity counts follow discovery rather
- * than competing with it; returning chats, orders and the walkthrough remain
- * available below.
+ * The screen opens on a greeting and search. Returning customers get one compact
+ * resume panel; first-time visitors go straight to category discovery. The shop
+ * launcher follows, without spending the first viewport on empty metrics or
+ * repeating separate paths into the same directory.
  *
  * There is no hero banner. The owner asked for the poster to go; the product
  * line survives in the greeting and supporting sentence, so the screen still
@@ -110,10 +110,14 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   const featured = state.shops.filter((s) => s.featured);
   const promos = activePromotions(state, 'home-banner');
   const allConversations = conversationsForCustomer(state);
-  const conversations = allConversations.slice(0, 3);
+  const latestConversation = allConversations[0];
   const activeOrders = ordersForCustomer(state).filter(
     (o) => isConfirmedOrder(o) && !['delivered', 'completed'].includes(o.status),
   );
+  const latestOrder = activeOrders[0];
+  const latestOrderShop = latestOrder ? getShop(state, latestOrder.shopId) : undefined;
+  const latestChatShop = latestConversation ? getShop(state, latestConversation.shopId) : undefined;
+  const latestChatMessage = latestConversation ? lastMessage(state, latestConversation.id) : undefined;
 
   /**
    * The worked example. SUPERSPAR carries the seeded basket, so it is the
@@ -256,6 +260,59 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           )}
       </section>
 
+      {(activeOrders.length > 0 || allConversations.length > 0) && (
+        <section className="home-resume" aria-label="Pick up where you left off">
+          <SectionHeader
+            title="Pick up where you left off"
+            subtitle="Recent demo activity — sample chats and orders only."
+          />
+          <div className={`home-resume__grid${latestOrder && latestChatShop ? '' : ' home-resume__grid--single'}`}>
+            {latestOrder && (
+              <button
+                type="button"
+                className="home-resume__card home-resume__card--order"
+                aria-label={`Open demo order ${latestOrder.ref}${latestOrderShop ? ` from ${latestOrderShop.name}` : ''}`}
+                onClick={() => navigate({ name: 'order', orderId: latestOrder.id })}
+              >
+                {latestOrderShop && <ShopAvatar shop={latestOrderShop} size="sm" />}
+                <span className="home-resume__copy">
+                  <small>Demo order · {latestOrder.ref}</small>
+                  <strong>{latestOrderShop?.name ?? 'Shop'}</strong>
+                  <StatusPill status={latestOrder.status} />
+                </span>
+              </button>
+            )}
+            {latestConversation && latestChatShop && (
+              <button
+                type="button"
+                className="home-resume__card home-resume__card--chat"
+                aria-label={`Open sample chat with ${latestChatShop.name}`}
+                onClick={() => navigate({ name: 'chat', conversationId: latestConversation.id })}
+              >
+                <ShopAvatar shop={latestChatShop} size="sm" />
+                <span className="home-resume__copy">
+                  <small>Sample chat</small>
+                  <strong>{latestChatShop.name}</strong>
+                  <span>{latestChatMessage ? latestChatMessage.text || 'Photo (demo)' : 'Start the conversation'}</span>
+                </span>
+              </button>
+            )}
+          </div>
+          <div className="home-resume__actions">
+            {activeOrders.length > 0 && (
+              <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'orders' })}>
+                All orders <ArrowRight size={15} aria-hidden />
+              </button>
+            )}
+            {allConversations.length > 0 && (
+              <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'chats' })}>
+                All chats <ArrowRight size={15} aria-hidden />
+              </button>
+            )}
+          </div>
+        </section>
+      )}
+
       <section aria-label="Shop by category">
         <SectionHeader
           title="Browse by category"
@@ -287,7 +344,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         </p>
       </section>
 
-      {/* Categories and shop discovery are the primary Home journey. */}
+      {/* New visitors go straight from category discovery into shop choices. */}
       {launcher.length > 0 && (
         <section className="shop-launcher" aria-labelledby="launcher-title">
           <div className="shop-launcher__head">
@@ -331,31 +388,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         </section>
       )}
 
-      {/* Activity is secondary to discovery, and remains real demo-store data. */}
-      <section className="home-stat-grid" aria-label="Your demo activity">
-        <button type="button" className="home-stat" onClick={() => navigate({ name: 'chats' })}>
-          <span className="home-stat__text">
-            <span className="home-stat__label">Chats</span>
-            <span className="home-stat__value">{allConversations.length}</span>
-            <span className="home-stat__note">sample threads</span>
-          </span>
-          <span className="home-stat__icon" aria-hidden>
-            <MessagesSquare size={17} />
-          </span>
-        </button>
-        <button type="button" className="home-stat" onClick={() => navigate({ name: 'orders' })}>
-          <span className="home-stat__text">
-            <span className="home-stat__label">Active orders</span>
-            <span className="home-stat__value">{activeOrders.length}</span>
-            <span className="home-stat__note">demo orders</span>
-          </span>
-          <span className="home-stat__icon" aria-hidden>
-            <ClipboardList size={17} />
-          </span>
-        </button>
-      </section>
-
-      {conversations.length === 0 && activeOrders.length === 0 && (
+      {allConversations.length === 0 && activeOrders.length === 0 && (
         <section className="welcome-card" aria-label="New here?">
           <img
             className="welcome-card__art"
@@ -383,81 +416,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </div>
         </section>
       )}
-
-      {activeOrders.length > 0 && (
-        <section aria-label="Your active demo orders">
-          <SectionHeader
-            title="Your active orders"
-            subtitle="Demo orders in progress right now."
-            action={
-              <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'orders' })}>
-                Order history <ArrowRight size={15} aria-hidden />
-              </button>
-            }
-          />
-          <div className="active-order-strip">
-            {activeOrders.map((order) => {
-              const shop = getShop(state, order.shopId);
-              return (
-                <button
-                  key={order.id}
-                  type="button"
-                  className="active-order-card"
-                  onClick={() => navigate({ name: 'order', orderId: order.id })}
-                >
-                  {shop && <ShopAvatar shop={shop} />}
-                  <span className="active-order-card__text">
-                    <strong>
-                      {order.ref} · {shop?.name ?? 'Shop'}
-                    </strong>
-                    <small>Updated {formatRelative(order.updatedAt)}</small>
-                  </span>
-                  <StatusPill status={order.status} />
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {conversations.length > 0 && (
-        <section aria-label="Recent conversations">
-          <SectionHeader
-            title="Pick up where you left off"
-            subtitle="Your recent shop chats (demo customer: Thandi M.)."
-            action={
-              <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'chats' })}>
-                All chats <ArrowRight size={15} aria-hidden />
-              </button>
-            }
-          />
-          <ul className="conversation-list">
-            {conversations.map((conversation) => {
-              const shop = getShop(state, conversation.shopId);
-              const last = lastMessage(state, conversation.id);
-              if (!shop) return null;
-              return (
-                <li key={conversation.id}>
-                  <button type="button" onClick={() => navigate({ name: 'chat', conversationId: conversation.id })}>
-                    <ShopAvatar shop={shop} />
-                    <span className="conversation-list__text">
-                      <strong>{shop.name}</strong>
-                      <small>{last ? last.text || 'Photo (demo)' : 'Start the conversation'}</small>
-                    </span>
-                    <span className="conversation-list__meta">
-                      <small>{formatRelative(conversation.lastActivityAt)}</small>
-                      {conversation.unreadForCustomer > 0 && (
-                        <span className="unread-badge">{conversation.unreadForCustomer}</span>
-                      )}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
-
 
       {walkthrough && (
         <section className="spotlight" aria-label="Start with a walkthrough">

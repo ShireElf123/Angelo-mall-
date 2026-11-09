@@ -107,7 +107,7 @@ describe('Home — composition', () => {
     expect(navigate).toHaveBeenCalledWith({ name: 'shop', shopId: 'shop-superspar' });
   });
 
-  it('puts category discovery ahead of secondary chat continuation', () => {
+  it('puts returning customers’ chats before category discovery', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const heading = (label: RegExp) =>
       Array.from(container.querySelectorAll('h2')).find((h) => label.test(h.textContent ?? '')) as
@@ -118,8 +118,8 @@ describe('Home — composition', () => {
     expect(continueHeading, 'no continuation block').toBeTruthy();
     expect(categoryHeading, 'no category block').toBeTruthy();
     expect(
-      precedes(categoryHeading!, continueHeading!),
-      'the category rail is the primary discovery path',
+      precedes(continueHeading!, categoryHeading!),
+      'returning shoppers should be able to resume before browsing',
     ).toBe(true);
   });
 

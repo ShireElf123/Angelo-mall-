@@ -341,20 +341,49 @@
 
 .hero__actions { display: flex; flex-wrap: wrap; gap: 9px; }
 
-.active-order-strip { display: flex; flex-direction: column; gap: 9px; }
-.active-order-card {
-  display: flex; align-items: center; gap: 12px;
-  width: 100%; text-align: left;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 5px solid var(--gold-500);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  cursor: pointer;
-  box-shadow: var(--shadow);
+.home-resume__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
-.active-order-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.active-order-card__text small { color: var(--muted); }
+.home-resume__grid--single { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+.home-resume__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 78px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.home-resume__card:hover { border-color: var(--forest-700); }
+.home-resume__copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.home-resume__copy small { color: var(--muted); font-size: 0.68rem; line-height: 1.25; }
+.home-resume__copy strong {
+  overflow: hidden;
+  color: var(--forest-950);
+  font-size: 0.84rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-resume__copy > span:not(.pill) {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-resume__actions { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 3px; }
 
 /* Bundle 3 — categories are one scrolling rail on phones. The 2-column list
    needed five rows to name nine categories and read like a settings menu; a

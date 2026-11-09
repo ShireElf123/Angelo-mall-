@@ -94,14 +94,15 @@ describe('mobile navigation polish', () => {
   });
 });
 
-describe('activity cards', () => {
-  it('lay out as a real two-up grid of tappable cards', () => {
-    const grid = rule('.home-stat-grid');
-    expect(grid).toContain('display: grid');
+describe('returning-customer activity', () => {
+  it('pairs the latest demo order and chat in two compact tap targets', () => {
+    const grid = rule('.home-resume__grid');
+    const card = rule('.home-resume__card');
     expect(grid).toContain('repeat(2, minmax(0, 1fr))');
-    // Row, not column: the label and number sit beside the icon, as on the
-    // reference dashboard. A column stacked the icon under the number.
-    expect(rule('.home-stat')).toContain('flex-direction: row');
+    expect(card).toContain('display: flex');
+    expect(card).toContain('min-height: 78px');
+    expect(card).toContain('width: 100%');
+    expect(rule('.home-resume__grid--single')).toContain('max-width: 560px');
   });
 });
 
@@ -162,13 +163,10 @@ describe('reference parity — the reference\'s own surfaces', () => {
     expect(rule('.shop-row__glyph')).toContain('stroke: currentColor');
   });
 
-  it('marks the activity cards with the reference\'s solid green badge', () => {
-    const card = rule('.home-stat');
+  it('distinguishes resumable activity with a quiet white card surface', () => {
+    const card = rule('.home-resume__card');
+    expect(card).toContain('border: 1px solid var(--border)');
     expect(card).toContain('background: var(--surface)');
-    // No outline: the white card on the grey sheet is the whole separation.
-    expect(card).toContain('border: none');
-    expect(rule('.home-stat__icon')).toContain('background: var(--forest-900)');
-    expect(rule('.home-stat__icon')).toContain('color: #fff');
   });
 
   it('offers one quiet, plainly labelled directory action in the launcher header', () => {
@@ -182,7 +180,7 @@ describe('reference parity — the reference\'s own surfaces', () => {
 describe('motion', () => {
   it('covers the new controls in the reduced-motion switch', () => {
     const reduced = css.split('@media (prefers-reduced-motion: reduce)').pop() ?? '';
-    expect(reduced).toContain('.home-stat:active');
+    expect(reduced).toContain('.home-resume__card:active');
     expect(reduced).toContain('.demo-drawer__summary:active');
     expect(reduced).toContain('.shop-launcher__more:active');
   });

@@ -14,12 +14,11 @@ import { isConfirmedOrder } from '../../utils/orderWorkflow';
  *
  * The owner's note was that the app still read as a web page: a permanent strip
  * of four demo controls, a green poster, then the shops. These tests pin the
- * parts of that pass which are structural enough to regress silently — the
- * role switcher living behind a disclosure, and the two-up activity cards
- * reading real numbers out of the demo store rather than hard-coded ones.
+ * parts of the Home flow which are structural enough to regress silently —
+ * returning customers resume seeded demo work before browsing, while a first
+ * visit can go straight to discovery without empty metric cards.
  *
- * jsdom cannot lay out CSS, so nothing here proves what the screens look like.
- * The appearance was checked in a real browser and is reported separately.
+ * jsdom cannot lay out CSS, so these tests pin order and destinations, not pixels.
  */
 function wrap(node: ReactNode) {
   return render(
@@ -33,64 +32,89 @@ afterEach(() => {
   window.localStorage.clear();
 });
 
-describe('home — activity cards', () => {
-  it('reads both counts from the demo store instead of hard-coding them', () => {
+describe('home — resume real demo activity', () => {
+  it('shows the demo orders and recent conversations from the store', () => {
     const seed = createSeedState();
-    const chats = conversationsForCustomer(seed).length;
-    const active = ordersForCustomer(seed).filter(
+    const activeOrders = ordersForCustomer(seed).filter(
       (order) => isConfirmedOrder(order) && !['delivered', 'completed'].includes(order.status),
-    ).length;
+    );
+    const recentConversations = conversationsForCustomer(seed).slice(0, 3);
+    expect(activeOrders.length).toBeGreaterThan(0);
+    expect(recentConversations.length).toBeGreaterThan(0);
 
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    const values = Array.from(container.querySelectorAll('.home-stat__value')).map((el) => el.textContent);
-    expect(values).toEqual([String(chats), String(active)]);
+    expect(container.querySelectorAll('.home-resume__card--order')).toHaveLength(activeOrders.length > 0 ? 1 : 0);
+    expect(container.querySelectorAll('.home-resume__card--chat')).toHaveLength(recentConversations.length > 0 ? 1 : 0);
+    expect(container.querySelector('.home-resume__card--order')?.textContent).toContain(activeOrders[0].ref);
+    expect(container.querySelector('.home-resume__card--chat')?.textContent).toContain('Sample chat');
+    expect(container.querySelector('.home-resume')?.textContent).toMatch(/sample chats and orders only/i);
   });
 
-  it('labels the numbers as demo data, so they can never read as live activity', () => {
+  it('puts resumable orders and chats before category browsing', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    const notes = Array.from(container.querySelectorAll('.home-stat__note')).map((el) => el.textContent);
-    expect(notes).toEqual(['sample threads', 'demo orders']);
+    const hello = container.querySelector('.home-hello');
+    const resume = container.querySelector('[aria-label="Pick up where you left off"]');
+    const categories = container.querySelector('[aria-label="Shop by category"]');
+    expect(hello).not.toBeNull();
+    expect(resume).not.toBeNull();
+    expect(categories).not.toBeNull();
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(follows(hello!, resume!), 'the returner panel follows the greeting').toBe(true);
+    expect(follows(resume!, categories!), 'the returner panel precedes discovery').toBe(true);
   });
 
-  it('opens the chats and orders screens when the cards are tapped', () => {
+  it('opens an existing order or conversation when its preview is tapped', () => {
     const navigate = vi.fn();
+    const seed = createSeedState();
+    const expectedOrder = ordersForCustomer(seed).find(
+      (candidate) => isConfirmedOrder(candidate) && !['delivered', 'completed'].includes(candidate.status),
+    )!;
+    const expectedConversation = conversationsForCustomer(seed)[0];
     const { container } = wrap(<HomeScreen navigate={navigate} />);
-    const cards = container.querySelectorAll<HTMLButtonElement>('.home-stat');
-    expect(cards).toHaveLength(2);
+    const order = container.querySelector<HTMLButtonElement>('.home-resume__card--order');
+    const conversation = container.querySelector<HTMLButtonElement>('.home-resume__card--chat');
+    expect(order).not.toBeNull();
+    expect(conversation).not.toBeNull();
 
-    fireEvent.click(cards[0]);
+    fireEvent.click(order!);
+    expect(navigate).toHaveBeenCalledWith({ name: 'order', orderId: expectedOrder.id });
+    navigate.mockClear();
+    fireEvent.click(conversation!);
+    expect(navigate).toHaveBeenCalledWith({ name: 'chat', conversationId: expectedConversation.id });
+
+    navigate.mockClear();
+    fireEvent.click(screen.getByRole('button', { name: /All chats/i }));
     expect(navigate).toHaveBeenCalledWith({ name: 'chats' });
-    fireEvent.click(cards[1]);
+    navigate.mockClear();
+    fireEvent.click(screen.getByRole('button', { name: /All orders/i }));
     expect(navigate).toHaveBeenCalledWith({ name: 'orders' });
   });
 });
 
-describe('home — composition after the app pass', () => {
-  it('prioritizes greeting, category discovery and shops before activity counts', () => {
+describe('home — composition for a returning customer', () => {
+  it('orders the greeting, resume activity, category rail and shop launcher', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const hello = container.querySelector('.home-hello');
+    const resume = container.querySelector('[aria-label="Pick up where you left off"]');
     const categories = container.querySelector('[aria-label="Shop by category"]');
     const launcher = container.querySelector('.shop-launcher');
-    const stats = container.querySelector('.home-stat-grid');
     expect(hello).not.toBeNull();
+    expect(resume).not.toBeNull();
     expect(categories).not.toBeNull();
     expect(launcher).not.toBeNull();
-    expect(stats).not.toBeNull();
 
-    // Shopping is the primary job: greet, browse categories, see shops, then
-    // show secondary activity. The directory still has one explicit CTA.
     const follows = (a: Element, b: Element) =>
       Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(follows(hello!, categories!), 'category discovery must follow the greeting').toBe(true);
-    expect(follows(categories!, launcher!), 'shop choices must follow the category rail').toBe(true);
-    expect(follows(launcher!, stats!), 'activity counts must not lead shop discovery').toBe(true);
+    expect(follows(hello!, resume!), 'the greeting comes first').toBe(true);
+    expect(follows(resume!, categories!), 'returning work comes before browsing').toBe(true);
+    expect(follows(categories!, launcher!), 'category discovery leads into shops').toBe(true);
+    expect(container.querySelector('.home-stat-grid')).toBeNull();
     expect(screen.getByRole('button', { name: /See all \d+ shops/i })).toBeTruthy();
   });
 
   it('keeps the simulated-chat disclosure on the screen', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    // Demo language remains visible in the greeting; no concept-art chip is
-    // needed because the greeting itself carries no artwork.
     expect(container.querySelector('.home-hello__lede')?.textContent).toMatch(/simulated/i);
     expect(container.querySelector('.hero__aside-chip')).toBeNull();
   });

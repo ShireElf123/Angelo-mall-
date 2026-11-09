@@ -146,81 +146,10 @@
   .hero__search .btn { min-height: 44px; padding: 8px 15px; font-size: 0.9rem; }
 }
 
-/* The greeting stays compact on wide screens; activity cards are below shop discovery. */
+/* The greeting and returning-customer activity stay compact on wide screens. */
 @media (min-width: 900px) {
   .home-hello__title { font-size: 2rem; }
   .home-hello .hero__search { max-width: 520px; }
-  .home-stat { min-height: 96px; }
-}
-
-/* On a tablet two cards across the full 768px leave each one three-quarters
-   empty; the pair keeps its size and the row stays left-aligned. */
-@media (max-width: 899px) {
-  .home-stat-grid { max-width: 620px; }
-}
-
-/* ---- 4. Two-up stat cards (the reference's dashboard top row) ---- */
-
-.home-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.home-stat {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 72px;
-  padding: 10px 11px 10px 12px;
-  /* The reference's dashboard pair: a white card on the grey sheet, no outline
-     and no shadow — the colour step is the edge — with the solid green badge
-     on the right. */
-  border: none;
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  color: var(--ink);
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
-}
-.home-stat:hover { background: var(--surface); box-shadow: none; }
-.home-stat:active { transform: translateY(1px); box-shadow: none; background: var(--sage-50); }
-
-.home-stat__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.home-stat__label {
-  /* The reference's top cards read label first, then the value: a small grey
-     caption above a bold number, with the badge on the right. */
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--muted);
-  order: 0;
-}
-.home-stat__value {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--forest-950);
-}
-.home-stat__note { font-size: 0.72rem; color: var(--muted); line-height: 1.3; }
-.home-stat__icon {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  flex: none;
-  border-radius: var(--radius-pill);
-  /* The reference's signature mark: a solid dark-green circle with a white
-     glyph inside. It appears on every card in that app, so it is the mark we
-     reuse — on these two cards and on every shop tile. */
-  border: none;
-  background: var(--forest-900);
-  color: #fff;
 }
 
 /* ---- 5. Cards: quieter edges, more air, app-sized radii ---- */
@@ -250,17 +179,9 @@
 }
 .section-header .btn--sm.btn--ghost:hover:not(:disabled) { background: transparent; color: var(--forest-900); }
 
-/* The two-up activity cards at 320px: the pair is ~150px wide each, so the
-   label is kept on one line and the icon gives up 4px to make room. */
-@media (max-width: 379px) {
-  .home-stat { padding: 11px 10px 11px 12px; gap: 6px; }
-  .home-stat__label { font-size: 0.72rem; white-space: nowrap; }
-  .home-stat__value { font-size: 1.2rem; }
-  .home-stat__icon { width: 24px; height: 24px; }
-}
-
 /* ---- 5b. The smallest phones (320-379px) ---- */
 @media (max-width: 379px) {
+  .home-resume__grid { grid-template-columns: minmax(0, 1fr); }
   /* One shop per row at 320px. Two-up leaves ~120px for the name and "The
      Angelo SUPERSPAR" came out as "The Angelo…" with the status pill clipped
      to "Sample…" — a tenant's name cut in half and a label that no longer says
@@ -635,13 +556,12 @@
 }
 
 /* ---- 6. Reduced motion for the new controls ---- */
-/* This block is the last one in the file, so it restates the app-wide motion
-   switch as well as the two new controls — the contract test reads the final
-   block, and a rule that only exists further up would not be covered. */
+/* This block is last so the contract test covers reduced motion for app-wide
+   and Home-specific controls in the final cascade. */
 @media (prefers-reduced-motion: reduce) {
   .shell-main .page { animation: none; transform: none; }
-  .home-stat:active,
   .category-tile:active,
+  .home-resume__card:active,
   .shop-launcher__more:active,
   .shop-row:active,
   .demo-drawer__summary:active { transform: none; }

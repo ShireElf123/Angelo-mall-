@@ -42,9 +42,8 @@ describe('shop launcher', () => {
     const heading = (label: RegExp) =>
       Array.from(container.querySelectorAll('h2')).find((h) => label.test(h.textContent ?? ''));
 
-    // Document order is what a screen reader and a phone scroll follow: the
-    // canonical category rail comes first, then the launcher and supporting
-    // featured/how-it-works sections.
+    // Returning customers may have a resume panel before this point. The
+    // browse path itself stays canonical: categories, then shops, then support.
     const category = heading(/Browse by category/i);
     expect(category, 'no category rail').toBeTruthy();
     expect(Boolean(category!.compareDocumentPosition(launcher!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
@@ -240,6 +239,6 @@ describe('the honest disclosures survive the redesign', () => {
     const { container } = wrap();
     // Seeded and active from the demo state, not a blank fixture.
     expect(container.textContent).toMatch(/Pick up where you left off/i);
-    expect(container.textContent).toMatch(/Your active orders/i);
+    expect(container.textContent).toMatch(/Demo order · AMG-/i);
   });
 });

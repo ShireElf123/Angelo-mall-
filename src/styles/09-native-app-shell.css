@@ -84,6 +84,7 @@
   .demo-bar__reset:active,
   .hero__results li button:active,
   .conversation-list li button:active,
+  .home-resume__card:active,
   .category-tile:active { transform: none; }
 }
 

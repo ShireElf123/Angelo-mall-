@@ -113,6 +113,18 @@ describe('home guidance art', () => {
     expect(card?.textContent).toMatch(/concept demo/i);
     expect(card?.textContent).toMatch(/nothing you send reaches them/i);
     expect(card?.querySelectorAll('button').length).toBe(2);
+    // First-run customers have no activity to resume, so don't show zero-count
+    // metric cards or empty history sections above the discovery path.
+    expect(container.querySelector('.home-stat-grid')).toBeNull();
+    expect(container.querySelector('.home-resume')).toBeNull();
+    const hello = container.querySelector('.home-hello');
+    const categories = container.querySelector('[aria-label="Shop by category"]');
+    const launcher = container.querySelector('.shop-launcher');
+    expect(hello).not.toBeNull();
+    expect(categories).not.toBeNull();
+    expect(launcher).not.toBeNull();
+    expect(Boolean(hello!.compareDocumentPosition(categories!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
+    expect(Boolean(categories!.compareDocumentPosition(launcher!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
   });
 });
 
