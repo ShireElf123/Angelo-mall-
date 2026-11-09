@@ -102,9 +102,14 @@ describe('shop launcher', () => {
     expect(listed?.querySelector('.shop-tile')).toBeNull();
   });
 
-  it('offers a way through to the whole directory', () => {
-    wrap();
-    expect(screen.getByRole('button', { name: /Browse all \d+ shops/i })).toBeTruthy();
+  it('offers one plainly labelled way through to the directory', () => {
+    const navigate = vi.fn();
+    const { container } = render(<HomeScreen navigate={navigate} />, { wrapper: DemoStoreProvider });
+    const allShops = screen.getByRole('button', { name: /See all \d+ shops/i });
+    expect(container.querySelectorAll('.shop-launcher__more')).toHaveLength(1);
+    expect(container.querySelector('.shop-launcher__all')).toBeNull();
+    fireEvent.click(allShops);
+    expect(navigate).toHaveBeenCalledWith({ name: 'shops' });
   });
 
   it('gives every tile a brand band with a mark or signage, and a readable name', () => {
@@ -122,11 +127,11 @@ describe('shop launcher', () => {
     }
   });
 
-  it('uses the readable Clicks emblem crop on the launcher card', () => {
+  it('keeps the full Clicks name and pharmacy cross in the launcher mark', () => {
     const { container } = wrap();
     const clicksTile = tileFor(container, 'Clicks')!;
     expect(clicksTile.querySelector('img.shop-tile__logo')?.getAttribute('src')).toBe(
-      '/images/logos/clicks-unicorn.png',
+      '/images/logos/clicks.png',
     );
   });
 

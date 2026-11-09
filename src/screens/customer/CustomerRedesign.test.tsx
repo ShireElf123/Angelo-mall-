@@ -51,7 +51,7 @@ describe('Home — composition', () => {
     expect(container.querySelector('.home-hello__tag')?.textContent).toMatch(/demo/i);
 
     // Exactly one prominent entry into the directory.
-    const browse = screen.getByRole('button', { name: /Browse all \d+ shops/i });
+    const browse = screen.getByRole('button', { name: /See all \d+ shops/i });
     expect(browse).toBeTruthy();
   });
 

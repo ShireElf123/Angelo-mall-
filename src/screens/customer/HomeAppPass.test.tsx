@@ -82,7 +82,7 @@ describe('home — composition after the app pass', () => {
       Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
     expect(follows(hello!, stats!), 'activity cards must follow the greeting').toBe(true);
     expect(follows(stats!, launcher!), 'shops must follow the activity cards').toBe(true);
-    expect(screen.getByRole('button', { name: /Browse all \d+ shops/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /See all \d+ shops/i })).toBeTruthy();
   });
 
   it('keeps the simulated-chat disclosure on the screen', () => {

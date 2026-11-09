@@ -86,6 +86,14 @@ describe('phone shell', () => {
   });
 });
 
+describe('mobile navigation polish', () => {
+  it('lets the phone brand bar scroll away above the persistent bottom navigation', () => {
+    const phone = media('(max-width: 899px)');
+    expect(phone).toMatch(/\.app-header\s*\{[^}]*position: static;/s);
+    expect(rule('.bottom-nav')).toContain('position: fixed');
+  });
+});
+
 describe('activity cards', () => {
   it('lay out as a real two-up grid of tappable cards', () => {
     const grid = rule('.home-stat-grid');
@@ -163,7 +171,7 @@ describe('reference parity — the reference\'s own surfaces', () => {
     expect(rule('.home-stat__icon')).toContain('color: #fff');
   });
 
-  it('offers a quiet "See more" on the launcher rather than only a large button', () => {
+  it('offers one quiet, plainly labelled directory action in the launcher header', () => {
     expect(rule('.shop-launcher__more')).toContain('background: none');
     expect(rule('.shop-launcher__more')).toContain('color: var(--forest-700)');
     // It is still a real target.

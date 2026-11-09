@@ -23,14 +23,8 @@ export interface ShopLogoAsset {
   shopId: string;
   /** Local public path or direct HTTPS image URL for the complete brand mark. */
   file: string;
-  /** Optional square/compact symbol crop for dense launcher cards; directory uses the full mark. */
-  tileFile?: string;
   /** Intrinsic width / height of the complete mark. */
   aspectRatio: number;
-  /** Optional intrinsic width / height of the compact tile symbol. */
-  tileAspectRatio?: number;
-  /** Whether the tile-specific crop has an opaque background. */
-  tileOpaqueBackground?: boolean;
   /** Accessible name; normally the tenant's display name. */
   alt: string;
   sourceType: LogoSourceType;
@@ -95,12 +89,9 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
   'shop-clicks': {
     shopId: 'shop-clicks',
     file: '/images/logos/clicks.png',
-    // At 7.9:1, the complete lock-up reads as a hairline on a launcher tile.
-    // The official unicorn emblem crop is used only there; the directory keeps
-    // the complete wordmark and pharmacy cross.
-    tileFile: '/images/logos/clicks-unicorn.png',
+    // Use the complete lock-up on every surface. The emblem-only crop was
+    // visibly soft at tile size and removed the brand's readable wordmark.
     aspectRatio: 7.9,
-    tileAspectRatio: 36 / 34,
     alt: 'Clicks',
     sourceType: 'third-party-logo-host',
     sourceUrl: 'https://tukuz.com/download-logo-vector-3414/',

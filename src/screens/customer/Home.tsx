@@ -299,12 +299,11 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         <section className="shop-launcher" aria-labelledby="launcher-title">
           <div className="shop-launcher__head">
             <h2 id="launcher-title">Shops</h2>
-            {/* A quiet "See more" on the section title, the way the reference
-                ends every section — not a second large button competing with
-                the tiles. The prominent "Browse all" control stays at the foot
-                of the section, where the tiles run out. */}
+            {/* One explicit directory action, placed where people look for it.
+                The old full-width button repeated this route at the foot of the
+                same section and added height without adding a new choice. */}
             <button type="button" className="shop-launcher__more" onClick={() => navigate({ name: 'shops' })}>
-              See more <ChevronRight size={13} aria-hidden strokeWidth={2.5} />
+              See all {state.shops.length} shops <ChevronRight size={15} aria-hidden strokeWidth={2.5} />
             </button>
           </div>
           {/* The grid: chat-capable tenants only. Every card here starts a
@@ -336,11 +335,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               </ul>
             </section>
           )}
-          <div className="shop-launcher__all">
-            <button type="button" className="btn btn--primary btn--lg" onClick={() => navigate({ name: 'shops' })}>
-              Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
-            </button>
-          </div>
         </section>
       )}
 

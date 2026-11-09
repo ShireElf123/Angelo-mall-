@@ -36,9 +36,7 @@ export function ShopTile({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) =>
   const logo = shopLogoAsset(shop.id);
   const [logoFailed, setLogoFailed] = useState(false);
   const showLogo = Boolean(logo) && !logoFailed;
-  const tileFile = logo?.tileFile ?? logo?.file;
-  const printed = logo?.tileFile ? Boolean(logo.tileOpaqueBackground) : Boolean(logo?.opaqueBackground);
-  const tileMark = logo ? { ...logo, aspectRatio: logo.tileAspectRatio ?? logo.aspectRatio } : undefined;
+  const printed = Boolean(logo?.opaqueBackground);
   const solid = Boolean(logo?.needsLightVariant);
 
   return (
@@ -62,11 +60,11 @@ export function ShopTile({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) =>
         {showLogo ? (
           <span
             className={`shop-tile__mark-inner ${printed ? 'is-printed' : ''}`}
-            style={{ ['--mark-width' as string]: `${markWidthPercent(tileMark)}%` }}
+            style={{ ['--mark-width' as string]: `${markWidthPercent(logo)}%` }}
           >
             <img
               className="shop-tile__logo"
-              src={tileFile!}
+              src={logo!.file}
               alt=""
               loading="lazy"
               decoding="async"

@@ -184,10 +184,13 @@
   .brand__text small { font-size: 0.7rem; }
 }
 
-/* The demo bar scrolls away once the user starts reading; the header is what
-   stays pinned. Guard against the sticky header covering an anchor target. */
+/* On phones the persistent bottom nav already carries navigation, so let the
+   brand bar scroll with the page rather than stacking two fixed bars. Besides
+   recovering viewport height, this prevents section headings sliding beneath
+   the header during normal reading. Desktop keeps the sticky app bar. */
 @media (max-width: 899px) {
   .shell-chrome { position: static; }
+  .app-header { position: static; }
 }
 
 /* ==========================================================================

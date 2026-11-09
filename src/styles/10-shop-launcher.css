@@ -1,16 +1,15 @@
 /* ==========================================================================
    Home: shop launcher
    --------------------------------------------------------------------------
-   The first thing a customer should be able to do is tap a shop. Before this,
-   Home opened on a hero that filled the entire phone viewport — mall artwork,
-   a four-line explanation, a search field and two competing buttons — so no
-   shop was visible on the first screen at all, and the only route to one was
-   "Browse all 29 shops", a directory the shopper then had to filter again.
+   Discovery is the main Home task: four sample-chat shops lead in a two-up
+   brand grid, with information-only tenants in clearly labelled rows beneath.
+   One "See all" link routes to the full directory; the former duplicate button
+   after the rows added height without adding a choice.
 
-   The launcher sits directly under a shorter hero: square tiles, each a brand
-   mark (or a category glyph on the tenant's own colour), the trading name, and
-   what tapping it does. Three columns on a phone, four from 560px, eight across
-   on a wide screen so the set reads as one row, like an app.
+   Tiles lead with a fitted tenant mark (or category signage in that tenant's
+   colour), then the name and concise trading facts. The grid is two-up on
+   phones and tablets, one row of four at desktop, and one-up only on the
+   narrowest phones so names stay readable.
    ========================================================================== */
 
 .shop-launcher {
@@ -186,12 +185,6 @@
   gap: 3px;
   padding: 10px 12px 12px;
 }
-.shop-launcher__all {
-  display: flex;
-  justify-content: center;
-  margin-top: 12px;
-}
-
 /* Two-up is the launcher's shape at every width a thumb is used, because that
    is the reference's "Home View". A tablet gets a little more gap, not more
    columns: four across a 768px screen left each card too narrow for a tenant
@@ -206,16 +199,10 @@
   }
 }
 
-/* On a desk the cards keep the reference's proportions instead of being
-   stretched into slivers (4-up gave 262x64) or crammed into one side of the
-   page (2-up left a dead gutter). Three across at the full width, with the mark
-   and the type scaled up, gives ~350x76 rows: the same shape the phone shows,
-   larger, and the section still reads as one block. */
+/* At desktop, the finishing layer places the four chat shops on one line;
+   these per-card type and spacing refinements keep that wider layout balanced. */
 @media (min-width: 900px) {
-  .shop-launcher__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-  }
+  .shop-launcher__grid { gap: 14px; }
   .shop-tile__body { padding: 12px 14px 14px; gap: 4px; }
   .shop-tile__name { font-size: 0.9rem; line-height: 1.3; }
   .shop-tile__meta { font-size: 0.75rem; }
