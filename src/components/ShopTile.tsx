@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Info, MessageCircle } from 'lucide-react';
 import type { Shop } from '../types';
-import { CATEGORY_MONOGRAM_GLYPH, shopMarkForSmallSurface } from '../data/shopLogos';
+import { CATEGORY_MONOGRAM_GLYPH, markWidthPercent, shopLogoAsset, shopMarkForRow } from '../data/shopLogos';
+import { categoryLabel } from '../data/seed';
 import { CategoryGlyph } from './ShopLogo';
-import { Check, Info } from 'lucide-react';
 
 /**
  * Shops as tappable app surfaces, in two shapes.
@@ -15,73 +16,29 @@ import { Check, Info } from 'lucide-react';
  * labels rather than one component with a flag — a caller cannot accidentally
  * put a listing-only shop in the chat grid, or a chat shop in the list.
  *
- * `ShopTile` is deliberately not `ShopCard` — that card leads with a 16:9
- * concept photo, a category line, a tagline, opening hours and an "Open shop"
- * button, which is right for the directory but pushes the actual shop mark and
- * name too far down to scan. A launcher tile is a square mark, a name, and what
- * happens when you tap it.
+ * ## Why the card leads with a brand band
  *
- * The mark is the shop's **verified brand logo** where one exists; otherwise a
- * **category glyph on the tenant's own colour** — a clean, category-aware
- * fallback rather than a photo of a generic shop or a bare set of initials.
- * Both are decorative: the name beside the mark is the accessible label.
- */
-
-/** The logo or category glyph for a shop, sized by its container. Decorative. */
-function ShopMark({ shop }: { shop: Shop }) {
-  // Small square surface: only a near-square mark survives at this size. A wide
-  // wordmark here rendered its own name about four pixels tall, which reads as
-  // a broken image rather than a brand, so those shops keep the glyph.
-  const asset = shopMarkForSmallSurface(shop.id);
-  const [logoFailed, setLogoFailed] = useState(false);
-  const showLogo = asset && !logoFailed;
-
-  return (
-    <span
-      className="shop-tile__mark"
-      /* The fallback is a tint of the tenant's own colour with the glyph in
-         the full colour, not a solid block of it. A wall of saturated squares
-         was the heaviest thing on the first screen; a tinted icon reads like
-         an app icon on a white card, which is what the reference grid does,
-         and it still tells the shops apart at a glance. */
-      style={
-        showLogo
-          ? undefined
-          : {
-              background: `${shop.colour}14`,
-              borderColor: `${shop.colour}33`,
-              color: shop.colour,
-            }
-      }
-    >
-      {showLogo ? (
-        <img
-          className="shop-tile__logo"
-          src={asset.file}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          onError={() => setLogoFailed(true)}
-        />
-      ) : (
-        <svg
-          className={`shop-tile__glyph shop-tile__glyph--${CATEGORY_MONOGRAM_GLYPH[shop.category]}`}
-          viewBox="0 0 24 24"
-          aria-hidden
-          focusable="false"
-        >
-          <CategoryGlyph category={shop.category} />
-        </svg>
-      )}
-    </span>
-  );
-}
-
-/**
- * A shop whose sample chat is open. Tapping it starts that chat — there is no
- * other outcome, so the card states exactly one thing.
+ * The first version was a 32px mark beside two lines of text. Measured on a
+ * phone, that put a 32px chip in a 173px card — a sixth of the width — and only
+ * logos that were nearly square survived in it, so a row of eight shops showed
+ * two real brand marks and six grey category glyphs. It read as a list of
+ * chats, not as a mall.
+ *
+ * A card now opens with a full-width band of the tenant's own colour carrying
+ * their mark, the way every launcher on a phone does. A wide band is what makes
+ * a wide wordmark possible at this size: SUPERSPAR's 3.2:1 lock-up gets the
+ * whole width instead of being squeezed into a square. Marks are still sized to
+ * an equal visual budget (see `markWidthPercent`), opaque files are printed on
+ * white, and a tenant with no verified mark gets a signage band with its trade
+ * name — never an empty frame.
  */
 export function ShopTile({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) => void }) {
+  const logo = shopLogoAsset(shop.id);
+  const [logoFailed, setLogoFailed] = useState(false);
+  const showLogo = Boolean(logo) && !logoFailed;
+  const printed = Boolean(logo?.opaqueBackground);
+  const solid = Boolean(logo?.needsLightVariant);
+
   return (
     <button
       type="button"
@@ -91,14 +48,54 @@ export function ShopTile({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) =>
       // performs — a screen reader should not have to infer it from two spans.
       aria-label={`Open the sample chat with ${shop.name}`}
     >
-      <ShopMark shop={shop} />
-      <span className="shop-tile__name">{shop.name}</span>
-      <span className="shop-tile__meta shop-tile__meta--chat">Sample chat</span>
-      {/* The reference badges every card in its row with a solid green circle.
-          Ours carries the same fact the caption says: this shop's sample chat
-          is open. */}
-      <span className="shop-tile__badge" aria-hidden>
-        <Check size={13} strokeWidth={3} />
+      <span
+        className={`shop-tile__mark ${solid ? 'is-solid' : 'is-tinted'}`}
+        style={
+          {
+            ['--plate-tint' as string]: `${shop.colour}1a`,
+            ['--plate-solid' as string]: shop.colour,
+          } as React.CSSProperties
+        }
+      >
+        {showLogo ? (
+          <span
+            className={`shop-tile__mark-inner ${printed ? 'is-printed' : ''}`}
+            style={{ ['--mark-width' as string]: `${markWidthPercent(logo)}%` }}
+          >
+            <img
+              className="shop-tile__logo"
+              src={logo!.file}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              onError={() => setLogoFailed(true)}
+            />
+          </span>
+        ) : (
+          /* No verified mark: a fascia, not a hole — the trade name in caps on
+             the tenant's own colour, the same signage idea the shop page uses. */
+          <span className="shop-tile__sign">
+            <svg className="shop-tile__success" viewBox="0 0 24 24" aria-hidden focusable="false">
+              <CategoryGlyph category={shop.category} />
+            </svg>
+            <span className="shop-tile__sign-word">{shop.name}</span>
+          </span>
+        )}
+        {/* A chat bubble in the band's corner: this is the one thing a tap on a
+            card does, and it is the only chat mark on the screen — said once,
+            as an affordance, instead of "Sample chat" repeated on every card. */}
+        <span className="shop-tile__badge" aria-hidden>
+          <MessageCircle size={13} strokeWidth={2.6} />
+        </span>
+      </span>
+      <span className="shop-tile__body">
+        <span className="shop-tile__name">{shop.name}</span>
+        {/* The shop's own facts, not the app's: what kind of shop it is and
+            whether it is trading in the demo. Two cards in a row used to read
+            "Sample chat / Sample chat", which made a mall look like an inbox. */}
+        <span className="shop-tile__meta">
+          {categoryLabel(shop.category)} · {shop.tradingNow ? 'Open now' : 'Closed'}
+        </span>
       </span>
     </button>
   );
@@ -108,12 +105,17 @@ export function ShopTile({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) =>
  * A directory listing with no Mall Go connection.
  *
  * Drawn as a full-width row rather than a card, so the shape itself says "this
- * is a different kind of thing" before the caption is read — the difference
- * between a chat and a page should not rest on a 12px icon. The caption says
- * what the tap does; it never says "no chat", because the information page it
- * opens offers a clearly labelled scripted sample chat.
+ * is a different kind of thing" before the caption is read. The mark slot is
+ * wider than it is tall, because these tenants' marks are wordmarks — a square
+ * slot forced PEP and Mica back to a category glyph even though their logo is
+ * in the registry, which is what made half the directory look unbranded.
  */
 export function ShopRow({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) => void }) {
+  const logo = shopMarkForRow(shop.id);
+  const [logoFailed, setLogoFailed] = useState(false);
+  const showLogo = Boolean(logo) && !logoFailed;
+  const printed = Boolean(logo?.opaqueBackground);
+
   return (
     <button
       type="button"
@@ -121,10 +123,34 @@ export function ShopRow({ shop, onOpen }: { shop: Shop; onOpen: (shop: Shop) => 
       onClick={() => onOpen(shop)}
       aria-label={`${shop.name} — opens shop information`}
     >
-      <ShopMark shop={shop} />
+      <span
+        className="shop-row__mark"
+        style={{ background: `${shop.colour}14`, borderColor: `${shop.colour}26` }}
+      >
+        {showLogo ? (
+          <img
+            className={`shop-row__logo ${printed ? 'is-printed' : ''}`}
+            src={logo!.file}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            onError={() => setLogoFailed(true)}
+          />
+        ) : (
+          <svg
+            className="shop-row__glyph"
+            viewBox="0 0 24 24"
+            aria-hidden
+            focusable="false"
+            style={{ color: shop.colour }}
+          >
+            <CategoryGlyph category={shop.category} />
+          </svg>
+        )}
+      </span>
       <span className="shop-row__text">
         <strong>{shop.name}</strong>
-        <small>Opens shop information</small>
+        <small>{categoryLabel(shop.category)}</small>
       </span>
       <span className="shop-row__badge" aria-hidden>
         <Info size={14} strokeWidth={2.6} />

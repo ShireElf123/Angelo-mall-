@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Bike, Clock, ShoppingBag, Star } from 'lucide-react';
 import { categoryLabel } from '../data/seed';
-import { shopLogoAsset } from '../data/shopLogos';
+import { markWidthPercent, shopLogoAsset } from '../data/shopLogos';
 import type { Shop } from '../types';
 import { formatZAR } from '../utils/format';
 import { ParticipationPill, SponsoredTag, TradingPill } from './ui';
@@ -70,9 +70,7 @@ export function ShopCard({
    * height instead. The exponent is damped the way an optical logo wall dampens
    * it — wide marks earn more width, but not linearly, so they stop dominating.
    */
-  const ratio = logo?.aspectRatio ?? 1;
-  const budget = 58 * Math.pow(ratio / 2.2, 0.45) * (logo?.markScale ?? 1);
-  const markWidth = `${Math.round(Math.min(80, Math.max(42, budget)))}%`;
+  const markWidth = `${markWidthPercent(logo)}%`;
 
   // An opaque file (JPEG from an official gallery, or a flat PNG) is printed on
   // a white plate so the box does not show as a rectangle of the wrong colour.

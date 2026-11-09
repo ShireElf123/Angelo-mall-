@@ -237,15 +237,14 @@ export function hasVerifiedLogo(shopId: string): boolean {
 }
 
 /**
- * The widest mark that still reads in a small square, e.g. the 32px box on a
- * Home tile or a directory row.
+ * The widest mark that still reads in a small square, e.g. the 32px box on the
+ * narrowest phone surface.
  *
  * A 3.2:1 wordmark squeezed into 32px renders its own name at about four
  * pixels tall: it stops being a brand mark and becomes a smudge that looks like
  * a broken image. Below this ratio the mark is used; above it the caller should
  * fall back to the category glyph or the signage plate, which is legible at
- * that size. Aspect ratio is a rough stand-in for "is this a wordmark or an
- * icon" and is good enough for the sizes this app renders at.
+ * that size.
  */
 export const SMALL_MARK_MAX_RATIO = 1.8;
 
@@ -253,6 +252,42 @@ export const SMALL_MARK_MAX_RATIO = 1.8;
 export function shopMarkForSmallSurface(shopId: string): ShopLogoAsset | undefined {
   const asset = shopLogoAsset(shopId);
   return asset && asset.aspectRatio <= SMALL_MARK_MAX_RATIO ? asset : undefined;
+}
+
+/**
+ * The widest a mark can be and still read in a directory row's mark slot,
+ * which is deliberately wider than it is tall (52x36).
+ *
+ * PEP (2.0:1), TOPS at SPAR (2.0:1), Mica (2.03:1) and Spur (2.8:1) all have a
+ * verified mark, and all of them were being thrown away for a category glyph
+ * because the slot used to be a square governed by the 1.8 rule above. In a
+ * 52px-wide slot a 2:1 wordmark is 52x26 — small, but a brand, and a brand is
+ * the whole point of the plate.
+ */
+export const ROW_MARK_MAX_RATIO = 3;
+
+/** The mark to show in a directory row's mark slot. */
+export function shopMarkForRow(shopId: string): ShopLogoAsset | undefined {
+  const asset = shopLogoAsset(shopId);
+  return asset && asset.aspectRatio <= ROW_MARK_MAX_RATIO ? asset : undefined;
+}
+
+/**
+ * Optical width budget for a mark inside a safe area, as a percentage.
+ *
+ * Equal *visual weight*, not equal box: the width grows with the square root of
+ * the mark's own aspect ratio — damped, so a 3.2:1 wordmark earns more width
+ * than a 1.08:1 roundel but not three times as much — then a per-asset boost can
+ * lift a very wide lock-up that would otherwise hit the cap and render its own
+ * name too small to read.
+ *
+ * Used by both the directory card and the Home tile so the two surfaces cannot
+ * drift into sizing the same logo differently.
+ */
+export function markWidthPercent(asset?: ShopLogoAsset): number {
+  const ratio = asset?.aspectRatio ?? 1;
+  const budget = 58 * Math.pow(ratio / 2.2, 0.45) * (asset?.markScale ?? 1);
+  return Math.round(Math.min(80, Math.max(42, budget)));
 }
 
 export const LOGO_COVERAGE = {

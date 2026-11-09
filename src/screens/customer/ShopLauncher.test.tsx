@@ -83,8 +83,12 @@ describe('shop launcher', () => {
     expect(cards).toHaveLength(4);
     for (const card of cards) {
       // Every card promises a chat, and the seed data backs the promise.
-      expect(card.querySelector('.shop-tile__meta')?.textContent).toBe('Sample chat');
       expect(card.getAttribute('aria-label')).toMatch(/sample chat/i);
+      // The visible caption is the shop's own fact — its category and whether
+      // it is trading — not the app's status word repeated on every card.
+      const meta = card.querySelector('.shop-tile__meta')?.textContent ?? '';
+      expect(meta).toMatch(/Open now|Closed/);
+      expect(meta).not.toMatch(/sample chat/i);
     }
   });
 
@@ -103,12 +107,35 @@ describe('shop launcher', () => {
     expect(screen.getByRole('button', { name: /Browse all \d+ shops/i })).toBeTruthy();
   });
 
-  it('gives every tile a square mark and a readable name', () => {
+  it('gives every tile a brand band with a mark or signage, and a readable name', () => {
     const { container } = wrap();
     for (const tile of Array.from(container.querySelectorAll('.shop-tile'))) {
-      expect(tile.querySelector('.shop-tile__mark')).not.toBeNull();
+      // The band is the card's subject, not a chip beside the text: it is the
+      // thing that makes eight shops read as brands rather than as inbox rows.
+      const band = tile.querySelector('.shop-tile__mark');
+      expect(band).not.toBeNull();
+      // A mark, or the tenant's trade name — never an empty frame.
+      const hasMark = band!.querySelector('img.shop-tile__logo, .shop-tile__sign-word') !== null;
+      expect(hasMark).toBe(true);
       const name = tile.querySelector('.shop-tile__name')?.textContent ?? '';
       expect(name.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('shows a directory row the tenant mark that the old square slot threw away', () => {
+    const { container } = wrap();
+    // PEP is a 2:1 wordmark. It was swapped for a category glyph by a rule that
+    // only allowed marks up to 1.8:1 in a square slot, so four tenants with a
+    // verified logo looked unbranded. A slot that is wider than it is tall is
+    // what lets them show their own mark.
+    const pep = rowFor(container, 'PEP')!;
+    const img = pep.querySelector('img.shop-row__logo');
+    expect(img).not.toBeNull();
+    expect(img!.getAttribute('src')).toMatch(/brandfetch|pep/i);
+    // Every row still has exactly one mark in its slot.
+    for (const row of Array.from(container.querySelectorAll('.shop-row'))) {
+      const slot = row.querySelector('.shop-row__mark')!;
+      expect(slot.querySelectorAll('img, svg').length).toBe(1);
     }
   });
 });
@@ -155,10 +182,18 @@ describe('tapping a shop', () => {
     // Both labels describe the action, and the accessible name carries the
     // destination, so the difference is audible as well as visible.
     const listingRow = rowFor(container, 'TOPS at SPAR')!;
-    expect(chatTile.querySelector('.shop-tile__meta')?.textContent).toBe('Sample chat');
-    expect(listingRow.querySelector('small')?.textContent).toBe('Opens shop information');
+    // The card says what kind of shop it is and that it is trading; the row
+    // says what kind of shop it is, and its information mark says what a tap
+    // does. The action itself is also in the accessible name of both.
+    expect(chatTile.querySelector('.shop-tile__meta')?.textContent).toMatch(/Groceries/);
+    expect(listingRow.querySelector('small')?.textContent).toBe('Groceries');
     expect(chatTile.getAttribute('aria-label')).toMatch(/sample chat/i);
     expect(listingRow.getAttribute('aria-label')).toMatch(/shop information/i);
+
+    // Both shapes show a real brand mark where the registry has one, rather
+    // than a bare glyph: a mark is the thing a customer recognises a shop by.
+    expect(chatTile.querySelector('img.shop-tile__logo')).not.toBeNull();
+    expect(listingRow.querySelector('img.shop-row__logo')).not.toBeNull();
   });
 
   it('never claims a listing-only shop has no chat at all', () => {

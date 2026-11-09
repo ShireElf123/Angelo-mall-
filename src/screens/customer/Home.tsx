@@ -325,8 +325,7 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
             <section className="shop-launcher__listed" aria-labelledby="launcher-listed-title">
               <h3 id="launcher-listed-title">Listed shops — information only</h3>
               <p className="shop-launcher__listed-note">
-                Real Angelo Mall tenants that have no Mall Go connection in this demo. Tapping one opens its
-                information page.
+                Real tenants with no Mall Go connection — a tap opens their information.
               </p>
               <ul className="shop-launcher__list">
                 {listedShops.map((shop) => (

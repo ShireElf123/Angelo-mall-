@@ -134,17 +134,24 @@ describe('reference parity — the reference\'s own surfaces', () => {
     expect(page).not.toMatch(/--bg:\s*#f2f5f2/);
   });
 
-  it('draws the shop tile as an outline-free row with a badge', () => {
+  it('draws the shop tile as a card whose brand band carries the mark', () => {
     const tile = rule('.shop-tile');
-    expect(tile).toContain('box-shadow: none');
+    // A column card: band, then name and facts. It was a 32px-chip row, which
+    // only fitted near-square logos and read like an inbox row.
+    expect(tile).toContain('flex-direction: column');
     expect(tile).toContain('border: none');
-    expect(tile).toContain('grid-template-columns: 32px minmax(0, 1fr) 18px');
-    expect(rule('.shop-tile__mark')).toContain('width: 32px');
-    expect(rule('.shop-tile__badge')).toContain('background: var(--forest-900)');
-    // The fallback mark is a tint of the tenant colour with the glyph in the
-    // colour itself — set inline by ShopTile — so the glyph must follow the
-    // text colour rather than being hard-coded white.
-    expect(rule('.shop-tile__glyph')).toContain('stroke: currentColor');
+    expect(rule('.shop-tile__mark')).toContain('aspect-ratio: 2 / 1');
+    expect(rule('.shop-tile__mark')).toContain('width: 100%');
+    // The mark's own safe area is sized by the shared optical budget, so a wide
+    // wordmark and a roundel carry the same visual weight.
+    expect(rule('.shop-tile__mark-inner')).toContain('width: var(--mark-width');
+    expect(rule('.shop-tile__logo')).toContain('object-fit: contain');
+    // The one chat mark on the screen sits in the band's corner.
+    expect(rule('.shop-tile__badge')).toContain('position: absolute');
+    // Both fallbacks (signage band, row glyph) follow the tenant's own colour,
+    // set inline, rather than being hard-coded white.
+    expect(rule('.shop-tile__success')).toContain('stroke: currentColor');
+    expect(rule('.shop-row__glyph')).toContain('stroke: currentColor');
   });
 
   it('marks the activity cards with the reference\'s solid green badge', () => {

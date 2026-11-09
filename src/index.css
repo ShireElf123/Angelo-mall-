@@ -3353,78 +3353,82 @@ body.chat-expanded {
 }
 
 .shop-tile {
-  display: grid;
-  /* Mark, then the name with its status beneath it — one compact row per shop,
-     the way the reference stacks its "Home View" cards. A column of mark, name,
-     pill made each card ~150px tall and left a third of it empty; this is the
-     same three pieces in the space two lines need. */
-  /* mark | text | badge, the reference's row. The text column takes the slack
-     so the badge always sits on the right edge. */
-  grid-template-columns: 32px minmax(0, 1fr) 18px;
-  grid-template-rows: auto auto;
-  column-gap: 8px;
-  row-gap: 1px;
-  align-items: center;
+  /* A card, not a row: a full-width brand band on top, the name and the shop's
+     own facts beneath. The previous row put a 32px chip beside two lines of
+     text, so only near-square logos survived and a row of eight shops showed
+     two brands and six grey glyphs — it read as an inbox, not a mall. */
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  min-height: 44px;
-  padding: 10px 11px;
-  /* A white tile on a pale page, the way the reference draws its "Home View"
-     grid: white fill, hairline-or-nothing edge, a mark, a name. The heavy
-     brown border and the drop shadow are gone, so the logo is the loudest
-     thing in the tile instead of the box around it. */
-  /* No outline: a white card on the grey sheet is the whole separation, as in
-     the reference. */
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  gap: 0;
   border: none;
   border-radius: var(--radius-md);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.05), 0 10px 22px -18px rgba(18, 36, 29, 0.45);
   color: var(--ink);
   text-align: left;
   cursor: pointer;
-  /* Brief, physical press feedback; no bounce, no long easing. */
-  transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
+.shop-tile:hover { box-shadow: 0 2px 4px rgba(18, 36, 29, 0.07), 0 18px 28px -20px rgba(18, 36, 29, 0.5); }
+.shop-tile:active { transform: translateY(1px); }
 
-.shop-tile:hover {
-  border-color: var(--border-strong);
-  box-shadow: none;
-}
-
-.shop-tile:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-.shop-tile:focus-visible {
-  outline: 2px solid var(--forest-700);
-  outline-offset: 2px;
-}
-
-/* The mark well: one square, one radius, one inset, for every tenant — logo or
-   glyph. Holding the aspect ratio here is what keeps the grid aligned when a
-   logo is 1:1 and its neighbour is 3.2:1. */
+/* The brand band: the tenant's colour, edge to edge, with the mark inside an
+   even safe area. A wide band is what makes a wide wordmark possible this
+   small — in a square it was unreadable, which is how six shops lost their
+   logo. */
 .shop-tile__mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-row: 1 / span 2;
-  grid-column: 1;
-  align-self: center;
-  aspect-ratio: 1 / 1;
-  /* A small mark in the corner of the card, not the card's subject. 44px is
-     the same footprint as the reference's card icons; the tenant's name below
-     is the label, and the mark is there to recognise a shop at a glance. */
-  width: 32px;
-  height: 32px;
-  align-self: center;
-  padding: 5px;
-  border-radius: var(--radius-sm);
-  background: var(--surface-warm);
-  border: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: var(--plate-tint, var(--surface-warm));
   overflow: hidden;
 }
+.shop-tile__mark.is-solid { background: var(--plate-solid, var(--forest-800)); }
 
+/* The mark's own safe area, sized by the shared optical budget. */
+.shop-tile__mark-inner {
+  display: grid;
+  place-items: center;
+  width: var(--mark-width, 60%);
+  height: 100%;
+}
+/* Opaque files (JPEGs, and PNGs shot on white) are printed on a white plate of
+   their own, the way a sticker sits on a coloured box. The plate keeps the
+   definite width of the optical budget: `width: auto` here collapsed it to the
+   image's shrink-to-fit width, which drew a 6px sliver inside the band. */
+.shop-tile__mark-inner.is-printed {
+  width: var(--mark-width, 60%);
+  max-width: 92%;
+  height: 100%;
+  padding: 7px 9px;
+  background: #fff;
+  border-radius: var(--radius-xs);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.08);
+}
+/* An opaque JPEG carries its own white page. Printed as a white card on a pale
+   tint, that card was the loudest shape in the band — three shops looked like
+   stickers rather than brands. Multiplying the white away lets the tenant's
+   colour be the band again while the artwork keeps its own colours. */
+.shop-tile__mark.is-tinted .shop-tile__mark-inner.is-printed {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  mix-blend-mode: multiply;
+}
+/* Both dimensions definite, so the plate is the same white box whatever the
+   mark's ratio and the artwork letterboxes inside it instead of collapsing. */
+.shop-tile__mark-inner.is-printed .shop-tile__logo {
+  width: 100%;
+  height: 100%;
+}
 .shop-tile__logo {
   max-width: 100%;
   max-height: 100%;
@@ -3432,82 +3436,58 @@ body.chat-expanded {
   object-fit: contain;
 }
 
-.shop-tile__glyph {
-  width: 68%;
-  max-width: 30px;
-  height: auto;
+/* Signage band for a tenant with no verified mark: the trade name in caps on
+   their own colour. Never an empty frame. */
+.shop-tile__sign {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 0 4%;
+  text-align: center;
+  color: var(--forest-800);
+}
+.shop-tile__success {
+  width: 20px;
+  height: 20px;
   fill: none;
-  /* currentColor: the mark's inline colour when this is the tinted fallback,
-     white when it sits on a solid tenant block. */
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.95;
+  opacity: 0.7;
+}
+.shop-tile__sign-word {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
-/* The name is the label, so it gets real presence and two lines of room rather
-   than being shrunk to fit one. "The Angelo SUPERSPAR" and "Golden Buffalo
-   Spur" both wrap here. */
-.shop-tile__name {
-  /* Full width of the card beside the mark, so a long tenant name is never cut
-     to "Golden Buffalo…" by the badge; the badge sits on the caption line. */
-  grid-column: 2 / span 2;
-  grid-row: 1;
-  align-self: end;
-  /* Two lines, left-aligned, no reserved height: the row heights come from the
-     content, and the pill sits under the name. */
-  font-size: 0.78rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--ink);
-  overflow-wrap: break-word;
-  /* Keep the name whole, and let a long one wrap to two lines. */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 0;
-}
-
-.shop-tile__meta {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--muted);
-}
-
-/* The row badge: solid dark green circle, white glyph — the reference's mark,
-   reused for state rather than decoration. Listing-only tenants get the same
-   shape in a quieter grey so the difference is readable at a glance. */
+/* The one chat mark on the screen: a bubble in the band's corner. Saying it
+   once as an affordance replaces "Sample chat" printed on every card, which is
+   what made a mall look like an open inbox. */
 .shop-tile__badge {
-  grid-column: 3;
-  grid-row: 2;
-  align-self: center;
-  justify-self: end;
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   border-radius: var(--radius-pill);
-  background: var(--forest-900);
-  color: #fff;
-  flex: none;
-}
-.shop-tile__badge--info {
-  background: var(--surface-warm);
-  color: var(--muted);
+  background: var(--surface);
+  color: var(--forest-700);
+  box-shadow: 0 1px 3px rgba(18, 36, 29, 0.18);
 }
 
-/* Chat is the promise of this screen, so the shops that support it say so in
-   the brand green; the ones that do not stay visibly quieter. */
-.shop-tile__meta--chat {
-  /* Same grey caption as the reference gives every card; the badge on the row
-     above is what distinguishes an open sample chat from an information page,
-     so the caption does not need a second colour to say it again. */
-  color: var(--muted);
+.shop-tile__body {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px 12px;
 }
-
 .shop-launcher__all {
   display: flex;
   justify-content: center;
@@ -3538,15 +3518,10 @@ body.chat-expanded {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
-  .shop-tile {
-    grid-template-columns: 44px minmax(0, 1fr) 22px;
-    column-gap: 12px;
-    padding: 14px 16px;
-  }
-  .shop-tile__mark { width: 44px; height: 44px; padding: 7px; }
-  .shop-tile__name { font-size: 0.86rem; line-height: 1.3; }
+  .shop-tile__body { padding: 12px 14px 14px; gap: 4px; }
+  .shop-tile__name { font-size: 0.9rem; line-height: 1.3; }
   .shop-tile__meta { font-size: 0.75rem; }
-  .shop-tile__badge { width: 22px; height: 22px; }
+  .shop-tile__badge { width: 26px; height: 26px; }
   .shop-launcher__head h2 { font-size: 1.15rem; }
   .shop-launcher__more { min-height: 36px; font-size: 0.8rem; }
 }
@@ -3575,12 +3550,11 @@ body.chat-expanded {
   .shop-launcher__grid {
     gap: 8px;
   }
-  .shop-tile {
-    padding: 10px;
-    column-gap: 8px;
-    grid-template-columns: 38px minmax(0, 1fr);
-  }
-  .shop-tile__mark { width: 38px; height: 38px; padding: 6px; }
+  /* One card per row makes the band almost 300px wide; at 2:1 that is 148px of
+     colour per shop, which pushes the second shop off a small screen. A wider
+     band keeps the brand presence and gives the page back 30px per card. */
+  .shop-tile__mark { aspect-ratio: 5 / 2; }
+  .shop-tile__body { padding: 9px 11px 11px; }
   .shop-tile__name {
     /* 0.75rem, folding into the existing step: 0.73rem sat 0.16px from 0.72rem
        and the type-scale contract forbids steps that close together. */
@@ -3945,60 +3919,11 @@ body.chat-expanded {
    drops to its own line instead of squeezing the section title. */
 .shop-launcher__head { flex-wrap: wrap; row-gap: 2px; }
 
-.shop-tile {
-  border-radius: var(--radius-md);
-  padding: 12px 10px 11px;
-  gap: 7px;
-  /* Flat: white on the pale page, a hairline only if a browser cannot paint the
-     soft shadow. No border, so the tile is a mark and a name, not a rectangle. */
-  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.04), 0 8px 18px -16px rgba(18, 36, 29, 0.35);
-  border-color: transparent;
-  /* Fill the grid cell, so every tile in a row is the same height and the
-     status pills share one baseline whether the name is one line or three. */
-  height: 100%;
-}
-.shop-tile__mark {
-  border-radius: var(--radius-md);
-}
-.shop-tile__name {
-  font-size: 0.8rem;
-  /* Two lines at 390px holds every tenant name in the launcher; "The Angelo
-     SUPERSPAR" is the longest and needs both. A truncated tenant name is the
-     one label this grid must not shorten. */
-  -webkit-line-clamp: 2;
-  min-height: 0;
-  text-align: left;
-}
-/* "Sample chat" becomes a small forest pill — the same visual language as the
-   "Open now (demo)" status pill elsewhere, and legible at arm's length. */
-.shop-tile__meta {
-  grid-column: 2;
-  align-self: start;
-  justify-self: start;
-  /* A grey second line under the name, the way the reference labels every card
-     ("Sensors / 3 active"): the state is read as a caption, and the badge on
-     the right is the glanceable version of the same fact. */
-  margin-top: 0;
-  padding: 0;
-  border-radius: 0;
-  background: none;
-  /* Spans the name's column and the badge's, so "Sample chat" is never cut to
-     "Sample c…" by the badge sitting beside it. */
-  grid-column: 2;
-  grid-row: 2;
-  font-size: 0.68rem;
-  line-height: 1.35;
-  /* One line always: "Sample chat" wrapped to "Sample / chat" in a 112px tile,
-     which made every chat-capable tile taller than its neighbours. */
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--muted);
-}
-.shop-tile__meta--chat {
-  color: var(--forest-700);
-}
+/* (Card anatomy is defined once, above. This block used to re-declare the
+   tile's padding and shadow for the old row layout; keeping it would have
+   re-introduced the 12px inset that the brand band must not have.) */
+.shop-tile { height: 100%; }
+
 
 /* Section links read as "See more ›" text, not as a second row of buttons —
    but they are still buttons, and a thumb is 44px wide. The extra height is
@@ -4033,19 +3958,14 @@ body.chat-expanded {
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
   }
-  .shop-tile {
-    grid-template-columns: 34px minmax(0, 1fr) 18px;
-    padding: 10px 12px;
-  }
-  .shop-tile__mark { width: 34px; height: 34px; padding: 5px; }
   .shop-tile__name {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     -webkit-line-clamp: 2;
     min-height: 0;
   }
   .shop-tile__meta {
     padding: 0;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -4202,13 +4122,36 @@ body.chat-expanded {
 .shop-row:hover { box-shadow: 0 1px 2px rgba(18, 36, 29, 0.06), 0 10px 20px -18px rgba(18, 36, 29, 0.4); }
 .shop-row:active { transform: translateY(1px); }
 
-/* The same mark as a card, at row scale. */
-.shop-row .shop-tile__mark {
-  grid-column: auto;
-  grid-row: auto;
-  width: 36px;
-  height: 36px;
-  padding: 6px;
+/* The row's mark slot: wider than it is tall, because these tenants' marks are
+   wordmarks. A square slot forced PEP, Mica, TOPS and Spur back to a category
+   glyph even though the registry has their logo — half the directory looked
+   unbranded for want of 20 pixels of width. */
+.shop-row__mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 40px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  overflow: hidden;
+}
+.shop-row__logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* Opaque files keep their own white background; paint it in rather than
+   letting the tint bleed through the box. */
+.shop-row__logo.is-printed { background: #fff; border-radius: var(--radius-xs); padding: 2px 3px; }
+.shop-row__glyph {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .shop-row__text {
@@ -4247,7 +4190,7 @@ body.chat-expanded {
   .shop-launcher__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .shop-launcher__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .shop-row { min-height: 72px; }
-  .shop-row .shop-tile__mark { width: 40px; height: 40px; }
+  .shop-row__mark { width: 64px; height: 46px; }
   .shop-row__text strong { font-size: 0.9rem; }
 }
 
