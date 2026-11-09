@@ -116,8 +116,7 @@
 .shop-card,
 .conversation-list li button,
 .hero__results li button,
-.category-tile,
-.need-tile {
+.category-tile {
   transition:
     transform var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out),
@@ -176,8 +175,7 @@
 
 .conversation-list li button:active,
 .hero__results li button:active,
-.category-tile:active,
-.need-tile:active {
+.category-tile:active {
   background: var(--forest-100);
   transform: scale(0.995);
 }
@@ -213,8 +211,7 @@
   .btn--ghost:hover:not(:disabled),
   .btn--light:hover:not(:disabled) { box-shadow: var(--elev-1); }
   .conversation-list li button:hover { transform: translateY(-1px); box-shadow: var(--elev-2); }
-  .category-tile:hover,
-  .need-tile:hover { transform: translateY(-2px); box-shadow: var(--elev-3); }
+  .category-tile:hover { transform: translateY(-2px); box-shadow: var(--elev-3); }
 }
 
 /* Touch screens: no lingering zoom/hover after a tap. */
@@ -237,7 +234,6 @@
   .hero__results li button:active { transform: none; }
   .shop-card:hover,
   .category-tile:hover,
-  .need-tile:hover,
   .conversation-list li button:hover { transform: none; }
 }
 

@@ -84,7 +84,6 @@
   .demo-bar__reset:active,
   .hero__results li button:active,
   .conversation-list li button:active,
-  .need-tile:active,
   .category-tile:active { transform: none; }
 }
 
@@ -116,7 +115,6 @@
   .shop-card__body { padding: var(--space-3); }
   .search-field { padding-left: var(--space-3); }
   .results-count { font-size: 0.84rem; }
-  .need-grid { gap: 8px; }
   .category-grid { grid-auto-columns: 82px; }
 }
 
@@ -131,7 +129,6 @@
 .demo-bar__reset:active,
 .hero__results li button:active,
 .conversation-list li button:active,
-.need-tile:active,
 .category-tile:active {
   transform: scale(0.97);
 }

@@ -5,7 +5,7 @@ import App from './App';
 
 /** Route-level smoke test: every demo workspace still mounts after Phase 2. */
 const ROUTES: [hash: string, expected: RegExp][] = [
-  ['#/', /What do you need today\?/],
+  ['#/', /Browse by category/],
   ['#/shops', /Shop directory/],
   ['#/shops?q=bread', /Shop directory/],
   ['#/shop/shop-superspar', /The Angelo SUPERSPAR/],

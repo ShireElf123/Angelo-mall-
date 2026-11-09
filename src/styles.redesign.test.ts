@@ -121,21 +121,11 @@ describe('category rail', () => {
   });
 });
 
-describe('need tiles', () => {
-  it('leads with one full-width tile on phones, then a two-up block', () => {
-    expect(css).toMatch(/\.need-grid > li:first-child\s*\{\s*grid-column: 1 \/ -1;/s);
-    expect(css).toMatch(/\.need-grid > li:first-child \.need-tile img\s*\{[^}]*aspect-ratio: 16 \/ 9/s);
-  });
-
-  it('drops the lead treatment when the grid has three or five columns', () => {
-    const wide = mediaBlocks('(min-width: 640px)').join('\n');
-    expect(wide).toMatch(/\.need-grid > li:first-child\s*\{\s*grid-column: auto;/s);
-  });
-
-  it('lets the artwork run to the tile edge', () => {
-    // Padding on the tile is what made a photograph look like a swatch.
-    expect(rule('.need-tile')).toContain('padding: 0');
-    expect(rule('.need-tile img')).toContain('border-radius: 0');
+describe('home discovery consolidation', () => {
+  it('keeps the nine category routes in the compact category rail', () => {
+    expect(rule('.category-grid')).toContain('grid-auto-flow: column');
+    expect(rule('.category-tile img')).toContain('aspect-ratio: 1 / 1');
+    expect(css).not.toContain('.need-grid');
   });
 });
 

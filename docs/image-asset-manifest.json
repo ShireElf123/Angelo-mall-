@@ -551,7 +551,7 @@
       "file": "/images/category-fashion.jpg",
       "kind": "generated",
       "batch": 3,
-      "purpose": "Fashion & accessories need shortcut: shirt, sneaker, sunglasses, bag, scarf.",
+      "purpose": "Fashion & accessories category tile: shirt, sneaker, sunglasses, bag, scarf.",
       "screens": [
         "home"
       ],
@@ -567,7 +567,7 @@
       "file": "/images/category-electronics.jpg",
       "kind": "generated",
       "batch": 3,
-      "purpose": "Electronics & mobile need shortcut: blank-screen phone, earbuds, cable, power bank.",
+      "purpose": "Electronics & mobile category tile: blank-screen phone, earbuds, cable, power bank.",
       "screens": [
         "home"
       ],
@@ -583,7 +583,7 @@
       "file": "/images/category-beauty.jpg",
       "kind": "generated",
       "batch": 3,
-      "purpose": "Beauty & personal care need shortcut: pump bottle, serum, cream tube, compact mirror.",
+      "purpose": "Beauty & personal care category tile: pump bottle, serum, cream tube, compact mirror.",
       "screens": [
         "home"
       ],
@@ -599,7 +599,7 @@
       "file": "/images/category-home-hardware.jpg",
       "kind": "generated",
       "batch": 3,
-      "purpose": "Home & hardware need shortcut: paint tin, brush, hammer and potted plant.",
+      "purpose": "Home & hardware category tile: paint tin, brush, hammer and potted plant.",
       "screens": [
         "home"
       ],

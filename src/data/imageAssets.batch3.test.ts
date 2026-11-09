@@ -2,13 +2,13 @@
 /**
  * Batch 3 guards (shop-discovery artwork).
  *
- * Batch 3 added illustrated "need" shortcuts, the directory's discovery strip
- * and wayfinding banner, the basket and delivery journey strips and the
- * welcome art on the Help install panel. Every asset must stay documented,
- * present and referenced from a real screen.
+ * Batch 3 added category illustrations, the directory's discovery strip and
+ * wayfinding banner, the basket and delivery journey strips and the welcome
+ * art on the Help install panel. Every asset must stay documented, present and
+ * referenced from a real screen.
  */
 import { describe, expect, it } from 'vitest';
-import { IMAGE_ASSETS, NEED_SHORTCUTS, imageAsset, imageSrc } from './imageAssets';
+import { IMAGE_ASSETS, imageAsset } from './imageAssets';
 import { CATEGORIES } from './seed';
 
 const BATCH_3_IDS = [
@@ -57,31 +57,29 @@ describe('batch 3 image assets', () => {
   });
 
   it.each(BATCH_3_IDS)('%s is reachable from a screen', (id) => {
-    // Direct `imageSrc('…')` use in a screen, or (for the need tiles) through
-    // the exported NEED_SHORTCUTS list that Home renders.
+    // Category illustrations are referenced by their canonical image path
+    // from Home's category-icon map rather than by manifest identifier.
     const direct = SCREEN_SOURCES.some(([, source]) => source.includes(`'${id}'`));
-    const viaNeedShortcuts =
-      NEED_SHORTCUTS.some((need) => need.art === imageAsset(id).file) &&
-      SCREEN_SOURCES.some(([, source]) => source.includes('NEED_SHORTCUTS'));
-    expect(direct || viaNeedShortcuts, `nothing renders ${id}`).toBe(true);
+    const filePath = SCREEN_SOURCES.some(([, source]) => source.includes(imageAsset(id).file));
+    expect(direct || filePath, `nothing renders ${id}`).toBe(true);
   });
 
-  it('maps every need shortcut to a real, filterable category', () => {
+  it('maps the five illustrated category assets to real Home categories', () => {
     const categoryIds = new Set(CATEGORIES.map((category) => category.id));
-    expect(NEED_SHORTCUTS).toHaveLength(5);
-    for (const need of NEED_SHORTCUTS) {
-      expect(categoryIds.has(need.category)).toBe(true);
-      expect(need.label.length).toBeGreaterThan(3);
-      expect(need.art).toMatch(/^\/images\/.*\.jpg$/);
-      expect(imageSrc(`need-${need.category === 'homeware' ? 'home-hardware' : need.category}`)).toBe(need.art);
-    }
-  });
+    const mapping = [
+      ['food', 'need-food', '/images/category-food.jpg'],
+      ['fashion', 'need-fashion', '/images/category-fashion.jpg'],
+      ['electronics', 'need-electronics', '/images/category-electronics.jpg'],
+      ['beauty', 'need-beauty', '/images/category-beauty.jpg'],
+      ['homeware', 'need-home-hardware', '/images/category-home-hardware.jpg'],
+    ] as const;
 
-  it('keeps the need artwork distinct from the photographic category covers', () => {
-    const needFiles = NEED_SHORTCUTS.map((need) => need.art);
-    const coverFiles = IMAGE_ASSETS.filter((asset) => asset.id.startsWith('category-')).map((asset) => asset.file);
-    for (const file of needFiles) expect(coverFiles).not.toContain(file);
-    expect(new Set(needFiles).size).toBe(needFiles.length);
+    for (const [categoryId, assetId, file] of mapping) {
+      expect(categoryIds.has(categoryId)).toBe(true);
+      expect(imageAsset(assetId).file).toBe(file);
+      expect(SCREEN_SOURCES.some(([, source]) => source.includes(file))).toBe(true);
+    }
+    expect(new Set(mapping.map(([, , file]) => file)).size).toBe(mapping.length);
   });
 
   it('never implies prices, offers or stock in the generated brief', () => {

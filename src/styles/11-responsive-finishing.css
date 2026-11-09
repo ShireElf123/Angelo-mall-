@@ -146,15 +146,8 @@
   .hero__search .btn { min-height: 44px; padding: 8px 15px; font-size: 0.9rem; }
 }
 
-/* A wide screen has room for the greeting and the two cards side by side, so the
-   header block is not a 1,200px-wide strip of mostly empty card. */
+/* The greeting stays compact on wide screens; activity cards are below shop discovery. */
 @media (min-width: 900px) {
-  .home-top {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
-    gap: 28px;
-    align-items: center;
-  }
   .home-hello__title { font-size: 2rem; }
   .home-hello .hero__search { max-width: 520px; }
   .home-stat { min-height: 96px; }

@@ -10,10 +10,9 @@ import { DirectoryScreen } from './Directory';
 /**
  * Bundle 3 — customer experience composition.
  *
- * These pin the *structure* of the redesign rather than its pixels: that Home
- * opens on one art-directed panel and then answers "where was I", "what do I
- * need" and "what is this" in that order; that the directory's search lives
- * inside the discovery card; and that the artwork is still labelled honestly.
+ * These pin the *structure* of the redesign rather than its pixels: Home leads
+ * with direct category and shop discovery before secondary activity; directory
+ * search lives inside its discovery card; artwork remains labelled honestly.
  *
  * jsdom cannot lay out CSS, so nothing here proves what the screens look like.
  * Rendered appearance is unverified in this environment and is reported as
@@ -108,19 +107,19 @@ describe('Home — composition', () => {
     expect(navigate).toHaveBeenCalledWith({ name: 'shop', shopId: 'shop-superspar' });
   });
 
-  it('puts the shopper back into their own chats before asking what they need', () => {
+  it('puts category discovery ahead of secondary chat continuation', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const heading = (label: RegExp) =>
       Array.from(container.querySelectorAll('h2')).find((h) => label.test(h.textContent ?? '')) as
         | HTMLHeadingElement
         | undefined;
     const continueHeading = heading(/Pick up where you left off/i);
-    const categoryHeading = heading(/What do you need today/i);
+    const categoryHeading = heading(/Browse by category/i);
     expect(continueHeading, 'no continuation block').toBeTruthy();
     expect(categoryHeading, 'no category block').toBeTruthy();
     expect(
-      precedes(continueHeading!, categoryHeading!),
-      'a returning shopper should see their chats before the category rail',
+      precedes(categoryHeading!, continueHeading!),
+      'the category rail is the primary discovery path',
     ).toBe(true);
   });
 
@@ -149,7 +148,7 @@ describe('Home — composition', () => {
     expect(copy).not.toMatch(/\bbestselling\b/i);
     // ...and the honesty it does carry stays put.
     expect(copy).toMatch(/simulated/i);
-    expect(copy).toMatch(/no shop in this demo has product photographs/i);
+    expect(copy).toMatch(/no shop in this demo has product photographs, confirmed stock or offers/i);
   });
 });
 

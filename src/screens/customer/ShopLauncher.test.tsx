@@ -8,8 +8,8 @@ import { HomeScreen } from './Home';
 /**
  * The redesigned Home: open the app, see shops, tap a shop, start talking.
  *
- * These pin the two things the redesign exists to guarantee — that shops are
- * the first thing on the screen, and that tapping one leads somewhere honest.
+ * These pin the two things the redesign exists to guarantee — that category
+ * discovery leads into shops, and that tapping one leads somewhere honest.
  * The chat/listing distinction is asserted from the real seed data rather than
  * a fixture, so it cannot drift away from what the demo actually supports.
  *
@@ -34,7 +34,7 @@ const rowFor = (container: HTMLElement, name: string | RegExp) =>
   );
 
 describe('shop launcher', () => {
-  it('puts the shops ahead of every supporting section', () => {
+  it('puts category discovery before shops and keeps later sections below them', () => {
     const { container } = wrap();
     const launcher = container.querySelector('.shop-launcher');
     expect(launcher).not.toBeNull();
@@ -42,8 +42,12 @@ describe('shop launcher', () => {
     const heading = (label: RegExp) =>
       Array.from(container.querySelectorAll('h2')).find((h) => label.test(h.textContent ?? ''));
 
-    // Document order is what a screen reader and a phone scroll follow, so the
-    // launcher must precede categories, featured, promos and how-it-works.
+    // Document order is what a screen reader and a phone scroll follow: the
+    // canonical category rail comes first, then the launcher and supporting
+    // featured/how-it-works sections.
+    const category = heading(/Browse by category/i);
+    expect(category, 'no category rail').toBeTruthy();
+    expect(Boolean(category!.compareDocumentPosition(launcher!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
     const follows = (label: RegExp) => {
       const other = heading(label);
       expect(other, `no ${label} section`).toBeTruthy();
@@ -51,7 +55,6 @@ describe('shop launcher', () => {
         launcher!.compareDocumentPosition(other!) & Node.DOCUMENT_POSITION_FOLLOWING,
       );
     };
-    expect(follows(/What do you need today/i)).toBe(true);
     expect(follows(/Featured shops/i)).toBe(true);
     expect(follows(/How chat-based ordering works/i)).toBe(true);
   });

@@ -12,7 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/seed';
-import { NEED_SHORTCUTS, imageSrc } from '../../data/imageAssets';
+import { imageSrc } from '../../data/imageAssets';
 import { DEMO_CUSTOMER } from '../../types';
 import type { Route } from '../../router';
 import { useDemoStore } from '../../store/DemoStore';
@@ -32,12 +32,12 @@ import { DemoTag, SectionHeader, ShopAvatar, StatusPill } from '../../components
 
 const CATEGORY_ICONS: Record<string, string> = {
   groceries: '/images/shop-grocery.jpg',
-  food: '/images/shop-food.jpg',
-  fashion: '/images/shop-fashion.jpg',
-  electronics: '/images/shop-electronics.jpg',
+  food: '/images/category-food.jpg',
+  fashion: '/images/category-fashion.jpg',
+  electronics: '/images/category-electronics.jpg',
   pharmacy: '/images/shop-pharmacy.jpg',
-  homeware: '/images/shop-homeware.jpg',
-  beauty: '/images/shop-beauty.jpg',
+  homeware: '/images/category-home-hardware.jpg',
+  beauty: '/images/category-beauty.jpg',
   services: '/images/shop-services.jpg',
   finance: '/images/shop-finance.jpg',
 };
@@ -47,16 +47,14 @@ const CATEGORY_ICONS: Record<string, string> = {
  *
  * One journey: open the app, see shops, tap a shop, start talking.
  *
- * The screen therefore opens on a greeting — a name, one sentence on what this
- * is, and search — then two activity cards, then the shop launcher. Everything
- * else (where you left off, categories, the walkthrough, promotions, how it
- * works) is kept, in full, *below* that, because none of it is the first thing
- * a customer wants to do.
+ * The screen therefore opens on a greeting and search, then one compact
+ * category rail and the shop launcher. Activity counts follow discovery rather
+ * than competing with it; returning chats, orders and the walkthrough remain
+ * available below.
  *
- * There is no hero banner. The owner compared the app with a reference design
- * that opens straight on a greeting and two cards, and asked for the poster to
- * go; the product line survives as the `h1` and the supporting sentence, so the
- * screen still says what this is before anything else.
+ * There is no hero banner. The owner asked for the poster to go; the product
+ * line survives in the greeting and supporting sentence, so the screen still
+ * explains itself before asking the shopper to act.
  *
  * That ordering is the redesign. The previous version opened with a hero that
  * filled a whole phone screen — artwork, a four-line explanation, search and two
@@ -185,18 +183,14 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   return (
     <div className="page page--home">
       {/*
-        Greeting header, not a hero poster.
-
-        The reference app opens on "Hello, Anna" and two cards — no banner. The
-        owner asked for that, so the mall photograph, the dark plate and the
-        four-line headline are gone: the first screen is a name, one honest
-        sentence and the search field.
+        Greeting header, not a hero poster. The mall photograph, dark plate and
+        four-line headline are gone: this is a name, an honest sentence and
+        search.
 
         The `h1` keeps the product's own words ("Chat to mall shops"), because
         that is what has to land in the first two seconds, and it stays the one
         heading on the screen so heading navigation still lands here.
       */}
-      <div className="home-top">
       <section className="home-hello" aria-labelledby="home-title">
         {/*
           The name is the page title, exactly as the reference opens: "Hello,
@@ -262,39 +256,38 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           )}
       </section>
 
-      {/*
-        Two-up stat cards, the way the reference dashboard opens under its
-        title. Both numbers are read from the demo store — chat threads and
-        confirmed orders that already exist — so nothing is invented and the
-        cards stay true if the demo data changes.
-      */}
-      <section className="home-stat-grid" aria-label="Your demo activity">
-        <button type="button" className="home-stat" onClick={() => navigate({ name: 'chats' })}>
-          <span className="home-stat__text">
-            <span className="home-stat__label">Chats</span>
-            <span className="home-stat__value">{allConversations.length}</span>
-            <span className="home-stat__note">sample threads</span>
-          </span>
-          <span className="home-stat__icon" aria-hidden>
-            <MessagesSquare size={17} />
-          </span>
-        </button>
-        <button type="button" className="home-stat" onClick={() => navigate({ name: 'orders' })}>
-          <span className="home-stat__text">
-            <span className="home-stat__label">Active orders</span>
-            <span className="home-stat__value">{activeOrders.length}</span>
-            <span className="home-stat__note">demo orders</span>
-          </span>
-          <span className="home-stat__icon" aria-hidden>
-            <ClipboardList size={17} />
-          </span>
-        </button>
+      <section aria-label="Shop by category">
+        <SectionHeader
+          title="Browse by category"
+          subtitle="Jump straight into the mall directory."
+        />
+        <div className="category-grid">
+          {CATEGORIES.map((category) => {
+            const count = state.shops.filter((s) => s.category === category.id).length;
+            return (
+              <button
+                key={category.id}
+                type="button"
+                className="category-tile"
+                onClick={() => navigate({ name: 'shops', category: category.id })}
+              >
+                <img src={CATEGORY_ICONS[category.id]} alt="" loading="lazy" />
+                <span>
+                  <strong>{category.label}</strong>
+                  <small>
+                    {count} shop{count === 1 ? '' : 's'}
+                  </small>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="category-grid__note">
+          Illustrations only — no shop in this demo has product photographs, confirmed stock or offers.
+        </p>
       </section>
-      </div>
 
-      {/* Shops come immediately after the greeting and the two activity cards —
-          open the app, see shops, tap one. It is the main action on this
-          screen, and now it is the first thing after the header block. */}
+      {/* Categories and shop discovery are the primary Home journey. */}
       {launcher.length > 0 && (
         <section className="shop-launcher" aria-labelledby="launcher-title">
           <div className="shop-launcher__head">
@@ -337,6 +330,30 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           )}
         </section>
       )}
+
+      {/* Activity is secondary to discovery, and remains real demo-store data. */}
+      <section className="home-stat-grid" aria-label="Your demo activity">
+        <button type="button" className="home-stat" onClick={() => navigate({ name: 'chats' })}>
+          <span className="home-stat__text">
+            <span className="home-stat__label">Chats</span>
+            <span className="home-stat__value">{allConversations.length}</span>
+            <span className="home-stat__note">sample threads</span>
+          </span>
+          <span className="home-stat__icon" aria-hidden>
+            <MessagesSquare size={17} />
+          </span>
+        </button>
+        <button type="button" className="home-stat" onClick={() => navigate({ name: 'orders' })}>
+          <span className="home-stat__text">
+            <span className="home-stat__label">Active orders</span>
+            <span className="home-stat__value">{activeOrders.length}</span>
+            <span className="home-stat__note">demo orders</span>
+          </span>
+          <span className="home-stat__icon" aria-hidden>
+            <ClipboardList size={17} />
+          </span>
+        </button>
+      </section>
 
       {conversations.length === 0 && activeOrders.length === 0 && (
         <section className="welcome-card" aria-label="New here?">
@@ -441,38 +458,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
         </section>
       )}
 
-      <section aria-label="Shop by category">
-        <SectionHeader
-          title="What do you need today?"
-          subtitle="Nine ways into the same mall directory. Real tenants, grouped the way the mall lists them."
-          action={
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => navigate({ name: 'shops' })}>
-              All {state.shops.length} <ArrowRight size={15} aria-hidden />
-            </button>
-          }
-        />
-        <div className="category-grid">
-          {CATEGORIES.map((category) => {
-            const count = state.shops.filter((s) => s.category === category.id).length;
-            return (
-              <button
-                key={category.id}
-                type="button"
-                className="category-tile"
-                onClick={() => navigate({ name: 'shops', category: category.id })}
-              >
-                <img src={CATEGORY_ICONS[category.id]} alt="" loading="lazy" />
-                <span>
-                  <strong>{category.label}</strong>
-                  <small>
-                    {count} shop{count === 1 ? '' : 's'}
-                  </small>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
 
       {walkthrough && (
         <section className="spotlight" aria-label="Start with a walkthrough">
@@ -510,33 +495,6 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
           </div>
         </section>
       )}
-
-      <section aria-label="Explore by need">
-        <SectionHeader
-          title="Explore by need"
-          subtitle="Five quick ways in. Each one filters the same mall directory — there is no catalogue, and prices only appear if a shop replies in a chat."
-        />
-        <ul className="need-grid">
-          {NEED_SHORTCUTS.map((need) => (
-            <li key={need.category}>
-              <button
-                type="button"
-                className="need-tile"
-                onClick={() => navigate({ name: 'shops', category: need.category })}
-              >
-                <img src={need.art} alt="" loading="lazy" decoding="async" aria-hidden />
-                <span>
-                  <strong>{need.label}</strong>
-                  <small>{need.caption}</small>
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <p className="need-grid__note">
-          Illustrations only — no shop in this demo has product photographs, confirmed stock or offers.
-        </p>
-      </section>
 
       <section aria-label="Featured shops">
         <SectionHeader

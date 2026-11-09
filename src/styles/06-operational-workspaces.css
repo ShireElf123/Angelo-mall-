@@ -155,10 +155,6 @@
     padding: 0;
     scroll-snap-type: none;
   }
-  .need-grid { grid-template-columns: repeat(3, 1fr); }
-  /* The lead tile spans only while the grid is two-up. */
-  .need-grid > li:first-child { grid-column: auto; }
-  .need-grid > li:first-child .need-tile img { aspect-ratio: 4 / 3; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .shop-facts { grid-template-columns: repeat(2, 1fr); }
   .basket-items li { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
@@ -201,7 +197,6 @@
   .toast-stack { bottom: 18px; }
   .shop-grid { grid-template-columns: repeat(3, 1fr); }
   .category-grid { grid-template-columns: repeat(4, 1fr); }
-  .need-grid { grid-template-columns: repeat(5, 1fr); }
   .stat-grid { grid-template-columns: repeat(4, 1fr); }
   .orders-board { grid-template-columns: repeat(3, 1fr); align-items: start; }
   .page--chat { grid-template-columns: minmax(0, 1fr) 310px; align-items: start; }

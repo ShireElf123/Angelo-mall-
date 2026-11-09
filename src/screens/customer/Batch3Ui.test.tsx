@@ -20,41 +20,39 @@ function wrap(node: React.ReactNode) {
   );
 }
 
-describe('Home — explore by need', () => {
-  it('shows five illustrated shortcuts as decorative art with readable labels', () => {
+describe('Home — category discovery hierarchy', () => {
+  it('uses one canonical nine-category rail instead of repeating the same routes', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    const tiles = container.querySelectorAll('.need-tile');
-    expect(tiles).toHaveLength(5);
+    expect(container.querySelectorAll('.category-tile')).toHaveLength(9);
+    expect(container.querySelectorAll('.need-grid')).toHaveLength(0);
+    expect(container.querySelectorAll('.need-tile')).toHaveLength(0);
+    expect(container.querySelector('.category-grid__note')?.textContent).toMatch(
+      /illustrations only.*no shop in this demo has product photographs, confirmed stock or offers/i,
+    );
+  });
 
-    const labels = Array.from(tiles).map((tile) => tile.querySelector('strong')?.textContent);
-    expect(labels).toEqual([
-      'Food & dining',
-      'Fashion & accessories',
-      'Electronics & mobile',
-      'Beauty & personal care',
-      'Home & hardware',
-    ]);
-
-    for (const tile of Array.from(tiles)) {
-      const img = tile.querySelector('img') as HTMLImageElement | null;
-      expect(img).not.toBeNull();
-      expect(img?.getAttribute('src')).toMatch(/^\/images\/category-.*\.jpg$/);
-      expect(img?.getAttribute('alt')).toBe('');
-      expect(img?.getAttribute('aria-hidden')).toBe('true');
+  it('keeps the generated category artwork decorative and clearly disclosed', () => {
+    const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
+    const tiles = Array.from(container.querySelectorAll('.category-tile'));
+    const generatedArt = tiles.filter((tile) =>
+      /category-(food|fashion|electronics|beauty|home-hardware)\.jpg/.test(
+        tile.querySelector('img')?.getAttribute('src') ?? '',
+      ),
+    );
+    expect(generatedArt).toHaveLength(5);
+    for (const tile of generatedArt) {
+      expect(tile.querySelector('img')?.getAttribute('alt')).toBe('');
     }
+    expect(container.querySelector('.category-grid__note')?.textContent).toMatch(/illustrations only/i);
   });
 
-  it('keeps the "no catalogue" honesty note next to the shortcuts', () => {
-    const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    expect(container.textContent).toMatch(/no shop in this demo has product photographs, confirmed stock or offers/i);
-  });
-
-  it('opens the directory filtered to the tapped need', () => {
+  it('opens the directory filtered to the tapped category', () => {
     const navigate = vi.fn();
     const { container } = wrap(<HomeScreen navigate={navigate} />);
-    const electronics = Array.from(container.querySelectorAll('.need-tile')).find((tile) =>
-      tile.textContent?.includes('Electronics & mobile'),
+    const electronics = Array.from(container.querySelectorAll('.category-tile')).find((tile) =>
+      tile.textContent?.includes('Electronics'),
     );
+    expect(electronics).toBeTruthy();
     fireEvent.click(electronics as Element);
     expect(navigate).toHaveBeenCalledWith({ name: 'shops', category: 'electronics' });
   });

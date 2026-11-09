@@ -66,30 +66,31 @@ describe('home — activity cards', () => {
 });
 
 describe('home — composition after the app pass', () => {
-  it('reads greeting, then activity cards, then shops', () => {
+  it('prioritizes greeting, category discovery and shops before activity counts', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
     const hello = container.querySelector('.home-hello');
-    const stats = container.querySelector('.home-stat-grid');
+    const categories = container.querySelector('[aria-label="Shop by category"]');
     const launcher = container.querySelector('.shop-launcher');
+    const stats = container.querySelector('.home-stat-grid');
     expect(hello).not.toBeNull();
-    expect(stats).not.toBeNull();
+    expect(categories).not.toBeNull();
     expect(launcher).not.toBeNull();
+    expect(stats).not.toBeNull();
 
-    // The reference order the owner asked for: who you are, then two numbers,
-    // then the shops. The shops are still the largest thing on the screen and
-    // the only single way into the directory.
+    // Shopping is the primary job: greet, browse categories, see shops, then
+    // show secondary activity. The directory still has one explicit CTA.
     const follows = (a: Element, b: Element) =>
       Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(follows(hello!, stats!), 'activity cards must follow the greeting').toBe(true);
-    expect(follows(stats!, launcher!), 'shops must follow the activity cards').toBe(true);
+    expect(follows(hello!, categories!), 'category discovery must follow the greeting').toBe(true);
+    expect(follows(categories!, launcher!), 'shop choices must follow the category rail').toBe(true);
+    expect(follows(launcher!, stats!), 'activity counts must not lead shop discovery').toBe(true);
     expect(screen.getByRole('button', { name: /See all \d+ shops/i })).toBeTruthy();
   });
 
   it('keeps the simulated-chat disclosure on the screen', () => {
     const { container } = wrap(<HomeScreen navigate={vi.fn()} />);
-    // Home carries no artwork any more, so the concept-art chip is gone with
-    // it — but the sentence that the chats and prices are simulated stays, and
-    // it is now the greeting block's lede.
+    // Demo language remains visible in the greeting; no concept-art chip is
+    // needed because the greeting itself carries no artwork.
     expect(container.querySelector('.home-hello__lede')?.textContent).toMatch(/simulated/i);
     expect(container.querySelector('.hero__aside-chip')).toBeNull();
   });

@@ -154,7 +154,6 @@ describe('press feedback parity', () => {
       '.demo-bar__reset:active',
       '.hero__results li button:active',
       '.conversation-list li button:active',
-      '.need-tile:active',
       '.category-tile:active',
     ]) {
       expect(css, `${selector} has no feedback`).toContain(selector);
