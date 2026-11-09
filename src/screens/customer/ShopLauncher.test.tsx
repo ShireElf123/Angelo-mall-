@@ -27,6 +27,12 @@ const tileFor = (container: HTMLElement, name: string | RegExp) =>
       : name.test(tile.textContent ?? ''),
   );
 
+/** The directory-only list beneath the chat grid. */
+const rowFor = (container: HTMLElement, name: string | RegExp) =>
+  Array.from(container.querySelectorAll<HTMLButtonElement>('.shop-row')).find((row) =>
+    typeof name === 'string' ? row.textContent?.includes(name) : name.test(row.textContent ?? ''),
+  );
+
 describe('shop launcher', () => {
   it('puts the shops ahead of every supporting section', () => {
     const { container } = wrap();
@@ -55,15 +61,41 @@ describe('shop launcher', () => {
     const names = Array.from(container.querySelectorAll('.shop-tile__name')).map(
       (n) => n.textContent,
     );
-    expect(names.slice(0, 4)).toEqual([
+    expect(names).toEqual([
       'The Angelo SUPERSPAR',
       'KFC',
       'Clicks',
       'MTN @ The Angelo Mall',
     ]);
-    // Eight tiles: the four chat-capable tenants plus four more from the
-    // directory. No invented ranking — see the SHOP_LAUNCHER comment.
-    expect(names).toHaveLength(8);
+    // Eight shops stay on Home, but in two shapes: the four chat-capable
+    // tenants are cards in the grid and the four directory listings are rows
+    // under their own heading. No invented ranking — see the SHOP_LAUNCHER
+    // comment.
+    const rows = Array.from(container.querySelectorAll('.shop-row__text strong')).map(
+      (n) => n.textContent,
+    );
+    expect(rows).toEqual(['TOPS at SPAR', 'PEP', 'Mica', 'Golden Buffalo Spur']);
+  });
+
+  it('puts only chat-capable shops in the card grid', () => {
+    const { container } = wrap();
+    const cards = Array.from(container.querySelectorAll('.shop-tile'));
+    expect(cards).toHaveLength(4);
+    for (const card of cards) {
+      // Every card promises a chat, and the seed data backs the promise.
+      expect(card.querySelector('.shop-tile__meta')?.textContent).toBe('Sample chat');
+      expect(card.getAttribute('aria-label')).toMatch(/sample chat/i);
+    }
+  });
+
+  it('labels the directory listings as information, not as chats', () => {
+    const { container } = wrap();
+    const listed = container.querySelector('.shop-launcher__listed');
+    expect(listed).not.toBeNull();
+    expect(listed?.querySelector('h3')?.textContent).toMatch(/information only/i);
+    expect(listed?.textContent).toMatch(/no Mall Go connection/i);
+    // A listing is a row, never a tile, so the two outcomes never share a shape.
+    expect(listed?.querySelector('.shop-tile')).toBeNull();
   });
 
   it('offers a way through to the whole directory', () => {
@@ -106,11 +138,12 @@ describe('tapping a shop', () => {
     const { container } = render(<HomeScreen navigate={navigate} />, { wrapper: DemoStoreProvider });
 
     // TOPS at SPAR is `real-listing`: no seeded conversation, so it must not
-    // pretend to open one.
+    // pretend to open one — and it is a row in the information list, not a card.
     const tops = seed.shops.find((shop) => shop.id === 'shop-tops')!;
     expect(tops.participation).toBe('real-listing');
+    expect(tileFor(container, 'TOPS at SPAR')).toBeUndefined();
 
-    fireEvent.click(tileFor(container, 'TOPS at SPAR')!);
+    fireEvent.click(rowFor(container, 'TOPS at SPAR')!);
     expect(navigate).toHaveBeenLastCalledWith({ name: 'shop', shopId: 'shop-tops' });
     expect(navigate).not.toHaveBeenLastCalledWith(expect.objectContaining({ name: 'chat' }));
   });
@@ -118,22 +151,22 @@ describe('tapping a shop', () => {
   it('states what the tap will do, not what the shop is', () => {
     const { container } = wrap();
     const chatTile = tileFor(container, 'The Angelo SUPERSPAR')!;
-    const listingTile = tileFor(container, 'TOPS at SPAR')!;
 
     // Both labels describe the action, and the accessible name carries the
     // destination, so the difference is audible as well as visible.
+    const listingRow = rowFor(container, 'TOPS at SPAR')!;
     expect(chatTile.querySelector('.shop-tile__meta')?.textContent).toBe('Sample chat');
-    expect(listingTile.querySelector('.shop-tile__meta')?.textContent).toBe('View info');
+    expect(listingRow.querySelector('small')?.textContent).toBe('Opens shop information');
     expect(chatTile.getAttribute('aria-label')).toMatch(/sample chat/i);
-    expect(listingTile.getAttribute('aria-label')).toMatch(/shop information/i);
+    expect(listingRow.getAttribute('aria-label')).toMatch(/shop information/i);
   });
 
   it('never claims a listing-only shop has no chat at all', () => {
     // The shop page does offer a clearly labelled scripted sample chat, so a
     // "No chat yet" label on the tile would contradict it.
     const { container } = wrap();
-    const listingTile = tileFor(container, 'TOPS at SPAR')!;
-    expect(listingTile.textContent).not.toMatch(/no chat/i);
+    const listingRow = rowFor(container, 'TOPS at SPAR')!;
+    expect(listingRow.textContent).not.toMatch(/no chat/i);
   });
 });
 

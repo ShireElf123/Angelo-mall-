@@ -27,7 +27,7 @@ import { formatRelative } from '../../utils/format';
 import { isConfirmedOrder } from '../../utils/orderWorkflow';
 import { PromotionBanner } from '../../components/PromotionBanner';
 import { ShopCard } from '../../components/ShopCard';
-import { ShopTile } from '../../components/ShopTile';
+import { ShopRow, ShopTile } from '../../components/ShopTile';
 import { DemoTag, SectionHeader, ShopAvatar, StatusPill } from '../../components/ui';
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -76,13 +76,20 @@ const CATEGORY_ICONS: Record<string, string> = {
  */
 
 /**
- * The shops offered in the launcher, in the order they are shown.
+ * The shops offered on Home, in the order they are shown.
  *
- * The first four are the tenants that carry a seeded demo conversation, so they
- * are the ones where "tap a shop → start chatting" actually works end to end.
- * SUPERSPAR carries the seeded basket. The remaining four are the tenants the
- * mall's own data already marks `featured`, plus two more that are listed with a
- * shop number in the Angelo Mall directory (TOPS at SPAR, shop 12; Mica, shop 5).
+ * The first four carry a seeded demo conversation, so they are the ones where
+ * "tap a shop → start chatting" works end to end; SUPERSPAR carries the seeded
+ * basket. The remaining four are the tenants the mall's own data already marks
+ * `featured`, plus two more that are listed with a shop number in the Angelo
+ * Mall directory (TOPS at SPAR, shop 12; Mica, shop 5).
+ *
+ * They are drawn in **two shapes, chosen by what the tenant can actually do**:
+ * the grid holds only the chat-capable shops, and the directory-only tenants sit
+ * in a separate labelled list beneath it. Both are one tap from Home, so nothing
+ * is lost — but the outcome of a tap is now visible from the shape of the thing
+ * being tapped, before its 12px caption is read. Eight identical cards with two
+ * different destinations was the version an older customer got wrong.
  *
  * This is a documented ordering, not a popularity ranking: nothing here is
  * derived from ratings, visit counts or sales, because the demo has none.
@@ -142,6 +149,14 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
   const launcher = SHOP_LAUNCHER.map((id) => state.shops.find((shop) => shop.id === id)).filter(
     (shop): shop is NonNullable<typeof shop> => Boolean(shop),
   );
+
+  /**
+   * Split by participation, at render, so the shapes can never lie: a tenant
+   * that loses its demo scenario moves out of the grid on the next render, and
+   * one that gains it moves in. `supportsChat` and the grid read the same fact.
+   */
+  const chatShops = launcher.filter((shop) => shop.participation === 'demo-scenario');
+  const listedShops = launcher.filter((shop) => shop.participation !== 'demo-scenario');
 
   /**
    * Only `demo-scenario` tenants carry a seeded conversation, so they are the
@@ -292,17 +307,36 @@ export function HomeScreen({ navigate }: { navigate: (route: Route) => void }) {
               See more <ChevronRight size={13} aria-hidden strokeWidth={2.5} />
             </button>
           </div>
-          <ul className="shop-launcher__grid">
-            {launcher.map((shop) => (
-              <li key={shop.id}>
-                <ShopTile
-                  shop={shop}
-                  supportsChat={supportsChat(shop.id)}
-                  onOpen={(picked) => void openShop(picked.id)}
-                />
-              </li>
-            ))}
-          </ul>
+          {/* The grid: chat-capable tenants only. Every card here starts a
+              conversation, so "which of these is a chat?" is not a question the
+              screen asks the customer to answer. */}
+          {chatShops.length > 0 && (
+            <ul className="shop-launcher__grid">
+              {chatShops.map((shop) => (
+                <li key={shop.id}>
+                  <ShopTile shop={shop} onOpen={(picked) => void openShop(picked.id)} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {/* The list: directory listings. A different shape and a stated
+              reason, so a listing is never mistaken for an open line. */}
+          {listedShops.length > 0 && (
+            <section className="shop-launcher__listed" aria-labelledby="launcher-listed-title">
+              <h3 id="launcher-listed-title">Listed shops — information only</h3>
+              <p className="shop-launcher__listed-note">
+                Real Angelo Mall tenants that have no Mall Go connection in this demo. Tapping one opens its
+                information page.
+              </p>
+              <ul className="shop-launcher__list">
+                {listedShops.map((shop) => (
+                  <li key={shop.id}>
+                    <ShopRow shop={shop} onOpen={(picked) => void openShop(picked.id)} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <div className="shop-launcher__all">
             <button type="button" className="btn btn--primary btn--lg" onClick={() => navigate({ name: 'shops' })}>
               Browse all {state.shops.length} shops <ArrowRight size={17} aria-hidden />
