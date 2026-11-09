@@ -82,21 +82,21 @@ describe('shop card brand plate', () => {
     const shop = createSeedState().shops.find((candidate) => candidate.id === 'shop-pep')!;
     const { container } = render(<ShopCard shop={shop} onOpen={vi.fn()} />);
 
-    const plate = container.querySelector('.shop-card__brand');
-    expect(plate).toBeTruthy();
-    expect(plate?.querySelector('.shop-logo__word')?.textContent).toBe('PEP');
-    expect(plate?.querySelector('.pill')).toBeTruthy();
+    // The plate carries the brand mark; the name is type in the body.
+    expect(container.querySelector('.shop-card__media img.shop-card__mark')).not.toBeNull();
+    expect(container.querySelector('.shop-card__titles')?.textContent).toBe('PEP');
+    expect(container.querySelector('.shop-card__brand .pill')).toBeTruthy();
     expect(container.querySelector('.shop-card__category')?.textContent).toBe('Clothing & fashion');
-    // The decorative cover stays decorative.
+    // The mark is decorative; the name carries the accessible name.
     expect(container.querySelector('.shop-card__media img')?.getAttribute('alt')).toBe('');
   });
 
-  it('keeps the monogram when the cover illustration fails', () => {
+  it('shows a signage plate, not a broken image, when the mark fails', () => {
     const shop = createSeedState().shops.find((candidate) => candidate.id === 'shop-mica')!;
     const { container } = render(<ShopCard shop={shop} onOpen={vi.fn()} />);
-    const cover = container.querySelector('.shop-card__media img') as HTMLImageElement;
-    fireEvent.error(cover);
-    expect(cover.style.display).toBe('none');
-    expect(container.querySelector('.shop-card__media-fallback')?.textContent).toContain('MC');
+    const mark = container.querySelector('.shop-card__media img') as HTMLImageElement;
+    fireEvent.error(mark);
+    expect(container.querySelector('.shop-card__media img')).toBeNull();
+    expect(container.querySelector('.shop-card__sign-word')?.textContent).toBe('Mica');
   });
 });

@@ -4251,6 +4251,116 @@ body.chat-expanded {
   .shop-row__text strong { font-size: 0.9rem; }
 }
 
+/* ---- 5i. Directory cards lead with the brand, not a photograph -----------
+   The top of every card is now a full-bleed brand plate: the tenant's verified
+   logo on a wash of their own colour, or a signage plate with their trade name
+   in caps where no verified mark exists. It replaced a 16:9 interior photo that
+   was reused across a whole category (and, for most tenants, was AI concept art
+   with a chip admitting it) — the loudest part of the card was the least true.
+
+   The mark is sized to an equal visual budget, not to one box: its width cap is
+   moved by the square root of its own aspect ratio, so a 3.2:1 wordmark gets
+   ~65% of the safe area and a 1.08:1 roundel ~38% and binds on height instead.
+   Fitting every logo to one width is what makes a mixed logo wall look messy.
+   ---------------------------------------------------------------------- */
+
+.shop-card__media--brand {
+  display: grid;
+  place-items: center;
+  /* Generous, even safe area: a logo that nearly touches its frame reads as a
+     crop, not a brand. */
+  padding: clamp(16px, 7%, 34px);
+  background: var(--plate-tint, var(--surface));
+}
+
+/* The safe area every mark is budgeted inside. */
+.shop-card__mark-wrap {
+  display: grid;
+  place-items: center;
+  width: var(--mark-width, 54%);
+  height: 54%;
+}
+
+/* JPEG marks (the SPAR group files) carry an opaque white background, so they
+   are printed on a white plate rather than dropped onto the tint. */
+.shop-card__mark-wrap--printed {
+  padding: 7px 10px;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.07);
+}
+
+/* Undo the photo framing: the photo filled the frame, a mark never should. */
+.shop-card__media--brand img.shop-card__mark {
+  position: static;
+  inset: auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* A logo that zooms under the finger looks like a mistake — the plate lifts
+   instead, and only a little. */
+.shop-card__media--brand:hover img.shop-card__mark { transform: none; }
+.shop-card__media--brand:active img.shop-card__mark { transform: none; }
+.shop-card__media--brand:hover { background: var(--plate-tint-strong, var(--plate-tint, var(--surface))); }
+
+.shop-card__sign {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 0 7%;
+  text-align: center;
+}
+.shop-card__sign-glyph {
+  width: clamp(30px, 9vw, 44px);
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.75;
+}
+/* The trade name, set as a fascia: caps, tracked, in the tenant's colour. A
+   tenant with no logo file must still be identifiable from the top of its card
+   — an empty plate is the one thing a directory cannot afford. */
+.shop-card__sign-word {
+  /* Big enough to be the plate's subject: a signage plate that whispers is
+     just an empty frame with a caption. */
+  font-size: clamp(0.82rem, 3.1vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* The body no longer repeats the logo beside the name: the plate carries the
+   identity, so the name is type. */
+.shop-card__titles {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+@media (max-width: 559px) {
+  /* One column at phone width gives the mark a shallower frame, so the plate
+     does not push the facts of the card below the fold. */
+  .shop-card__media--brand { padding: 14px 16px; }
+  .shop-card__mark-wrap { height: 60%; }
+}
+
+@media (min-width: 900px) {
+  .shop-card__media--brand { padding: 22px 28px; }
+  .shop-card__titles { font-size: 1.08rem; }
+}
+
 /* ---- 6. Reduced motion for the new controls ---- */
 /* This block is the last one in the file, so it restates the app-wide motion
    switch as well as the two new controls — the contract test reads the final

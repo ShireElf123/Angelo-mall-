@@ -201,6 +201,25 @@ export function hasVerifiedLogo(shopId: string): boolean {
   return shopLogoAsset(shopId) !== undefined;
 }
 
+/**
+ * The widest mark that still reads in a small square, e.g. the 32px box on a
+ * Home tile or a directory row.
+ *
+ * A 3.2:1 wordmark squeezed into 32px renders its own name at about four
+ * pixels tall: it stops being a brand mark and becomes a smudge that looks like
+ * a broken image. Below this ratio the mark is used; above it the caller should
+ * fall back to the category glyph or the signage plate, which is legible at
+ * that size. Aspect ratio is a rough stand-in for "is this a wordmark or an
+ * icon" and is good enough for the sizes this app renders at.
+ */
+export const SMALL_MARK_MAX_RATIO = 1.8;
+
+/** The mark to show in a small square surface, if the artwork can survive it. */
+export function shopMarkForSmallSurface(shopId: string): ShopLogoAsset | undefined {
+  const asset = shopLogoAsset(shopId);
+  return asset && asset.aspectRatio <= SMALL_MARK_MAX_RATIO ? asset : undefined;
+}
+
 export const LOGO_COVERAGE = {
   withVerifiedLogo: Object.keys(SHOP_LOGO_ASSETS).filter((id) => hasVerifiedLogo(id)).length,
 } as const;

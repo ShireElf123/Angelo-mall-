@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { CATEGORY_MONOGRAM_GLYPH, LOGO_COVERAGE, SHOP_LOGO_ASSETS, hasVerifiedLogo, shopLogoAsset } from './shopLogos';
+import {
+  CATEGORY_MONOGRAM_GLYPH,
+  LOGO_COVERAGE,
+  SHOP_LOGO_ASSETS,
+  SMALL_MARK_MAX_RATIO,
+  hasVerifiedLogo,
+  shopLogoAsset,
+  shopMarkForSmallSurface,
+} from './shopLogos';
 import { TENANTS } from './tenants';
 
 /**
@@ -13,6 +21,26 @@ import { TENANTS } from './tenants';
 const PUBLIC_FILES = new Set(
   Object.keys(import.meta.glob('../../public/**/*')).map((p) => p.replace(/^.*\/public/, '')),
 );
+
+describe('small-surface marks', () => {
+  it('drops a wide wordmark from a 32px box, and keeps a near-square one', () => {
+    // SUPERSPAR's mark is 3.2:1 — at 32px its name would be ~4px tall.
+    expect(shopLogoAsset('shop-superspar')!.aspectRatio).toBeGreaterThan(SMALL_MARK_MAX_RATIO);
+    expect(shopMarkForSmallSurface('shop-superspar')).toBeUndefined();
+    // KFC's roundel is 1.08:1 and stays legible in the same box.
+    expect(shopLogoAsset('shop-kfc')!.aspectRatio).toBeLessThanOrEqual(SMALL_MARK_MAX_RATIO);
+    expect(shopMarkForSmallSurface('shop-kfc')).toBeDefined();
+  });
+
+  it('never promotes a logo the registry would not serve anyway', () => {
+    for (const shopId of Object.keys(SHOP_LOGO_ASSETS)) {
+      if (shopLogoAsset(shopId) === undefined) {
+        expect(shopMarkForSmallSurface(shopId)).toBeUndefined();
+      }
+    }
+    expect(shopMarkForSmallSurface('shop-cash-crusaders')).toBeUndefined();
+  });
+});
 
 describe('shop logo registry', () => {
   it('never exposes an unverified asset to the UI', () => {

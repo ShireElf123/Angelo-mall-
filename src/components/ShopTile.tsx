@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Shop } from '../types';
-import { CATEGORY_MONOGRAM_GLYPH, shopLogoAsset } from '../data/shopLogos';
+import { CATEGORY_MONOGRAM_GLYPH, shopMarkForSmallSurface } from '../data/shopLogos';
 import { CategoryGlyph } from './ShopLogo';
 import { Check, Info } from 'lucide-react';
 
@@ -29,7 +29,10 @@ import { Check, Info } from 'lucide-react';
 
 /** The logo or category glyph for a shop, sized by its container. Decorative. */
 function ShopMark({ shop }: { shop: Shop }) {
-  const asset = shopLogoAsset(shop.id);
+  // Small square surface: only a near-square mark survives at this size. A wide
+  // wordmark here rendered its own name about four pixels tall, which reads as
+  // a broken image rather than a brand, so those shops keep the glyph.
+  const asset = shopMarkForSmallSurface(shop.id);
   const [logoFailed, setLogoFailed] = useState(false);
   const showLogo = asset && !logoFailed;
 

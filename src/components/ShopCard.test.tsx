@@ -2,48 +2,78 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { categoryLabel, createSeedState } from '../data/seed';
+import { shopLogoAsset } from '../data/shopLogos';
 import { ShopCard } from './ShopCard';
 
-const shop = createSeedState().shops[0];
+const seed = createSeedState();
+const shop = seed.shops.find((candidate) => candidate.id === 'shop-kfc')!;
+/** A tenant with no verified mark, i.e. the signage-plate case. */
+const noLogoShop = seed.shops.find((candidate) => candidate.id === 'shop-cash-crusaders')!;
 
 describe('ShopCard', () => {
-  it('renders the shop wordmark, category and the tenant\'s own concept image', () => {
+  it('leads with the verified brand mark, not concept art', () => {
     const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
-    // Real tenants can share a short initials mark with their name (e.g. "KFC"),
-    // so assert on the wordmark element rather than on ambiguous text.
-    expect(container.querySelector('.shop-logo__word')?.textContent).toBe(shop.name);
+    const asset = shopLogoAsset(shop.id)!;
+    expect(asset, 'KFC has a verified mark in the registry').toBeTruthy();
+
     expect(screen.getAllByText(categoryLabel(shop.category)).length).toBeGreaterThanOrEqual(1);
-    const img = container.querySelector('.shop-card__media img') as HTMLImageElement;
-    // The card shows this tenant's researched interior, not the category art
-    // that every shop in a category used to share.
-    expect(shop.conceptImage).toBeTruthy();
-    expect(img.getAttribute('src')).toBe(shop.conceptImage);
-    expect(img.getAttribute('loading')).toBe('lazy');
-    // Intrinsic size is declared so the 16:9 frame cannot shift while loading.
-    expect(img.getAttribute('width')).toBe('1280');
-    expect(img.getAttribute('height')).toBe('720');
-  });
+    const mark = container.querySelector('.shop-card__media img.shop-card__mark') as HTMLImageElement;
+    expect(mark.getAttribute('src')).toBe(asset.file);
+    expect(mark.getAttribute('loading')).toBe('lazy');
+    // Decorative: the shop name in the body carries the accessible name.
+    expect(mark.getAttribute('alt')).toBe('');
+    expect(mark.style.aspectRatio).toBe(`${asset.aspectRatio}`);
 
-  it('labels the concept image as concept art', () => {
-    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
-    expect(container.querySelector('.shop-card__concept-chip')?.textContent).toBe('Concept art');
-  });
-
-  it('falls back to the category cover, with no concept label, when a shop has no concept art', () => {
-    const noArt = { ...shop, conceptImage: undefined };
-    const { container } = render(<ShopCard shop={noArt} onOpen={() => {}} />);
-    const img = container.querySelector('.shop-card__media img') as HTMLImageElement;
-    expect(img.getAttribute('src')).toBe(shop.coverImage);
-    // No AI art on screen, so no concept-art disclaimer either.
+    // The AI concept frame and its disclaimer are gone from cards entirely —
+    // there is no concept art left here to disclose.
     expect(container.querySelector('.shop-card__concept-chip')).toBeNull();
+    expect(container.querySelector('picture')).toBeNull();
   });
 
-  it('falls back to the monogram wordmark when the cover image fails to load', () => {
+  it('sizes each mark to its own shape instead of one fixed box', () => {
     const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
-    const img = container.querySelector('.shop-card__media img') as HTMLImageElement;
-    fireEvent.error(img);
-    expect(img.style.display).toBe('none');
-    expect(container.querySelector('.shop-card__media-fallback')?.textContent).toBe(shop.initials);
+    const wrap = container.querySelector('.shop-card__mark-wrap') as HTMLElement;
+    // A width cap derived from the mark's aspect ratio, so a wide wordmark and
+    // a roundel carry the same visual weight in the same row.
+    const raw = wrap.style.getPropertyValue('--mark-width');
+    expect(raw).toMatch(/^\d+%$/);
+    const width = Number(raw.replace('%', ''));
+    expect(width).toBeGreaterThanOrEqual(34);
+    expect(width).toBeLessThanOrEqual(78);
+  });
+
+  it('prints an opaque JPEG mark on white instead of on the tint', () => {
+    const spar = seed.shops.find((candidate) => candidate.id === 'shop-superspar')!;
+    expect(shopLogoAsset(spar.id)?.file).toMatch(/\.jpe?g$/i);
+    const { container } = render(<ShopCard shop={spar} onOpen={() => {}} />);
+    expect(container.querySelector('.shop-card__mark-wrap--printed')).not.toBeNull();
+  });
+
+  it('gives a tenant with no verified mark a signage plate, not a hole', () => {
+    expect(shopLogoAsset(noLogoShop.id)).toBeUndefined();
+    const { container } = render(<ShopCard shop={noLogoShop} onOpen={() => {}} />);
+    const media = container.querySelector('.shop-card__media') as HTMLElement;
+    expect(media.className).toContain('is-sign');
+    expect(media.querySelector('.shop-card__sign-glyph')).not.toBeNull();
+    // The trade name is set in caps on the plate itself.
+    expect(media.querySelector('.shop-card__sign-word')?.textContent).toBe(noLogoShop.name);
+    expect(media.querySelector('img')).toBeNull();
+  });
+
+  it('falls back to the signage plate when a logo file fails to load', () => {
+    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
+    const mark = container.querySelector('.shop-card__media img.shop-card__mark') as HTMLImageElement;
+    fireEvent.error(mark);
+    // A broken image must never reach the UI: the plate becomes the fascia.
+    expect(container.querySelector('.shop-card__media img')).toBeNull();
+    expect(container.querySelector('.shop-card__sign-word')?.textContent).toBe(shop.name);
+  });
+
+  it('names the shop once in the body, now that the plate carries the mark', () => {
+    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
+    expect(container.querySelector('.shop-card__titles')?.textContent).toBe(shop.name);
+    // The small logo lock-up beside the name would repeat the plate's mark.
+    expect(container.querySelector('.shop-card__brand .shop-logo')).toBeNull();
   });
 
   it('gives the card a prominent primary action, not a quiet row', () => {

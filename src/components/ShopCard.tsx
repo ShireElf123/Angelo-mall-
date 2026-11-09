@@ -1,30 +1,54 @@
+import { useState } from 'react';
 import { ArrowRight, Bike, Clock, ShoppingBag, Star } from 'lucide-react';
 import { categoryLabel } from '../data/seed';
+import { shopLogoAsset } from '../data/shopLogos';
 import type { Shop } from '../types';
 import { formatZAR } from '../utils/format';
 import { ParticipationPill, SponsoredTag, TradingPill } from './ui';
-import { ShopLogo } from './ShopLogo';
-import { ResponsiveImage } from './ResponsiveImage';
-import { CARD_IMAGE_SIZES, webpSrcSetFor } from '../utils/responsiveImages';
+import { CategoryGlyph } from './ShopLogo';
 
 /**
  * Tenant card.
  *
- * The card is read in one pass, top to bottom: artwork → category → name →
- * trading state → what the shop is → the demo facts → the disclosure → action.
- * The category now sits *above* the wordmark as a small gold label, because a
- * shopper scanning a grid filters by kind ("Restaurants") before brand; the
- * name is the confirmation, not the entry point.
+ * The card is read in one pass, top to bottom: **brand plate** → category →
+ * name → trading state → what the shop is → the demo facts → the disclosure →
+ * action.
  *
- * The action is a filled forest-green pill, not a hairline row. An earlier
- * pass demoted it to a quiet text row to stop 29 cards reading as one repeated
- * template, but that traded away the thing the card has to communicate: there
- * is one obvious thing to do here. The quiet row was legible and still worked
- * with a keyboard, yet at a glance it read as a label rather than a button —
- * which is exactly the wrong signal for a customer who is unsure where to tap.
- * The card is not heavier for it: the pill reuses `.btn--primary`, so the
- * gradient, elevation, press and focus behaviour are the app's existing button
- * system, and the metadata around it stays deliberately quieter.
+ * ## Why the top of the card is a brand plate, not a photograph
+ *
+ * Every card used to open with a 16:9 interior shot. In a directory of 29 shops
+ * that is eight photos reused across 29 tenants, and the ones that were not
+ * reused were AI concept art carrying a "Concept art" chip — so the largest,
+ * loudest part of every card was the part that was least true, and two shops in
+ * the same category still looked alike. A brand mark is the opposite: it is
+ * real, it is the tenant's own, and it is what a customer actually recognises
+ * across a shopfront, a carrier bag and a phone.
+ *
+ * So the media frame is now a full-bleed **brand plate**: the tenant's verified
+ * logo on a wash of the tenant's own colour, or — where we have no verified
+ * mark — a signage plate with their trade name set in caps and a category
+ * glyph. 13 of the 29 tenants have a verified logo; the other 16 are the reason
+ * the signage plate exists, so a missing file can never read as broken data.
+ *
+ * ## Why the marks are sized per logo, not to one box
+ *
+ * Logos arrive in wildly different shapes (SUPERSPAR 3.2:1, KFC 1.08:1). Fitting
+ * all of them to the same width makes square marks balloon and wide wordmarks
+ * dominate; fitting them all to the same height does the reverse. Each mark is
+ * therefore given an equal *visual budget* inside a safe area, with its width
+ * cap moved by the square root of its own aspect ratio — the standard optical
+ * normalisation for a mixed logo wall. Wide marks get more width, compact marks
+ * bind on height, and the row reads as one weight at a glance.
+ *
+ * JPEG-sourced marks (the SPAR group files) have an opaque white background, so
+ * they get a white plate of their own instead of sitting on the tint.
+ *
+ * ## The body
+ *
+ * The plate carries the identity, so the body no longer repeats the logo beside
+ * the name: it is text from the name down. The action stays a filled forest
+ * pill rather than a hairline row, because a card has one obvious thing to do
+ * and a quiet row read as a label.
  */
 export function ShopCard({
   shop,
@@ -35,46 +59,78 @@ export function ShopCard({
   sponsored?: boolean;
   onOpen: (shopId: string) => void;
 }) {
-  // The tenant's own researched interior stands in for the shared category
-  // illustration. Cards used to show `coverImage` for all 29 tenants, so a
-  // directory full of different shops showed the same eight pictures and every
-  // concept-image batch looked like it had changed nothing. `coverImage` stays
-  // as the fallback for a tenant with no concept art yet.
-  const media = shop.conceptImage ?? shop.coverImage;
+  const logo = shopLogoAsset(shop.id);
+  const [logoFailed, setLogoFailed] = useState(false);
+  const showLogo = Boolean(logo) && !logoFailed;
+
+  /**
+   * Equal visual budget, adjusted for shape: `54 * sqrt(ratio / 2.2)`, clamped
+   * to 34–78% of the safe area. A 3.2:1 wordmark gets ~65% of the width, a
+   * 1.08:1 roundel ~38% and binds on height instead.
+   */
+  const markWidth = `${Math.round(
+    Math.min(78, Math.max(34, 54 * Math.sqrt((logo?.aspectRatio ?? 1) / 2.2))),
+  )}%`;
+
+  // Opaque (JPEG) marks are printed on white, so they get a white plate under
+  // them; transparent PNG/SVG marks sit straight on the tint.
+  const opaqueMark = logo ? /\.jpe?g(\?|$)/i.test(logo.file) : false;
 
   return (
     <article className="shop-card">
-      <button type="button" className="shop-card__media" onClick={() => onOpen(shop.id)} aria-label={`Open ${shop.name}`}>
-        {/* Decorative: the shop wordmark below is the accessible name. */}
-        <ResponsiveImage
-          src={media}
-          webpSrcSet={webpSrcSetFor(media)}
-          sizes={CARD_IMAGE_SIZES}
-          alt=""
-          width={1280}
-          height={720}
-          loading="lazy"
-          decoding="async"
-          onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
-        />
-        <span className="shop-card__media-fallback" style={{ background: shop.colour }} aria-hidden>
-          {shop.initials}
-        </span>
+      <button
+        type="button"
+        className={`shop-card__media shop-card__media--brand ${showLogo ? 'is-mark' : 'is-sign'}`}
+        onClick={() => onOpen(shop.id)}
+        aria-label={`Open ${shop.name}`}
+        style={
+          {
+            ['--plate-tint' as string]: `${shop.colour}1a`,
+            ['--plate-tint-strong' as string]: `${shop.colour}26`,
+          } as React.CSSProperties
+        }
+      >
+        {showLogo ? (
+          <span
+            className={`shop-card__mark-wrap ${opaqueMark ? 'shop-card__mark-wrap--printed' : ''}`}
+            style={{ ['--mark-width' as string]: markWidth }}
+          >
+            {/* Decorative: the shop name in the body is the accessible name. */}
+            <img
+              className="shop-card__mark"
+              src={logo!.file}
+              alt=""
+              width={Math.round(48 * logo!.aspectRatio)}
+              height={48}
+              loading="lazy"
+              decoding="async"
+              style={{ aspectRatio: `${logo!.aspectRatio}` }}
+              onError={() => setLogoFailed(true)}
+            />
+          </span>
+        ) : (
+          /* No verified mark: a fascia, not a hole. The trade name is set in
+             caps on the tenant's own colour — the same signage idea the rest of
+             the app uses where a logo is unavailable — so the plate still
+             identifies the shop at a glance and never looks like missing data. */
+          <span className="shop-card__sign" style={{ color: shop.colour }}>
+            <svg className="shop-card__sign-glyph" viewBox="0 0 24 24" aria-hidden focusable="false">
+              <CategoryGlyph category={shop.category} />
+            </svg>
+            <span className="shop-card__sign-word">{shop.name}</span>
+          </span>
+        )}
         {shop.featured && (
           <span className="featured-ribbon">
             <Star size={13} aria-hidden /> Featured
           </span>
         )}
-        {/* Same disclosure as the shop page: AI concept art, never a shopfront photo. */}
-        {shop.conceptImage && <span className="shop-card__concept-chip">Concept art</span>}
       </button>
       <div className="shop-card__body">
         {sponsored && <SponsoredTag />}
         <p className="shop-card__category">{categoryLabel(shop.category)}</p>
         <div className="shop-card__brand">
-          <h3 className="shop-card__titles">
-            <ShopLogo shop={shop} size="sm" />
-          </h3>
+          <h3 className="shop-card__titles">{shop.name}</h3>
           <TradingPill tradingNow={shop.tradingNow} />
         </div>
         <p className="shop-card__tagline">{shop.tagline}</p>
