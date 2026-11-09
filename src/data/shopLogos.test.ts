@@ -1,0 +1,136 @@
+import { describe, expect, it } from 'vitest';
+import {
+  CATEGORY_MONOGRAM_GLYPH,
+  LOGO_COVERAGE,
+  SHOP_LOGO_ASSETS,
+  SMALL_MARK_MAX_RATIO,
+  hasVerifiedLogo,
+  shopLogoAsset,
+  shopMarkForSmallSurface,
+} from './shopLogos';
+import { TENANTS } from './tenants';
+
+/**
+ * Logo-registry guard (Phase 5).
+ *
+ * The registry is intentionally allowed to be empty — bundling an unverified
+ * brand mark is worse than a clean wordmark. What these tests enforce is that
+ * anything added to it is real: a file that exists, a source URL, a retrieval
+ * date, an explicit verification flag and a sane aspect ratio.
+ */
+const PUBLIC_FILES = new Set(
+  Object.keys(import.meta.glob('../../public/**/*')).map((p) => p.replace(/^.*\/public/, '')),
+);
+
+describe('small-surface marks', () => {
+  it('drops a wide wordmark from a 32px box, and keeps a near-square one', () => {
+    // SUPERSPAR's mark is 3.2:1 — at 32px its name would be ~4px tall.
+    expect(shopLogoAsset('shop-superspar')!.aspectRatio).toBeGreaterThan(SMALL_MARK_MAX_RATIO);
+    expect(shopMarkForSmallSurface('shop-superspar')).toBeUndefined();
+    // KFC's roundel is 1.08:1 and stays legible in the same box.
+    expect(shopLogoAsset('shop-kfc')!.aspectRatio).toBeLessThanOrEqual(SMALL_MARK_MAX_RATIO);
+    expect(shopMarkForSmallSurface('shop-kfc')).toBeDefined();
+  });
+
+  it('never promotes a logo the registry would not serve anyway', () => {
+    for (const shopId of Object.keys(SHOP_LOGO_ASSETS)) {
+      if (shopLogoAsset(shopId) === undefined) {
+        expect(shopMarkForSmallSurface(shopId)).toBeUndefined();
+      }
+    }
+    expect(shopMarkForSmallSurface('shop-cash-crusaders')).toBeUndefined();
+  });
+});
+
+describe('shop logo registry', () => {
+  it('never exposes an unverified asset to the UI', () => {
+    for (const [shopId, asset] of Object.entries(SHOP_LOGO_ASSETS)) {
+      if (!asset.verified) {
+        expect(shopLogoAsset(shopId), `${shopId} is unverified but is served`).toBeUndefined();
+        expect(hasVerifiedLogo(shopId)).toBe(false);
+      }
+    }
+  });
+
+  it('uses either a local logo file or a direct hosted HTTPS image', () => {
+    for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
+      if (asset.file.startsWith('https://')) {
+        expect(asset.sourceUrl).toMatch(/^https:\/\//);
+      } else {
+        expect(PUBLIC_FILES.has(asset.file), `${asset.file} missing from public/`).toBe(true);
+        expect(asset.file.startsWith('/images/logos/'), `${asset.file} must live in the logo folder`).toBe(true);
+        expect(asset.file).toMatch(/\.(svg|png|jpg|webp)$/);
+      }
+    }
+  });
+
+  it('uses the full crisp Clicks lock-up on launcher tiles instead of a soft symbol crop', () => {
+    const clicks = shopLogoAsset('shop-clicks')!;
+    expect(clicks.file).toBe('/images/logos/clicks.png');
+    expect(clicks.aspectRatio).toBe(7.9);
+    expect(PUBLIC_FILES.has(clicks.file)).toBe(true);
+    expect(clicks.opaqueBackground).toBe(true);
+  });
+
+  it('records provenance for every configured logo', () => {
+    for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
+      expect(asset.sourceUrl).toMatch(/^https:\/\//);
+      expect(asset.retrievedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(['official-brand-site', 'official-media-kit', 'tenant-supplied', 'third-party-logo-host']).toContain(asset.sourceType);
+      expect(asset.aspectRatio).toBeGreaterThan(0.3);
+      // Most marks sit between a roundel and a mood wordmark. The ceiling was
+      // 4.5 until the Clicks retail lock-up (unicorn + CLICKS + pharmacy cross)
+      // arrived at 7.9:1 — a genuinely wide mark is allowed, but anything that
+      // wide has to declare an optical boost so it still reads at card size.
+      expect(asset.aspectRatio).toBeLessThan(9.5);
+      if (asset.aspectRatio > 4.5) {
+        expect(asset.markScale, `${asset.shopId} is very wide with no optical boost`).toBeGreaterThan(1);
+      }
+      expect(asset.alt.length).toBeGreaterThan(1);
+    }
+  });
+
+  it('only references tenant ids that exist in the directory', () => {
+    const tenantIds = new Set(TENANTS.map((tenant) => tenant.id));
+    for (const asset of Object.values(SHOP_LOGO_ASSETS)) {
+      expect(tenantIds.has(asset.shopId), `${asset.shopId} is not a tenant`).toBe(true);
+      expect(asset.alt.length).toBeGreaterThan(0);
+    }
+    // Key and payload must agree, so a rename cannot desynchronise them.
+    for (const [key, asset] of Object.entries(SHOP_LOGO_ASSETS)) {
+      expect(asset.shopId).toBe(key);
+    }
+  });
+
+  it('reports coverage that matches the registry', () => {
+    const verified = Object.values(SHOP_LOGO_ASSETS).filter((asset) => asset.verified).length;
+    expect(LOGO_COVERAGE.withVerifiedLogo).toBe(verified);
+  });
+});
+
+describe('monogram fallback coverage', () => {
+  it('gives every tenant a readable fallback', () => {
+    for (const tenant of TENANTS) {
+      expect(tenant.initials.trim().length, `${tenant.id} initials`).toBeGreaterThan(0);
+      expect(tenant.initials.length, `${tenant.id} initials too long for a tile`).toBeLessThanOrEqual(4);
+      expect(tenant.name.trim().length, `${tenant.id} name`).toBeGreaterThan(0);
+      expect(tenant.colour, `${tenant.id} colour`).toMatch(/^#[0-9a-f]{6}$/i);
+    }
+  });
+
+  it('has a category glyph for every category in use', () => {
+    for (const tenant of TENANTS) {
+      expect(CATEGORY_MONOGRAM_GLYPH[tenant.category], `${tenant.category} has no glyph`).toBeTruthy();
+    }
+  });
+
+  it('does not give two tenants in the same category the same initials and colour', () => {
+    const keys = new Set<string>();
+    for (const tenant of TENANTS) {
+      const key = `${tenant.category}:${tenant.initials}:${tenant.colour}`;
+      // Identical identity would make two cards indistinguishable in a list.
+      expect(keys.has(key), `${tenant.id} duplicates another card identity`).toBe(false);
+      keys.add(key);
+    }
+  });
+});

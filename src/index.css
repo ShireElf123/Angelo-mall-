@@ -1,0 +1,12 @@
+/* Ordered style modules; keep import order aligned with the original cascade. */
+@import './styles/01-foundation.css';
+@import './styles/02-shell.css';
+@import './styles/03-home-and-directory.css';
+@import './styles/04-shop-and-chat.css';
+@import './styles/05-customer-checkout.css';
+@import './styles/06-operational-workspaces.css';
+@import './styles/07-shop-identity-and-chat-controls.css';
+@import './styles/08-interaction-tokens.css';
+@import './styles/09-native-app-shell.css';
+@import './styles/10-shop-launcher.css';
+@import './styles/11-responsive-finishing.css';

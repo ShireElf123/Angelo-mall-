@@ -1,0 +1,473 @@
+/* ==========================================================================
+   Angelo Mall Go — Phase 1 design system
+   Deep forest green + restrained warm gold on warm off-white. Mobile first.
+   ========================================================================== */
+
+:root {
+  --forest-950: #07231b;
+  --forest-900: #0c3b2e;
+  --forest-800: #10503d;
+  --forest-700: #14654d;
+  --forest-100: #dcebe3;
+  --forest-50: #eef5f0;
+  --gold-600: #7f6212; /* darkened for AA text contrast (was #a8841c, 3.5:1) */
+  --gold-500: #c9a227;
+  --gold-100: #f6ecd2;
+  /* Page vs card was #faf7f2 vs #ffffff: 1.07:1, i.e. a white card on an
+     almost-white page. No shadow can sell depth against that, which is why
+     earlier elevation work read as invisible. The page now sits a clear
+     step below the card (1.16:1) and carries more of the contrast so the
+     shadows only have to do the edge. */
+  /* The page is a cool, barely-green off-white, and a card is white. The warm
+     cream of the earlier passes was the loudest thing the app did: it tinted
+     every screenshot apricot and fought the forest green it was meant to sit
+     under. The reference design the owner pointed at uses exactly this pairing
+     — near-white page, white cards, green as the only accent — so the tint is
+     gone and the green does the talking. Cards still sit a clear step above
+     the page (1.11:1 against #ffffff) without a shadow. */
+  /* Sampled from the reference: its content sheet is a neutral cool grey
+     (#f3f5f7) and its cards are pure white — nothing is green-tinted except
+     the things that are green on purpose. */
+  --bg: #f3f5f7;
+  --surface: #ffffff;
+  --surface-warm: #eef2ef;
+  /* The soft mint the reference uses for its activity bars and its "Active"
+     chips. */
+  --sage-50: #e7f0e8;
+  --sage-100: #d3e4d6;
+  /* The reference's app bar green, sampled (#2d4e36 / #30573b across the bar).
+     It is a mossier, lighter green than our old forest-950; the deep forest is
+     now only for text and icons. */
+  --app-bar: #2b5238;
+  --ink: #14231a;
+  --ink-2: #3d4b44;
+  --muted: #67746d; /* 4.9:1 on --bg, 5.6:1 on white */
+  /* The reference draws no card outlines at all: a white card on the grey
+     sheet is the whole separation. Borders survive only on inputs, where they
+     are a control affordance rather than decoration. */
+  --border: #e6ebe8;
+  --border-strong: #d3dbd6;
+  /* Radius and type scales are declared once, further down ("tokens"). */
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3d7;
+  --success: #14654d;
+  --success-bg: #e3f1e9;
+  --info: #1d4e79;
+  --info-bg: #e6eef7;
+  /* Chat. Outgoing is the brand forest, filled; incoming is white. The old pair
+     (pale green vs white) was too close in weight to read at a glance, and the
+     contrast between "my turn" and "their turn" is the single most important
+     signal in a conversation. Both are still brand colours. */
+  --chat-mine: #10503d;        /* forest-800, 9.1:1 with white text */
+  --chat-mine-edge: #0c3b2e;   /* forest-900, for the hairline */
+  --chat-theirs: #ffffff;
+  --chat-bg: #eef3ef;
+  /* Elevation — four honest levels and one for the fixed chrome.
+     Restraint is the point: a card never looks like a dialog, and nothing in
+     the app floats above --elev-4. */
+  /* Tight, dark contact shadow + a wider soft one. The old values spread their
+     ink over 24-44px at 12-18% alpha behind a -12px/-16px negative spread, so
+     almost nothing landed where the card meets the page. If a shadow cannot be
+     seen on a phone in daylight it is decoration, not elevation. */
+  /* Flattened: the reference design lets a 1px border and the page tint carry
+     depth, with almost no shadow. Level 1 is now a hint, level 2 is the most a
+     card ever casts, and only dialogs get real distance (level 4). */
+  --elev-1: 0 1px 1px rgba(12, 59, 46, 0.05);
+  --elev-2: 0 1px 2px rgba(12, 59, 46, 0.06), 0 2px 6px -2px rgba(12, 59, 46, 0.08);
+  --elev-3: 0 2px 4px rgba(12, 59, 46, 0.08), 0 8px 18px -8px rgba(12, 59, 46, 0.14);
+  --elev-4: 0 8px 20px -6px rgba(7, 35, 27, 0.3), 0 28px 60px -20px rgba(7, 35, 27, 0.42);
+  --elev-nav: 0 -6px 20px -16px rgba(12, 59, 46, 0.22);
+  /* The shadow a control collapses to while it is being pressed. */
+  --elev-press: 0 1px 1px rgba(12, 59, 46, 0.1);
+  /* Tonal alternatives to shadows where a hairline reads more precisely. */
+  --surface-raised: #ffffff;
+  --surface-sunken: var(--surface-warm);
+  --surface-tint: #f4f8f4;
+  /* Motion: one fast step for feedback, one for arrivals. */
+  --dur-fast: 110ms;
+  --dur: 180ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Kept as aliases so the existing 21 call sites keep their intent. */
+  --shadow: var(--elev-2);
+  --shadow-lg: var(--elev-3);
+  /* The space the fixed bottom bar occupies, used for page padding and for
+     lifting floating controls clear of it. This MUST include the safe-area
+     inset: the bar's real height is nav-item (54) + padding (4 + 6) + inset,
+     which on a notched phone is ~98px. A flat 68px left the last ~30px of
+     every page sitting behind the bar. The second declaration wins only where
+     env() is supported; older engines keep the flat 68px. */
+  --bottom-nav-h: 68px;
+  --bottom-nav-h: calc(66px + env(safe-area-inset-bottom, 0px));
+}
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Stops in-page anchors and focus() from landing underneath the fixed bar. */
+  scroll-padding-bottom: var(--bottom-nav-h);
+  scroll-padding-top: 84px;
+}
+
+:root {
+  /* Kept as an escape hatch for editorial type, but no longer used on any
+     heading the customer sees: the reference is a single geometric sans from
+     its app bar to its tab labels, and a serif page title was the last thing
+     that still read as a different product. */
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4 { line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; }
+button { font: inherit; }
+/* Native apps never flash a grey tap highlight or wait 300ms for a double-tap
+   zoom; on a phone this is the difference between "web page" and "app". */
+button,
+a,
+label,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+input, select, textarea { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--gold-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px; top: -60px;
+  z-index: 200;
+  background: var(--forest-900);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 0 0 10px 10px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---------------- Buttons, chips, forms ---------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  /* Two speeds: colour for hover, transform for the press. */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+.btn:active:not(:disabled) { transform: translateY(0) scale(0.97); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn--primary {
+  /* Deeper stops (1.78:1) so the face reads as a curved, raised key rather
+     than a flat filled rectangle. */
+  background: linear-gradient(180deg, var(--forest-700) 0%, var(--forest-900) 100%);
+  color: #fff;
+  box-shadow: var(--elev-1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--forest-800) 0%, var(--forest-950) 100%);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn--gold { background: var(--gold-500); color: var(--forest-950); }
+.btn--gold:hover:not(:disabled) { background: #d9b13b; }
+.btn--ghost { background: transparent; color: var(--forest-800); border-color: var(--border-strong); }
+.btn--ghost:hover:not(:disabled) { background: var(--forest-50); }
+.btn--danger { background: var(--danger); color: #fff; }
+.btn--danger-ghost { background: transparent; color: var(--danger); border-color: transparent; }
+.btn--danger-ghost:hover:not(:disabled) { background: var(--danger-bg); }
+.btn--light { background: #fff; color: var(--forest-900); }
+.btn--outline-light { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.7); }
+.btn--outline-light:hover { background: rgba(255, 255, 255, 0.12); }
+/* The small size is a *visual* step, not a touch-target exemption: a 38px
+   "Chat" button on an order card is a miss with a thumb. 44px everywhere. */
+.btn--sm { min-height: 44px; padding: 7px 14px; font-size: 0.9rem; }
+/* The small size is a *visual* step, not a touch-target exemption: the promo
+   CTA and the search button inside the header still get 44px of height. */
+.promo-banner .btn--sm,
+.hero__search .btn { min-height: 44px; }
+.btn--lg { min-height: 52px; padding: 13px 22px; font-size: 1.05rem; }
+.btn--block { width: 100%; }
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px is the Android touch-target floor. */
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  flex: none;
+}
+.icon-btn:hover { background: var(--forest-50); }
+.icon-btn--sm { width: 44px; height: 44px; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--forest-800);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 4px;
+  margin-bottom: 10px;
+}
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* One row that scrolls, instead of three stacked rows of chips eating the
+   screen before the first shop. The row bleeds to the page edge so the last
+   chip is visibly cut off — that cut is the affordance that says "scroll me".
+   Overflow stays inside this box, so the page itself never scrolls sideways. */
+.chip-row--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--space-4);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Room for the focus ring, which would otherwise be clipped by the scroller. */
+  padding: 3px var(--space-4) 3px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.chip-row--scroll::-webkit-scrollbar { display: none; }
+.chip-row--scroll > .chip { flex: none; scroll-snap-align: start; }
+/* A soft fade on the right edge signals more content without a hard border. */
+.chip-row--scroll { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+.chip-row--scroll:has(.chip:last-child) { mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 28px), transparent 100%); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  /* Grey wells on a white card, white pills on the grey sheet: the chip always
+     takes the opposite tone of whatever it sits on, which is how the reference
+     keeps its filters visible without drawing a border round each one. */
+  border: 1px solid transparent;
+  background: var(--surface-warm);
+  color: var(--ink-2);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--elev-1);
+}
+.chip:hover { background: var(--forest-50); }
+.chip--active { background: var(--forest-900); color: #fff; border-color: var(--forest-900); }
+.chip--button { max-width: 100%; }
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* A tinted well with no outline, exactly how the reference draws search and
+     its filter pills: the fill says "input", the hairline is not needed. */
+  background: var(--surface-warm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 6px 8px 6px 18px;
+  color: var(--muted);
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+.search-field:focus-within { background: var(--surface); border-color: var(--forest-700); }
+.search-field input {
+  /* The field is 52px tall; the input inside it takes the full target so a tap
+     anywhere in the pill reaches it. */
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  min-height: 44px;
+  font-size: 1rem;
+}
+.search-field input:focus { outline: none; }
+.search-field:focus-within { border-color: var(--forest-700); box-shadow: 0 0 0 3px var(--forest-100); }
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* The box is 20px; the row it sits in is the thing a thumb hits, so the
+     label takes the full 44px target. */
+  min-height: 44px;
+  padding-right: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.switch input { width: 20px; height: 20px; accent-color: var(--forest-800); }
+
+label input[type='text'], label input:not([type]), label textarea, label select,
+.item-editor input, .promo-form input, .promo-form select, .promo-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  min-height: 44px;
+}
+
+.form-error { color: var(--danger); font-size: 0.9rem; font-weight: 500; margin-top: 6px; display: block; }
+
+/* ---------------- Pills & tags ---------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pill-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.pill--open { background: var(--success-bg); color: var(--success); }
+.pill--closed { background: #ece7db; color: var(--muted); }
+.pill--participation {
+  background: var(--surface-warm);
+  color: #5b4711;
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  font-weight: 600;
+}
+.pill--paused { background: var(--danger-bg); color: var(--danger); }
+.pill--demo-scenario { background: #e7f0ff; color: #1d4ed8; }
+.pill--real-listing { background: #eef2f0; color: #3f4f48; }
+.pill--status { text-transform: none; }
+.pill--success { background: var(--success-bg); color: var(--success); }
+.pill--warning { background: var(--warning-bg); color: var(--warning); }
+.pill--info { background: var(--info-bg); color: var(--info); }
+.pill--danger { background: var(--danger-bg); color: var(--danger); }
+.pill--job-available { background: var(--warning-bg); color: var(--warning); }
+.pill--job-accepted, .pill--job-collected, .pill--job-out-for-delivery { background: var(--info-bg); color: var(--info); }
+.pill--job-delivered { background: var(--success-bg); color: var(--success); }
+.pill--job-failed { background: var(--danger-bg); color: var(--danger); }
+
+.demo-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  border: 1px dashed var(--border-strong);
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.sponsored-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: #2b2118;
+  color: #f6d97b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.unread-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px; height: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--forest-700);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.unread-badge--gold { background: var(--gold-500); color: var(--forest-950); }
+
+.shop-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-weight: 800;
+  flex: none;
+  letter-spacing: 0.02em;
+}
+.shop-avatar--sm { width: 38px; height: 38px; font-size: 0.84rem; border-radius: var(--radius-sm); }
+.shop-avatar--md { width: 48px; height: 48px; font-size: 1rem; }
+.shop-avatar--lg { width: 62px; height: 62px; font-size: 1.25rem; border-radius: var(--radius-xl); }
+
+.customer-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--gold-100);
+  color: #6d5410;
+  font-weight: 800;
+  flex: none;
+}
+
+
+/* Route chunks load on demand; keep the transition quiet and spatially stable. */
+.route-loading {
+  min-height: 10rem;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}

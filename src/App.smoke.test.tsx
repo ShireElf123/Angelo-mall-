@@ -1,0 +1,54 @@
+/** @vitest-environment jsdom */
+import { render, screen, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import App from './App';
+
+/** Route-level smoke test: every demo workspace still mounts after Phase 2. */
+const ROUTES: [hash: string, expected: RegExp][] = [
+  ['#/', /Browse by category/],
+  ['#/shops', /Shop directory/],
+  ['#/shops?q=bread', /Shop directory/],
+  ['#/shop/shop-superspar', /The Angelo SUPERSPAR/],
+  ['#/chats', /Your chats/],
+  ['#/chat/conv-superspar-thandi', /Basket AMG-1001 ready/],
+  ['#/orders', /orders/i],
+  ['#/order/ord-demo-1001', /AMG-1001/],
+  ['#/basket/ord-demo-1002', /./],
+  ['#/help', /./],
+  ['#/promotion/promo-sample-nearby', /./],
+  ['#/retailer/inbox', /./],
+  ['#/retailer/orders', /./],
+  ['#/retailer/today', /./],
+  ['#/delivery/available', /./],
+  ['#/delivery/mine', /./],
+  ['#/delivery/done', /./],
+  ['#/admin/overview', /./],
+  ['#/admin/shops', /./],
+  ['#/admin/promotions', /./],
+  ['#/admin/deliveries', /./],
+  ['#/admin/reports', /./],
+];
+
+describe('all demo routes mount', () => {
+  afterEach(() => {
+    window.localStorage.clear();
+    window.location.hash = '#/';
+  });
+
+  for (const [hash, expected] of ROUTES) {
+    it(`renders ${hash}`, async () => {
+      window.location.hash = hash;
+      const { container, unmount } = render(<App />);
+      expect(container.querySelector('main#main')).toBeTruthy();
+      expect(screen.getByText('Angelo Mall Go')).toBeTruthy();
+      // Route screens are intentionally code-split, so wait for their chunk
+      // rather than mistaking the accessible loading state for a broken route.
+      await waitFor(() => {
+        const text = container.querySelector('main#main')?.textContent ?? '';
+        expect(text.length).toBeGreaterThan(20);
+        if (expected.source !== '.') expect(text).toMatch(expected);
+      });
+      unmount();
+    });
+  }
+});

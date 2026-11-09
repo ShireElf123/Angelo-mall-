@@ -1,0 +1,233 @@
+/* ---------------- Shop identity / wordmark ---------------- */
+
+.shop-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+  /* Positioning context for the visually-hidden accessible name inside. Without
+     it that 1px box is placed relative to the page and escapes the horizontal
+     shop rail's clipping, which stretched the Home page 825px sideways on a
+     phone and let the whole page slide left. */
+  position: relative;
+}
+.shop-logo__initials { position: relative; z-index: 1; }
+/* Category glyph sits behind the initials at low opacity: app artwork, not a mark. */
+.shop-logo__glyph {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.shop-logo__image {
+  display: block;
+  height: 34px;
+  width: auto;
+  /* Bounded, not fixed: the widest hosted marks are 3.2:1, which is 108px at
+     34px tall. Capping at 45% of the lock-up keeps the name at least half the
+     row on any card width and still lets `contain` preserve the proportions. */
+  max-width: min(108px, 45%);
+  object-fit: contain;
+  object-position: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  border-radius: var(--radius-xs);
+}
+.shop-logo__word {
+  flex: 1 1 auto;
+  /* A flex child defaults to min-width:auto, which refuses to shrink below the
+     longest word and pushes the text out of the card. 0 + break-word wraps only
+     when a word genuinely cannot fit, instead of splitting mid-word always. */
+  min-width: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+}
+/* ---------------- Signage plate (shops with no brand mark) ----------------
+   Sixteen of the twenty-nine tenants have no sourced brand logo - independents
+   like Cash Crusaders' neighbours, Zillion Hair, Maxi's, the carwash. They used
+   to render as a bare initials tile: a coloured square reading "CC" or "ZZ"
+   beside every shop that showed a real mark. Read cold, that looks like the
+   data is missing, which is exactly how the owner read it when shown the mall's
+   own signage photograph.
+
+   So the label now IS the name, set the way the mall's fascias set it: the
+   trading name in heavy uppercase on a plate in the tenant's own colour, with
+   the category glyph inline. It is app artwork, never a copy of a brand mark,
+   and the plate carries no logo-like claim. Every one of the sixteen colours is
+   dark enough for white ink (lightest #c2410c measures 5.2:1). */
+.shop-logo__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  /* A hairline top light plus a soft drop reads as a mounted sign rather than
+     a flat swatch, without adding a second shadow language. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+.shop-logo__plate-word {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  line-height: 1.15;
+  /* Never split a plate mid-word, but let a long trading name wrap to two
+     lines rather than run off the card (Aviya Photography & Graphics). */
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+/* The glyph is a corner badge on the old monogram; on a plate it sits inline. */
+.shop-logo__plate .shop-logo__glyph {
+  position: static;
+  width: 15px;
+  height: 15px;
+  flex: none;
+  opacity: 0.85;
+}
+.shop-logo__plate--sm .shop-logo__plate-word { font-size: 0.82rem; }
+.shop-logo__plate--lg { min-height: 44px; padding: 8px 14px; gap: 9px; }
+.shop-logo__plate--lg .shop-logo__plate-word { font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem); }
+.shop-logo__plate--lg .shop-logo__glyph { width: 19px; height: 19px; }
+
+.shop-logo--sm .shop-logo__word { font-size: 1rem; }
+.shop-logo--md .shop-logo__word { font-size: 1.05rem; }
+.shop-logo--lg { gap: 12px; }
+.shop-logo--lg .shop-logo__glyph { width: 26px; height: 26px; }
+.shop-logo--lg .shop-logo__image { height: 42px; max-width: min(140px, 45%); }
+.shop-logo--lg .shop-logo__word { font-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.3rem); }
+.shop-logo--on-dark .shop-logo__word { color: #fff; }
+/* Verified logo images that are dark-inked need a light plate on dark surfaces. */
+.shop-logo--on-dark .shop-logo__image { background: rgba(255, 255, 255, 0.92); padding: 3px 6px; }
+
+.shop-card__brand h3 { font-size: inherit; }
+.shop-card__title-row > .pill { margin-top: 4px; }
+
+/* ---------------- Consistent media framing ---------------- */
+
+@supports not (aspect-ratio: 4 / 3) {
+  .shop-card__media { height: 172px; }
+}
+.shop-card__concept-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 35, 27, 0.78);
+  color: #f4f7f4;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+.shop-card__media:hover img { transform: scale(1.03); }
+/* (wordmark wrapping is handled once, in .shop-logo__word) */
+
+/* The hero used to be a fixed clamp(170px, 32vw, 250px) tall, so at 1440px it
+   was 758x250 (3.03:1) and `cover` threw away ~41% of a 16:9 concept scene.
+   It now shares the art's 16:9 frame, so the scene is shown whole. */
+.shop-hero__media img { object-position: center; }
+
+/* ---------------- Chat header expand control ---------------- */
+
+.chat-header__expand {
+  width: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 11px;
+  gap: 7px;
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+}
+.chat-header__expand:hover { background: rgba(255, 255, 255, 0.14); }
+.chat-header__expand-label { display: none; font-size: 0.82rem; font-weight: 700; }
+.chat-header__expand[aria-expanded='true'] { background: rgba(255, 255, 255, 0.16); }
+
+/* Keep the compact header breathing on small phones: the pill's open/closed
+   state is also written in the header subtitle. */
+@media (max-width: 559px) {
+  .chat-header > .pill { display: none; }
+}
+
+/* ---------------- Expanded (full-screen) chat ---------------- */
+
+.chat-expanded,
+html.chat-expanded,
+body.chat-expanded {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.page--chat--expanded::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(7, 35, 27, 0.55);
+}
+
+.page--chat--expanded .chat-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  width: 100%;
+  max-width: none;
+  /* --chat-overlay-height is set from window.visualViewport so the composer
+     stays above the on-screen keyboard; 100dvh is the fallback. */
+  height: var(--chat-overlay-height, 100dvh);
+  min-height: var(--chat-overlay-height, 100dvh);
+  max-height: var(--chat-overlay-height, 100dvh);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.page--chat--expanded .chat-header {
+  padding-top: calc(10px + env(safe-area-inset-top));
+}
+.page--chat--expanded .composer {
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}
+.page--chat--expanded .chat-scroll { padding: 18px 12px 12px; }
+.page--chat--expanded .chat-aside { display: none; }
+
+/* Touch/keyboard: keep the composer visible and usable inside the overlay. */
+.page--chat--expanded .composer textarea { max-height: 6.5rem; }
+
+@media (min-width: 640px) {
+  .page--chat--expanded .chat-scroll { padding: 22px 24px 16px; }
+}
+
+@media (min-width: 900px) {
+  .chat-header__expand-label { display: inline; }
+  .page--chat--expanded .chat-frame {
+    inset: auto;
+    top: 18px;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1080px, calc(100vw - 48px));
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .page--chat--expanded .chat-header { padding-top: 10px; }
+  .page--chat--expanded .composer { padding-bottom: 10px; }
+  .page--chat--expanded .chat-scroll { padding: 24px clamp(20px, 5vw, 56px) 18px; }
+}

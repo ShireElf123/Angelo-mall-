@@ -1,0 +1,365 @@
+/* ==========================================================================
+   Home: shop launcher
+   --------------------------------------------------------------------------
+   Discovery is the main Home task: four sample-chat shops lead in a two-up
+   brand grid, with information-only tenants in clearly labelled rows beneath.
+   One "See all" link routes to the full directory; the former duplicate button
+   after the rows added height without adding a choice.
+
+   Tiles lead with a fitted tenant mark (or category signage in that tenant's
+   colour), then the name and concise trading facts. The grid is two-up on
+   phones and tablets, one row of four at desktop, and one-up only on the
+   narrowest phones so names stay readable.
+   ========================================================================== */
+
+.shop-launcher {
+  padding: 0;
+  margin: 0;
+}
+
+.shop-launcher__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.shop-launcher__head h2 {
+  /* The reference's "Home View": about 17px, semibold, near-black — a section
+     label, not a page title competing with the greeting above it. */
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.shop-launcher__grid {
+  display: grid;
+  /* Two-up on a phone, like the reference's "Home View": two shops per row,
+     each with a big mark, the whole name and its status. Three columns at
+     390px left ~112px a tile, which is where names and labels started being
+     truncated. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.shop-tile {
+  /* A card, not a row: a full-width brand band on top, the name and the shop's
+     own facts beneath. The previous row put a 32px chip beside two lines of
+     text, so only near-square logos survived and a row of eight shops showed
+     two brands and six grey glyphs — it read as an inbox, not a mall. */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  gap: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.05), 0 10px 22px -18px rgba(18, 36, 29, 0.45);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.shop-tile:hover { box-shadow: 0 2px 4px rgba(18, 36, 29, 0.07), 0 18px 28px -20px rgba(18, 36, 29, 0.5); }
+.shop-tile:active { transform: translateY(1px); }
+
+/* The brand band: the tenant's colour, edge to edge, with the mark inside an
+   even safe area. A wide band is what makes a wide wordmark possible this
+   small — in a square it was unreadable, which is how six shops lost their
+   logo. */
+.shop-tile__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: var(--plate-tint, var(--surface-warm));
+  overflow: hidden;
+}
+.shop-tile__mark.is-solid { background: var(--plate-solid, var(--forest-800)); }
+
+/* The mark's own safe area, sized by the shared optical budget. */
+.shop-tile__mark-inner {
+  display: grid;
+  place-items: center;
+  width: var(--mark-width, 60%);
+  height: 100%;
+}
+/* Opaque files (JPEGs, and PNGs shot on white) are printed on a white plate of
+   their own, the way a sticker sits on a coloured box. The plate keeps the
+   definite width of the optical budget: `width: auto` here collapsed it to the
+   image's shrink-to-fit width, which drew a 6px sliver inside the band. */
+.shop-tile__mark-inner.is-printed {
+  width: var(--mark-width, 60%);
+  max-width: 92%;
+  height: 100%;
+  padding: 7px 9px;
+  background: #fff;
+  border-radius: var(--radius-xs);
+  box-shadow: 0 1px 2px rgba(18, 36, 29, 0.08);
+}
+/* An opaque JPEG carries its own white page. Printed as a white card on a pale
+   tint, that card was the loudest shape in the band — three shops looked like
+   stickers rather than brands. Multiplying the white away lets the tenant's
+   colour be the band again while the artwork keeps its own colours. */
+.shop-tile__mark.is-tinted .shop-tile__mark-inner.is-printed {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  mix-blend-mode: multiply;
+}
+/* Both dimensions definite, so the plate is the same white box whatever the
+   mark's ratio and the artwork letterboxes inside it instead of collapsing. */
+.shop-tile__mark-inner.is-printed .shop-tile__logo {
+  width: 100%;
+  height: 100%;
+}
+.shop-tile__logo {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  /* contain, never cover: a wordmark must not be cropped into nonsense. */
+  object-fit: contain;
+}
+
+/* Signage band for a tenant with no verified mark: the trade name in caps on
+   their own colour. Never an empty frame. */
+.shop-tile__sign {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 0 4%;
+  text-align: center;
+  color: var(--forest-800);
+}
+.shop-tile__success {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+}
+.shop-tile__sign-word {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* The one chat mark on the screen: a bubble in the band's corner. Saying it
+   once as an affordance replaces "Sample chat" printed on every card, which is
+   what made a mall look like an open inbox. */
+.shop-tile__badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--forest-700);
+  box-shadow: 0 1px 3px rgba(18, 36, 29, 0.18);
+}
+
+.shop-tile__body {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px 12px;
+}
+/* Two-up is the launcher's shape at every width a thumb is used, because that
+   is the reference's "Home View". A tablet gets a little more gap, not more
+   columns: four across a 768px screen left each card too narrow for a tenant
+   name. */
+@media (min-width: 560px) {
+  .shop-launcher__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .shop-tile__name {
+    font-size: 0.86rem;
+  }
+}
+
+/* At desktop, the finishing layer places the four chat shops on one line;
+   these per-card type and spacing refinements keep that wider layout balanced. */
+@media (min-width: 900px) {
+  .shop-launcher__grid { gap: 14px; }
+  .shop-tile__body { padding: 12px 14px 14px; gap: 4px; }
+  .shop-tile__name { font-size: 0.9rem; line-height: 1.3; }
+  .shop-tile__meta { font-size: 0.75rem; }
+  .shop-tile__badge { width: 26px; height: 26px; }
+  .shop-launcher__head h2 { font-size: 1.15rem; }
+  .shop-launcher__more { min-height: 44px; font-size: 0.8rem; }
+}
+
+/* Section title on the left, a quiet text link on the right — the reference's
+   "See more ›" rhythm. No pill, no border: it is a link, not a second button. */
+.shop-launcher__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 0 2px;
+  background: none;
+  border: none;
+  color: var(--forest-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.shop-launcher__more:hover { color: var(--forest-900); }
+.shop-launcher__more:active { transform: translateY(1px); }
+
+@media (max-width: 379px) {
+  /* Three columns still fit at 320px, but the name needs the extra room. */
+  .shop-launcher__grid {
+    gap: 8px;
+  }
+  /* One card per row makes the band almost 300px wide; at 2:1 that is 148px of
+     colour per shop, which pushes the second shop off a small screen. A wider
+     band keeps the brand presence and gives the page back 30px per card. */
+  .shop-tile__mark { aspect-ratio: 5 / 2; }
+  .shop-tile__body { padding: 9px 11px 11px; }
+  .shop-tile__name {
+    /* 0.75rem, folding into the existing step: 0.73rem sat 0.16px from 0.72rem
+       and the type-scale contract forbids steps that close together. */
+    font-size: 0.75rem;
+    line-height: 1.25;
+    /* Three lines at 320px: "Golden Buffalo Spur" needs them, and truncating a
+       tenant's name to "Golden Buffalo…" is exactly the kind of unreadable
+       label this redesign is meant to remove. */
+    -webkit-line-clamp: 3;
+    min-height: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Demo bar on the narrowest phones
+   --------------------------------------------------------------------------
+   At 320px the role switcher was left 97px wide for a 2x2 grid, so each button
+   had 44px and "Customer" (needs ~62px) spilled over its neighbour — "Customer"
+   and "Staff" rendered as one run of text, and so did "Delivery"/"Admin". The
+   switcher now takes a full-width row of its own below the notice, which gives
+   each button ~123px and keeps the four roles legible and separately tappable.
+   -------------------------------------------------------------------------- */
+@media (max-width: 419px) {
+  /* The <=639px block sets `flex-wrap: nowrap` on the bar to keep the notice
+     and controls on one strip. At 320px that left the switcher 97px wide for a
+     2x2 grid of 44px buttons, so "Customer" overflowed into "Staff". The bar is
+     allowed to wrap again here, and the switcher takes its own full-width row. */
+  .demo-bar {
+    flex-wrap: wrap;
+  }
+  .demo-bar__actions {
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+  .role-switcher {
+    flex: 1 1 auto;
+  }
+  .role-switcher__btn {
+    /* Ellipsis rather than overflow, so a longer label can never run into the
+       button beside it. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Shop / admin workspaces on a phone
+   --------------------------------------------------------------------------
+   Phase 4 review of the shop side. Nothing here changes what the workspace
+   does; it changes how much of it a presenter can see at once.
+
+   At 390px the header, the shop switcher, the "not security" notice, the tab
+   row, the search field and the filter chips stacked up to fill the whole first
+   viewport, so not one customer conversation was visible — the same problem the
+   customer home screen had. The three tab labels also overflowed their row, so
+   "Today" was cut off at the right edge.
+
+   The page rhythm tightens and the tabs shrink to fit; every label, notice and
+   control is kept exactly as it was.
+   ========================================================================== */
+@media (max-width: 639px) {
+  .page--wide {
+    gap: 14px;
+  }
+  .workspace-head {
+    gap: 10px;
+  }
+  .workspace-head h1 {
+    font-size: 1.3rem;
+    margin-top: 2px;
+  }
+  /* The one-line explanation is worth keeping, but it does not need three
+     lines of a phone screen in front of the conversations. */
+  .workspace-head p {
+    font-size: 0.9rem;
+    margin-top: 3px;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Three tabs must fit one row where they can. At 390px they now do. */
+  .workspace-tabs {
+    gap: 6px;
+  }
+  .workspace-tab {
+    padding: 8px 11px;
+    gap: 5px;
+    font-size: 0.86rem;
+    min-height: 44px;
+  }
+}
+
+/* At 320px even the tightened labels do not fit one row (Inbox 128 + Orders 233
+   + Today 356 against a 320px screen), so "Today" was clipped to "Toda". The row
+   wraps to a second line instead — every label stays fully readable, and nothing
+   is hidden behind a sideways scroll. */
+@media (max-width: 359px) {
+  .workspace-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+/* ==========================================================================
+   Native-app pass — shell, canvas and home (MyWisdom reference)
+   --------------------------------------------------------------------------
+   The owner's note was that the product still looked like a web page wearing a
+   shopping app's clothes. The reference is a care app (MyWisdom, Phenomenon
+   Studio) whose shell is: one slim green bar, a pale, cool canvas, white cards
+   with generous radii, bold section titles with a quiet "See more" on the
+   right, and small two-up stat cards at the top of the dashboard.
+
+   Nothing below changes what the app *does*, what it says, or any disclosure.
+   It is a shell and surface pass: chrome shrinks, the canvas cools, cards get
+   air, and the phone hero becomes a light card under a dark bar instead of a
+   second dark slab — which also moves the shop launcher up the screen.
+
+   Kept deliberately: the warm gold accent, the serif page title, and every
+   contrast decision already recorded above (#5a6961 on #eef5f0 is 5.1:1;
+   #7f6212 gold on white is 4.97:1).
+   ========================================================================== */

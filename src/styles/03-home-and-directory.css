@@ -1,0 +1,757 @@
+/* ---------------- Page & panels ---------------- */
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px var(--space-4) calc(32px + var(--bottom-nav-h));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.page--narrow { max-width: 760px; }
+.page--wide { max-width: 1240px; }
+.page--chat { max-width: 1180px; display: grid; gap: 16px; }
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: var(--space-3);
+}
+.section-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+}
+.section-header p { color: var(--muted); font-size: 0.9rem; margin-top: 4px; max-width: 640px; }
+
+/* ---------------- Page title block ----------------
+   One per screen, and the only <h1> in it. `SectionHeader` above stays the
+   heading for a *section within* a page; this is the page itself, so the two
+   are deliberately different sizes and weights rather than the same block
+   recycled at two levels. */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+.page-header__lead {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  /* Long titles must wrap, never push a contextual action off-screen. */
+  flex: 1 1 320px;
+}
+.page-header__eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  /* 4.97:1 on --bg: the gold is dark enough for 11.5px text, unlike --gold-500. */
+  color: var(--gold-600);
+}
+.page-header__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.3rem + 0.9vw, 1.9rem);
+  line-height: 1.14;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+  /* Sans, like every heading in the reference. The serif display face gave the
+     app its editorial voice, but against this reference it was the last thing
+     that still read as a different product; the brand now carries in the green
+     bar, the type weights and the gold accent. */
+  font-family: inherit;
+  color: var(--ink);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.page-header__subtitle {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.page-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.page-header__action {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 639px) {
+  .page-header__title { font-size: 1.45rem; }
+  .page-header__subtitle { font-size: 0.9rem; }
+  .page-header__action { width: 100%; }
+  .page-header__action > * { flex: 1 1 auto; }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.panel h2 { font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.panel--warning { border-color: #e8cf7a; background: #fffaf0; }
+.panel__lede { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.panel__empty { color: var(--muted); padding: 10px 0; }
+
+.info-banner {
+  display: flex;
+  gap: 10px;
+  background: var(--forest-50);
+  border: 1px solid var(--forest-100);
+  color: var(--forest-900);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  align-items: flex-start;
+}
+.info-banner svg { flex: none; margin-top: 2px; }
+.info-banner--illustrated { align-items: flex-start; flex-wrap: wrap; }
+.info-banner--illustrated > div { flex: 1 1 260px; }
+.info-banner__art {
+  order: 3;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+
+/* A dashed border reads as "unfinished placeholder". An empty state is a real
+   screen a customer can land on, so it gets a solid surface, a soft tint and
+   the same radius as every other feature panel. */
+.empty-state {
+  text-align: center;
+  padding: 34px 22px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elev-1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.empty-state h3 { font-size: 1.15rem; color: var(--forest-950); }
+.empty-state__icon {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: var(--forest-50);
+  box-shadow: inset 0 0 0 1px var(--forest-100);
+  color: var(--forest-800);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-state p { color: var(--muted); max-width: 460px; }
+.empty-state__art {
+  width: min(100%, 360px);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 2px;
+}
+/* Inside the chat panel the empty state is narrow: keep the art modest. */
+.chat-thread .empty-state__art { width: min(100%, 280px); }
+@media (max-width: 420px) {
+  .empty-state__art { width: 100%; }
+}
+
+.group-title { font-size: 1.05rem; margin: 18px 0 10px; color: var(--forest-950); }
+
+.action-stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* ---------------- Toast & modal ---------------- */
+
+.toast-stack {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--bottom-nav-h) + 14px);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(92vw, 460px);
+}
+.toast {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: var(--forest-950);
+  color: #eef7f0;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  box-shadow: var(--elev-4);
+  animation: toast-rise var(--dur) var(--ease-out);
+}
+.toast svg { flex: none; margin-top: 1px; color: #7fd6a4; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 35, 27, 0.55);
+  z-index: 110;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.modal {
+  background: var(--surface);
+  width: 100%;
+  max-width: 520px;
+  border-radius: 20px 20px 0 0;
+  padding: 8px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height: 88dvh;
+  overflow-y: auto;
+  box-shadow: var(--elev-4);
+  animation: sheet-rise var(--dur) var(--ease-out);
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
+.modal-head h2 { font-size: 1.15rem; }
+.modal-body { display: flex; flex-direction: column; gap: 12px; padding-bottom: 6px; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+
+@media (min-width: 640px) {
+  .modal-backdrop { align-items: center; padding: 20px; }
+  .modal { border-radius: var(--radius-xl); }
+}
+
+/* ---------------- Hero & home ---------------- */
+
+/* ---------------- Home greeting (replaces the hero poster) ----------------
+
+   The home screen used to open on a dark green card with the mall photograph,
+   a four-line serif headline, a lede and a search pill — a poster. The owner
+   compared the app with a reference design that opens on a greeting and two
+   cards, and asked for the poster to go.
+
+   So there is no hero on Home any more: no artwork, no dark plate, no scrim to
+   manage. What is left is the part that was doing the work — a name, the
+   product's own line, one honest sentence, and search — set on the page rather
+   than inside a card, the way an app's dashboard header sits. */
+
+.home-hello {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 2px 0;
+}
+.home-hello__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* The UI face, not the serif. A serif display headline was the app's
+     editorial voice, but against the reference it was the single biggest
+     mismatch: that app states its line in a compact sans and gets out of the
+     way. The words are unchanged — only the voice. */
+  font-family: inherit;
+  font-size: clamp(1.4rem, 1.18rem + 1vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--forest-950);
+  text-wrap: balance;
+}
+/* The one piece of gold left in the header block: a hairline chip that keeps
+   the demo disclosure on the greeting without turning it into an eyebrow. */
+.home-hello__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--gold-100);
+  background: #fdf8e9;
+  color: var(--gold-600);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.home-hello__lede {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 52ch;
+}
+.home-hello .hero__search { margin-top: 4px; }
+
+/* The search field is a filled well on the page — the reference puts its search
+   inside the first card; we keep it as the one interactive control in the
+   header block, with a border instead of a shadow so it does not float. */
+.hero__search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 5px 5px 5px 14px;
+  color: var(--muted);
+  max-width: 560px;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.hero__search:focus-within {
+  border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(20, 101, 77, 0.16);
+}
+.hero__search-field { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; }
+.hero__search input { flex: 1; min-width: 0; border: none; background: none; min-height: 44px; font-size: 1rem; }
+.hero__search input:focus { outline: none; }
+
+.hero__results { background: var(--surface); border: 1px solid var(--border); color: var(--ink); border-radius: var(--radius-md); padding: 8px; }
+.hero__results p { padding: 8px; font-size: 0.9rem; color: var(--ink-2); }
+.hero__results li button {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; text-align: left;
+  background: none; border: none; cursor: pointer;
+  padding: 9px; border-radius: var(--radius-sm);
+}
+.hero__results li button:hover { background: var(--forest-50); }
+.hero__results li span { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hero__results small { color: var(--muted); }
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.home-resume__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.home-resume__grid--single { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+.home-resume__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 78px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.home-resume__card:hover { border-color: var(--forest-700); }
+.home-resume__copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.home-resume__copy small { color: var(--muted); font-size: 0.68rem; line-height: 1.25; }
+.home-resume__copy strong {
+  overflow: hidden;
+  color: var(--forest-950);
+  font-size: 0.84rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-resume__copy > span:not(.pill) {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-resume__actions { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 3px; }
+
+/* Bundle 3 — categories are one scrolling rail on phones. The 2-column list
+   needed five rows to name nine categories and read like a settings menu; a
+   rail shows the same nine in a strip the thumb can flick, and it is the shape
+   every shopping app uses for this job. From 640px up it becomes the grid
+   again, because there the height is free. */
+.category-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 92px;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: 3px var(--space-4) 6px 0;
+  margin: 0 calc(-1 * var(--space-4)) 0 0;
+  max-width: calc(100% + var(--space-4));
+  overscroll-behavior-x: contain;
+}
+.category-grid::-webkit-scrollbar { display: none; }
+.category-grid__note { color: var(--muted); font-size: 0.75rem; line-height: 1.4; margin: 6px 0 0; }
+.category-tile {
+  display: flex; flex-direction: column; gap: 0; align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: var(--elev-1);
+  scroll-snap-align: start;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.category-tile:hover { border-color: var(--forest-700); box-shadow: var(--elev-2); }
+.category-tile img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 0; flex: none; }
+.category-tile span { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding: 8px 9px 10px; }
+.category-tile strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--forest-950);
+  line-height: 1.3;
+  /* Two lines for "Restaurants & takeaway"; the reserved height keeps the
+     nine tiles on one baseline instead of a ragged strip. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+.category-tile small { color: var(--muted); font-size: 0.68rem; line-height: 1.3; }
+
+.welcome-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.welcome-card__art {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+.welcome-card__body { flex: 1 1 220px; min-width: 0; }
+.welcome-card__body h2 { font-size: 1.05rem; margin: 0 0 6px; }
+.welcome-card__body p { margin: 0 0 10px; font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
+@media (min-width: 620px) {
+  .welcome-card { padding: 14px 16px; }
+  .welcome-card__art { width: 240px; }
+}
+
+.hero__no-match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  background: #fff;
+  color: var(--ink);
+  border-radius: var(--radius-md);
+}
+.hero__no-match img { width: 92px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-xs); flex: none; }
+.hero__no-match p { padding: 0; margin: 0; flex: 1 1 180px; font-size: 0.9rem; color: var(--ink-2); }
+
+.shop-source__art { margin: 10px 0 0; }
+.shop-source__art img {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.shop-source__art figcaption { font-size: 0.75rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+.panel__art--banner { aspect-ratio: 16 / 9; }
+.panel__art--square { max-width: 260px; aspect-ratio: 1 / 1; margin-inline: auto; }
+
+/* A quiet supporting strip, not a hero. It keeps the illustration and the
+   scripted-reply disclosure, but sits *below* the search controls so it can no
+   longer push the shop results under the fold. */
+.discovery-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 11px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 9px 11px;
+  margin-bottom: 0;
+  box-shadow: var(--elev-1);
+}
+.discovery-strip__art {
+  width: 96px;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+.discovery-strip p { margin: 0; flex: 1 1 auto; min-width: 0; font-size: 0.84rem; color: var(--ink-2); line-height: 1.45; }
+@media (max-width: 639px) {
+  /* Decorative art on a phone: keep a token of it, give the text the width. */
+  .discovery-strip { padding: 8px 10px; gap: 9px; }
+  .discovery-strip__art { width: 60px; border-radius: var(--radius-xs); }
+  .discovery-strip p { font-size: 0.82rem; }
+}
+
+.journey-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  background: var(--surface-2, var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.journey-strip--tight { margin-top: 12px; margin-bottom: 4px; }
+.journey-strip__art {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex: none;
+}
+@media (min-width: 380px) {
+  .journey-strip__art { width: 200px; }
+}
+.journey-strip figcaption { flex: 1 1 200px; font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+.panel__art--landscape { aspect-ratio: 3 / 2; }
+
+.shop-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+.promo-stack { display: flex; flex-direction: column; gap: 14px; }
+
+.promo-banner {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 190px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: var(--shadow);
+  background: var(--forest-900);
+}
+.promo-banner > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.promo-banner__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(95deg, rgba(7, 35, 27, 0.92), rgba(7, 35, 27, 0.62) 58%, rgba(7, 35, 27, 0.2)); }
+/* Illustration banners carry their own pale background; keep text legible. */
+.promo-banner--illustration > img { object-position: center; }
+.promo-banner__content { padding: 18px; color: #fff; max-width: 560px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.promo-banner__content h3 { font-size: 1.25rem; }
+.promo-banner__content p { color: #d7e8dd; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.promo-banner__kicker { display: inline-flex; gap: 6px; align-items: center; font-size: 0.75rem; font-weight: 700; color: #f6d97b; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.flow-steps { display: grid; gap: 14px; margin-top: 4px; }
+.flow-step {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.flow-step img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.flow-step strong { display: block; font-size: 0.98rem; margin-bottom: 4px; }
+.flow-step p { color: var(--ink-2); font-size: 0.9rem; }
+@media (min-width: 620px) {
+  .flow-step { grid-template-columns: 190px 1fr; align-items: center; gap: 16px; }
+  .flow-step img { aspect-ratio: 3 / 2; }
+}
+
+/* Bundle 3 — the explainer closes the page on forest green: the last thing a
+   shopper scrolls past should look like the shop it belongs to, not like the
+   fourth white box in a column of white boxes. */
+.how-it-works {
+  background: var(--forest-950);
+  border: 1px solid var(--forest-900);
+  border-radius: var(--radius-xl);
+  padding: 22px 18px 20px;
+  color: #fff;
+}
+.how-it-works .section-header h2 { color: #fff; }
+.how-it-works .section-header p { color: #b9d3c6; }
+.steps { display: grid; gap: 12px; }
+.steps li {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.steps__icon {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--gold-500); color: var(--forest-950);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 9px;
+}
+.steps h3 { font-size: 1rem; margin-bottom: 5px; color: #fff; }
+.steps p { color: #c3d8cc; font-size: 0.9rem; }
+.how-it-works__note { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: #e7f0ea; font-size: 0.9rem; }
+
+/* ---------------- Shop cards & directory ---------------- */
+
+.shop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--elev-2);
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+.shop-card__media {
+  position: relative;
+  border: none; padding: 0; cursor: pointer;
+  /* Every tenant hero is 1280x720. A fixed 150px window cropped 10% off the
+     top and bottom of the counters and seating the art was composed around,
+     so the frame now follows the image's own ratio. */
+  aspect-ratio: 16 / 9;
+  min-height: 148px;
+  background: var(--forest-100);
+  overflow: hidden;
+  display: block; width: 100%;
+}
+.shop-card__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 0.25s ease; }
+.shop-card__media-fallback {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 2.4rem; font-weight: 800;
+}
+.featured-ribbon {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  display: inline-flex; gap: 5px; align-items: center;
+  background: var(--gold-500); color: var(--forest-950);
+  font-size: 0.75rem; font-weight: 700;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+}
+.shop-card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+/* Identity → description → facts → status → action, with a deliberate gap
+   before the CTA so the button is not read as part of the metadata block. */
+.shop-card__body > .pill--participation { margin-top: 2px; }
+/* The CTA is pinned to the floor of the card. Without this, a one-line tagline
+   leaves its button floating ~20px above its neighbour's, so a row of cards
+   reads as ragged even though the cards themselves are equal height. */
+.shop-card__body > .btn:last-child { margin-top: auto; }
+/* 48px, not 46: the target on the single most important control on the card. */
+.shop-card__body > .btn:last-child { min-height: 48px; }
+.shop-card__title-row { display: flex; align-items: flex-start; gap: 10px; }
+/* Brand plate: keeps the shop mark visually separate from the category illustration.
+   Name and trading status are stacked, not side by side. Measured with Inter 800,
+   the status pill is ~142px wide; sharing one row left the name 0-30px on a
+   3-column card, which clipped long names (SUPERSPAR, Ocean Basket, Cash
+   Crusaders) inside a plate that hides its overflow. */
+.shop-card__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  /* No border and no gradient plate: the card is already a surface, and a
+     second framed box inside it made the tenant name fight its own container.
+     The column stack is kept — it is what stops long names being clipped. */
+  padding: 0;
+  border: none;
+  background: none;
+}
+.shop-card__brand .shop-logo { flex: 1 1 auto; width: 100%; }
+.shop-card__brand .pill { flex: none; align-self: flex-start; }
+.shop-card__titles { flex: 1 1 auto; min-width: 0; width: 100%; font-size: 1.12rem; margin: 0; }
+/* Read first, above the name: a shopper scanning a grid filters by kind
+   ("Restaurants") before brand. The wordmark below confirms the choice. */
+.shop-card__category {
+  color: var(--gold-600);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.shop-card__tagline {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  /* Two lines is enough to describe a shop; a third pushes the facts and the
+     action down and makes a row of cards uneven. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.shop-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.shop-card__meta > span { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
+.shop-card__meta span { display: inline-flex; align-items: center; gap: 5px; }
+.shop-card .btn { margin-top: auto; }
+
+.directory-controls { display: flex; flex-direction: column; gap: 10px; }
+/* The search box is the primary control on this screen, so it gets a taller
+   target and a stronger resting border than a generic field. */
+.directory-controls .search-field { min-height: 52px; box-shadow: var(--elev-1); }
+.directory-controls .search-field input { font-size: 1rem; }
+.directory-controls .chip-row--scroll { margin-top: 2px; }
+.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.filter-row__label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink-2); font-size: 0.9rem; }
+.results-count { color: var(--muted); font-size: 0.9rem; }
+
+.skeleton-list { display: flex; flex-direction: column; gap: 12px; }
+.skeleton-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.skeleton-line { height: 14px; border-radius: var(--radius-xs); background: linear-gradient(90deg, #eee7d8, #f7f2e7, #eee7d8); background-size: 200% 100%; animation: skeleton 1.2s infinite; width: 80%; }
+.skeleton-line--wide { width: 55%; height: 20px; }
+.skeleton-line--short { width: 40%; }
+@keyframes skeleton { from { background-position: 200% 0; } to { background-position: -200% 0; } }
