@@ -34,7 +34,26 @@ export interface ShopLogoAsset {
   retrievedOn: string;
   /** True only when the image was visually identified as the correct brand mark. */
   verified: boolean;
+  /**
+   * The artwork is white (or very light) ink, i.e. the negative variant meant
+   * for a dark background. On the pale brand tint used by cards it disappears
+   * — Ocean Basket and PostNet were rendered as a white wordmark on a wash of
+   * near-white, which read as an empty plate. These get a solid plate in the
+   * tenant's own colour instead.
+   */
   needsLightVariant?: boolean;
+  /**
+   * The file has an opaque background rather than transparency (a JPEG from an
+   * official gallery, or a PNG exported flat). It is printed on a white plate
+   * so the box does not show as a rectangle of the wrong colour on the tint.
+   */
+  opaqueBackground?: boolean;
+  /**
+   * Optical boost, 1 = trust the aspect-ratio formula. A very wide lock-up
+   * (7:1 and beyond) hits the width cap and then renders its own name too small
+   * to read, so it is allowed past the normal maximum.
+   */
+  markScale?: number;
   notes?: string;
 }
 
@@ -53,6 +72,7 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     sourceUrl: 'https://global.kfc.com/media-assets',
     retrievedOn: '2026-10-27',
     verified: true,
+    opaqueBackground: true,
     notes: 'KFC Global brand-assets image URL; usage notice on the source page applies.',
   },
   'shop-golden-buffalo-spur': {
@@ -68,14 +88,23 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
   },
   'shop-clicks': {
     shopId: 'shop-clicks',
-    file: 'https://companieslogo.com/img/orig/CLS.JO_BIG-e435f2e6.svg?download=true&t=1720244491',
-    aspectRatio: 3.2,
+    file: '/images/logos/clicks.png',
+    // 269x34 after trimming the file's own white margins.
+    aspectRatio: 7.9,
     alt: 'Clicks',
     sourceType: 'third-party-logo-host',
-    sourceUrl: 'https://companieslogo.com/clicks-group/logo',
-    retrievedOn: '2026-10-27',
+    sourceUrl: 'https://tukuz.com/download-logo-vector-3414/',
+    retrievedOn: '2026-11-09',
     verified: true,
-    notes: 'Third-party public-company logo host; brand is Clicks Group / Clicks retail.',
+    // The previous asset was the *corporate* lock-up — "CLICKS GROUP LIMITED",
+    // the JSE-listed parent — for a card about the Clicks shop. A shopper reads
+    // the unicorn, the blue CLICKS wordmark and the green pharmacy cross; the
+    // group's annual-report wordmark is not the shop's brand. Brand colours per
+    // the group's own brand sheet: blue #005093, green #84bf41.
+    opaqueBackground: true,
+    markScale: 1.25,
+    notes:
+      'Clicks retail mark (unicorn + CLICKS + pharmacy cross). Bundled locally because the only hosted version found was the parent company lock-up. Brand usage is Clicks Group Limited’s; this is a non-transactional visual demo and implies no partnership.',
   },
   'shop-vodacom': {
     shopId: 'shop-vodacom',
@@ -141,6 +170,8 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     sourceUrl: 'https://brandfetch.com/oceanbasket.com',
     retrievedOn: '2026-10-27',
     verified: true,
+    // Served by the host as the white/negative variant; invisible on a tint.
+    needsLightVariant: true,
     notes: 'Direct SVG from Brandfetch Ocean Basket brand profile.',
   },
   'shop-postnet': {
@@ -152,6 +183,8 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     sourceUrl: 'https://brandfetch.com/postnet.co.za',
     retrievedOn: '2026-10-27',
     verified: true,
+    // Served by the host as the white/negative variant; invisible on a tint.
+    needsLightVariant: true,
     notes: 'Direct SVG from Brandfetch PostNet Southern Africa brand profile.',
   },
   'shop-fnb': {
@@ -174,6 +207,7 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     sourceUrl: 'https://thespargroup.com/bwg_gallery/logos/',
     retrievedOn: '2026-10-27',
     verified: true,
+    opaqueBackground: true,
     notes: 'Official SPAR Group logo gallery. JPEG rather than transparent PNG.',
   },
   'shop-tops': {
@@ -185,6 +219,7 @@ export const SHOP_LOGO_ASSETS: Record<string, ShopLogoAsset> = {
     sourceUrl: 'https://thespargroup.com/bwg_gallery/logos/',
     retrievedOn: '2026-10-27',
     verified: true,
+    opaqueBackground: true,
     notes: 'Official SPAR Group logo gallery. JPEG rather than transparent PNG.',
   },
 };

@@ -31,22 +31,72 @@ describe('ShopCard', () => {
   });
 
   it('sizes each mark to its own shape instead of one fixed box', () => {
-    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
-    const wrap = container.querySelector('.shop-card__mark-wrap') as HTMLElement;
+    const widthFor = (shopId: string) => {
+      const candidate = seed.shops.find((item) => item.id === shopId)!;
+      const { container, unmount } = render(<ShopCard shop={candidate} onOpen={() => {}} />);
+      const raw = (container.querySelector('.shop-card__mark-wrap') as HTMLElement).style.getPropertyValue(
+        '--mark-width',
+      );
+      unmount();
+      expect(raw).toMatch(/^\d+%$/);
+      return Number(raw.replace('%', ''));
+    };
+
     // A width cap derived from the mark's aspect ratio, so a wide wordmark and
     // a roundel carry the same visual weight in the same row.
-    const raw = wrap.style.getPropertyValue('--mark-width');
-    expect(raw).toMatch(/^\d+%$/);
-    const width = Number(raw.replace('%', ''));
-    expect(width).toBeGreaterThanOrEqual(34);
-    expect(width).toBeLessThanOrEqual(78);
+    for (const shopId of ['shop-kfc', 'shop-superspar', 'shop-pep', 'shop-mtn']) {
+      const width = widthFor(shopId);
+      expect(width).toBeGreaterThanOrEqual(42);
+      expect(width).toBeLessThanOrEqual(80);
+    }
+    // The wide wordmark earns more width than the near-square roundel, but not
+    // in proportion to its ratio: a 3.2:1 mark is not three times the roundel.
+    const wide = widthFor('shop-superspar');
+    const round = widthFor('shop-kfc');
+    expect(wide).toBeGreaterThan(round);
+    expect(wide / round).toBeLessThan(2);
   });
 
-  it('prints an opaque JPEG mark on white instead of on the tint', () => {
+  it('prints an opaque mark on white instead of on the tint', () => {
     const spar = seed.shops.find((candidate) => candidate.id === 'shop-superspar')!;
-    expect(shopLogoAsset(spar.id)?.file).toMatch(/\.jpe?g$/i);
+    // JPEGs carry their own white background, so the registry flags them.
+    expect(shopLogoAsset(spar.id)?.opaqueBackground).toBe(true);
     const { container } = render(<ShopCard shop={spar} onOpen={() => {}} />);
     expect(container.querySelector('.shop-card__mark-wrap--printed')).not.toBeNull();
+
+    // KFC's PNG is opaque too — a flat export, not a transparent one. The old
+    // check sniffed the file extension and missed it, so it sat on the tint as
+    // a white rectangle.
+    const kfc = seed.shops.find((candidate) => candidate.id === 'shop-kfc')!;
+    expect(shopLogoAsset(kfc.id)?.file).toMatch(/\.png(\?|$)/i);
+    const kfcCard = render(<ShopCard shop={kfc} onOpen={() => {}} />);
+    expect(kfcCard.container.querySelector('.shop-card__mark-wrap--printed')).not.toBeNull();
+  });
+
+  it('gives white-ink artwork a solid plate so it cannot vanish', () => {
+    for (const shopId of ['shop-ocean-basket', 'shop-postnet']) {
+      const whiteInk = seed.shops.find((candidate) => candidate.id === shopId)!;
+      expect(shopLogoAsset(shopId)?.needsLightVariant, `${shopId} should be flagged`).toBe(true);
+      const { container, unmount } = render(<ShopCard shop={whiteInk} onOpen={() => {}} />);
+      const media = container.querySelector('.shop-card__media') as HTMLElement;
+      expect(media.className).toContain('is-solid');
+      expect(media.style.getPropertyValue('--plate-solid')).toBe(whiteInk.colour);
+      unmount();
+    }
+    // A normal dark-ink mark keeps the soft tint, not a heavy block of colour.
+    const { container } = render(<ShopCard shop={shop} onOpen={() => {}} />);
+    expect((container.querySelector('.shop-card__media') as HTMLElement).className).not.toContain('is-solid');
+  });
+
+  it('uses the Clicks shop mark, not the parent company’s corporate lock-up', () => {
+    const clicks = seed.shops.find((candidate) => candidate.id === 'shop-clicks')!;
+    const asset = shopLogoAsset(clicks.id)!;
+    // The retail mark is a wide lock-up (unicorn, CLICKS, pharmacy cross) and is
+    // bundled locally; the corporate "CLICKS GROUP LIMITED" wordmark is not the
+    // brand a shopper recognises over the shop door.
+    expect(asset.file).toBe('/images/logos/clicks.png');
+    expect(asset.notes).toMatch(/parent company/i);
+    expect(asset.aspectRatio).toBeGreaterThan(4);
   });
 
   it('gives a tenant with no verified mark a signage plate, not a hole', () => {

@@ -4265,11 +4265,18 @@ body.chat-expanded {
    ---------------------------------------------------------------------- */
 
 .shop-card__media--brand {
+  /* A brand band, not a photo frame. At the photo's 16:9 the plate was 350x197
+     with a mark rattling around inside it, which read as a logo that was too
+     small for its box — measured, the KFC roundel was 30% of the plate's width
+     and the surrounding 70% was empty tint. 12:5 gives the plate a header's
+     proportions, so the mark fills it the way an app icon fills its tile. */
+  aspect-ratio: 12 / 5;
+  min-height: 0;
   display: grid;
   place-items: center;
   /* Generous, even safe area: a logo that nearly touches its frame reads as a
      crop, not a brand. */
-  padding: clamp(16px, 7%, 34px);
+  padding: 10px 8%;
   background: var(--plate-tint, var(--surface));
 }
 
@@ -4278,7 +4285,7 @@ body.chat-expanded {
   display: grid;
   place-items: center;
   width: var(--mark-width, 54%);
-  height: 54%;
+  height: 74%;
 }
 
 /* JPEG marks (the SPAR group files) carry an opaque white background, so they
@@ -4288,6 +4295,18 @@ body.chat-expanded {
   background: #fff;
   border-radius: var(--radius-sm);
   box-shadow: 0 1px 2px rgba(18, 36, 29, 0.07);
+}
+
+/* White-ink artwork needs a dark bed, or it vanishes: Ocean Basket and PostNet
+   were a white wordmark on a wash of near-white, which read as an empty plate
+   rather than a brand. Solid in the tenant's own colour — the same treatment an
+   app icon gets — and the plate stops looking like an unfinished card. */
+.shop-card__media--brand.is-solid {
+  background: var(--plate-solid, var(--forest-800));
+}
+.shop-card__media--brand.is-solid:hover {
+  background: var(--plate-solid, var(--forest-800));
+  filter: brightness(1.06);
 }
 
 /* Undo the photo framing: the photo filled the frame, a mark never should. */
@@ -4350,14 +4369,13 @@ body.chat-expanded {
 }
 
 @media (max-width: 559px) {
-  /* One column at phone width gives the mark a shallower frame, so the plate
-     does not push the facts of the card below the fold. */
-  .shop-card__media--brand { padding: 14px 16px; }
-  .shop-card__mark-wrap { height: 60%; }
+  /* Full-width cards on a phone: the band stays shallow so the facts of the
+     card are not pushed below the fold by a logo. */
+  .shop-card__media--brand { aspect-ratio: 16 / 7; padding: 10px 8%; }
+  .shop-card__mark-wrap { height: 72%; }
 }
 
 @media (min-width: 900px) {
-  .shop-card__media--brand { padding: 22px 28px; }
   .shop-card__titles { font-size: 1.08rem; }
 }
 

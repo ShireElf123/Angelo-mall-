@@ -70,7 +70,14 @@ describe('shop logo registry', () => {
       expect(asset.retrievedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(['official-brand-site', 'official-media-kit', 'tenant-supplied', 'third-party-logo-host']).toContain(asset.sourceType);
       expect(asset.aspectRatio).toBeGreaterThan(0.3);
-      expect(asset.aspectRatio).toBeLessThan(4.5);
+      // Most marks sit between a roundel and a mood wordmark. The ceiling was
+      // 4.5 until the Clicks retail lock-up (unicorn + CLICKS + pharmacy cross)
+      // arrived at 7.9:1 — a genuinely wide mark is allowed, but anything that
+      // wide has to declare an optical boost so it still reads at card size.
+      expect(asset.aspectRatio).toBeLessThan(9.5);
+      if (asset.aspectRatio > 4.5) {
+        expect(asset.markScale, `${asset.shopId} is very wide with no optical boost`).toBeGreaterThan(1);
+      }
       expect(asset.alt.length).toBeGreaterThan(1);
     }
   });

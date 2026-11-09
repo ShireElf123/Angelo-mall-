@@ -64,29 +64,37 @@ export function ShopCard({
   const showLogo = Boolean(logo) && !logoFailed;
 
   /**
-   * Equal visual budget, adjusted for shape: `54 * sqrt(ratio / 2.2)`, clamped
-   * to 34–78% of the safe area. A 3.2:1 wordmark gets ~65% of the width, a
-   * 1.08:1 roundel ~38% and binds on height instead.
+   * Equal visual budget, adjusted for shape: `58 * (ratio / 2.2) ^ 0.45`,
+   * clamped to 42–80% of the safe area, times an optional per-asset boost.
+   * A 3.2:1 wordmark gets ~69% of the width, a 1.08:1 roundel ~42% and binds on
+   * height instead. The exponent is damped the way an optical logo wall dampens
+   * it — wide marks earn more width, but not linearly, so they stop dominating.
    */
-  const markWidth = `${Math.round(
-    Math.min(78, Math.max(34, 54 * Math.sqrt((logo?.aspectRatio ?? 1) / 2.2))),
-  )}%`;
+  const ratio = logo?.aspectRatio ?? 1;
+  const budget = 58 * Math.pow(ratio / 2.2, 0.45) * (logo?.markScale ?? 1);
+  const markWidth = `${Math.round(Math.min(80, Math.max(42, budget)))}%`;
 
-  // Opaque (JPEG) marks are printed on white, so they get a white plate under
-  // them; transparent PNG/SVG marks sit straight on the tint.
-  const opaqueMark = logo ? /\.jpe?g(\?|$)/i.test(logo.file) : false;
+  // An opaque file (JPEG from an official gallery, or a flat PNG) is printed on
+  // a white plate so the box does not show as a rectangle of the wrong colour.
+  const opaqueMark = Boolean(logo?.opaqueBackground);
+  // White-ink artwork needs a dark bed: the pale tint made Ocean Basket and
+  // PostNet look like empty plates.
+  const solidPlate = Boolean(logo?.needsLightVariant);
 
   return (
     <article className="shop-card">
       <button
         type="button"
-        className={`shop-card__media shop-card__media--brand ${showLogo ? 'is-mark' : 'is-sign'}`}
+        className={`shop-card__media shop-card__media--brand ${showLogo ? 'is-mark' : 'is-sign'} ${
+          showLogo && solidPlate ? 'is-solid' : ''
+        }`}
         onClick={() => onOpen(shop.id)}
         aria-label={`Open ${shop.name}`}
         style={
           {
             ['--plate-tint' as string]: `${shop.colour}1a`,
             ['--plate-tint-strong' as string]: `${shop.colour}26`,
+            ['--plate-solid' as string]: shop.colour,
           } as React.CSSProperties
         }
       >
